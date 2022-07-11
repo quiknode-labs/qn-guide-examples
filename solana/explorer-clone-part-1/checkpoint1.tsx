@@ -52,7 +52,7 @@ export const TransactionLog: FC = () => {
                 return (
                     <tr  key={i+1} className="bg-white border-b bg-zinc-800 dark:border-zinc-700">
                         <td className="px-6 py-3">
-                                //some transactions return more than 1 signature -- we only want the 1st one
+                                {/* some transactions return more than 1 signature -- we only want the 1st one */} 
                                 {transaction.transaction.signatures[0]}
                         </td>
                         <td className="px-6 py-3">{transaction.slot.toLocaleString("en-US")}</td>
