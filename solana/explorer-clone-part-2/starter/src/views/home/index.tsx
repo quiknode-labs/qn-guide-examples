@@ -1,7 +1,7 @@
 // Next, React
 import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
-
+import { GetTokens } from 'components/GetTokens';
 // Wallet
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 
@@ -11,7 +11,7 @@ import pkg from '../../../package.json';
 
 // Store
 import useUserSOLBalanceStore from '../../stores/useUserSOLBalanceStore';
-import { GetTokens } from 'components/GetTokens';
+
 export const HomeView: FC = ({ }) => {
   const wallet = useWallet();
   const { connection } = useConnection();

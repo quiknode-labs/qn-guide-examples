@@ -1,7 +1,3 @@
-# Update .env
-Rename `.env.example` to `.env`. Delete the comments.
-Set `REACT_APP_SOLANA_RPC_HOST`to your QuickNode endpoint URL.
-Set `REACT_APP_NETWORK` to the corresponding Solana network (`devnet`, `mainnet-beta`, `testnet`)
 
 # Solana dApp Scaffold Next
 

@@ -1,9 +1,8 @@
-
 import { FC, useEffect } from "react";
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import useUserSOLBalanceStore from '../../stores/useUserSOLBalanceStore';
-import { TransactionLog } from "../../components/TransactionsLog";
-{/* import { GetTokens } from "../../components/GetTokens"; */}
+import { TransactionLog } from "components/TransactionsLog";
+{/* import { GetTokens } from "components/GetTokens"; */}
 
 export const ExplorerView: FC = ({ }) => {
   const wallet = useWallet();
