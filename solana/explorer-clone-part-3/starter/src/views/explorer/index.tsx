@@ -2,7 +2,7 @@ import { FC, useEffect } from "react";
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import useUserSOLBalanceStore from '../../stores/useUserSOLBalanceStore';
 import { TransactionLog } from "components/TransactionsLog";
-{/* import { GetTokens } from "components/GetTokens"; */}
+import { GetTokens } from "components/GetTokens";
 
 export const ExplorerView: FC = ({ }) => {
   const wallet = useWallet();
@@ -30,7 +30,7 @@ export const ExplorerView: FC = ({ }) => {
         </div>
         <div className="text-center">          
           <TransactionLog/>
-          {/* <GetTokens/> */}
+          <GetTokens/>
         </div>
       </div>
     </div>
