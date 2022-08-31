@@ -20,7 +20,7 @@ function generateTransactions(batchSize:number, dropList: Drop[], fromWallet: Pu
         let bulkTransaction = new Transaction();
         let lowerIndex = i * batchSize;
         let upperIndex = (i+1) * batchSize;
-        for (let j = lowerIndex; j < upperIndex ;j++){
+        for (let j = lowerIndex; j < upperIndex; j++){
             if (txInstructions[j]) bulkTransaction.add(txInstructions[j]);  
         }
         result.push(bulkTransaction);
