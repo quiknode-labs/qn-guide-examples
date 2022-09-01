@@ -6,7 +6,7 @@ const QUICKNODE_RPC = 'https://example.quiknode.pro/0123456/';
 const SOLANA_CONNECTION = new Connection(QUICKNODE_RPC);
 const FROM_KEY_PAIR = Keypair.fromSecretKey(new Uint8Array(secret));
 const NUM_DROPS_PER_TX = 20; 
-const TX_INTERVAL = 250;
+const TX_INTERVAL = 1000;
 
 function generateTransactions(batchSize:number, dropList: Drop[], fromWallet: PublicKey):Transaction[] {
     let result: Transaction[] = [];
