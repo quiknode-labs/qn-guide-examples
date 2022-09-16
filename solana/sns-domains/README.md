@@ -3,8 +3,8 @@
 This project is based on the guide, [How to Query Solana Naming Service Domains (.sol)](https://www.quicknode.com/guides/web3-sdks/how-to-query-solana-naming-service-domains-sol) by Aaron Milano. To begin, clone the `quicknode-guide-examples` repo and navigate to this project's directory.
 
 ```bash
-git clone https://github.com/quiknode-labs/quicknode-guide-examples.git
-cd quicknode-guide-examples/sns-domains
+git clone https://github.com/quiknode-labs/qn-guide-examples.git
+cd qn-guide-examples/solana/sns-domains
 ```
 
 ## Add Environment Variables
