@@ -3,8 +3,8 @@
 This project is based on the guide, [How to Get All Tokens Held by a Wallet in Solana](https://www.quicknode.com/guides/web3-sdks/how-to-get-all-tokens-held-by-a-wallet-in-solana) by Aaron Milano. To begin, clone the `quicknode-guide-examples` repo and navigate to this project's directory.
 
 ```bash
-git clone https://github.com/quiknode-labs/quicknode-guide-examples.git
-cd quicknode-guide-examples/sol-get-tokens
+git clone https://github.com/quiknode-labs/qn-guide-examples.git
+cd qn-guide-examples/solana/sol-get-tokens
 ```
 
 ## Add Environment Variables
