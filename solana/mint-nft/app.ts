@@ -43,7 +43,7 @@ async function uploadImage(filePath: string,fileName: string): Promise<string> {
 }
 
 async function uploadMetadata(imgUri: string, imgType: string, nftName: string, description: string, attributes: {trait_type: string, value: string}[]) {
-    console.log(`Step 2 - Uploading MetaData`);
+    console.log(`Step 2 - Uploading Metadata`);
     const { uri } = await METAPLEX
     .nfts()
     .uploadMetadata({
@@ -88,9 +88,9 @@ async function main() {
     //Step 1 - Upload Image
     const imgUri = await uploadImage(CONFIG.uploadPath,CONFIG.imgFileName);
     //Step 2 - Upload Metadata
-    const metaDataUri = await uploadMetadata(imgUri,CONFIG.imgType,CONFIG.imgName, CONFIG.description, CONFIG.attributes); 
+    const metadataUri = await uploadMetadata(imgUri,CONFIG.imgType,CONFIG.imgName, CONFIG.description, CONFIG.attributes); 
     //Step 3 - Mint NFT
-    mintNft(metaDataUri,CONFIG.imgName,CONFIG.sellerFeeBasisPoints,CONFIG.symbol,CONFIG.creators);
+    mintNft(metadataUri,CONFIG.imgName,CONFIG.sellerFeeBasisPoints,CONFIG.symbol,CONFIG.creators);
 }
 
 main();
