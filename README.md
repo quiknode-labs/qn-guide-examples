@@ -1,5 +1,3 @@
-# QuickNode Technical Content
+# QuickNode Guide Examples
 
-## Guides 
-
-https://www.quicknode.com/guides
+A collection of example applications from QuickNode's [guides](https://quicknode.com/guides).
