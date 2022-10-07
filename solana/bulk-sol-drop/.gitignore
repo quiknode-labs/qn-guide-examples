@@ -1,0 +1,4 @@
+node_modules
+.env
+guideSecret.json
+.DS_Store

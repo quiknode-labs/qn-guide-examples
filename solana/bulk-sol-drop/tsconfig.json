@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    /* Specify a set of bundled library declaration files that describe the target runtime environment. */
+    "lib": ["es2020"],
+    
+    /* Specify what module code is generated. */
+    "module": "commonjs",
+    
+    /* Enable importing .json files. */
+    "resolveJsonModule": true,
+    
+    /* Emit additional JS to ease support for importing CJS modules and enable 'allowSyntheticDefaultImports' for type compatibility. */
+    "esModuleInterop": true,
+    
+    /* Ensure that casing is correct in imports. */
+    "forceConsistentCasingInFileNames": true,
+    
+    /* Enable all strict type-checking options. */
+    "strict": true,
+    
+    /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true
+  }
+}

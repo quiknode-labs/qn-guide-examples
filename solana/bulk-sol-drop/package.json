@@ -1,0 +1,21 @@
+{
+  "name": "bulk-sol-drop",
+  "version": "1.0.0",
+  "description": "How to Send Bulk Transactions on Solana",
+  "scripts": {
+    "start": "ts-node app.ts",
+    "kp": "ts-node wallet.ts"
+  },
+  "keywords": [ "QuickNode", "Solana" ],
+  "license": "MIT",
+  "dependencies": {
+    "@solana/web3.js": "^1.63.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.8.3",
+    "dotenv": "^16.0.3",
+    "ts-node": "^10.9.1",
+    "tsc": "^2.0.4",
+    "typescript": "^4.8.4"
+  }
+}
