@@ -1,17 +1,16 @@
 {
   "name": "sns-domains",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "How to get a .sol domain from a given Solana wallet address and vice versa",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "domains": "ts-node index.ts"
+    "start": "ts-node index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [ "QuickNode", "Solana", "Solana Name Service" ],
+  "license": "MIT",
   "dependencies": {
     "@bonfida/spl-name-service": "^0.1.50",
+    "@solana/buffer-layout": "^4.0.0",
+    "@solana/spl-token": "^0.3.5",
     "@solana/web3.js": "^1.61.0"
   },
   "devDependencies": {

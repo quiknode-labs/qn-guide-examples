@@ -1,6 +1,10 @@
 # Get All Tokens Held by a Solana Wallet
 
-This project is based on the guide, [How to Get All Tokens Held by a Wallet in Solana](https://www.quicknode.com/guides/web3-sdks/how-to-get-all-tokens-held-by-a-wallet-in-solana) by Aaron Milano. To begin, clone the `quicknode-guide-examples` repo and navigate to this project's directory.
+This project is based on the guide, [How to Get All Tokens Held by a Wallet in Solana](https://www.quicknode.com/guides/web3-sdks/how-to-get-all-tokens-held-by-a-wallet-in-solana) by Aaron Milano.
+
+## Clone Example Monorepo
+
+To begin, clone the `qn-guide-examples` repo and navigate to this project's directory.
 
 ```bash
 git clone https://github.com/quiknode-labs/qn-guide-examples.git
@@ -21,14 +25,14 @@ Either `npm` or `pnpm` can be used to install the project's dependencies and run
 
 ```bash
 npm i
-npm run tokens
+npm start
 ```
 
 ### pnpm
 
 ```bash
 pnpm i
-pnpm tokens
+pnpm start
 ```
 
 ## Expected Output
