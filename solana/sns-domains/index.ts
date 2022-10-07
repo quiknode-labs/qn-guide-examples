@@ -2,9 +2,11 @@ import { Connection, PublicKey } from "@solana/web3.js"
 import { getDomainKey, NameRegistryState, getAllDomains, performReverseLookup } from "@bonfida/spl-name-service"
 import "dotenv/config"
 
-const SOLANA_CONNECTION = new Connection(process.env.QUICKNODE_RPC_ENDPOINT as string)
+const { QUICKNODE_RPC_ENDPOINT } = process.env
 
-async function getPublicKeyFromSolDomain(domain: string):Promise<string>{
+const SOLANA_CONNECTION = new Connection(QUICKNODE_RPC_ENDPOINT as string)
+
+async function getPublicKeyFromSolDomain(domain: string): Promise<string>{
   const { pubkey } = await getDomainKey(domain)
   const owner = (await NameRegistryState.retrieve(
     SOLANA_CONNECTION, pubkey
@@ -13,7 +15,7 @@ async function getPublicKeyFromSolDomain(domain: string):Promise<string>{
   return owner
 }
 
-async function getSolDomainsFromPublicKey(wallet: string):Promise<string[]>{
+async function getSolDomainsFromPublicKey(wallet: string): Promise<string[]>{
   const ownerWallet = new PublicKey(wallet)
   const allDomainKeys = await getAllDomains(SOLANA_CONNECTION, ownerWallet)
   const allDomainNames = await Promise.all(

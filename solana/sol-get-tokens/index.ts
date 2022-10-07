@@ -2,8 +2,10 @@ import { Connection, GetProgramAccountsFilter } from "@solana/web3.js"
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 import 'dotenv/config'
 
-const solanaConnection = new Connection(process.env.QUICKNODE_RPC_ENDPOINT as string)
-const walletToQuery = process.env.WALLET_PUBLIC_KEY as string // example: vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg
+const { QUICKNODE_RPC_ENDPOINT, WALLET_PUBLIC_KEY } = process.env
+
+const solanaConnection = new Connection(QUICKNODE_RPC_ENDPOINT as string)
+const walletToQuery = WALLET_PUBLIC_KEY as string // example: vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg
 
 async function getTokenAccounts(wallet: string, solanaConnection: Connection) {
   const filters:GetProgramAccountsFilter[] = [
