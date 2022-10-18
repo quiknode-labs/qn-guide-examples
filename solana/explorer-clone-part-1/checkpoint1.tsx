@@ -28,7 +28,7 @@ export const TransactionLog: FC = () => {
         //Parse transactions to get signature for recent transactions 
         let signatureList = transactionList.map(transaction=>transaction.signature);
         //Get parsed details of each transaction 
-        let transactionDetails = await connection.getParsedTransactions(signatureList);
+        let transactionDetails = await connection.getParsedTransactions(signatureList, {maxSupportedTransactionVersion:0});
         //Update State
         setTransactionHistory(transactionDetails);
 

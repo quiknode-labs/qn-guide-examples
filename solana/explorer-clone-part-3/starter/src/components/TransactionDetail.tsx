@@ -24,7 +24,7 @@ export const TransactionDetail: FC = () => {
     
     async function getTransaction(txid: string) {
         //Get parsed details for the transaction 
-        let transactionDetails = await connection.getParsedTransaction(txid);
+        let transactionDetails = await connection.getParsedTransaction(txid, {maxSupportedTransactionVersion:0});
         //Update State
         setTransactionDetail(transactionDetails);
     }
