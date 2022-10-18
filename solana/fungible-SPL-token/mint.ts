@@ -51,7 +51,7 @@ const uploadMetadata = async(wallet: Keypair, tokenMetadata: UploadMetadataInput
         }));
     
     //Upload to Arweave
-    const { uri } = await metaplex.nfts().uploadMetadata(tokenMetadata).run();
+    const { uri } = await metaplex.nfts().uploadMetadata(tokenMetadata);
     console.log(`Arweave URL: `, uri);
     return uri;
 

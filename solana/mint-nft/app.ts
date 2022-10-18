@@ -59,8 +59,7 @@ async function uploadMetadata(imgUri: string, imgType: string, nftName: string, 
                 },
             ]
         }
-    })
-    .run();
+    });
     console.log('   Metadata URI:',uri);
     return uri;    
 }
@@ -77,8 +76,7 @@ async function mintNft(metadataUri: string, name: string, sellerFee: number, sym
         creators: creators,
         isMutable: false,
         maxSupply: toBigNumber(1)
-    })
-    .run();
+    });
     console.log(`   Success!🎉`);
     console.log(`   Minted NFT: https://explorer.solana.com/address/${nft.address}?cluster=devnet`);
 }
