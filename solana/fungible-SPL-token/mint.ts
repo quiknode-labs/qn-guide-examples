@@ -1,3 +1,13 @@
+/**
+ * 
+ * Solana pushed breaking changes to some transaction elements in October, 2022 to implement Versioned Transactions. 
+ * A newer version of this code supporting versioned transactions is available here: 
+ * https://github.com/quiknode-labs/qn-guide-examples/blob/main/solana/fungible-SPL-token/mintVersionedTest.ts
+ * For more information on versioned transactions, please visit: 
+ * https://www.quicknode.com/guides/solana-development/how-to-use-versioned-transactions-on-solana
+ */
+
+
 import { Transaction, SystemProgram, Keypair, Connection, PublicKey } from "@solana/web3.js";
 import { MINT_SIZE, TOKEN_PROGRAM_ID, createInitializeMintInstruction, getMinimumBalanceForRentExemptMint, getAssociatedTokenAddress, createAssociatedTokenAccountInstruction, createMintToInstruction } from '@solana/spl-token';
 import { DataV2, createCreateMetadataAccountV2Instruction } from '@metaplex-foundation/mpl-token-metadata';

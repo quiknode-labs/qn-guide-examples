@@ -1,4 +1,4 @@
-//TEMPORARY FOR TESTING - do not save link to this doc
+//Updated for Versioned Transactions
 
 import {  SystemProgram, Keypair, Connection, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import { MINT_SIZE, TOKEN_PROGRAM_ID, createInitializeMintInstruction, getMinimumBalanceForRentExemptMint, getAssociatedTokenAddress, createAssociatedTokenAccountInstruction, createMintToInstruction } from '@solana/spl-token';
@@ -61,13 +61,14 @@ const uploadMetadata = async(wallet: Keypair, tokenMetadata: UploadMetadataInput
 
 
 const createNewMintTransaction = async (connection:Connection, payer:Keypair, mintKeypair: Keypair, destinationWallet: PublicKey, mintAuthority: PublicKey, freezeAuthority: PublicKey)=>{
-        const metaplex = Metaplex.make(solanaConnection)
-        .use(keypairIdentity(payer))
-        .use(bundlrStorage({
-        address: 'https://devnet.bundlr.network',
-        providerUrl: endpoint,
-        timeout: 60000,
-        }));
+    //create metaplex instance on devnet using this wallet
+    const metaplex = Metaplex.make(solanaConnection)
+      .use(keypairIdentity(payer))
+      .use(bundlrStorage({
+      address: 'https://devnet.bundlr.network',
+      providerUrl: endpoint,
+      timeout: 60000,
+    }));
     
     
     //Get the minimum lamport balance to create a new account and avoid rent payments
@@ -128,7 +129,7 @@ const createNewMintTransaction = async (connection:Connection, payer:Keypair, mi
     }).compileToV0Message();
     console.log("   ✅ - Compiled Transaction Message");
     const transaction = new VersionedTransaction(messageV0);
-    transaction.sign([payer]);
+    transaction.sign([payer, mintKeypair]);
     return transaction;
 }
 
