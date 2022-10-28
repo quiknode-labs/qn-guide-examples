@@ -1,0 +1,16 @@
+{
+  "name": "mintwithethers",
+  "version": "1.0.0",
+  "description": "How to mint an NFT on Polygon with Ethers",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "mint": "node mint.js"
+  },
+  "keywords": [ "QuickNode", "Polygon", "Ethers" ],
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "ethers": "^5.7.2"
+  }
+}
