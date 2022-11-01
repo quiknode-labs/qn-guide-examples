@@ -44,6 +44,7 @@ npx hardhat run --network mumbai scripts/deploy.js
 
 > As configured in **hardhat.config.js** and **deploy.js**
 
+
 ### Minting NFTs
 
 To mint NFTs, run the following command:
