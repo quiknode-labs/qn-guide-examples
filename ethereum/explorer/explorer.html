@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QuickNode Explorer</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Styles -->
+    <style>
+    body {
+        margin: 0;
+        padding-top: 15px;
+        color: #ffffff;
+        background-color: #171725;
+    }
+
+    h1 {
+      margin: 15px 0px;
+    }
+
+    img {
+      width: 15%;
+    }
+
+    canvas {
+      display: block;
+      vertical-align: bottom;
+    }
+
+    /* ---- particles.js container ---- */
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    </style>
+  </head>
+  <body>
+    <!-- particles.js container --> 
+    <div id="particles-js"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center" >
+          <!-- Link to logo file here from full project -->
+          <img src="img/logo.png" alt="logo">
+          <h1>QuickNode Explorer</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Block #</th>
+                <th scope="col">Hash</th>
+                <th scope="col">Gas_used</th>
+                <th scope="col">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- particles.js lib - https://github.com/VincentGarreau/particles.js --> 
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <!-- Link to we3.min.js CDN delivery -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+
+    <!--Explorer sccript which connects to node and gets values from blocks-->
+    <script>
+      var provider = 'ADD_YOUR_QUICKNODE_HERE'; // Add your quicknode HTTP provider link here
+      var web3Provider = new Web3.providers.HttpProvider(provider);
+      var web3 = new Web3(web3Provider);
+      var numBlocks = 10; // Change the value based on the number of blocks to be retrieved.
+      web3.eth.getBlockNumber().then((result) => {
+        for (var i = 0; i < numBlocks; i++) {
+          web3.eth.getBlock(result - i).then((block)=>{
+            console.log("Latest Ethereum Block is ",block);
+            var number = block.number;
+            var hash = block.hash;
+            var time = block.timestamp;
+            var gas = block.gasUsed;
+            $('tbody').append("<tr><td>" + number + "</td><td>" + hash + "</td><td>" + gas + "</td><td>" + time + "</td></tr>");
+          });
+        }
+      });
+    </script>
+
+    <!--Background particles-->
+    <script>
+      particlesJS("particles-js", {
+        "particles": {
+          "number": {
+            "value": 355,
+            "density": {
+              "enable": true,
+              "value_area": 789.1476416322727
+            }
+          },
+          "color": {
+            "value": "#ffffff"
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "polygon": {
+              "nb_sides": 5
+            },
+            "image": {
+              "src": "img/github.svg",
+              "width": 100,
+              "height": 100
+            }
+          },
+          "opacity": {
+            "value": 0.48927153781200905,
+            "random": false,
+            "anim": {
+              "enable": true,
+              "speed": 0.2,
+              "opacity_min": 0,
+              "sync": false
+            }
+          },
+          "size": {
+            "value": 2,
+            "random": true,
+            "anim": {
+              "enable": true,
+              "speed": 2,
+              "size_min": 0,
+              "sync": false
+            }
+          },
+          "line_linked": {
+            "enable": false,
+            "distance": 150,
+            "color": "#ffffff",
+            "opacity": 0.4,
+            "width": 1
+          },
+          "move": {
+            "enable": true,
+            "speed": 0.2,
+            "direction": "none",
+            "random": true,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+            "attract": {
+              "enable": false,
+              "rotateX": 600,
+              "rotateY": 1200
+            }
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "bubble"
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "push"
+            },
+            "resize": true
+          },
+          "modes": {
+            "grab": {
+              "distance": 400,
+              "line_linked": {
+                "opacity": 1
+              }
+            },
+            "bubble": {
+              "distance": 83.91608391608392,
+              "size": 1,
+              "duration": 3,
+              "opacity": 1,
+              "speed": 3
+            },
+            "repulse": {
+              "distance": 200,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            },
+            "remove": {
+              "particles_nb": 2
+            }
+          }
+        },
+        "retina_detect": true
+      });
+    </script>
+  </body>
+</html>
