@@ -1,6 +1,6 @@
 # Create a Block Explorer with QuickNode
 
-This project is based on the guide, [How to Create a Block Explorer with QuickNode](https://www.quicknode.com/guides/ethereum-development/how-to-create-a-block-explorer-with-quicknode).
+This project is based on the guide, [How to Create a Block Explorer with QuickNode](https://www.quicknode.com/guides/ethereum-development/how-to-create-a-block-explorer-with-quicknode?utm_source=githubscaffolds&utm_campaign=explorer_app).
 
 ## Clone Example Monorepo
 
