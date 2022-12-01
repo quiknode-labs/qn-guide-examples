@@ -25,4 +25,33 @@ Then run the following command:
 solcjs test.sol --abi
 ```
 
-This will create a **test_sol_test.abi** file in your directory, this file will have the contract's abi in JSON format.
+This will create a **test_sol_test.abi** file in your directory, this file will have the contract's abi in the following format:
+
+```
+[
+	{
+		"inputs": [],
+		"name": "getCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "increment",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+```
+
+You can also get the ABI of a smart contract from [REMIX IDE](https://remix.ethereum.org/):
+
+![imageedit_1_8093646267](https://user-images.githubusercontent.com/41318044/204959036-2031e3c7-9037-4ca3-b730-a3cfe9484250.png)
