@@ -21,7 +21,7 @@ Then create a new file in [REMIX IDE](https://remix.ethereum.org/) and deploy yo
 
 > Make sure to set the compiler version to `0.4.24`
 
-### 2️⃣ By By using [OpenZepplin](https://docs.openzeppelin.com/contracts/4.x/) contract library, for this use the file **erc20_with_library.sol**
+### 2️⃣ By using [OpenZepplin](https://docs.openzeppelin.com/contracts/4.x/) contract library, for this use the file **erc20_with_library.sol**
 
 In this method we can deploy the contract using [REMIX IDE's](https://remix.ethereum.org/) injected provider on Goerli testnet. 
 
