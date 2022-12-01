@@ -60,7 +60,7 @@ contract QKCToken is ERC20Interface, SafeMath {
  
     constructor() public {
         symbol = "QKC";
-        name = "QuikNode Coin";
+        name = "QuickNode Coin";
         decimals = 2;
         _totalSupply = 100000;
         balances[YOUR_METAMASK_WALLET_ADDRESS] = _totalSupply;
