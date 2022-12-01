@@ -12,10 +12,17 @@ cd qn-guide-examples/ethereum/abi
 code .
 ```
 
-Save any PNG format image in the `img` folder and name it **logo.png**.
+Then install [solc](https://www.npmjs.com/package/solc) a Solidity compiler globally.
 
-Open the **explorer.html** file and replace **ADD_YOUR_QUICKNODE_HERE** on [Line 78](https://github.com/quiknode-labs/qn-guide-examples/blob/main/ethereum/explorer/explorer.html#L78) with a [QuickNode](https://www.quicknode.com/?utm_source=githubscaffolds&utm_campaign=explorer_app) Ethereum HTTPS endpoint.
+```bash
+npm i -g solc
+```
+> You might need a sudo command to install the above.
 
-Now open the **explorer.html** file in your browser and you will see a page like the below:
+Then run the following command:
 
-![Screenshot 2022-12-01 at 2 52 24 AM](https://user-images.githubusercontent.com/41318044/204910906-3241f9bc-1ba0-4d7d-a009-8e524e0e5145.png)
+```bash
+solcjs test.sol --abi
+```
+
+This will create a **test_sol_test.abi** file in your directory, this file will have the contract's abi in JSON format.
