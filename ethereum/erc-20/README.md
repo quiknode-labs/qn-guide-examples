@@ -1,6 +1,6 @@
 # Create and Deploy an ERC20 Token
 
-This project is based on the guide, [How to create and deploy an ERC20 token](https://www.quicknode.com/guides/smart-contract-development/how-to-create-and-deploy-an-erc20-token?utm_source=githubscaffolds&utm_campaign=erc20).
+This project is based on the guide, [How to create and deploy an ERC20 token](https://www.quicknode.com/guides/smart-contract-development/how-to-create-and-deploy-an-erc20-token?utm_source=githubscaffolds&utm_campaign=erc20?utm_source=qn-github&utm_campaign=erc20&utm_content=sign-up&utm_medium=generic).
 
 ## Clone Example Monorepo
 
