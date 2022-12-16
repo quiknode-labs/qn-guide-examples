@@ -33,7 +33,7 @@ const Home: NextPage = () => {
         <div className={appContainer}>
           <Link href="https://quicknode.com">
             <h1>QuickNode</h1>
-            <h2 className={title}>Sample Wallet App</h2>
+            <h2 className={title}>Sample App</h2>
           </Link>
 
           <div className={grid}>
