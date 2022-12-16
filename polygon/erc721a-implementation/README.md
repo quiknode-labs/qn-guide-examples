@@ -1,6 +1,6 @@
 # How To Batch Mint NFTs Using the ERC-721A Implementation
 
-This project is based on the guide, [How To Batch Mint NFTs Using the ERC-721A Implementation](https://www.quicknode.com/guides/smart-contract-development/how-to-batch-mint-nfts-using-the-erc-721a-implementation) by Ferhat Kochan.
+This project is based on the guide, [How To Batch Mint NFTs Using the ERC-721A Implementation](https://www.quicknode.com/guides/smart-contract-development/how-to-batch-mint-nfts-using-the-erc-721a-implementation?utm_source=qn-github&utm_campaign=erc721_a&utm_content=sign-up&utm_medium=generic) by Ferhat Kochan.
 
 ### Clone Example Monorepo
 
