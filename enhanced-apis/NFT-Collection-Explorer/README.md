@@ -13,7 +13,7 @@ pnpm i
 
 ### Step 2️⃣:
 Create a `.env` file and copy-paste the content from `.env.example` file in it. Replace **YOUR_URL_HERE** with your [QuickNode Ethereum HTTPS URL](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=nft-collection-explorer&utm_content=sign-up&utm_medium=generic).
-    <a href="[placeholder.com](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=nft-collection-explorer&utm_content=sign-up&utm_medium=generic)" target="_blank">Opens in new tab</a>
+    <a href="https://www.quicknode.com/?utm_source=qn-github&utm_campaign=nft-collection-explorer&utm_content=sign-up&utm_medium=generic" target="_blank">Opens in new tab</a>
 
 ### Step 3️⃣:
 Start your local server.
