@@ -11,7 +11,13 @@ pnpm i
 ```
 
 ### Step 2️⃣:
-Create a `.env` file and copy-paste the content from `.env.example` file in it. Replace **YOUR_URL_HERE** with your [QuickNode Ethereum HTTPS URL](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=nft-collection-explorer&utm_content=sign-up&utm_medium=generic).
+Add environment variable.
+
+```bash
+cp .env.example .env
+```
+
+Open the `.env` file in a code editor and replace **YOUR_URL_HERE** with your [QuickNode Ethereum HTTPS URL](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=nft-collection-explorer&utm_content=sign-up&utm_medium=generic).
 
 ### Step 3️⃣:
 Start your local server.
