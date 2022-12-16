@@ -1,6 +1,6 @@
 # Create a BEP20 Token
 
-This project is based on the guide, [How to Create a BEP20 Token](https://www.quicknode.com/guides/smart-contract-development/how-to-create-a-bep20-token) by Noah Hein.
+This project is based on the guide, [How to Create a BEP20 Token](https://www.quicknode.com/guides/smart-contract-development/how-to-create-a-bep20-token?utm_source=qn-github&utm_campaign=bep20&utm_content=sign-up&utm_medium=generic) by Noah Hein.
 
 ## Clone Example Monorepo
 
