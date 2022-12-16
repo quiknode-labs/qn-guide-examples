@@ -1,6 +1,6 @@
 # How to get ABI of a smart contract
 
-This project is based on the guide, [What is an ABI?](https://www.quicknode.com/guides/smart-contract-development/what-is-an-abi?utm_source=githubscaffolds&utm_campaign=abi).
+This project is based on the guide, [What is an ABI?](https://www.quicknode.com/guides/smart-contract-development/what-is-an-abi?utm_source=qn-github&utm_campaign=abi&utm_content=sign-up&utm_medium=generic).
 
 ## Clone Example Monorepo
 
