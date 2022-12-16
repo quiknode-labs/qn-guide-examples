@@ -1,6 +1,6 @@
 # Mint an NFT on Polygon with Ethers.js
 
-This project is based on the guide, [How to Mint an NFT on Polygon with Ethers.js](https://www.quicknode.com/guides/web3-sdks/how-to-mint-an-nft-on-polygon-with-ethersjs) by Ferhat Kochan.
+This project is based on the guide, [How to Mint an NFT on Polygon with Ethers.js](https://www.quicknode.com/guides/web3-sdks/how-to-mint-an-nft-on-polygon-with-ethersjs?utm_source=qn-github&utm_campaign=polygon_ethers&utm_content=sign-up&utm_medium=generic) by Ferhat Kochan.
 
 ## Clone Example Monorepo
 
