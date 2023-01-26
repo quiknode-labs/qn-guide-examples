@@ -1,0 +1,21 @@
+{
+  "image": "1.png",
+  "name": "I burned BONK #2",
+  "description": "Proof of Bonk Burn",
+  "symbol": "BURN",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Green"
+    }
+  ],
+  "properties": {
+    "category": "image",
+    "files": [
+      {
+        "uri": "1.png",
+        "type": "image/png"
+      }
+    ]
+  }
+}

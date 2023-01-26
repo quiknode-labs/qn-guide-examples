@@ -1,0 +1,27 @@
+{
+  "image": "collection.png",
+  "name": "I burned BONK #3",
+  "description": "Proof of Bonk Burn",
+  "symbol": "BURN",
+  "attributes": [
+    {
+      "trait_type": "collection",
+      "value": "yep"
+    }
+  ],
+  "seller_fee_basis_points": 0,
+  "properties": {
+    "creators": [
+      {
+        "address": "BNKP2f6zrnETxejQmRjbT2kki6TG8x7rj76tyhQ1tqsF",
+        "share": 100
+      }
+    ],
+    "files": [
+      {
+        "uri": "collection.png",
+        "type": "image/png"
+      }
+    ]
+  }
+}
