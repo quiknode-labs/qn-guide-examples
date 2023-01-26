@@ -1,0 +1,20 @@
+{
+  "number": 3,
+  "symbol": "BURN",
+  "sellerFeeBasisPoints": 0,
+  "isMutable": false,
+  "isSequential": false,
+  "creators": [
+    {
+      "address": "BNKP2f6zrnETxejQmRjbT2kki6TG8x7rj76tyhQ1tqsF",
+      "share": 100
+    }
+  ],
+  "uploadMethod": "bundlr",
+  "awsConfig": null,
+  "nftStorageAuthToken": null,
+  "shdwStorageAccount": null,
+  "pinataConfig": null,
+  "hiddenSettings": null,
+  "guards": null
+}
