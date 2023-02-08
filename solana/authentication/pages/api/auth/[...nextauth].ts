@@ -65,6 +65,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
       async session({ session, token }) {
+        // @ts-ignore
         session.publicKey = token.sub;
         if (session.user) {
           session.user.name = token.sub;
