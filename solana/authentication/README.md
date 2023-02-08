@@ -1,7 +1,10 @@
-Supporting Repo from Guide: How to Integrate SSO Authentication with a Solana Wallet
-https://www.quicknode.com/guides/solana-development/how-to-integrate-sso-authentication-with-a-solana-wallet
+# How to Integrate SSO Authentication with a Solana Wallet
 
-/////////
+This project is based on the guide, [How to Integrate SSO Authentication with a Solana Wallet](https://www.quicknode.com/guides/solana-development/how-to-integrate-sso-authentication-with-a-solana-wallet) by Aaron Milano.
+
+This code is modified from the NextAuth Sample Repo (Details below) to include authentication via a Solana Wallet, using the [Solana Wallet Adapter](https://github.com/solana-labs/wallet-adapter). Shout out to Blocksmith Labs for this great [sample repository](https://github.com/Blocksmith-Labs/solana-next-auth).
+
+### NextAuth Sample Repo
 
 > The example repository is maintained from a [monorepo](https://github.com/nextauthjs/next-auth/tree/main/apps/example-nextjs). Pull Requests should be opened against [`nextauthjs/next-auth`](https://github.com/nextauthjs/next-auth).
 
