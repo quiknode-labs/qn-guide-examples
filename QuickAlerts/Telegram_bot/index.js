@@ -3,7 +3,7 @@ const express = require("express");
 const TelegramBot = require("node-telegram-bot-api");
 
 
-const {TOKEN, PORT} = process.env
+const {TOKEN, PORT} = process.env;
 
 const bot = new TelegramBot(TOKEN);
 
@@ -14,10 +14,10 @@ app.use(express.json());
 // We are receiving updates at the route below!
 app.post('/webhook', async (req, res) => {
   const webhook = req.body;
-  const from = webhook[0].from
-  const to = webhook[0].to
-  const token_id = Number.parseInt(webhook[0].logs[0].topics[3],16)
-  const tx_hash = webhook[0].logs[0].transactionHash
+  const from = webhook[0].from;
+  const to = webhook[0].to;
+  const token_id = Number.parseInt(webhook[0].logs[0].topics[3],16);
+  const tx_hash = webhook[0].logs[0].transactionHash;
 
   res.sendStatus(200);
 
