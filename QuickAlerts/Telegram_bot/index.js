@@ -3,7 +3,7 @@ const express = require("express");
 const TelegramBot = require("node-telegram-bot-api");
 
 
-const {TOKEN, SERVER_URL, PORT} = process.env
+const {TOKEN, PORT} = process.env
 
 const bot = new TelegramBot(TOKEN);
 

@@ -49,11 +49,10 @@ Now create a `.env` file in your `/Telegram_bot` directory and paste the followi
 
 ```bash
 TOKEN=<bot_token>
-SERVER_URL=<ngrok_URL>
 PORT=5001
 ```
 
-Replace `<bot_token>` with the bot token you got from BotFather in the last step, replace `<ngrok_URL>` with the URL you got from running the ngrok command. Make sure the value of PORT is exactly the same as the port number used with the ngrok command.
+Replace `<bot_token>` with the bot token you got from BotFather in the last step. Make sure the value of PORT is exactly the same as the port number used with the ngrok command.
 
 In the index.js file, replace `<TELEGRAM_CHANNEL_ID>` on line 24 with the channel ID you got from step 2.
 
