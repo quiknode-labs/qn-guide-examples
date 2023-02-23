@@ -1,36 +1,54 @@
-pragma solidity ^0.6.6;
-import "./FlashLoanReceiverBase.sol";
-import "./ILendingPoolAddressesProvider.sol";
-import "./ILendingPool.sol";
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.10;
 
-contract FlashloanV1 is FlashLoanReceiverBaseV1 {
-    constructor(address _addressProvider) FlashLoanReceiverBaseV1(_addressProvider) public{}
+import "https://github.com/aave/aave-v3-core/blob/master/contracts/flashloan/base/FlashLoanSimpleReceiverBase.sol";
+import "https://github.com/aave/aave-v3-core/blob/master/contracts/interfaces/IPoolAddressesProvider.sol";
+import "https://github.com/aave/aave-v3-core/blob/master/contracts/dependencies/openzeppelin/contracts/IERC20.sol";
 
-    // Flash loan 1000000000000000000 wei (1 ether) worth of `_asset`
-    function flashloan(address _asset) public onlyOwner {
-        bytes memory data = "";
-        uint amount = 1 ether;
 
-        ILendingPoolV1 lendingPool = ILendingPoolV1(addressesProvider.getLendingPool());
-        lendingPool.flashLoan(address(this), _asset, amount, data);
-    }
+contract SimpleFlashLoan is FlashLoanSimpleReceiverBase {
+    address payable owner;
 
-    // This function is called after your contract has received the flash loaned amount
-    function executeOperation(
-        address _reserve,
-        uint256 _amount,
-        uint256 _fee,
-        bytes calldata _params
-    )
-        external
-        override
+    constructor(address _addressProvider)
+        FlashLoanSimpleReceiverBase(IPoolAddressesProvider(_addressProvider))
     {
-        require(_amount <= getBalanceInternal(address(this), _reserve), "Invalid balance, was the flashLoan successful?");
-
-        // Your logic goes here.
-        // !! Ensure that *this contract* has enough of `_reserve` funds to payback the `_fee` !!
-
-        uint totalDebt = _amount.add(_fee);
-        transferFundsBackToPoolInternal(_reserve, totalDebt);
     }
+
+    function fn_RequestFlashLoan(address _token, uint256 _amount) public {
+        address receiverAddress = address(this);
+        address asset = _token;
+        uint256 amount = _amount;
+        bytes memory params = "";
+        uint16 referralCode = 0;
+
+        POOL.flashLoanSimple(
+            receiverAddress,
+            asset,
+            amount,
+            params,
+            referralCode
+        );
+    }
+
+
+    /**
+        This function is called after your contract has received the flash loaned amount
+     */
+    function  executeOperation(
+        address asset,
+        uint256 amount,
+        uint256 premium,
+        address initiator,
+        bytes calldata params
+    )  external override returns (bool) {
+        
+        //Logic goes here
+        
+        uint256 totalAmount = amount + premium;
+        IERC20(asset).approve(address(POOL), totalAmount);
+
+        return true;
+    }
+
+    receive() external payable {}
 }
