@@ -1,6 +1,6 @@
 # Make a Flash Loan using Aave
 
-This project is based on the guide, [How to Make a Flash Loan using Aave](https://www.quicknode.com/guides/defi/how-to-make-a-flash-loan-using-aave?utm_source=qn-github&utm_campaign=flash_loan&utm_content=sign-up&utm_medium=generic) by Noah Hein.
+This project is based on the guide, [How to Make a Flash Loan using Aave](https://www.quicknode.com/guides/defi/how-to-make-a-flash-loan-using-aave?utm_source=qn-github&utm_campaign=flash_loan&utm_content=sign-up&utm_medium=generic), follow the guide to understand how the smart contract works.
 
 ## Clone Example Monorepo
 
