@@ -2,11 +2,11 @@
 
 ## Video with a high level overview of staking options:
 
-Ethereum Staking Options
+[![Ethereum Staking Options](EthereumStakingOptionsIn2023.png)](https://youtu.be/uYsZSUnlDl0)
 
 ## Staking Options
 
-(ethereum-staking-options.png)
+![Ethereum Staking Options](ethereum-staking-options.png)
 
 SVG version: [ethereum-staking-options.svg](ethereum-staking-options.svg)
 
