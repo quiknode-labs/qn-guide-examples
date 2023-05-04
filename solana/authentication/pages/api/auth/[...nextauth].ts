@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
 import { SigninMessage } from "../../../utils/SigninMessage";
@@ -18,7 +18,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           type: "text",
         },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         try {
           const signinMessage = new SigninMessage(
             JSON.parse(credentials?.message || "{}")
@@ -28,7 +28,9 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
             return null;
           }
 
-          if (signinMessage.nonce !== (await getCsrfToken({ req }))) {
+          const csrfToken = await getCsrfToken({ req: { ...req, body: null } });
+
+          if (signinMessage.nonce !== csrfToken) {
             return null;
           }
 
