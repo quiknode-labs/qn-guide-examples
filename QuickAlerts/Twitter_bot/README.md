@@ -2,8 +2,8 @@
 
 #### Prerequisites
 
-- A QuickNode account with [QuickAlerts](https://www.quicknode.com/quickalerts?utm_source=qn-github&utm_campaign=quickalerts_twitter_bot&utm_content=sign-up&utm_medium=generic)
-- [Node.js]() 18.16.0>, [Ethers.js](https://docs.ethers.org/v5) 5.7, [twitter-api-v2](https://www.npmjs.com/package/twitter-api-v2) 1.15.0 installed
+- A [QuickNode](https://www.quicknode.com/quickalerts?utm_source=qn-github&utm_campaign=quickalerts_twitter_bot&utm_content=sign-up&utm_medium=generic) account
+- [Node.js](https://nodejs.org) 18.16.0>, [Ethers.js](https://docs.ethers.org/v5) 5.7, [twitter-api-v2](https://www.npmjs.com/package/twitter-api-v2) 1.15.0 installed
 - [Ngrok](https://ngrok.com/) installed globally
 - [Twitter API Keys](https://developer.twitter.com/en/portal/dashboard) (shown in Step 2)
 - [VSCode](https://code.visualstudio.com/)
@@ -43,17 +43,17 @@ accessSecret=
 
 ### Step 2️⃣ - Setup a Twitter Developer Account and Create API Keys 
 
-Navigate to your [Twitter Developer Portal Dashboard] and go to one of your Apps within a Project (if you don't have this yet, you can do it now).
+Navigate to your [Twitter Developer Portal Dashboard](https://developer.twitter.com/en/portal/dashboard) and go to one of your Apps within a Project (if you don't have this yet, you can do it now).
 
 > Note to make sure your App has **Read & Write** permissions enabled.
 
 <img width="1450" alt="twitter" src="https://github.com/quiknode-labs/qn-guide-examples/assets/101136230/d04b92ac-aaf4-47d9-a077-d56e0c025b71">
 
-On your Keys and Tokens page within your App, you'll need to extract both your **API Key and Secret** and **Access Token and Secret**. With both sets of keys, paste them accordingly into your **.env** file. Remember to save the file.
+On the **Keys and Tokens** tab within your App, you'll need to extract both your **API Key and Secret** and **Access Token and Secret**. With both sets of keys, paste them accordingly into your **.env** file. Remember to save the file.
 
 ### Step 2️⃣ - Setting up the Backend for the Twitter Bot
 
-Open a terminal window and run the following command to start the Express.js server (check out the guide for an explanation of the code):
+Open a terminal window and run the following command to start the Express.js server (check out the [guide](https://www.quicknode.com/guides/quicknode-products/quickalerts/how-to-track-uniswap-liquidity-pools-using-quickalerts-and-twitter) for an explanation of the code):
 
 ```
 node index.js
@@ -96,7 +96,7 @@ In the end, click **Create Webhook**, then toggle the Webhook destination on and
 
 ### Step 4️⃣ - Running the bot🏃‍♂️💨
 
-Up until this point, you have created a server with Express.js that listens to incoming POST requests and makes a tweet with the Twitter API, hosted it with Ngrok, and set up a QuickAlert.
+Up until this point, you have created a QuickAlert and set up a server with Express.js and Ngrok that listens to incoming POST requests and makes a tweet with the Twitter API when a QuickAlert sends a notification to our Webhook destination.
 
 Since it could take a while for someone to create a liquidity pool on Ethereum mainnet, we'll showcase how this should look, given one occurs. You can replicate this behavior by creating your own liquidity pool and testing it on a testnet like Goerli or Sepolia.
 
