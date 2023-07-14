@@ -47,7 +47,7 @@ Navigate to your [Twitter Developer Portal Dashboard] and go to one of your Apps
 
 > Note to make sure your App has **Read & Write** permissions enabled.
 
-[Twitter img]
+<img width="1450" alt="twitter" src="https://github.com/quiknode-labs/qn-guide-examples/assets/101136230/d04b92ac-aaf4-47d9-a077-d56e0c025b71">
 
 On your Keys and Tokens page within your App, you'll need to extract both your **API Key and Secret** and **Access Token and Secret**. With both sets of keys, paste them accordingly into your **.env** file. Remember to save the file.
 
@@ -67,7 +67,7 @@ Then, open a separate terminal window and run the following command to start a *
 ngrok http 8000
 ```
 
-[ngrok img]
+<img width="1186" alt="ngrok" src="https://github.com/quiknode-labs/qn-guide-examples/assets/101136230/0b375775-dee8-4918-b3ca-62b2bd7d627b">
 
 By now, both servers (Express.js and ngrok) should be running so that our QuickAlert can access it properly.
 
@@ -100,4 +100,5 @@ Up until this point, you have created a server with Express.js that listens to i
 
 Since it could take a while for someone to create a liquidity pool on Ethereum mainnet, we'll showcase how this should look, given one occurs. You can replicate this behavior by creating your own liquidity pool and testing it on a testnet like Goerli or Sepolia.
 
-[tweet img]
+<img width="881" alt="tweet" src="https://github.com/quiknode-labs/qn-guide-examples/assets/101136230/1b5e45d6-f689-442e-94c1-b2175cef783c">
+
