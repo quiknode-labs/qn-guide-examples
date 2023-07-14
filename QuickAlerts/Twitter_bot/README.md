@@ -2,7 +2,7 @@
 
 #### Prerequisites
 
-- A QuickNode account with [QuickAlerts](https://www.quicknode.com/quickalerts?utm_source=qn-github&utm_campaign=quickalerts_telegram_bot&utm_content=sign-up&utm_medium=generic)
+- A QuickNode account with [QuickAlerts](https://www.quicknode.com/quickalerts?utm_source=qn-github&utm_campaign=quickalerts_twitter_bot&utm_content=sign-up&utm_medium=generic)
 - [Node.js]() 18.16.0>, [Ethers.js](https://docs.ethers.org/v5) 5.7, [twitter-api-v2](https://www.npmjs.com/package/twitter-api-v2) 1.15.0 installed
 - [Ngrok](https://ngrok.com/) installed globally
 - [Twitter API Keys](https://developer.twitter.com/en/portal/dashboard) (shown in Step 2)
