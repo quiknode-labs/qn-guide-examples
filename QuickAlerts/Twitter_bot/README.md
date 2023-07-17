@@ -19,12 +19,6 @@ npm install
 code .
 ```
 
-Then, install the packages with the following node command:
-
-```
-npm i
-```
-
 After, create a **.env** file that will hold your private Twitter credentials:
 
 ```
@@ -51,7 +45,7 @@ Navigate to your [Twitter Developer Portal Dashboard](https://developer.twitter.
 
 On the **Keys and Tokens** tab within your App, you'll need to extract both your **API Key and Secret** and **Access Token and Secret**. With both sets of keys, paste them accordingly into your **.env** file. Remember to save the file.
 
-### Step 2️⃣ - Setting up the Backend for the Twitter Bot
+### Step 3️⃣ - Setting up the Backend for the Twitter Bot
 
 Open a terminal window and run the following command to start the Express.js server (check out the [guide](https://www.quicknode.com/guides/quicknode-products/quickalerts/how-to-track-uniswap-liquidity-pools-using-quickalerts-and-twitter) for an explanation of the code):
 
@@ -71,7 +65,7 @@ ngrok http 8000
 
 By now, both servers (Express.js and ngrok) should be running so that our QuickAlert can access it properly.
 
-### Step 3️⃣ - Setting up QuickAlerts🔔
+### Step 4️⃣ - Setting up QuickAlerts🔔
 
 > Learn how to setup a QuickAlert:
 [Guide](https://www.quicknode.com/guides/knowledge-base/an-overview-of-quicknodes-quickalerts), [Video](https://youtu.be/Y3UZDxX-ZD8)
@@ -94,7 +88,7 @@ For the **Webhook** destination, we'll need to use the URL referenced in our ter
 
 In the end, click **Create Webhook**, then toggle the Webhook destination on and click **Deploy Alert**. You can edit any QuickAlert's settings by clicking the specific QuickAlert on the [QuickAlerts Dashboard](https://dashboard.quicknode.com/quick-alerts) page.
 
-### Step 4️⃣ - Running the bot🏃‍♂️💨
+### Step 5️⃣ - Running the bot🏃‍♂️💨
 
 Up until this point, you have created a QuickAlert and set up a server with Express.js and Ngrok that listens to incoming POST requests and makes a tweet with the Twitter API when a QuickAlert sends a notification to our Webhook destination.
 
