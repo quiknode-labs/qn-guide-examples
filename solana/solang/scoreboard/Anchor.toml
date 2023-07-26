@@ -1,0 +1,16 @@
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+scoreboard = "F1ipperKF9EfD821ZbbYjS319LXYiBmjhzkkf5a26rC"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Localnet" # Update this to your QuickNode endpoint for mainnet
+wallet = "/Users/qn-guides/.config/solana/id.json" # Update this to your localnet wallet path
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
