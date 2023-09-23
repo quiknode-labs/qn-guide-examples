@@ -36,7 +36,7 @@ async function sendFundsToTokenAccount() {
     const receipt = await signer.sendTransaction(tx);
     await receipt.wait();
 
-    const tokenAccountBalance = (await hre.ethers.provider.getBalance(computedAddress)).toString();
+    const tokenAccountBalance = ethers.formatEther((await hre.ethers.provider.getBalance(computedAddress)).toString());
     console.log(`Token account has ${tokenAccountBalance} ETH after transfer`);
   } catch (err) {
     console.error('Error in sendFundsToTokenAccount:', err);
