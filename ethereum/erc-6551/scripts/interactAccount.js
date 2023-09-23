@@ -2,13 +2,13 @@ const hre = require('hardhat');
 const { ethers } = require('ethers');
 require('dotenv').config();
 
-const provider = new ethers.JsonRpcProvider("QUICKNODE_HTTP_ENDPOINT")
-const signer = new ethers.Wallet("YOUR_PRIVATE_KEY", provider)
+const provider = new ethers.JsonRpcProvider(process.env.RPC_URL)
+const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
 
-const nftContractAddress = '0x70eADCA5D2Ec3Ae99C1232d163d34d8A0a7ab471';
+const nftContractAddress = 'YOUR_NFT_ADDRESS';
 const registryContractAddress = '0x02101dfB77FDE026414827Fdc604ddAF224F0921';
 const accountImplementationAddress = '0x2d25602551487c3f3354dd80d76d54383a243358';
-const tokenBoundAccountAddress = '0xd42d61CFDfce1577d02bA6CE83Dc2583586A4c12';
+const tokenBoundAccountAddress = 'YOUR_TOKEN_BOUND_ACCOUNT_ADDRESS';
 
 const tokenId = 0;
 const salt = 0;

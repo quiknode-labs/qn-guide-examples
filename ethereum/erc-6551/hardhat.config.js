@@ -1,5 +1,6 @@
 /** @type import('hardhat/config').HardhatUserConfig */
 require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config()
 module.exports = {
   defaultNetwork: "sepolia",
   solidity: "0.8.19",
@@ -7,8 +8,8 @@ module.exports = {
     hardhat: {
     },
     sepolia: {
-      url: "YOUR_QUICKNODE_ENDPOINT",
-      accounts: ["YOUR_PRIVATE_KEY"]
+      url: process.env.RPC_URL,
+      accounts: [process.env.PRIVATE_KEY]
     }
   }
 };
