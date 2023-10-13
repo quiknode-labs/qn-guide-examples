@@ -1,0 +1,39 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "D:\\Nazeeh Projects\\wave-portal-svelte\\contracts\\Wave-Portal.sol": {
+      "lastModificationDate": 1634416092477,
+      "contentHash": "5c367a67d0d84e42d11ceb26fa01b9a0",
+      "sourceName": "contracts/Wave-Portal.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "WavePortal"
+      ]
+    }
+  }
+}
