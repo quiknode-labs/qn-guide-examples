@@ -27,8 +27,8 @@ interface createNewTokenParams {
 export async function createNewToken({
     authority,
     connection,
-    numDecimals = 0,
-    numTokens = 0
+    numDecimals = 2,
+    numTokens = 1000
 }: createNewTokenParams): Promise<createNewTokenReturn> {
     const instructions: TransactionInstruction[] = [];
     // Instruction 1 - Create a new account
