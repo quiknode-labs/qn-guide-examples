@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useState } from 'react';
 import { Transaction, TransactionInstruction } from '@solana/web3.js';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import type { TransactionSignature } from '@solana/web3.js';
+import type { Keypair, TransactionSignature } from '@solana/web3.js';
 import { getExplorerUrl, shortenHash } from '@/utils/utils';
 import { Toaster, toast } from 'sonner';
 import { cluster } from '@/utils/constants';
@@ -9,9 +9,10 @@ import { cluster } from '@/utils/constants';
 type SendTransactionTemplateProps = {
     transactionInstructions: TransactionInstruction[];
     buttonLabel: string;
+    extraSigners?: Keypair[];
 };
 
-export const SendTransactionTemplate: FC<SendTransactionTemplateProps> = ({ transactionInstructions, buttonLabel }) => {
+export const SendTransactionTemplate: FC<SendTransactionTemplateProps> = ({ transactionInstructions, buttonLabel, extraSigners }) => {
     const { connection } = useConnection();
     const { publicKey, sendTransaction } = useWallet();
     const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +30,7 @@ export const SendTransactionTemplate: FC<SendTransactionTemplateProps> = ({ tran
             const transaction = new Transaction().add(...transactionInstructions);
             transaction.recentBlockhash = blockhash;
             transaction.feePayer = publicKey;
-
+            if (extraSigners) transaction.partialSign(...extraSigners);
             let signature: TransactionSignature = await sendTransaction(transaction, connection, { minContextSlot });
             const url = getExplorerUrl(signature, cluster);
             await connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature });
