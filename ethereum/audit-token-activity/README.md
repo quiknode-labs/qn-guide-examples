@@ -25,11 +25,11 @@ npm install
 2. Open the `index.js` file.
 3. Locate the `Core` object instantiation. It should look like this:
 
-   ```javascript
-   const core = new Core({
-     endpointUrl: "QUICKNODE_ENDPOINT",
-   });
-   ```
+```javascript
+const core = new Core({
+  endpointUrl: "QUICKNODE_ENDPOINT",
+});
+```
 4. Replace `QUICKNODE_ENDPOINT` with your actual QuickNode endpoint URL.
 
 ### Audit Configuration
