@@ -2,8 +2,9 @@ import { ConnectionProvider } from '@solana/wallet-adapter-react';
 import React, { useMemo } from 'react';
 import { WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { PhantomWalletAdapter,SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { endpoint } from '@/utils/constants';
+import { GameProgramProvider } from '@/utils/game/useGame';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -21,7 +22,9 @@ const SolanaProviders = ({ children }: SolanaProvidersProps) => {
         <ConnectionProvider endpoint={walletEndpoint}>
             <WalletProvider wallets={wallets} autoConnect>
                 <WalletModalProvider>
-                    {children}
+                    <GameProgramProvider>
+                        {children}
+                    </GameProgramProvider>
                 </WalletModalProvider>
             </WalletProvider>
         </ConnectionProvider>

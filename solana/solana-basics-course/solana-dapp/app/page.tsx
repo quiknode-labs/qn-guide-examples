@@ -2,15 +2,15 @@
 
 import React from 'react';
 import SolanaProviders from '@/components/SolanaProviders';
-import Main from '@/components/Main';
 import Navbar from '@/components/Navbar';
+import Game from '@/components/Game';
 
 export default function Home() {
 
   return (
     <SolanaProviders>
-      <Navbar/>
-      <Main/>
+      <Navbar />
+      <Game />
     </SolanaProviders>
   )
 }
