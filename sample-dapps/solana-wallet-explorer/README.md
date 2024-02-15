@@ -1,4 +1,4 @@
-# QuickNode Solana Explorere Demo
+# QuickNode Solana Explorer Demo
 
 ## Overview
 This is a simple demo of how to use your QuickNode Solana Node Endpoint to query the Solana blockchain for tokens, transactions, and NFTs for a given wallet.
@@ -28,7 +28,7 @@ Rename `.env.example` to `.env.local` and update with your QuickNode Solana Node
 
 ```env
 SOLANA_RPC_URL=https://example.solana-mainnet.quiknode.pro/123456/
-DAS_API_ENABLED=true 
+DAS_API_ENABLED=true
 ```
 
 
@@ -49,18 +49,18 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Using the Dapp
 
 Search for a Solana wallet address and press enter. 
-The dapp will redirect to `/wallet/[address]` and query the Solana blockchain for the wallet's token balances, transactions, and NFTs. Results are rendered in respective cards.
+The Dapp will redirect to `/wallet/[address]` and query the Solana blockchain for the wallet's token balances, transactions, and NFTs. Results are rendered in respective cards.
 
 ### Architecture
 
 ```bash
-| - src
-  | - app
-  |  | - api
-  |     | - wallet
-  | - components
-     | - explorer
-     | - header
+src/
+├── app/
+│   └── api/
+│       └── wallet/
+├── components/
+    ├── explorer/
+    └── header/
 ```
 
 - `api` - Contains the API routes for the Solana RPC calls. These can be accessed from the client via `/api/wallet/[method]?walletAddress=[address]`. These GET requests utilize the `@solana/web3.js` library and Metaplex Digital Asset Standard framework to handle queries.
