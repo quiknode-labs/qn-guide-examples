@@ -24,7 +24,7 @@ import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { DasApiAsset, dasApi } from '@metaplex-foundation/digital-asset-standard-api';
 
 
-const endpoint = "https://dawn-nameless-surf.solana-devnet.quiknode.pro/27099280e0add293e13f9404e30f883dc67ee2e2/";
+const endpoint = "https://example.solana-devnet.quiknode.pro/123456/";
 
 const umi = createUmi(endpoint)
     .use(mplTokenMetadata())
