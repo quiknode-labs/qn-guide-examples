@@ -42,3 +42,10 @@ export interface TokenAmount {
     tokens: Token[];
   }
   
+ export interface JupToken {
+    name: string;
+    symbol: string;
+    address: string;
+    decimals: number;
+    logoURI: string;
+  }
