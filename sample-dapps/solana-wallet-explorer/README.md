@@ -29,6 +29,7 @@ Rename `.env.example` to `.env.local` and update with your QuickNode Solana Node
 ```env
 SOLANA_RPC_URL=https://example.solana-mainnet.quiknode.pro/123456/
 DAS_API_ENABLED=true
+NEXT_PUBLIC_FETCH_JUPLIST=true
 ```
 
 

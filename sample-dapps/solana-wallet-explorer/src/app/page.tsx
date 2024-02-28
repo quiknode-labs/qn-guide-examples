@@ -27,10 +27,13 @@ export default function Home() {
           DAS_API_ENABLED=true
         </CardContent>
         <CardContent>
-          Create a QuickNode Endpoint <Link href="https://www.quicknode.com/" target="_blank">here</Link>.
+          Set whether or not to fetch Jupiter's token list (to display token names/symbols) in `.env.local` (this is a large file):
+          <br />
+          NEXT_PUBLIC_FETCH_JUPLIST=true
         </CardContent>
+        Create a QuickNode Endpoint <Link href="https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=Solana-Explorer" target="_blank">here</Link>.
         <CardContent>
-          Learn more about the Solana Digtal Asset Standard Add-on <Link href="https://marketplace.quicknode.com/add-on/metaplex-digital-asset-standard-api" target="_blank">here</Link>.
+          Learn more about the Solana Digtal Asset Standard Add-on <Link href="https://marketplace.quicknode.com/add-on/metaplex-digital-asset-standard-api?utm_source=internal&utm_campaign=dapp-examples&utm_content=Solana-Explorer" target="_blank">here</Link>.
         </CardContent>
       </Card>
     </div>
