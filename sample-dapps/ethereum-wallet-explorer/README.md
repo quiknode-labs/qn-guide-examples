@@ -1,0 +1,87 @@
+# QuickNode EVM Explorer Demo
+
+## Overview
+This is a simple demo of how to use your QuickNode EVM Node Endpoint to query the EVM blockchain for tokens, transactions, and NFTs for a given wallet.
+
+The demo uses [Next.js 14](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+
+
+## Getting Started
+
+### Install Dependencies
+
+First, install the dependencies:
+
+```bash
+npm install
+# or
+yarn
+# or
+pnpm install
+# or
+bun install
+```
+
+### Set Environment Variables
+
+Rename `.env.example` to `.env.local` and update with your QuickNode EVM Node Endpoint. Enable the DAS API only if you have enabled the DAS add-on for your QuickNode EVM Node Endpoint.
+
+```env
+EVM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
+```
+
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Using the Dapp
+
+Search for an EVM wallet address and press enter. 
+The Dapp will redirect to `/wallet/[address]` and query the EVM blockchain for the wallet's token balances, transactions, and NFTs. Results are rendered in respective cards.
+
+### Architecture
+
+```bash
+src/
+├── app/
+│   └── api/
+│       └── wallet/
+├── components/
+    ├── explorer/
+    └── header/
+```
+
+- `api` - Contains the API routes for the EVM RPC calls. These can be accessed from the client via `/api/wallet/[method]?walletAddress=[address]`. These GET requests utilize the `` library and Metaplex Digital Asset Standard framework to handle queries.
+- `components` - Contains the React components for the dapp. 
+    - The `explorer` component contains client-side components that call the API routes and render the results.
+    - The `header` component contains the search bar for the dapp.
+
+## Deploy on Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)]()
+
+## Preview 
+
+![Preview](public/demo.png)
+
+## Next.js Documentation
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
