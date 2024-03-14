@@ -19,7 +19,7 @@ const Balance = ({ walletAddress }: BalanceProps) => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setBalance(data.solBalance);
+        setBalance(data.ethBalance);
       } catch (error) {
         setError('Failed to fetch balance');
         console.error("Error fetching balance:", error);
@@ -36,7 +36,7 @@ const Balance = ({ walletAddress }: BalanceProps) => {
 
   return (
     <div className="text-4xl font-bold">
-      {balance?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} SOL
+      {Number(balance).toFixed(2)} ETH
     </div>
   );
 };
