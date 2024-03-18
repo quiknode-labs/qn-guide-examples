@@ -3,6 +3,7 @@ import { handleError, parseAndValidateAddress } from '../../utils/helpers';
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
+    let internalFlag;
     const walletAddress = url.searchParams.get('walletAddress');
     try {
         const validAddress = await parseAndValidateAddress(walletAddress);
@@ -14,12 +15,18 @@ export async function GET(request: Request) {
             const blockNumber = await ethers.toQuantity(txn.blockNumber)
             const transactionIndex = await ethers.toQuantity(txn.transactionIndex);
             const transactionDetails = await provider.send("eth_getTransactionByBlockNumberAndIndex", [blockNumber, transactionIndex]);
+            if (transactionDetails.from !== walletAddress && transactionDetails.to !== walletAddress) {
+                internalFlag = "✅";
+            } else {
+                internalFlag = "❌";
+            }
             transactions.push({
                 transactionHash: transactionDetails.hash,
-                blockNumber: transactionDetails.blockNumber,
+                blockNumber: BigInt(transactionDetails.blockNumber).toString(),
                 from: transactionDetails.from,
                 to: transactionDetails.to,
-                value: transactionDetails.value
+                value: ethers.formatEther(BigInt(transactionDetails.value).toString()),
+                internal: internalFlag
             });
         }
 

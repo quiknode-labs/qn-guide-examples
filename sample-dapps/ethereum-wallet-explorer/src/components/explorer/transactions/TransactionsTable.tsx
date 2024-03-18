@@ -10,6 +10,7 @@ interface Transaction {
     from: string;
     to: string;
     value: string;
+    internal: string;
 }
 
 interface TransactionProps {
@@ -21,7 +22,7 @@ const TransactionsTable = ({ walletAddress }: TransactionProps) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(0);
-    const transactionsPerPage = 10;
+    const transactionsPerPage = 7;
 
 
     useEffect(() => {
@@ -54,12 +55,15 @@ const TransactionsTable = ({ walletAddress }: TransactionProps) => {
         <>
             <Table>
                 <TableHeader>
+                    <br/>
+                    <br/>
                     <TableRow>
                         <TableHead>Transaction Hash</TableHead>
                         <TableHead>Block</TableHead>
                         <TableHead>From</TableHead>
                         <TableHead>To</TableHead>
                         <TableHead>Value</TableHead>
+                        <TableHead>Internal Txn</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y">
@@ -70,7 +74,8 @@ const TransactionsTable = ({ walletAddress }: TransactionProps) => {
                                 <TableCell>{transaction.blockNumber}</TableCell>
                                 <TableCell>{transaction.from}</TableCell>
                                 <TableCell>{transaction.to}</TableCell>
-                                <TableCell>{transaction.value}</TableCell>
+                                <TableCell>{transaction.value} ETH</TableCell>
+                                <TableHead>{transaction.internal}</TableHead>
                             </TableRow>
                         ))}
                 </TableBody>

@@ -68,7 +68,9 @@ const NFTsTable = ({ walletAddress }: NFTProps) => {
         <>
             <Table>
                 <TableHeader>
-                    Unique count of NFTs in Wallet: {totalTokens}
+                    Unique count of NFTs in Wallet: <strong>{totalTokens}</strong>
+                    <br/>
+                    <br/>
                     <TableRow>
                         <TableHead>Collection Name</TableHead>
                         <TableHead>Token ID</TableHead>
@@ -76,14 +78,14 @@ const NFTsTable = ({ walletAddress }: NFTProps) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y">
-                    {loading ? <TableSkeleton numRows={5} /> :
+                    {loading ? <TableSkeleton numRows={7} /> :
                         nfts.map((nft, index) => (
                             <TableRow className="divide-x" key={nft.collectionAddress + nft.collectionTokenId}>
                                 <TableCell>{nft.collectionName}</TableCell>
                                 <TableCell>{nft.collectionTokenId}</TableCell>
                                 <TableCell>
                                     {nft.imageUrl ? (
-                                        <img src={nft.imageUrl} alt={nft.name} style={{ width: '50px', height: '50px' }} />
+                                        <img src={nft.imageUrl} alt={nft.name} style={{ width: '100px', height: '100px' }} />
                                     ) : (
                                         "No Image Found"
                                     )}

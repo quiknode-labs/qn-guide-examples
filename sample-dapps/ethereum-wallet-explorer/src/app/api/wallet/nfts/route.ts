@@ -12,7 +12,7 @@ export async function GET(request: Request) {
         const params = [{
             wallet: validAddress,
             page,
-            perPage: 5,
+            perPage: 7,
             omitFields: ["traits"]
         }];
         const nfts = await provider.send("qn_fetchNFTs", params);

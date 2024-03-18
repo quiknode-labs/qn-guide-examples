@@ -66,7 +66,9 @@ const TokensTable = ({ walletAddress }: TokenProps) => {
         <>
             <Table>
                 <TableHeader>
-                    Unique count of Tokens in Wallet: {totalTokens}
+                    Unique count of Tokens in Wallet: <strong>{totalTokens}</strong>
+                    <br/>
+                    <br/>
                     <TableRow>
                         <TableHead>Name</TableHead>
                         <TableHead>Symbol</TableHead>
