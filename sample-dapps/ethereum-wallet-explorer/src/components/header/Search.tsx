@@ -29,7 +29,7 @@ const Search = () => {
                 <Input
                     name="search"
                     className="w-[400px] sm:w-[300px] lg:w-[400px]"
-                    placeholder="Wallet search..."
+                    placeholder="Wallet address or ENS..."
                     type="search"
                 />
             </form>
@@ -45,8 +45,16 @@ async function validateAddress(walletAddress: string): Promise<string> {
         throw new Error('Wallet address is required.');
     }
     try {
-        const pubKey = ethers.getAddress(walletAddress)
-        return pubKey
+        if (walletAddress.startsWith("0x")) {
+            return ethers.getAddress(walletAddress);
+        } else {
+            const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_EVM_RPC_URL);
+            const pubKey = await provider.resolveName(walletAddress);
+            if (pubKey === null) {
+                throw new Error(`The ENS name '${walletAddress}' does not resolve to an address.`);
+            }
+            return pubKey; 
+        }
     } catch {
         throw new Error('Invalid wallet address.');
     }
