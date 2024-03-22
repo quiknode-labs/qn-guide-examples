@@ -1,0 +1,4 @@
+aiofiles>=23.2.1
+aiohttp>=3.9.3
+python-dotenv>=1.0.1
+python_dateutil>=2.9.0
