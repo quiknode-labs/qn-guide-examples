@@ -5,7 +5,6 @@ export const cluster: Cluster = process.env.NEXT_PUBLIC_CLUSTER as Cluster || 'd
 export const endpoint: string = process.env.NEXT_PUBLIC_URL || clusterApiUrl(WalletAdapterNetwork.Devnet);
 //export const endpoint: string = 'http://127.0.0.1:8899';
 
-// NEW
 export const SEEDS: { [key: string]: Buffer } = {
     player: Buffer.from("player"),
     mint: Buffer.from("play_token_mint"),
@@ -13,4 +12,5 @@ export const SEEDS: { [key: string]: Buffer } = {
     game: Buffer.from("new_game"),
 };
 
-export const PROGRAM_ID: PublicKey = new PublicKey('QTTmCrRSrMhPtZS431TSmtiosubJoqfExRhi7JHcJhC');
+const programAddress: string = process.env.NEXT_PUBLIC_PROGRAM_ADDRESS || 'QTTmCrRSrMhPtZS431TSmtiosubJoqfExRhi7JHcJhC';
+export const PROGRAM_ID: PublicKey = new PublicKey(programAddress);
