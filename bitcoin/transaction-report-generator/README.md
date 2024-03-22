@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This script is designed to fetch and analyze Bitcoin transactions associated with a specific address, utilizing the power of QuickNode's Blockbook RPC add-on. It generates detailed reports within a specified date range, providing insights into transaction history, balances after each transaction, and the USD value of Bitcoin movements. Aimed at developers, financial analysts, and enthusiasts, this tool ensures clarity and compliance in managing Bitcoin transaction data.
+This script is designed to fetch and analyze Bitcoin transactions associated with a specific address, utilizing the power of QuickNode's *paid* [Blockbook add-on](https://marketplace.quicknode.com/add-on/blockbook-rpc-add-on). It generates detailed reports within a specified date range, providing insights into transaction history, balances after each transaction, and the USD value of Bitcoin movements. Aimed at developers, financial analysts, and enthusiasts, this tool ensures clarity and compliance in managing Bitcoin transaction data.
 
 For an in-depth guide on how to use and develop this tool, refer to [our comprehensive guide on QuickNode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-generate-bitcoin-transaction-reports-with-blockbook).
 

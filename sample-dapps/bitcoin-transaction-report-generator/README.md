@@ -3,7 +3,7 @@
 
 ## Introduction
 
-This application is designed to fetch and analyze Bitcoin transactions associated with a specific address, leveraging the capabilities of QuickNode's Blockbook RPC add-on. It provides users with detailed reports within a specified date range, offering insights into transaction history, balances after each transaction, and the USD value of Bitcoin movements.
+This application is designed to fetch and analyze Bitcoin transactions associated with a specific address, leveraging the capabilities of QuickNode's [Blockbook add-on](https://marketplace.quicknode.com/add-on/blockbook-rpc-add-on). It provides users with detailed reports within a specified date range, offering insights into transaction history, balances after each transaction, and the USD value of Bitcoin movements.
 
 For an in-depth guide on how to fetch data and develop further functionalities, refer to [our comprehensive guide on QuickNode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-generate-bitcoin-transaction-reports-with-blockbook) or [our script files](../../bitcoin/transaction-report-generator/).
 
@@ -65,6 +65,8 @@ Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_BITCOIN_ENDPOINT
 ```env
 VITE_QUICKNODE_ENDPOINT = "YOUR_QUICKNODE_BITCOIN_ENDPOINT_URL"
 ```
+
+> Please note that while we utilize `dotenv` for environment variable management, sensitive information like endpoints can still be visible on the frontend. This configuration is not recommended for production environments as-is.
 
 ### Running the Application
 
