@@ -45,17 +45,16 @@ async function validateAddress(walletAddress: string): Promise<string> {
         throw new Error('Wallet address is required.');
     }
     try {
-        if (walletAddress.startsWith("0x")) {
-            return ethers.getAddress(walletAddress);
-        } else {
-            const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_ETHEREUM_RPC_URL);
-            const pubKey = await provider.resolveName(walletAddress);
-            if (pubKey === null) {
-                throw new Error(`The ENS name '${walletAddress}' does not resolve to an address.`);
-            }
-            return pubKey; 
+        const response = await fetch(`/api/resolve?walletAddress=${encodeURIComponent(walletAddress)}`);
+        if (!response.ok) {
+            throw new Error('Failed to resolve address');
         }
-    } catch {
+        const data = await response.json();
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        return data.address;
+    } catch (error) {
         throw new Error('Invalid wallet address.');
     }
 }

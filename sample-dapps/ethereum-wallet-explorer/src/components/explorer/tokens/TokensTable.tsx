@@ -20,10 +20,10 @@ interface TokenProps {
 
 const TokensTable = ({ walletAddress }: TokenProps) => {
     const [tokens, setTokens] = useState<ERC20Token[]>([]);
-    const [totalPages, setTotalPages] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalTokens, setTotalTokens] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const fetchTokens = async (page: number) => {

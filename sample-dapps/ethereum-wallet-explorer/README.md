@@ -30,7 +30,6 @@ Rename `.env.example` to `.env.local` and update with your QuickNode Ethereum No
 
 ```env
 ETHEREUM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
-NEXT_PUBLIC_ETHEREUM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
 ```
 
 First, run the development server:
@@ -71,7 +70,8 @@ src/
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer&env=ETHEREUM_RPC_URL,NEXT_PUBLIC_ETHEREUM_RPC_URL&envDescription=ETHEREUM_RPC_URL%3A%20Use%20QuickNode%20Ethereum%20Mainnet%20Endpoint%20%7C%20NEXT_PUBLIC_ETHEREUM_RPC_URL%3A%20Your%20Ethereum%20RPC%20URL%20for%20frontend%20uses&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=ethereum-wallet-explorer&repository-name=ethereum-wallet-explorer&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-title=QuickNode%20Starter%20Ethereum%20Wallet%20Explorer&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fblob%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer%2Fpublic%2Fdemo1.png)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer&env=ETHEREUM_RPC_URL&envDescription=ETHEREUM_RPC_URL%3A%20Use%20QuickNode%20Ethereum%20Mainnet%20Endpoint&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=ethereum-wallet-explorer&repository-name=ethereum-wallet-explorer&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-title=QuickNode%20Starter%20Ethereum%20Wallet%20Explorer&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fblob%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer%2Fpublic%2Fdemo1.png)
+
 
 ## Preview 
 

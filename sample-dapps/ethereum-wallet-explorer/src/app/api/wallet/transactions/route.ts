@@ -9,7 +9,7 @@ export async function GET(request: Request) {
         const validAddress = await parseAndValidateAddress(walletAddress);
         const provider = new ethers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL);
         const appearances = await provider.send("tb_getAppearances", [{"address": validAddress}]);
-        const txnsData = await appearances.data
+        const txnsData = await appearances.data.slice(-100) // Hard limit to last 100 transactions
         const transactions = [];
         for (let txn of txnsData) {
             const blockNumber = await ethers.toQuantity(txn.blockNumber)

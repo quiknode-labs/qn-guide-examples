@@ -23,10 +23,10 @@ interface NFTProps {
 
 const NFTsTable = ({ walletAddress }: NFTProps) => {
     const [nfts, setNfts] = useState<NFT[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     const [totalTokens, setTotalTokens] = useState(0);
 
     useEffect(() => {
