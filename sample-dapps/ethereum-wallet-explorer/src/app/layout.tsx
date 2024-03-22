@@ -9,10 +9,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | QuickNode EVM Wallet Explorer',
-    default: 'QuickNode EVM Wallet Explorer',
+    template: '%s | QuickNode Ethereum Wallet Explorer',
+    default: 'QuickNode Ethereum Wallet Explorer',
   },
-  description: 'This is an example EVM Wallet Explorer.',
+  description: 'This is an example Ethereum Wallet Explorer.',
   metadataBase: new URL('https://some-example-site.sh'),
 };
 

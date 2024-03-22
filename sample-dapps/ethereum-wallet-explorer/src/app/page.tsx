@@ -21,13 +21,13 @@ export default function Home() {
           Local Development
         </CardHeader>
         <CardContent>
-          Create a QuickNode Endpoint <Link href="https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=EVM-Explorer" target="_blank">here</Link>.
+          Create a QuickNode Endpoint <Link href="https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=Ethereum-Explorer" target="_blank" style={{ color: 'teal' }}>here</Link>.
           <br />
           <br />
-          Update `.env.local` with your QuickNode EVM Node Endpoint:
+          Update `.env.local` with your QuickNode Ethereum Node Endpoint:
           <br />
           <br />
-          EVM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
+          ETHEREUM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
         </CardContent>
       </Card>
       <Card>

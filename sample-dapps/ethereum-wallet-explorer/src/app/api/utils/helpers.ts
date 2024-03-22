@@ -21,7 +21,7 @@ export function initializeConnection(): ethers.JsonRpcProvider {
   return new ethers.JsonRpcProvider(ethRpcUrl);
 }
 
-// Example of getting the Ethereum RPC URL, similar to the DAS API endpoint retrieval
+// Example of getting the Ethereum RPC URL
 export function getEthRpcUrl(): string {
   const ethRpcUrl = process.env.ETH_RPC_URL;
   if (!ethRpcUrl) {

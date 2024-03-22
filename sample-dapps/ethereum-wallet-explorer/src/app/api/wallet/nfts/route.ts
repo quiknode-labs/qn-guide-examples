@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     const page = parseInt(url.searchParams.get('page') || '1', 10);
     try {
         const validAddress = await parseAndValidateAddress(walletAddress);
-        const provider = new ethers.JsonRpcProvider(process.env.EVM_RPC_URL);
+        const provider = new ethers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL);
 
         const params = [{
             wallet: validAddress,

@@ -15,7 +15,7 @@ const Header = () => {
         <Search />
       </div>
       <div className="w-full md:flex-1 flex justify-end">
-        <Link href="https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=EVM-Explorer" target="_blank">
+        <Link href="https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=ETHEREUM-Explorer" target="_blank">
         <Button className="hidden md:inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-sm rounded-md text-white bg-cyan-500 hover:bg-cyan-600 font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
           Sign up
         </Button>

@@ -1,11 +1,12 @@
-# QuickNode EVM Explorer Demo
+# QuickNode Ethereum Explorer Demo
 
 ## Overview
-This is a simple demo of how to use your QuickNode EVM Node Endpoint to query the EVM blockchain for tokens, transactions, and NFTs for a given wallet.
+
+This is a simple demo of how to use your QuickNode Ethereum Node Endpoint and APIs from the QuickNode Marketplace to query the Ethereum blockchain for tokens, transactions, and NFTs for a given wallet.
+
+To run this demo to its full capabilities, you will need both the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle?utm_source=internal&utm_content=courses) (free) and [`Trueblocks Key`](https://marketplace.quicknode.com/add-on/trueblocks-key?utm_source=internal&utm_content=course) (paid) add-ons from the [QuickNode Marketplace](https://www.quicknode.com/marketplace?utm_source=internal&utm_content=course) installed.
 
 The demo uses [Next.js 14](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-
 
 ## Getting Started
 
@@ -25,12 +26,12 @@ bun install
 
 ### Set Environment Variables
 
-Rename `.env.example` to `.env.local` and update with your QuickNode EVM Node Endpoint. Enable the DAS API only if you have enabled the DAS add-on for your QuickNode EVM Node Endpoint.
+Rename `.env.example` to `.env.local` and update with your QuickNode Ethereum Node Endpoint.
 
 ```env
-EVM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
+ETHEREUM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
+NEXT_PUBLIC_ETHEREUM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
 ```
-
 
 First, run the development server:
 
@@ -48,8 +49,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Using the Dapp
 
-Search for an EVM wallet address and press enter. 
-The Dapp will redirect to `/wallet/[address]` and query the EVM blockchain for the wallet's token balances, transactions, and NFTs. Results are rendered in respective cards.
+Search for an Ethereum wallet address and press enter. The Dapp will redirect to `/wallet/[address]` and query the Ethereum blockchain for the wallet's token balances, transactions, and NFTs. Results are rendered in respective cards.
 
 ### Architecture
 
@@ -63,7 +63,8 @@ src/
     └── header/
 ```
 
-- `api` - Contains the API routes for the EVM RPC calls. These can be accessed from the client via `/api/wallet/[method]?walletAddress=[address]`. These GET requests utilize the `` library and Metaplex Digital Asset Standard framework to handle queries.
+- `api` - Contains the API routes for the Ethereum RPC calls. These can be accessed from the client via `/api/wallet/[method]?walletAddress=[address]`. These GET requests utilize the [`Ethers`](https://docs.ethers.org/v6/) library, which lets us interact with Ethereum via our RPC URL and helps us parse and decode data, the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle?utm_source=internal&utm_content=courses) add-on from the [QuickNode Marketplace](https://www.quicknode.com/marketplace?utm_source=internal&utm_content=course) to get information about NFTs and ERC-20 Tokens via simple RPC request, and the [`Trueblocks Key`](https://marketplace.quicknode.com/add-on/trueblocks-key?utm_source=internal&utm_content=course) add-on to obtain a complete historical list of appearances (block number, transaction id) for any Ethereum address.
+
 - `components` - Contains the React components for the dapp. 
     - The `explorer` component contains client-side components that call the API routes and render the results.
     - The `header` component contains the search bar for the dapp.
@@ -74,7 +75,9 @@ src/
 
 ## Preview 
 
-![Preview](public/demo.png)
+![Preview](././public/demo1.png)
+
+![Preview](././public/demo2.png)
 
 ## Next.js Documentation
 
@@ -84,4 +87,3 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
