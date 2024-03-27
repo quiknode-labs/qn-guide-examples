@@ -1,5 +1,5 @@
 import { LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js";
-import { ArbBot, SwapToken } from './index';
+import { ArbBot, SwapToken } from './bot';
 import dotenv from "dotenv";
 
 dotenv.config({
