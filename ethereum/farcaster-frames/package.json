@@ -2,12 +2,12 @@
     "name": "frames-express",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "src/index.ts",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "build": "tsc -p .",
       "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
-      "start": "node dist/index.js"
+      "start": "ts-node src/index.ts"
     },
     "dependencies": {
       "cors": "^2.8.5",
@@ -25,7 +25,7 @@
     "author": "",
     "license": "ISC",
     "engines": {
-      "node": "20.x"
+      "node": "18.x"
     }
   }
   
