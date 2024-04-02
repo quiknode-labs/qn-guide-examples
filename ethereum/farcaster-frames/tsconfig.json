@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "target": "es6",                           // Compile to ES6
+      "module": "commonjs",                      // Use commonjs module system
+      "lib": ["es6", "DOM"],                            // Include the ES6 library
+      "outDir": "./dist",                        // Output to 'dist' folder
+      "rootDir": "./src",                        // Root directory is 'src'
+      "strict": true,                            // Enable all strict type-checking options
+      "moduleResolution": "node",                // Module resolution strategy
+      "esModuleInterop": true,                   // Enables __importDefault helper
+      "skipLibCheck": true,                // Skip type checking of all declaration files (*.d.ts)
+      "forceConsistentCasingInFileNames": true   // Disallow inconsistently-cased references to the same file
+    },
+    "include": [
+      "src/**/*.ts"                              // Include all TypeScript files in src
+, "config.ts"    ],
+    "exclude": [
+      "node_modules",                            // Exclude the node_modules directory
+      "**/*.spec.ts"                             // Exclude test files
+    ],
+  }
