@@ -8,7 +8,7 @@ dotenv.config({
 
 const defaultConfig = {
     solanaEndpoint: clusterApiUrl("mainnet-beta"),
-    jupiter: "https://quote-api.jup.ag/v6",
+    jupiter: "https://public.jupiterapi.com",
 };
 
 async function main() {
