@@ -19,9 +19,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <SolanaProviders>
-        <Navbar />
-        <body className={inter.className}>{children}</body>
+        <body className={`${inter.className} antialiased`}>
+          <Navbar />
+          <div className="flex h-screen flex-col bg-gray-100">
+            <div className="w-full flex-none mt-20">
+              {children}
+            </div>
+          </div>
+        </body>
       </SolanaProviders>
+
     </html>
   );
 }

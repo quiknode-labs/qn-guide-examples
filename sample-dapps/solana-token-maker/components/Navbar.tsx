@@ -10,11 +10,11 @@ const WalletMultiButtonDynamic = dynamic(
 
 const Navbar = () => {
   return (
-    <div className="w-full h-20 text-white bg-slate-900 sticky top-0 z-20">
-      <div className="container mx-auto px-4 h-full">
+    <div className="w-full h-20 text-white bg-gray-300 sticky top-0 z-20">
+      <div className="container mx-auto px-12 h-full">
         <div className="flex justify-between items-center h-full ">
-          <Link href="/">
-          Quick-Token
+          <Link href="/" className="font-bold text-2xl text-black">
+            <div>Quick-Token</div>            
           </Link>
           <WalletMultiButtonDynamic />
         </div>
