@@ -1,33 +1,39 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest } from "next/server";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
+export async function POST(request: NextRequest) {
+    const API_KEY = process.env.QN_IPFS_API;
+    const API_ENDPOINT = "https://api.quicknode.com/ipfs/rest/v1/s3/put-object";
+
     try {
-      var myHeaders = new Headers();
-      myHeaders.append("x-api-key", "YOUR_API_KEY");
+        if (!API_KEY) {
+            throw new Error('API key not set');
+        }
 
-      var formdata = new FormData();
-      formdata.append("Body", req.file, "YOUR_FILE_PATH");
-      formdata.append("Key", "YOUR_FILE_NAME");
-      formdata.append("ContentType", "YOUR_CONTENT_TYPE");
+        const myHeaders = new Headers();
+        myHeaders.append("x-api-key", API_KEY);
 
-      var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: formdata,
-        redirect: 'follow'
-      };
+        const formData = await request.formData();
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData
+        };
 
-      const response = await fetch("https://api.quicknode.com/ipfs/rest/v1/s3/put-object", requestOptions);
-      const result = await response.text();
+        const result = await fetch(API_ENDPOINT, requestOptions);
+        if (!result.ok) {
+            throw new Error(`API call failed with status ${result.status}: ${await result.text()}`);
+        }
 
-      res.status(200).json({ result });
+        const response = await result.json();
+        return new Response(JSON.stringify({ response }), {
+            headers: { 'Content-Type': 'application/json' },
+            status: 200,
+        });
     } catch (error) {
-      console.log('error', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        console.error("Error in POST function:", error instanceof Error ? error.message : error);
+        return new Response(JSON.stringify({ error: 'An error occurred while processing your request. Please try again later.' }), {
+            headers: { 'Content-Type': 'application/json' },
+            status: 500,
+        });
     }
-  } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
 }
