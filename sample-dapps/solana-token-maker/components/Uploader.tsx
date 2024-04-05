@@ -1,28 +1,20 @@
 'use client'
 
 import { GATEWAY_URL } from '@/utils/constants';
-import { UploadResponse } from '@/utils/types';
-import { useState, useCallback, useMemo, ChangeEvent, useEffect } from 'react';
+import { MintUploadState, UploadResponse } from '@/utils/types';
+import { useState, useCallback, useMemo, ChangeEvent, useEffect, Dispatch, SetStateAction } from 'react';
 import Link from 'next/link';
 
 const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
-interface UploadState {
-    imagePreview: string | null;
-    file: File | null;
-    imgUrl: string | null;
-    errorMessage: string;
-    isUploading: boolean;
+
+interface Props {
+    setUploadState: Dispatch<SetStateAction<MintUploadState>>;
+    uploadState: MintUploadState
 }
 
-export default function Uploader() {
+export default function Uploader({ setUploadState, uploadState }: Props) {
     const [dragActive, setDragActive] = useState(false);
-    const [uploadState, setUploadState] = useState<UploadState>({
-        imagePreview: null,
-        file: null,
-        imgUrl: null,
-        errorMessage: '',
-        isUploading: false,
-    });
+
     const { imagePreview, file, imgUrl, errorMessage, isUploading } = uploadState;
 
     useEffect(() => {
@@ -82,12 +74,16 @@ export default function Uploader() {
 
     const onDrop = useCallback(
         (e: React.DragEvent<HTMLDivElement>) => {
+            console.log("TEST")
+
             e.preventDefault()
             e.stopPropagation()
             setDragActive(false)
 
             const file = e.dataTransfer.files && e.dataTransfer.files[0];
+            console.log("TEST")
             if (!file) return;
+            console.log("TEST2")
             handleFile(file);
         }, [handleFile]);
 
@@ -191,25 +187,13 @@ export default function Uploader() {
                     />
                 </div>
             </div>
-
-            <button
-                disabled={saveDisabled}
-                className={`${saveDisabled
-                    ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
-                    : 'border-black bg-black text-white hover:bg-white hover:text-black'
-                    } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
-            >
-                {isUploading ? (
-                    "Uploading..."
-                ) : (
-                    <p className="text-sm">Upload Image</p>
-                )}
-            </button>
-            {imgUrl && (
+            {/*             
+{imgUrl && (
                 <Link href={imgUrl} target='_blank' className="text-black text-center">
                     View Image on IPFS ↗️
                 </Link>
             )}
+ */}
         </form>
     )
 }

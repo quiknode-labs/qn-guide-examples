@@ -23,3 +23,35 @@ export interface UploadResponse {
 }
 
 
+export interface MetadataFormInputs {
+    name: string;
+    symbol: string;
+    description: string;
+}
+
+export const initialFormData: MetadataFormInputs = {
+    name: '',
+    symbol: '',
+    description: '',
+};
+
+export interface UploadState {
+    file: File | null;
+    errorMessage: string;
+    isUploading: boolean;
+}
+
+export interface TokenMetadata extends MetadataFormInputs {
+    image: string;
+}
+
+export interface ImageUploadState extends UploadState {
+    imagePreview: string | null;
+    imgUrl: string | null;
+}
+
+export interface JsonUploadState extends UploadState {
+    jsonUrl: string | null;
+}
+
+export type MintUploadState = ImageUploadState & JsonUploadState;

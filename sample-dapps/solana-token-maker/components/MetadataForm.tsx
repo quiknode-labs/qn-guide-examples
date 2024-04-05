@@ -1,42 +1,25 @@
 'use client'
 
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent, Dispatch, SetStateAction } from 'react';
+import { MetadataFormInputs, initialFormData } from '@/utils/types';
 
-interface FormData {
-    name: string;
-    symbol: string;
-    description: string;
-}
-
-const initialFormData: FormData = {
-    name: '',
-    symbol: '',
-    description: '',
-};
 
 const inputFieldClasses = 'text-gray-500 border-2 border-gray-300 focus:text-black focus:border-black z-[3] flex items-center justify-center rounded-md p-2 transition-all focus:font-semibold';
 
-export default function MetadataForm() {
-    const [formData, setFormData] = useState<FormData>(initialFormData);
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+interface Props {
+    setFormData: Dispatch<SetStateAction<MetadataFormInputs>>;
+    formData: MetadataFormInputs
+}
+
+export default function MetadataForm({ setFormData, formData }: Props) {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prevData => ({ ...prevData, [name]: value }));
-    };
-
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-
-        // Simulate API call
-        console.log('Form Data:', formData);
-
-        setIsSubmitting(false);
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     return (
-        <form className="grid gap-6" onSubmit={handleSubmit}>
+        <form className="grid gap-6" >
             <div className="space-y-1 ">
                 <h2 className="text-xl text-black font-semibold">
                     2. Enter Metadata
@@ -77,13 +60,6 @@ export default function MetadataForm() {
                     required
                 />
             </div>
-            <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`${isSubmitting ? 'sor-not-allowed border-gray-200 bg-gray-100 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
-            >
-                {isSubmitting ? 'Submitting...' : 'Submit'}
-            </button>
         </form>
     );
 }
