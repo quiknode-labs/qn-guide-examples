@@ -37,7 +37,7 @@ export default function Uploader() {
     }, [file]);
 
     const handleFile = (selectedFile: File) => {
-        if (selectedFile.size / 1024 / 1024 > 50) {
+        if (selectedFile.size / 1024 / 1024 > 10) {
             setUploadState((prev) => ({ ...prev, errorMessage: 'File size too big (max 50MB)' }));
             return;
         }
@@ -117,7 +117,7 @@ export default function Uploader() {
         >
             <div>
                 <div className="space-y-1 mb-4">
-                    <h2 className="text-xl text-black font-semibold">Upload a file</h2>
+                    <h2 className="text-xl text-black font-semibold">1. Upload a file</h2>
 
                     <p className="text-sm text-gray-500">
                         Accepted formats: .png, .jpg, .gif
@@ -125,7 +125,7 @@ export default function Uploader() {
                 </div>
                 <label
                     htmlFor="image-upload"
-                    className="group relative mt-2 flex h-72 cursor-pointer flex-col items-center justify-center rounded-md border border-gray-300 bg-white shadow-sm transition-all hover:bg-gray-50"
+                    className="group relative mt-2 flex h-36 cursor-pointer flex-col items-center justify-center rounded-md border border-gray-300 bg-white shadow-sm transition-all hover:bg-gray-50"
                 >
                     <div
                         className="absolute z-[5] h-full w-full rounded-md"
@@ -162,7 +162,7 @@ export default function Uploader() {
                             Drag and drop or click to upload.
                         </p>
                         <p className="mt-2 text-center text-sm text-gray-500">
-                            Max file size: 50MB
+                            Max file size: 10MB
                         </p>
                         {errorMessage && (
                             <p className="mt-2 text-center text-smtext-red-500">
