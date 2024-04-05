@@ -1,12 +1,17 @@
 "use client"
 import MetadataForm from "@/components/MetadataForm";
 import Uploader from "@/components/Uploader";
+import Spinner from "@/components/Spinner";
 import { GATEWAY_URL } from "@/utils/constants";
-import { MintUploadState, MetadataFormInputs, UploadResponse, initialFormData, TokenMetadata } from '@/utils/types';
-import { useEffect, useState } from "react";
+import { generateSolanaFmUrl } from "@/utils/solana";
+import { buildCreateTokenTx } from "@/utils/spl";
+import { MintUploadState, MetadataFormInputs, UploadResponse, initialFormData, JsonMetadata } from '@/utils/types';
+import { useWallet } from "@solana/wallet-adapter-react";
+import { Connection, Keypair } from "@solana/web3.js";
+import { useState } from "react";
 
 const Minter = () => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState<MetadataFormInputs>(initialFormData);
     const [uploadState, setUploadState] = useState<MintUploadState>({
         imagePreview: null,
         file: null,
@@ -15,35 +20,63 @@ const Minter = () => {
         isUploading: false,
         jsonUrl: null,
     });
-
-
-
-    const { imagePreview, file, imgUrl, errorMessage, isUploading } = uploadState;
-
-    const [formData, setFormData] = useState<MetadataFormInputs>(initialFormData);
-
-    useEffect(() => {
-        console.log(formData);
-        console.log(uploadState);
-    }, [formData, uploadState]);
+    const { file, isUploading } = uploadState;
+    const { publicKey: authority, signTransaction } = useWallet();
 
     const handleMint = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setIsSubmitting(true);
+        setUploadState((prev) => ({ ...prev, isUploading: true }));
+        if (!authority || !signTransaction) throw new Error('No wallet connected');
+        // TODO validate decimals & amount  
+        const mintKeypair = Keypair.generate();
         try {
             const imageIpfs = await uploadImage();
-            const json = await generateJson(imageIpfs);
-            await uploadJson(json);
-            // await mintToken();
+            const jsonMetadata = await generateJson(imageIpfs);
+            const jsonIpfs = await uploadJson(jsonMetadata);
+            const connection = new Connection('http://127.0.0.1:8899');
+            const buildCreateTokenArgs = {
+                connection,
+                authority,
+                jsonMetadata,
+                jsonUri: jsonIpfs,
+                decimals: formData.decimals, 
+                mintKeypair,
+                amount: formData.amount,
+            };
+            const { mintTransaction } = await buildCreateTokenTx(buildCreateTokenArgs);
+            const { value: { blockhash, lastValidBlockHeight }, context: { slot: minContextSlot } } = await connection.getLatestBlockhashAndContext('confirmed');
+            mintTransaction.recentBlockhash = blockhash;
+            mintTransaction.lastValidBlockHeight = lastValidBlockHeight;
+            mintTransaction.minNonceContextSlot = minContextSlot;
+            mintTransaction.lastValidBlockHeight = lastValidBlockHeight;
+            mintTransaction.feePayer = authority;
+            mintTransaction.partialSign(mintKeypair);
+            const txSigned = await signTransaction(mintTransaction);
+            const signature = await connection.sendRawTransaction(txSigned.serialize(), {
+                skipPreflight: true,
+                preflightCommitment: 'confirmed',
+                maxRetries: 0,
+                minContextSlot,
+            });
+            const confirmation = await connection.confirmTransaction({
+                blockhash,
+                lastValidBlockHeight,
+                signature,
+                minContextSlot
+            }, "processed");
+            if (confirmation.value.err) {
+                throw new Error('Transaction failed');
+            }
+            console.log('Transaction confirmed!!', generateSolanaFmUrl(undefined, signature));
 
         } catch (error) {
             console.log(error);
         } finally {
-            setIsSubmitting(false);
+            setUploadState((prev) => ({ ...prev, isUploading: false }));
         }
     };
 
-    const generateJson = async (imageUrl: string): Promise<TokenMetadata> => {
+    const generateJson = async (imageUrl: string): Promise<JsonMetadata> => {
         if (!imageUrl) throw new Error('No image to generate json');
         if (!formData.name || !formData.symbol || !formData.description) throw new Error('Missing metadata fields');
         return {
@@ -57,7 +90,6 @@ const Minter = () => {
     const uploadImage = async () => {
         if (!file) throw new Error('No file to upload');
         const API_ENDPOINT = '/api/upload/image';
-        setUploadState((prev) => ({ ...prev, isUploading: true }));
 
         const formData = new FormData();
         formData.append("Body", file);
@@ -81,21 +113,17 @@ const Minter = () => {
                 throw new Error('Failed to upload image');
             }
         } catch (error) {
-            console.log(error);
             setUploadState((prev) => ({
                 ...prev,
                 errorMessage: 'Failed to upload image',
                 isUploading: false,
             }));
             throw new Error('Failed to upload image');
-        } finally {
-            setUploadState((prev) => ({ ...prev, isUploading: false }));
         }
     }
 
-    const uploadJson = async (json: TokenMetadata) => {
+    const uploadJson = async (json: JsonMetadata) => {
         const API_ENDPOINT = '/api/upload/json';
-        setUploadState((prev) => ({ ...prev, isUploading: true }));
         try {
             const jsonBlob = new Blob([JSON.stringify(json)], { type: "application/json" });
 
@@ -112,23 +140,19 @@ const Minter = () => {
                 const data: UploadResponse = await response.json();
                 const jsonUrl = GATEWAY_URL + data.response.pin.cid;
                 setUploadState((prev) => ({ ...prev, jsonUrl }));
-                console.log("THE JSON URL:", jsonUrl)
+                return jsonUrl;
             } else {
-                const errorText = await response.text();
-                console.error('Upload error:', errorText);
                 setUploadState((prev) => ({ ...prev, errorMessage: 'Failed to upload JSON' }));
+                throw new Error('Failed to upload JSON');
             }
         } catch (error) {
-            console.log(error);
             setUploadState((prev) => ({
                 ...prev,
                 errorMessage: 'Failed to upload JSON',
             }));
-        } finally {
-            setUploadState((prev) => ({ ...prev, isUploading: false }));
+            throw new Error('Failed to upload JSON');
         }
     }
-
 
     return (
         <div className="bg-white/3 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full space-y-12">
@@ -143,10 +167,10 @@ const Minter = () => {
             <form className="" onSubmit={handleMint}>
                 <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className={`${isSubmitting ? 'sor-not-allowed border-gray-200 bg-gray-100 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
+                    disabled={isUploading}
+                    className={`${isUploading ? 'sor-not-allowed border-gray-200 bg-gray-100 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
                 >
-                    {isSubmitting ? 'Submitting...' : 'Submit'}
+                    {isUploading ? 'Minting in progress...' : <Spinner />}
                 </button>
             </form>
         </div>

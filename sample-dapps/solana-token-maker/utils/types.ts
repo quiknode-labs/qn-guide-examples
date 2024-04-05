@@ -27,12 +27,16 @@ export interface MetadataFormInputs {
     name: string;
     symbol: string;
     description: string;
+    decimals: number;
+    amount: number;
 }
 
 export const initialFormData: MetadataFormInputs = {
     name: '',
     symbol: '',
     description: '',
+    decimals: 6,
+    amount: 10000
 };
 
 export interface UploadState {
@@ -44,6 +48,8 @@ export interface UploadState {
 export interface TokenMetadata extends MetadataFormInputs {
     image: string;
 }
+
+export type JsonMetadata = Omit<TokenMetadata, 'decimals' | 'amount'>;
 
 export interface ImageUploadState extends UploadState {
     imagePreview: string | null;

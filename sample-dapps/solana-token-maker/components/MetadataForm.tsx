@@ -37,7 +37,7 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     required
                 />
 
-                <label htmlFor="name" className="text-sm text-gray-500 ">Symbol: </label>
+                <label htmlFor="symbol" className="text-sm text-gray-500 ">Symbol: </label>
                 <input
                     type="text"
                     name="symbol"
@@ -57,6 +57,30 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     placeholder="Just a token that moves fast!"
                     className={inputFieldClasses}
                     maxLength={100}
+                    required
+                />
+
+                <label htmlFor="decimals" className="text-sm text-gray-500 ">Number of Token Decimals: </label>
+                <input
+                    type="number"
+                    name="decimals"
+                    value={formData.decimals}
+                    onChange={handleChange}
+                    placeholder="6"
+                    className={inputFieldClasses}
+                    maxLength={2}
+                    required
+                />
+
+                <label htmlFor="amount" className="text-sm text-gray-500 ">Number of Tokens to Mint: </label>
+                <input
+                    type="number"
+                    name="amount"
+                    value={formData.amount}
+                    onChange={handleChange}
+                    placeholder="10000"
+                    className={inputFieldClasses}
+                    maxLength={15}
                     required
                 />
             </div>
