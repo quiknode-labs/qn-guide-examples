@@ -66,7 +66,6 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     name="decimals"
                     value={formData.decimals}
                     onChange={handleChange}
-                    placeholder="6"
                     className={inputFieldClasses}
                     maxLength={2}
                     required
@@ -78,7 +77,6 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     name="amount"
                     value={formData.amount}
                     onChange={handleChange}
-                    placeholder="10000"
                     className={inputFieldClasses}
                     maxLength={15}
                     required

@@ -9,6 +9,7 @@ import { MintUploadState, MetadataFormInputs, UploadResponse, initialFormData, J
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Connection, Keypair } from "@solana/web3.js";
 import { useState } from "react";
+import { toast } from 'sonner';
 
 const Minter = () => {
     const [formData, setFormData] = useState<MetadataFormInputs>(initialFormData);
@@ -25,11 +26,16 @@ const Minter = () => {
 
     const handleMint = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setUploadState((prev) => ({ ...prev, isUploading: true }));
-        if (!authority || !signTransaction) throw new Error('No wallet connected');
-        // TODO validate decimals & amount  
+
+        if (!authority || !signTransaction) {
+            toast.error('No wallet connected');
+            throw new Error('No wallet connected')
+        };
+
+        setUploadState((prev) => ({ ...prev, isUploading: true }));        
         const mintKeypair = Keypair.generate();
         try {
+            validateInputs();
             const imageIpfs = await uploadImage();
             const jsonMetadata = await generateJson(imageIpfs);
             const jsonIpfs = await uploadJson(jsonMetadata);
@@ -39,7 +45,7 @@ const Minter = () => {
                 authority,
                 jsonMetadata,
                 jsonUri: jsonIpfs,
-                decimals: formData.decimals, 
+                decimals: formData.decimals,
                 mintKeypair,
                 amount: formData.amount,
             };
@@ -67,10 +73,22 @@ const Minter = () => {
             if (confirmation.value.err) {
                 throw new Error('Transaction failed');
             }
-            console.log('Transaction confirmed!!', generateSolanaFmUrl(undefined, signature));
+            const explorerUrl = generateSolanaFmUrl(undefined, signature);
+            console.log('Transaction confirmed!!', explorerUrl);
+            toast.success(<div>
+                Success!&nbsp;
+                <a href={explorerUrl} target='_blank' rel='noreferrer'>
+                    (View Transaction ↗️)
+                </a>
+            </div>, { duration: 6000 });
+            return;
 
         } catch (error) {
-            console.log(error);
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('An unexpected error occurred');
+            }
         } finally {
             setUploadState((prev) => ({ ...prev, isUploading: false }));
         }
@@ -154,25 +172,39 @@ const Minter = () => {
         }
     }
 
+    const validateInputs = () => {
+        if (!file) throw new Error('No file to upload');
+        if (!formData.name || !formData.symbol || !formData.description || !formData.decimals || !formData.amount) {
+            throw new Error('Missing metadata fields');
+        }
+        if (!Number.isInteger(formData.decimals) || formData.decimals < 0 || formData.decimals > 18) {
+            throw new Error('Decimals must be a positive integer');
+        }
+        if (!Number.isInteger(formData.amount) || formData.amount < 0) {
+            throw new Error('Amount must be a positive integer');
+        }
+    }
+
+    const disableButton = !file || !formData.name || !formData.symbol || !formData.description || !formData.decimals || !formData.amount || !authority;
     return (
         <div className="bg-white/3 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full space-y-12">
-            <Uploader
-                uploadState={uploadState}
-                setUploadState={setUploadState}
-            />
-            <MetadataForm
-                formData={formData}
-                setFormData={setFormData}
-            />
-            <form className="" onSubmit={handleMint}>
-                <button
-                    type="submit"
-                    disabled={isUploading}
-                    className={`${isUploading ? 'sor-not-allowed border-gray-200 bg-gray-100 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
-                >
-                    {isUploading ? 'Minting in progress...' : <Spinner />}
-                </button>
-            </form>
+                <Uploader
+                    uploadState={uploadState}
+                    setUploadState={setUploadState}
+                />
+                <MetadataForm
+                    formData={formData}
+                    setFormData={setFormData}
+                />
+                <form className="" onSubmit={handleMint}>
+                    <button
+                        type="submit"
+                        disabled={disableButton || isUploading}
+                        className={`${(disableButton || isUploading) ? 'sor-not-allowed border-gray-200 bg-gray-600 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
+                    >
+                        {disableButton ? "Fill out form" : isUploading ? <Spinner /> : "Mint Token!"}
+                    </button>
+                </form>
         </div>
     )
 };
