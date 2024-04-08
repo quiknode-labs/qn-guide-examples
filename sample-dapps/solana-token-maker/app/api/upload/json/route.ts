@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
         if (!API_KEY) {
             throw new Error('API key not set');
         }
-/*         const formData = await request.formData();
+        const formData = await request.formData();
 
         const myHeaders = new Headers();
         myHeaders.append("x-api-key", API_KEY);
@@ -23,29 +23,9 @@ export async function POST(request: NextRequest) {
             throw new Error(`API call failed with status ${result.status}: ${await result.text()}`);
         }
 
-        const response = await result.json(); */
-        
-        // Temporary mock response for quick iterations w/o making actual API call
-        const mockResponse = {
-            "requestid": "some-request-id",
-            "status": "pinned",
-            "created": "2024-04-04T15:21:18.000-04:00",
-            "pin": {
-                "cid": "QmdCkrrTySp7KMboaYrrrvuZ8fii7hCt5mtAKfu5TRfL89",
-                "name": "metadata.json",
-                "origins": [],
-                "meta": {}
-            },
-            "info": {
-                "size": "187515"
-            },
-            "delegates": [
-                "example1",
-                "example2",
-                "example3"
-            ]
-        };
-        return new Response(JSON.stringify({ response: mockResponse }), {
+        const response = await result.json();
+
+        return new Response(JSON.stringify({ response }), {
             headers: { 'Content-Type': 'application/json' },
             status: 200,
         });

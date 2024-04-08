@@ -19,36 +19,14 @@ export async function POST(request: NextRequest) {
             body: formData
         };
 
-/*
         const result = await fetch(API_ENDPOINT, requestOptions);
         if (!result.ok) {
             throw new Error(`API call failed with status ${result.status}: ${await result.text()}`);
         }
 
         const response = await result.json(); 
-*/
 
-        // Temporary mock response for quick iterations w/o making actual API call
-        const mockResponse = {
-            "requestid": "some-request-id",
-            "status": "pinned",
-            "created": "2024-04-04T15:21:18.000-04:00",
-            "pin": {
-                "cid": "QmUUbKTffTuKmwwURebdyHwJtT1izHom5U9n7XUUTLMoaA",
-                "name": "image.png",
-                "origins": [],
-                "meta": {}
-            },
-            "info": {
-                "size": "187515"
-            },
-            "delegates": [
-                "example1",
-                "example2",
-                "example3"
-            ]
-        };
-        return new Response(JSON.stringify({ response: mockResponse }), {
+        return new Response(JSON.stringify({ response }), {
             headers: { 'Content-Type': 'application/json' },
             status: 200,
         });

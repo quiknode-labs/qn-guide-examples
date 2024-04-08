@@ -16,10 +16,10 @@ export function shortAddress(address: string): string {
 }
 
 export function initializeConnection(): Connection {
-    if (!process.env.RPC_URL) {
-        throw new Error('SOLANA_RPC_URL is not set');
+    if (!process.env.QN_ENDPOINT) {
+        throw new Error('QN_ENDPOINT is not set');
     }
-    return new Connection(process.env.RPC_URL);
+    return new Connection(process.env.QN_ENDPOINT);
 }
 
 export function handleError(error: unknown): Response {

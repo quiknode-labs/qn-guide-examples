@@ -74,16 +74,12 @@ export default function Uploader({ setUploadState, uploadState }: Props) {
 
     const onDrop = useCallback(
         (e: React.DragEvent<HTMLDivElement>) => {
-            console.log("TEST")
-
             e.preventDefault()
             e.stopPropagation()
             setDragActive(false)
 
             const file = e.dataTransfer.files && e.dataTransfer.files[0];
-            console.log("TEST")
             if (!file) return;
-            console.log("TEST2")
             handleFile(file);
         }, [handleFile]);
 
@@ -102,14 +98,9 @@ export default function Uploader({ setUploadState, uploadState }: Props) {
         [handleFile]
     )
 
-    const saveDisabled = useMemo(() => {
-        return !imagePreview || isUploading
-    }, [imagePreview, isUploading])
-
     return (
         <form
             className="grid gap-6"
-            onSubmit={handleSubmit}
         >
             <div>
                 <div className="space-y-1 mb-4">

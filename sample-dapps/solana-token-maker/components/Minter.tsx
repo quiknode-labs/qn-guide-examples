@@ -7,7 +7,7 @@ import { generateSolanaFmUrl } from "@/utils/solana";
 import { buildCreateTokenTx } from "@/utils/spl";
 import { MintUploadState, MetadataFormInputs, UploadResponse, initialFormData, JsonMetadata } from '@/utils/types';
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Connection, Keypair } from "@solana/web3.js";
+import { Connection, Keypair, Transaction } from "@solana/web3.js";
 import { useState } from "react";
 import { toast } from 'sonner';
 
@@ -31,56 +31,32 @@ const Minter = () => {
             toast.error('No wallet connected');
             throw new Error('No wallet connected')
         };
-
-        setUploadState((prev) => ({ ...prev, isUploading: true }));        
-        const mintKeypair = Keypair.generate();
+        setUploadState((prev) => ({ ...prev, isUploading: true }));
         try {
             validateInputs();
             const imageIpfs = await uploadImage();
             const jsonMetadata = await generateJson(imageIpfs);
             const jsonIpfs = await uploadJson(jsonMetadata);
-            const connection = new Connection('http://127.0.0.1:8899');
-            const buildCreateTokenArgs = {
-                connection,
-                authority,
+            const txPartialSerialized = await generateTransaction({
+                authority: authority.toBase58(),
                 jsonMetadata,
                 jsonUri: jsonIpfs,
-                decimals: formData.decimals,
-                mintKeypair,
-                amount: formData.amount,
-            };
-            const { mintTransaction } = await buildCreateTokenTx(buildCreateTokenArgs);
-            const { value: { blockhash, lastValidBlockHeight }, context: { slot: minContextSlot } } = await connection.getLatestBlockhashAndContext('confirmed');
-            mintTransaction.recentBlockhash = blockhash;
-            mintTransaction.lastValidBlockHeight = lastValidBlockHeight;
-            mintTransaction.minNonceContextSlot = minContextSlot;
-            mintTransaction.lastValidBlockHeight = lastValidBlockHeight;
-            mintTransaction.feePayer = authority;
-            mintTransaction.partialSign(mintKeypair);
-            const txSigned = await signTransaction(mintTransaction);
-            const signature = await connection.sendRawTransaction(txSigned.serialize(), {
-                skipPreflight: true,
-                preflightCommitment: 'confirmed',
-                maxRetries: 0,
-                minContextSlot,
+                decimals: formData.decimals.toString(),
+                amount: formData.amount.toString(),
             });
-            const confirmation = await connection.confirmTransaction({
-                blockhash,
-                lastValidBlockHeight,
-                signature,
-                minContextSlot
-            }, "processed");
-            if (confirmation.value.err) {
-                throw new Error('Transaction failed');
-            }
+            const txPartial = Transaction.from(Buffer.from(txPartialSerialized, 'base64'))
+            const txSigned = await signTransaction(txPartial);
+            const txFullSerialized = txSigned.serialize({ requireAllSignatures: true });
+            const txFullBase64 = txFullSerialized.toString('base64');
+            const signature = await sendAndConfirm(txFullBase64);
+
             const explorerUrl = generateSolanaFmUrl(undefined, signature);
-            console.log('Transaction confirmed!!', explorerUrl);
             toast.success(<div>
                 Success!&nbsp;
                 <a href={explorerUrl} target='_blank' rel='noreferrer'>
                     (View Transaction ↗️)
                 </a>
-            </div>, { duration: 6000 });
+            </div>);
             return;
 
         } catch (error) {
@@ -172,41 +148,114 @@ const Minter = () => {
         }
     }
 
+    const generateTransaction = async (args: MintRequestBody) => {
+        if (!file) throw new Error('No file to upload');
+        const API_ENDPOINT = '/api/solana/createMintTx';
+
+        const body = JSON.stringify(args);
+
+        try {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                body,
+            });
+            if (response.ok) {
+                const data = await response.json();
+                return data.transaction;
+            } else {
+                console.error('Upload error:', response);
+                setUploadState((prev) => ({ ...prev, errorMessage: 'Failed to generate transaction' }));
+                throw new Error('Failed to generate transaction');
+            }
+        } catch (error) {
+            setUploadState((prev) => ({
+                ...prev,
+                errorMessage: 'Failed to generate transaction',
+                isUploading: false,
+            }));
+            throw new Error('Failed to generate transaction');
+        }
+    }
+
+    const sendAndConfirm = async (serializedTx: string) => {
+        if (!serializedTx) throw new Error('No transaction to send');
+        const API_ENDPOINT = '/api/solana/sendAndConfirm';
+
+        try {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ serializedTx }),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                return data.signature;
+            } else {
+                setUploadState((prev) => ({ ...prev, errorMessage: 'Failed to send and confirm Tx' }));
+                throw new Error('Failed to send and confirm Tx');
+            }
+        } catch (error) {
+            setUploadState((prev) => ({
+                ...prev,
+                errorMessage: 'Failed to send and confirm Tx',
+                isUploading: false,
+            }));
+            throw new Error('Failed to send and confirm Tx');
+        }
+    }
+
+
     const validateInputs = () => {
         if (!file) throw new Error('No file to upload');
-        if (!formData.name || !formData.symbol || !formData.description || !formData.decimals || !formData.amount) {
+        if (!formData.name || !formData.symbol || !formData.description) {
             throw new Error('Missing metadata fields');
         }
-        if (!Number.isInteger(formData.decimals) || formData.decimals < 0 || formData.decimals > 18) {
-            throw new Error('Decimals must be a positive integer');
+        
+        const decimals = Number(formData.decimals);
+        const amount = Number(formData.amount);
+    
+        if (isNaN(decimals) || !Number.isInteger(decimals) || decimals < 0 || decimals > 18) {
+            throw new Error('Decimals must be a positive integer between 0 and 18');
         }
-        if (!Number.isInteger(formData.amount) || formData.amount < 0) {
+        if (isNaN(amount) || !Number.isInteger(amount) || amount < 0) {
             throw new Error('Amount must be a positive integer');
         }
     }
+    
 
     const disableButton = !file || !formData.name || !formData.symbol || !formData.description || !formData.decimals || !formData.amount || !authority;
     return (
         <div className="bg-white/3 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full space-y-12">
-                <Uploader
-                    uploadState={uploadState}
-                    setUploadState={setUploadState}
-                />
-                <MetadataForm
-                    formData={formData}
-                    setFormData={setFormData}
-                />
-                <form className="" onSubmit={handleMint}>
-                    <button
-                        type="submit"
-                        disabled={disableButton || isUploading}
-                        className={`${(disableButton || isUploading) ? 'sor-not-allowed border-gray-200 bg-gray-600 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
-                    >
-                        {disableButton ? "Fill out form" : isUploading ? <Spinner /> : "Mint Token!"}
-                    </button>
-                </form>
+            <Uploader
+                uploadState={uploadState}
+                setUploadState={setUploadState}
+            />
+            <MetadataForm
+                formData={formData}
+                setFormData={setFormData}
+            />
+            <form className="" onSubmit={handleMint}>
+                <button
+                    type="submit"
+                    disabled={disableButton || isUploading}
+                    className={`${(disableButton || isUploading) ? 'sor-not-allowed border-gray-200 bg-gray-600 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
+                >
+                    {disableButton ? "Fill out form" : isUploading ? <Spinner /> : "Mint Token!"}
+                </button>
+            </form>
         </div>
     )
 };
 
 export default Minter;
+
+
+interface MintRequestBody {
+    authority: string;
+    jsonMetadata: JsonMetadata;
+    jsonUri: string;
+    decimals: string;
+    amount: string;
+}
