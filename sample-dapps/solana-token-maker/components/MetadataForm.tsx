@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, ChangeEvent, FormEvent, Dispatch, SetStateAction } from 'react';
-import { MetadataFormInputs, initialFormData } from '@/utils/types';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { MetadataFormInputs } from '@/utils/types';
 
 
 const inputFieldClasses = 'text-gray-500 border-2 border-gray-300 focus:text-black focus:border-black z-[3] flex items-center justify-center rounded-md p-2 transition-all focus:font-semibold';
+const labelClass = 'text-sm text-gray-500';
 
 interface Props {
     setFormData: Dispatch<SetStateAction<MetadataFormInputs>>;
@@ -26,7 +27,7 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                 </h2>
             </div>
             <div className="grid gap-1 h-full w-full">
-                <label htmlFor="name" className="text-sm text-gray-500 ">Token Name: </label>
+                <label htmlFor="name" className={labelClass}>Token Name: </label>
                 <input
                     type="text"
                     name="name"
@@ -37,7 +38,7 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     required
                 />
 
-                <label htmlFor="symbol" className="text-sm text-gray-500 ">Symbol: </label>
+                <label htmlFor="symbol" className={labelClass}>Symbol: </label>
                 <input
                     type="text"
                     name="symbol"
@@ -48,7 +49,7 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     required
                 />
 
-                <label htmlFor="name" className="text-sm text-gray-500 ">Description (max 100 char): </label>
+                <label htmlFor="name" className={labelClass}>Description (max 100 char): </label>
                 <input
                     type="text"
                     name="description"
@@ -60,7 +61,7 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     required
                 />
 
-                <label htmlFor="decimals" className="text-sm text-gray-500 ">Number of Token Decimals: </label>
+                <label htmlFor="decimals" className={labelClass}>Number of Token Decimals: </label>
                 <input
                     type="number"
                     name="decimals"
@@ -71,7 +72,7 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     required
                 />
 
-                <label htmlFor="amount" className="text-sm text-gray-500 ">Number of Tokens to Mint: </label>
+                <label htmlFor="amount" className={labelClass}>Number of Tokens to Mint: </label>
                 <input
                     type="number"
                     name="amount"

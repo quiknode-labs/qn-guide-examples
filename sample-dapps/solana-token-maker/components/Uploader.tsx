@@ -1,9 +1,7 @@
 'use client'
 
-import { GATEWAY_URL } from '@/utils/constants';
-import { MintUploadState, UploadResponse } from '@/utils/types';
-import { useState, useCallback, useMemo, ChangeEvent, useEffect, Dispatch, SetStateAction } from 'react';
-import Link from 'next/link';
+import { MintUploadState } from '@/utils/types';
+import { useState, useCallback, ChangeEvent, useEffect, Dispatch, SetStateAction } from 'react';
 
 const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 
@@ -15,7 +13,7 @@ interface Props {
 export default function Uploader({ setUploadState, uploadState }: Props) {
     const [dragActive, setDragActive] = useState(false);
 
-    const { imagePreview, file, imgUrl, errorMessage, isUploading } = uploadState;
+    const { imagePreview, file, errorMessage } = uploadState;
 
     useEffect(() => {
         if (!file) return;
@@ -38,38 +36,6 @@ export default function Uploader({ setUploadState, uploadState }: Props) {
             return;
         }
         setUploadState((prev) => ({ ...prev, file: selectedFile, errorMessage: '' }));
-    };
-
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!file) return;
-
-        setUploadState((prev) => ({ ...prev, isUploading: true }));
-
-        const formData = new FormData();
-        formData.append("Body", file);
-        formData.append("Key", file.name);
-        formData.append("ContentType", file.type);
-
-        try {
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (response.ok) {
-                const data: UploadResponse = await response.json();
-                setUploadState((prev) => ({ ...prev, imgUrl: GATEWAY_URL + data.response.pin.cid }));
-            } else {
-                const errorText = await response.text();
-                console.error('Upload error:', errorText);
-            }
-        } catch (error) {
-            console.error('Network error:', error);
-        } finally {
-            setUploadState((prev) => ({ ...prev, isUploading: false }));
-        }
     };
 
     const onDrop = useCallback(
@@ -178,13 +144,6 @@ export default function Uploader({ setUploadState, uploadState }: Props) {
                     />
                 </div>
             </div>
-            {/*             
-{imgUrl && (
-                <Link href={imgUrl} target='_blank' className="text-black text-center">
-                    View Image on IPFS ↗️
-                </Link>
-            )}
- */}
         </form>
     )
 }

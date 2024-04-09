@@ -61,3 +61,11 @@ export interface JsonUploadState extends UploadState {
 }
 
 export type MintUploadState = ImageUploadState & JsonUploadState;
+
+export interface MintRequestBody {
+    authority: string;
+    jsonMetadata: JsonMetadata;
+    jsonUri: string;
+    decimals: string;
+    amount: string;
+}

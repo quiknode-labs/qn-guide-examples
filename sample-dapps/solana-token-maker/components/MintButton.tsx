@@ -15,8 +15,7 @@ const MintButton: React.FC<Props> = ({ disableButton, isUploading, onClick }) =>
             <button
                 type="submit"
                 disabled={disabled}
-                className={`${(disabled) ? 'cursor-not-allowed border-gray-200 bg-gray-600 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'
-                    } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
+                className={`${disabled ? 'cursor-not-allowed border-gray-200 bg-gray-600 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
             >
                 {buttonDisplay}
             </button>

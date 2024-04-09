@@ -3,12 +3,12 @@ import MetadataForm from "@/components/MetadataForm";
 import Uploader from "@/components/Uploader";
 import { GATEWAY_URL } from "@/utils/constants";
 import { generateSolanaFmUrl } from "@/utils/solana";
-import { MintUploadState, MetadataFormInputs, UploadResponse, initialFormData, JsonMetadata } from '@/utils/types';
+import { MintUploadState, MetadataFormInputs, UploadResponse, initialFormData, JsonMetadata, MintRequestBody } from '@/utils/types';
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Transaction } from "@solana/web3.js";
 import { useState } from "react";
 import { toast } from 'sonner';
-import MintButton from "./MintButton";
+import MintButton from "@/components/MintButton";
 
 const Minter = () => {
     const [formData, setFormData] = useState<MetadataFormInputs>(initialFormData);
@@ -225,8 +225,9 @@ const Minter = () => {
 
 
     const disableButton = !file || !formData.name || !formData.symbol || !formData.description || !formData.decimals || !formData.amount || !authority;
+
     return (
-        <div className="bg-white/3 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full space-y-12">
+        <Container>
             <Uploader
                 uploadState={uploadState}
                 setUploadState={setUploadState}
@@ -240,17 +241,19 @@ const Minter = () => {
                 isUploading={isUploading}
                 disableButton={disableButton}
             />
-        </div>
+        </Container>
     )
 };
 
 export default Minter;
 
 
-interface MintRequestBody {
-    authority: string;
-    jsonMetadata: JsonMetadata;
-    jsonUri: string;
-    decimals: string;
-    amount: string;
-}
+
+
+const Container = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <div className="bg-white/3 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full space-y-12">
+            {children}
+        </div>
+    );
+};
