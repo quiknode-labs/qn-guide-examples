@@ -1,15 +1,14 @@
 "use client"
 import MetadataForm from "@/components/MetadataForm";
 import Uploader from "@/components/Uploader";
-import Spinner from "@/components/Spinner";
 import { GATEWAY_URL } from "@/utils/constants";
 import { generateSolanaFmUrl } from "@/utils/solana";
-import { buildCreateTokenTx } from "@/utils/spl";
 import { MintUploadState, MetadataFormInputs, UploadResponse, initialFormData, JsonMetadata } from '@/utils/types';
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Connection, Keypair, Transaction } from "@solana/web3.js";
+import { Transaction } from "@solana/web3.js";
 import { useState } from "react";
 import { toast } from 'sonner';
+import MintButton from "./MintButton";
 
 const Minter = () => {
     const [formData, setFormData] = useState<MetadataFormInputs>(initialFormData);
@@ -212,10 +211,10 @@ const Minter = () => {
         if (!formData.name || !formData.symbol || !formData.description) {
             throw new Error('Missing metadata fields');
         }
-        
+
         const decimals = Number(formData.decimals);
         const amount = Number(formData.amount);
-    
+
         if (isNaN(decimals) || !Number.isInteger(decimals) || decimals < 0 || decimals > 18) {
             throw new Error('Decimals must be a positive integer between 0 and 18');
         }
@@ -223,7 +222,7 @@ const Minter = () => {
             throw new Error('Amount must be a positive integer');
         }
     }
-    
+
 
     const disableButton = !file || !formData.name || !formData.symbol || !formData.description || !formData.decimals || !formData.amount || !authority;
     return (
@@ -236,15 +235,11 @@ const Minter = () => {
                 formData={formData}
                 setFormData={setFormData}
             />
-            <form className="" onSubmit={handleMint}>
-                <button
-                    type="submit"
-                    disabled={disableButton || isUploading}
-                    className={`${(disableButton || isUploading) ? 'sor-not-allowed border-gray-200 bg-gray-600 text-gray-400' : 'border-black bg-black text-white hover:bg-white hover:text-black'} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
-                >
-                    {disableButton ? "Fill out form" : isUploading ? <Spinner /> : "Mint Token!"}
-                </button>
-            </form>
+            <MintButton
+                onClick={handleMint}
+                isUploading={isUploading}
+                disableButton={disableButton}
+            />
         </div>
     )
 };
