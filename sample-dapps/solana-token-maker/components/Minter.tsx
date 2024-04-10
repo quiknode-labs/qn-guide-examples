@@ -2,7 +2,7 @@
 import MetadataForm from "@/components/MetadataForm";
 import Uploader from "@/components/Uploader";
 import { GATEWAY_URL } from "@/utils/constants";
-import { generateSolanaFmUrl } from "@/utils/solana";
+import { getExplorerUrl } from "@/utils/solana";
 import { MintUploadState, MetadataFormInputs, UploadResponse, initialFormData, JsonMetadata, MintRequestBody } from '@/utils/types';
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Transaction } from "@solana/web3.js";
@@ -49,7 +49,7 @@ const Minter = () => {
             const txFullBase64 = txFullSerialized.toString('base64');
             const signature = await sendAndConfirm(txFullBase64);
 
-            const explorerUrl = generateSolanaFmUrl(undefined, signature);
+            const explorerUrl = getExplorerUrl(signature);
             toast.success(<div>
                 Success!&nbsp;
                 <a href={explorerUrl} target='_blank' rel='noreferrer'>

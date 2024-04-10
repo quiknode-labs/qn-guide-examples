@@ -32,11 +32,14 @@ bun install
 
 ### Set Environment Variables
 
-Rename `.env.example` to `.env.local` and update with your QuickNode Solana Node Endpoint and QuickNode IPFS key. You can use QuickNode's public IPFS Gateway URL or replace it with your own.
+- Rename `.env.example` to `.env.local` and update with your QuickNode Solana Node Endpoint and QuickNode IPFS key.
+- Make sure to update the cluster to ensure your transaction URLs point to the correct explorer (use only of the enum values provided in the `.env.example` file).
+- You can use QuickNode's public IPFS Gateway URL or replace it with your own.
 
 ```env
 QN_IPFS_API=QN_abc123456789xyz_REPLACE_THIS
 QN_ENDPOINT=https://example.solana-mainnet.quiknode.pro/123456
+NEXT_PUBLIC_CLUSTER=mainnet-beta # mainnet-beta | devnet | testnet | local
 NEXT_PUBLIC_GATEWAY_URL=https://quicknode.quicknode-ipfs.com/ipfs/
 ```
 
