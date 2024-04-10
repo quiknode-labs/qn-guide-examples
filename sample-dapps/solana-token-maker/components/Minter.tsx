@@ -1,12 +1,12 @@
 "use client"
 import MetadataForm from "@/components/MetadataForm";
 import Uploader from "@/components/Uploader";
-import { GATEWAY_URL } from "@/utils/constants";
+import { GATEWAY_URL, MINIMUM_BALANCE } from "@/utils/constants";
 import { getExplorerUrl } from "@/utils/solana";
 import { MintUploadState, MetadataFormInputs, UploadResponse, initialFormData, JsonMetadata, MintRequestBody } from '@/utils/types';
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Transaction } from "@solana/web3.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from 'sonner';
 import MintButton from "@/components/MintButton";
 
@@ -20,8 +20,35 @@ const Minter = () => {
         isUploading: false,
         jsonUrl: null,
     });
+    const [balance, setBalance] = useState<number>(0);
     const { file, isUploading } = uploadState;
     const { publicKey: authority, signTransaction } = useWallet();
+
+    useEffect(() => {
+        if (!authority) return;
+        const fetchBalance = async () => {
+            const API_ENDPOINT = '/api/solana/balance';
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ address: authority.toBase58() }),
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setBalance(data.balance);
+                    console.log('Balance:', data.balance);
+                } else {
+                    console.error('Failed to fetch balance:', response);
+                }
+            } catch (error) {
+                console.error('Failed to fetch balance:', error);
+            }
+        };
+        fetchBalance();
+    }, [authority]);
 
     const handleMint = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -30,6 +57,15 @@ const Minter = () => {
             toast.error('No wallet connected');
             throw new Error('No wallet connected')
         };
+        if (balance < MINIMUM_BALANCE) {
+            toast.error(<div>
+                <span className="font-bold">Insufficient Balance!</span><br/>
+                <a href={'https://faucet.quicknode.com/solana/devnet'} target='_blank' rel='noreferrer'>
+                    (Go To Faucet ↗️)
+                </a>
+            </div>);
+            throw new Error('Insufficient balance');
+        }
         setUploadState((prev) => ({ ...prev, isUploading: true }));
         try {
             validateInputs();
@@ -208,7 +244,7 @@ const Minter = () => {
 
     const validateInputs = () => {
         if (!file) throw new Error('No file to upload');
-        if (!formData.name || !formData.symbol || !formData.description) {
+        if (!formData.name || !formData.symbol || !formData.description || !formData.decimals || !formData.amount) {
             throw new Error('Missing metadata fields');
         }
 
@@ -222,7 +258,6 @@ const Minter = () => {
             throw new Error('Amount must be a positive integer');
         }
     }
-
 
     const disableButton = !file || !formData.name || !formData.symbol || !formData.description || !formData.decimals || !formData.amount || !authority;
 

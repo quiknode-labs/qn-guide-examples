@@ -4,7 +4,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { MetadataFormInputs } from '@/utils/types';
 
 
-const inputFieldClasses = 'text-gray-500 border-2 border-gray-300 focus:text-black focus:border-black z-[3] flex items-center justify-center rounded-md p-2 transition-all focus:font-semibold';
+const inputFieldClasses = 'border-2 border-gray-300 focus:text-black focus:border-black z-[3] flex items-center justify-center rounded-md p-2 transition-all focus:font-semibold';
 const labelClass = 'text-sm text-gray-500';
 
 interface Props {
@@ -34,7 +34,7 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="The Quickest Token"
-                    className={inputFieldClasses}
+                    className={`${inputFieldClasses} ${formData.name ? 'text-black' : 'text-gray-500'}`}
                     required
                 />
 
@@ -45,18 +45,18 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                     value={formData.symbol}
                     onChange={handleChange}
                     placeholder="$TQT"
-                    className={inputFieldClasses}
+                    className={`${inputFieldClasses} ${formData.symbol ? 'text-black' : 'text-gray-500'}`}
                     required
                 />
 
-                <label htmlFor="name" className={labelClass}>Description (max 100 char): </label>
+                <label htmlFor="description" className={labelClass}>Description (max 100 char): </label>
                 <input
                     type="text"
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
                     placeholder="Just a token that moves fast!"
-                    className={inputFieldClasses}
+                    className={`${inputFieldClasses} ${formData.description ? 'text-black' : 'text-gray-500'}`}
                     maxLength={100}
                     required
                 />
@@ -65,9 +65,10 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                 <input
                     type="number"
                     name="decimals"
-                    value={formData.decimals}
+                    value={formData.decimals || ''}
                     onChange={handleChange}
-                    className={inputFieldClasses}
+                    placeholder="6"
+                    className={`${inputFieldClasses} ${formData.decimals ? 'text-black' : 'text-gray-500'}`}
                     maxLength={2}
                     required
                 />
@@ -76,9 +77,10 @@ export default function MetadataForm({ setFormData, formData }: Props) {
                 <input
                     type="number"
                     name="amount"
-                    value={formData.amount}
+                    value={formData.amount || ''}
                     onChange={handleChange}
-                    className={inputFieldClasses}
+                    placeholder="1000000"
+                    className={`${inputFieldClasses} ${formData.amount ? 'text-black' : 'text-gray-500'}`}
                     maxLength={15}
                     required
                 />

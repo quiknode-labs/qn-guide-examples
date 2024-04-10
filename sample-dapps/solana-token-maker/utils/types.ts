@@ -35,8 +35,8 @@ export const initialFormData: MetadataFormInputs = {
     name: '',
     symbol: '',
     description: '',
-    decimals: 6,
-    amount: 10000
+    decimals: 0,
+    amount: 0
 };
 
 export interface UploadState {
