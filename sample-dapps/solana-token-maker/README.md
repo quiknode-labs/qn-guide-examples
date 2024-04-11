@@ -88,7 +88,7 @@ src/
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-token-maker&env=QN_IPFS_API,QN_ENDPOINT,NEXT_PUBLIC_GATEWAY_URL&envDescription=Requires%20QuickNode%20Endpoint%20and%20QN%20IPFS%20API%20Key&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=quicknode-token-minter&repository-name=quicknode-token-minter&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-token-maker%2Fpublic%2Fpreview.png)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-token-maker&env=QN_IPFS_API,QN_ENDPOINT,NEXT_PUBLIC_CLUSTER,NEXT_PUBLIC_GATEWAY_URL&envDescription=Requires%20QuickNode%20Endpoint%20and%20QN%20IPFS%20API%20Key&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=quicknode-token-minter&repository-name=quicknode-token-minter&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-token-maker%2Fpublic%2Fpreview.png)
 
 ## Next.js Documentation
 
