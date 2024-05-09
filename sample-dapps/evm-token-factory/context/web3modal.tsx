@@ -3,7 +3,7 @@
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/react'
 
 // 1. Get projectId at https://cloud.walletconnect.com
-const projectId = 'YOUR_WALLETCONNECT_PROJECT_ID'
+const projectId = 'YOUR_PROJECT_ID'
 
 // 2. Set chains
 export const mainnet = {
@@ -11,7 +11,7 @@ export const mainnet = {
   name: 'Ethereum',
   currency: 'ETH',
   explorerUrl: 'https://etherscan.io',
-  rpcUrl: 'MAINNET_RPC_URL'
+  rpcUrl: 'YOUR_QUICKNODE_HTTP_ENDPOINT'
 }
 
 export const holesky = {
@@ -19,7 +19,7 @@ export const holesky = {
   name: 'Ethereum Holesky',
   currency: 'ETH',
   explorerUrl: 'https://holesky.etherscan.io',
-  rpcUrl: 'HOLESKY_RPC_URL'
+  rpcUrl: 'YOUR_QUICKNODE_HTTP_ENDPOINT'
 }
 
 export const sepolia = {
@@ -27,7 +27,7 @@ export const sepolia = {
   name: 'Ethereum Sepolia',
   currency: 'ETH',
   explorerUrl: 'https://sepolia.etherscan.io',
-  rpcUrl: 'SEPOLIA_RPC_URL'
+  rpcUrl: 'YOUR_QUICKNODE_HTTP_ENDPOINT'
 }
 
 // 3. Create a metadata object
@@ -47,6 +47,18 @@ const ethersConfig = defaultConfig({
   enableInjected: true, // true by default
   enableCoinbase: true, // true by default
 })
+
+const validateConstants = (chains: any[], projectId: string) => {
+  const invalidChains = chains.filter(chain => !chain.rpcUrl || chain.rpcUrl.includes('RPC_URL'));
+  if (invalidChains.length > 0) {
+    throw new Error(`Update src/context/web3modal.tsx. Missing RPC URLs for the following chains: ${invalidChains.map(chain => chain.name).join(', ')}.`);
+  }
+  if (!projectId || !projectId.match(/^[a-f0-9]{32}$/i)) {
+    throw new Error(`Update src/context/web3modal.tsx. Invalid or missing projectId: '${projectId}'. It should be a 32-character hexadecimal string.`);
+  }
+}
+
+validateConstants([sepolia, mainnet, holesky], projectId);
 
 // 5. Create a Web3Modal instance
 createWeb3Modal({
