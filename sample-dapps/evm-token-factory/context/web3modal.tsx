@@ -2,16 +2,16 @@
 
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/react'
 
-// 1. Get projectId at https://cloud.walletconnect.com
-const projectId = 'YOUR_PROJECT_ID'
+// 1. Get projectId using environment variable
+const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string;
 
-// 2. Set chains
+// 2. Set chains using environment variables
 export const mainnet = {
   chainId: 1,
   name: 'Ethereum',
   currency: 'ETH',
   explorerUrl: 'https://etherscan.io',
-  rpcUrl: 'YOUR_QUICKNODE_HTTP_ENDPOINT'
+  rpcUrl: process.env.NEXT_PUBLIC_MAINNET_RPC_URL as string
 }
 
 export const holesky = {
@@ -19,7 +19,7 @@ export const holesky = {
   name: 'Ethereum Holesky',
   currency: 'ETH',
   explorerUrl: 'https://holesky.etherscan.io',
-  rpcUrl: 'YOUR_QUICKNODE_HTTP_ENDPOINT'
+  rpcUrl: process.env.NEXT_PUBLIC_HOLESKY_RPC_URL as string
 }
 
 export const sepolia = {
@@ -27,7 +27,7 @@ export const sepolia = {
   name: 'Ethereum Sepolia',
   currency: 'ETH',
   explorerUrl: 'https://sepolia.etherscan.io',
-  rpcUrl: 'YOUR_QUICKNODE_HTTP_ENDPOINT'
+  rpcUrl: process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL as string
 }
 
 // 3. Create a metadata object

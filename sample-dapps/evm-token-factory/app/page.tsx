@@ -12,6 +12,7 @@ export default function Home() {
   const [contractAddress, setContractAddress] = useState('');
   const [explorerUrl, setExplorerUrl] = useState('');
   const [isTokenCreated, setIsTokenCreated] = useState(false);
+  const [isCreatingToken, setIsCreatingToken] = useState(false);
   const { chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
@@ -22,6 +23,7 @@ export default function Home() {
       throw new Error('Wallet provider is undefined');
     }
 
+    setIsCreatingToken(true);
     const ethersProvider = new BrowserProvider(walletProvider);
     const decoder = ethers.AbiCoder.defaultAbiCoder();
     const signer = await ethersProvider.getSigner();
@@ -59,6 +61,8 @@ export default function Home() {
     } catch (error) {
         console.error('Error:', error);
         setTransactionStatus('Failed to create token');
+    } finally {
+        setIsCreatingToken(false);
     }
 };
 
@@ -70,6 +74,7 @@ export default function Home() {
     setContractAddress('');
     setExplorerUrl('');
     setIsTokenCreated(false);
+    setIsCreatingToken(false);
   };
 
   return (
@@ -115,7 +120,7 @@ export default function Home() {
               <button
                 onClick={handleCreateToken}
                 className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-                disabled={!isConnected}
+                disabled={!isConnected || isCreatingToken}
               >
                 {transactionStatus || 'Create Token'}
               </button>

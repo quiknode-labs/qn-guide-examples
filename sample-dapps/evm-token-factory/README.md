@@ -2,7 +2,7 @@
 
 ## Overview
 
-This simple demo lets you create an ERC-20 token on any EVM-compatible blockchain. The demo will allow you to set an ERC-20 token's `name`, `symbol`, and `initial supply`. Current supported networks include Sepolia and Holesky (feel free to add more!)
+This simple demo lets you create an ERC-20 token on any EVM-compatible blockchain. The demo will allow you to set an ERC-20 token's `name`, `symbol`, and `initialSupply`. Current supported networks include Sepolia and Holesky (feel free to add more!)
 
 ![Preview](public/preview.png)
 
@@ -11,6 +11,17 @@ This simple demo lets you create an ERC-20 token on any EVM-compatible blockchai
 The demo uses [Next.js 14](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
+
+### Set Environment Variables
+
+1. Rename `.env.example` to `.env.local `and update it with RPC URLs for each blockchain. Also, include your WalletConnect project ID. You can retrieve RPC URLs on [QuickNode](https://quicknode.com) and a project ID on [WalletConnect](https://walletconnect.com/web3modal).
+
+### RPC Configuration
+
+This app requires a valid RPC URL for each blockchain you want to support. Here are more details on how RPC is configured throughout the app.
+
+- The RPC URLs referenced in the `.env.local` file are for the WalletConnect modal.
+- To send transactions, the app utilizes the `ethers.BrowserProvider` class to wrap an injected provider (e.g., MetaMask, Rabby, Coinbase Wallet). Therefore, users interacting with the app should have the network they're creating tokens on added to their wallet and switched to that network. Failing to do so will result in the app displaying a "This app doesn’t support your current network. Switch to an available option following to continue." message.
 
 ### Install Dependencies
 
@@ -48,12 +59,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Using the Dapp
 
-**Prerequisites**
-
-- Ensure your WalletConnect Project ID is set up in `src/context/web3modal.tsx`.
-- Put the RPC url of each chain you want to support in the `rpcUrl` variable. Chains you don't want to support should be commented out in the code.
-
-
 1. Connect your wallet
     - Make sure you have enough ETH (or other native EVM gas token) in your wallet to cover the create token transaction
     - If you are using Testnet, you can get free ETH from the [QuickNode Faucet](https://faucet.quicknode.com/)
@@ -80,19 +85,8 @@ src/
 │       └── factory.json  # Factory ABI
 │   └── Factory.sol       # Token Factory 
 │   └── Token.sol         # Token Details
+├── .env.local  # Configure RPCs and WalletConnect Project ID
 ```
-
-## WalletConnect Configuration
-
-This app utilizes WalletConnect's Web3Modal SDK. Ensure that you are properly filled in the `projectId` variable in the `src/context/web3modal.tsx` file. You can retrieve a project ID [here](https://cloud.walletconnect.com/).
-
-## RPC Configuration
-
-This app requires a valid RPC URL for each blockchain you want to support. Please follow these steps to configure your RPC URL:
-
-- In `src/context/web3modal.tsx`, update the `rpcUrl` for each chain with a valid RPC url. This will ensure that WalletConnect (in the Navbar) can properly load balances. Failing to input a valid RPC will return an error and zero balance. You can retrieve an RPC url on [QuickNode](https://quicknode.com).
-
-- In `page.tsx` (the main page for the Token Factory), it utilizes `ethers` and its `BrowserProvider` class to wrap an injected provider (e.g., MetaMask, Rabby, Coinbase Wallet). Therefore, users interacting with the app should have the network they're creating tokens on added to their wallet and switched to that network. Failing to do so will result in the app displaying a "This app doesn’t support your current network. Switch to an available option following to continue." message.
 
 ## Smart Contracts
 
