@@ -14,14 +14,16 @@ The demo uses [Next.js 14](https://nextjs.org/) project bootstrapped with [`crea
 
 ### Set Environment Variables
 
-1. Rename `.env.example` to `.env.local `and update it with RPC URLs for each blockchain. Also, include your WalletConnect project ID. You can retrieve RPC URLs on [QuickNode](https://quicknode.com) and a project ID on [WalletConnect](https://walletconnect.com/web3modal).
+1. Rename `.env.example` to `.env.local `and update it with RPC URLs for each blockchain. Also, include your [WalletConnect](https://cloud.walletconnect.com/). project ID (optionally, you can leave this blank but some features will not be supported). To create RPC URLs for each chain, you can run your own node locally or use a service like [QuickNode](https://quicknode.com) to quickly spin up a node endpoint.
 
 ### RPC Configuration
 
 This app requires a valid RPC URL for each blockchain you want to support. Here are more details on how RPC is configured throughout the app.
 
 - The RPC URLs referenced in the `.env.local` file are for the WalletConnect modal.
-- To send transactions, the app utilizes the `ethers.BrowserProvider` class to wrap an injected provider (e.g., MetaMask, Rabby, Coinbase Wallet). Therefore, users interacting with the app should have the network they're creating tokens on added to their wallet and switched to that network. Failing to do so will result in the app displaying a "This app doesn’t support your current network. Switch to an available option following to continue." message.
+- To send transactions, the app utilizes the `ethers.BrowserProvider` class to wrap an injected provider (e.g., MetaMask, Rabby, Coinbase Wallet) and use the providers RPC configuration. Therefore, users interacting with the app should have the network they're creating tokens on added to their wallet and switched to that RPC network. Failing to do so will result in the app displaying a "This app doesn’t support your current network. Switch to an available option following to continue." message.
+
+If you do not want to support a blockchain(s), you can remove references of the chain(s) from the `src/context/web3modal.tsx` file.
 
 ### Install Dependencies
 
@@ -98,12 +100,14 @@ The ERC-20 Token Factory is built with two smart contracts:
 
 - **Token**: This is an ERC-20 smart contract (`smart-contracts/Token.sol`) defined by the OpenZeppelin standard and includes a `mint` and `transferOwnership` function call in the constructor upon deployment.
 
-**Supported Chains & Addresses**:
+### Supported Chains & Addresses
 
 - **Sepolia**: 0x28D99a0A1B430B3669B8A2799dCDd7d332ceDb1C
 - **Holesky**: 0x5fCCa8dCeD28B13f2924CB78B934Ab0AF445542A
 
-To deploy the Factory contract on a new chain, follow these steps:
+### Deploy the Factory to another EVM blockchain
+
+To deploy the Factory contract on a new chain using Foundry, follow these steps:
 
 1. Ensure [Foundry](https://book.getfoundry.sh/) is installed and navigate inside the `smart-contracts` directory. Install the required dependencies with the following commands:
 
@@ -116,7 +120,7 @@ forge install foundry-rs/forge-std --no-commit
 
 3. Run tests using the `forge test` command.
 
-4. To deploy, run the command and input the proper variables:
+4. To deploy, run the `forge create` command below and input the proper RPC network and private key values:
 
 ```sh
 forge create --rpc-url QUICKNODE_HTTP_URL \
@@ -124,7 +128,7 @@ forge create --rpc-url QUICKNODE_HTTP_URL \
 src/Factory.sol:Factory
 ```
 
-5. Edit the `src/context/web3modal.tsx` file and add a new chain object with its chain ID (find a list [here](https://chainlist.org/)), name, native gas token currency, explorer URL, and RPC URL (e.g., QuickNode)
+5. Edit the `src/context/web3modal.tsx` file and add a new chain object with its chain ID (find a list [here](https://chainlist.org/)), name, native gas token currency, explorer URL, and RPC URL (e.g., QuickNode):
 
 ```javascript
 export const mainnet = {
@@ -132,7 +136,7 @@ export const mainnet = {
   name: 'Ethereum',
   currency: 'ETH',
   explorerUrl: 'https://etherscan.io',
-  rpcUrl: 'MAINNET_RPC_URL'
+  rpcUrl: process.env.NEXT_PUBLIC_MAINNET_RPC_URL
 }
 ```
 
@@ -140,7 +144,7 @@ export const mainnet = {
 
 ```javascript
     1: { // Ethereum Mainnet
-        factoryAddress: "The Factory Address",
+        factoryAddress: "FACTORY_ADDRESS",
         explorerUrl: "https://etherscan.io", 
     },
 ```
