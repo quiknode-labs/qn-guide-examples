@@ -1,0 +1,6 @@
+[submodule "sample-dapps/evm-token-factory/smart-contracts/lib/forge-std"]
+	path = sample-dapps/evm-token-factory/smart-contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "sample-dapps/evm-token-factory/smart-contracts/lib/openzeppelin-contracts"]
+	path = sample-dapps/evm-token-factory/smart-contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
