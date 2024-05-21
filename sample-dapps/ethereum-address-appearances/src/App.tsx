@@ -12,7 +12,6 @@ import {
   SimplifiedEtherscanTransaction,
   CombinedTransactionData,
 } from "./interfaces";
-import "./helpers/chartSetup";
 
 const App: React.FC = () => {
   const [address, setAddress] = useState<string>("");
