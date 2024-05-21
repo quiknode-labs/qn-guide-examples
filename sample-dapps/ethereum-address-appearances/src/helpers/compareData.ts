@@ -45,7 +45,6 @@ const compareData = (
           etherscanBlockNumber: etherscanTx.blockNumber,
           etherscanTxIndex: etherscanTx.transactionIndex,
           type: etherscanTx.type,
-
         });
       }
     }
@@ -71,7 +70,7 @@ const compareData = (
       }
     }
   }
-  
+
   // Sort filteredData by block number in descending order
   combinedData.sort(
     (a, b) =>

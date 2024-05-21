@@ -5,8 +5,6 @@ import AddressInputForm from "./components/AddressInputForm";
 import ComparisonTable from "./components/ComparisonTable";
 import TransactionSummary from "./components/TransactionSummary";
 
-// import BarChart from "./components/BarChart";
-// import ComparisonChart from "./components/ComparisonChart";
 import compareData from "./helpers/compareData";
 import fetchTransactions from "./helpers/fetchData";
 import {
@@ -56,8 +54,6 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (customData.length > 0 || Object.keys(etherscanData).length > 0) {
-      // console.log("custom data", customData);
-      // console.log("etherscan data", etherscanData);
       const comparisonResult = compareData(customData, etherscanData);
       setComparisonTable(comparisonResult);
     }

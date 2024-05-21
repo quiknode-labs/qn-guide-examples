@@ -41,8 +41,6 @@ const fetchCustomMethodData = async (
       id: 1,
     });
 
-    // console.log("response", response);
-
     if (response.data) {
       const { data, meta } = response.data.result;
 
@@ -68,7 +66,6 @@ const fetchEtherscanData = async (address: string) => {
   const results: { [key: string]: SimplifiedEtherscanTransaction[] } = {};
 
   for (const action of actions) {
-    // console.log("action", action);
     results[action] = await fetchEtherscanTransactions(address, action);
   }
 
@@ -96,7 +93,6 @@ const fetchEtherscanTransactions = async (address: string, action: string) => {
   });
 
   const { result } = response.data;
-  // console.log("result", result);
   results.push(
     ...result.map((tx: SimplifiedEtherscanTransaction) => ({
       blockNumber: tx.blockNumber,
@@ -126,8 +122,6 @@ const filterDuplicates = (etherscanData: {
     if (!uniqueTransactions.has(key)) {
       uniqueTransactions.set(key, tx);
     }
-    // console.log("key", key);
-    // console.log(uniqueTransactions);
   });
 
   // Reconstruct the etherscanData object with unique transactions
@@ -142,8 +136,6 @@ const filterDuplicates = (etherscanData: {
       return false;
     });
   }
-
-  // console.log("filtered data", filteredData);
 
   return filteredData;
 };
