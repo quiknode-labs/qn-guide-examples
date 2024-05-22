@@ -23,6 +23,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit, isLoading }) => {
   ); // default to today's date
   const [timezone, setTimezone] = useState("UTC");
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const handleAddressChange = (e: any) => {
     const inputAddress = e.target.value;
     setAddress(inputAddress);

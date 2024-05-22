@@ -43,7 +43,11 @@ const convertToCSV = (data: ExtractedTransaction[]) => {
     row.push(tx.value);
     row.push(tx.tokenId ? tx.tokenId : "N/A");
     row.push(tx.fee);
-    row.push(tx.methodNameOrId.startsWith('0x') ? `"${tx.methodNameOrId}"` : tx.methodNameOrId);
+    row.push(
+      tx.methodNameOrId.startsWith("0x")
+        ? `"${tx.methodNameOrId}"`
+        : tx.methodNameOrId
+    );
     csvRows.push(row.join(",")); // Join each row's columns and push
   });
 

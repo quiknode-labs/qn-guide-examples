@@ -32,10 +32,12 @@ export async function calculateVariables(
 
     let methodNameOrId = "";
     if (transaction.ethereumSpecific?.parsedData) {
-      methodNameOrId =
-        transaction.ethereumSpecific.parsedData.name ||
-        transaction.ethereumSpecific.parsedData.methodId ||
-        "Unknown";
+      const { name, methodId } = transaction.ethereumSpecific.parsedData;
+      if (name && methodId) {
+        methodNameOrId = `${name} (${methodId})`;
+      } else {
+        methodNameOrId = name || methodId || "Unknown";
+      }
     }
 
     if (blockTime < startOfPeriod || blockTime > endOfPeriod) continue;
@@ -93,7 +95,7 @@ export async function calculateVariables(
           transfer.from === result.address ||
           transfer.to === result.address
         ) {
-          let direction =
+          const direction =
             transfer.from === result.address ? "Outgoing" : "Incoming";
 
           extractedData.push({
@@ -137,17 +139,11 @@ export async function calculateVariables(
           switch (tokenTransfer.type) {
             case "ERC1155":
               if (tokenTransfer.multiTokenValues) {
-                tokenTransfer.multiTokenValues.forEach((token, index) => {
-                  tokenId +=
-                    token.id +
-                    (index < tokenTransfer.multiTokenValues.length - 1
-                      ? ", "
-                      : "");
+                const tokens = tokenTransfer.multiTokenValues;
+                tokens.forEach((token, index) => {
+                  tokenId += token.id + (index < tokens.length - 1 ? ", " : "");
                   value +=
-                    token.value +
-                    (index < tokenTransfer.multiTokenValues.length - 1
-                      ? ", "
-                      : "");
+                    token.value + (index < tokens.length - 1 ? ", " : "");
                 });
               } else {
                 // Handle the case where there are no multiTokenValues

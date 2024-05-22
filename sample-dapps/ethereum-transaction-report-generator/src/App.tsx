@@ -43,7 +43,7 @@ const App = () => {
         setReportData(extendedData);
       })
       .catch((error) => {
-        setLoading(false)
+        setLoading(false);
         console.error(error);
       });
   };
@@ -51,7 +51,7 @@ const App = () => {
   return (
     <div className="min-h-screen flex flex-col bg-blue-50">
       <header className="bg-blue-200 text-xl text-center p-4">
-        Ethereum Transaction Report Generator by QuickNode
+        Ethereum Transaction Report Generator
       </header>
       <main className="flex-grow container mx-auto p-4">
         <ReportForm onSubmit={handleFormSubmit} isLoading={loading} />

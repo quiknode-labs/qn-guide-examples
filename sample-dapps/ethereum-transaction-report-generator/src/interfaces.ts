@@ -9,7 +9,7 @@ export interface CalculateVariablesOptions {
 export interface Config {
   startDate?: {
     year: number;
-    month: number; // Luxon uses 1-indexed months
+    month: number;
     day: number;
   };
   endDate?: {
