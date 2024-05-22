@@ -37,8 +37,7 @@ Before you begin, ensure you have the following:
 > You can run the commands below to install TypeScript and ts-node globally to have TypeScript available across all projects.
 
 ```bash
-npm install -g typescript
-npm install -g ts-node
+npm install -g typescript ts-node
 ```
 
 ### Installation Dependencies
