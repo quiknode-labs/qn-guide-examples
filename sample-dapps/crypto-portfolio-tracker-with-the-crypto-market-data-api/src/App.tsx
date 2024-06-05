@@ -13,6 +13,7 @@ import {
   updateHolding,
   removeHolding,
   fetchPortfolioData,
+  fetchTotalPortfolioValue,
   handleExportCSV,
 } from "./utils/portfolioUtils";
 
@@ -36,8 +37,6 @@ const App: React.FC = () => {
   const [initialized, setInitialized] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
-
   useEffect(() => {
     // Load holdings from local storage
     const storedHoldings = localStorage.getItem("holdings");
@@ -60,9 +59,20 @@ const App: React.FC = () => {
     if (initialized) {
       // Save holdings to local storage
       localStorage.setItem("holdings", JSON.stringify(holdings));
-      // Clear results when holdings change
-      setTotalValue(0);
+      // // Clear results when holdings change
+      // setTotalValue(0);
       setHistoricalData([]);
+      // Automatically fetch total portfolio value
+      const fetchTotalValue = async () => {
+        await fetchTotalPortfolioValue(
+          holdings,
+          currency,
+          setExchangeRates,
+          setTotalValue,
+          setLoading
+        );
+      };
+      fetchTotalValue();
     }
   }, [holdings, currency, initialized]);
 
@@ -113,10 +123,9 @@ const App: React.FC = () => {
 
         {!loading && totalValue !== 0 && (
           <div>
-            <PortfolioSummary totalValue={totalValue} currency={currency} />
             <div className="flex space-x-4">
-              <div className="w-1/2 my-4 p-4 border rounded-lg shadow-sm bg-white h-96">
-                <HistoricalChart data={historicalData} currency={currency} />
+              <div className="w-1/2 my-4 p-4 border rounded-lg shadow-sm bg-white h-96 text-center">
+                <PortfolioSummary totalValue={totalValue} currency={currency} />
               </div>
               <div className="w-1/2 my-4 p-4 border rounded-lg shadow-sm bg-white h-96">
                 <PortfolioPieChart
@@ -126,6 +135,7 @@ const App: React.FC = () => {
                 />
               </div>
             </div>
+            <HistoricalChart data={historicalData} currency={currency} />
           </div>
         )}
       </div>

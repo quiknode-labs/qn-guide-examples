@@ -7,7 +7,7 @@ const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({
   currency,
 }) => {
   return (
-    <div className="my-4 p-4 border rounded-lg shadow-sm bg-white text-center">
+    <div>
       <h2 className="text-xl font-semibold">Total Portfolio Value</h2>
       <p className="text-2xl">
         {totalValue.toFixed(2)} {currency}

@@ -1,5 +1,5 @@
 // src/components/PortfolioPieChart.tsx
-import React, { useEffect } from "react";
+import React from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { PortfolioHolding } from "../interfaces";
@@ -18,11 +18,6 @@ const PortfolioPieChart: React.FC<PortfolioPieChartProps> = ({
   exchangeRates,
   currency,
 }) => {
-  useEffect(() => {
-    console.log("Holdings:", holdings);
-    console.log("Exchange Rates:", exchangeRates);
-  }, [holdings, exchangeRates]);
-
   if (!holdings || holdings.length === 0 || !exchangeRates) {
     return <div>No data available</div>;
   }

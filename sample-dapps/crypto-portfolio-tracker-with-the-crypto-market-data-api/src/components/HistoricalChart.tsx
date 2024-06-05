@@ -34,14 +34,10 @@ interface HistoricalChartProps {
   currency: string;
 }
 
-const HistoricalChart: React.FC<HistoricalChartProps> = ({
-  data,
-}) => {
+const HistoricalChart: React.FC<HistoricalChartProps> = ({ data }) => {
   if (!data || data.length === 0) {
-    return <div>No data available</div>;
+    return <div>No historical data</div>;
   }
-
-  console.log("data", data);
 
   const labels = data.map((entry) => entry.date);
   // const assets = Object.keys(data[0]).filter((key) => key !== "date");

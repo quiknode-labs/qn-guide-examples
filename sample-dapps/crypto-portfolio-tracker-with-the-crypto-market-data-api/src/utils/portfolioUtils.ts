@@ -103,6 +103,42 @@ export const fetchPortfolioData = async (
   }
 };
 
+export const fetchTotalPortfolioValue = async (
+  holdings: PortfolioHolding[],
+  currency: string,
+  setExchangeRates: (rates: { [key: string]: number }) => void,
+  setTotalValue: (value: number) => void,
+  setLoading: (loading: boolean) => void
+) => {
+  try {
+    setLoading(true);
+
+    const currentRates = await Promise.all(
+      holdings.map((holding) =>
+        fetchCurrentExchangeRates(holding.asset, currency)
+      )
+    );
+
+    const exchangeRatesMap: { [key: string]: number } = {};
+    currentRates.forEach((rate) => {
+      exchangeRatesMap[`${rate.asset_id_base}-${rate.asset_id_quote}`] =
+        rate.rate;
+    });
+    setExchangeRates(exchangeRatesMap);
+
+    const totalValue = holdings.reduce((acc, holding) => {
+      const rate = exchangeRatesMap[`${holding.asset}-${currency}`] || 0;
+      return acc + holding.amount * rate;
+    }, 0);
+
+    setTotalValue(totalValue);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 // Handle CSV export
 export const handleExportCSV = (historicalData: HistoricalDataEntry[]) => {
   exportToCSV(historicalData, "portfolio_value");

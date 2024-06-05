@@ -27,7 +27,7 @@ const PortfolioControls: React.FC<PortfolioControlsProps> = ({
       onClick={calculatePortfolioValue}
       className="bg-green-600 text-white py-2 px-4 rounded-md"
     >
-      Calculate Portfolio Value
+      Get Historical Chart
     </button>
     <button
       onClick={exportCSV}

@@ -78,7 +78,8 @@ Open [http://localhost:5173/](http://localhost:5173/) with your browser to see t
 - **Manage Holdings**: Edit or remove holdings as needed.
 - **Select Currency**: Choose the currency in which to view your portfolio value.
 - **Select Time Interval**: Choose the time interval for viewing historical portfolio value (e.g., 5 Minutes, 1 Hour, 1 Day).
-- **View Portfolio Value**: Click **Calculate Portfolio Value** to fetch the current and historical values.
+- **View Current Portfolio Value**: The current portfolio value and pie chart are fetched immediately after you add or update assets to your holding.
+- **View Historical Portfolio Value**: Click **Calculate Portfolio Value** to fetch the historical values.
 - **Export Data**: Click **Export as CSV** to download your historical portfolio value data.
 
 ## Project Structure
