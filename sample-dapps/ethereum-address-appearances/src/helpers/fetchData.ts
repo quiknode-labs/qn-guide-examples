@@ -5,19 +5,24 @@ import {
   SimplifiedEtherscanTransaction,
 } from "../interfaces";
 
-const ETHERSCAN_API_KEY =
-  import.meta.env.VITE_ETHERSCAN_API_KEY || "YourApiKeyToken";
+const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY || undefined;
 const RATE_LIMIT_DELAY = 300;
 const QUICKNODE_ENDPOINT = import.meta.env.VITE_QUICKNODE_ENDPOINT as string;
 
 const fetchTransactions = async (address: string) => {
   const customMethodData = await fetchCustomMethodData(address);
-  let esData = await fetchEtherscanData(address);
 
-  esData = filterDuplicates(esData);
+  let esData = {};
+
+  if (ETHERSCAN_API_KEY) {
+    esData = await fetchEtherscanData(address);
+    esData = filterDuplicates(esData);
+  }
 
   const customTotal = customMethodData.length;
-  const etherscanTotals = calculateEtherscanTotals(esData);
+  const etherscanTotals = ETHERSCAN_API_KEY
+    ? calculateEtherscanTotals(esData)
+    : {};
 
   return {
     customMethodData,

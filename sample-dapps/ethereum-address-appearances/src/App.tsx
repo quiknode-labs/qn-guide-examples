@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import AddressInputForm from "./components/AddressInputForm";
 import ComparisonTable from "./components/ComparisonTable";
 import TransactionSummary from "./components/TransactionSummary";
+import AddressAppearancesResults from "./components/AddressAppearancesResults"; // New component for Address Appearances results
 
 import compareData from "./helpers/compareData";
 import fetchTransactions from "./helpers/fetchData";
@@ -12,6 +13,8 @@ import {
   SimplifiedEtherscanTransaction,
   CombinedTransactionData,
 } from "./interfaces";
+
+const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY || undefined;
 
 const App: React.FC = () => {
   const [address, setAddress] = useState<string>("");
@@ -52,9 +55,13 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (customData.length > 0 || Object.keys(etherscanData).length > 0) {
-      const comparisonResult = compareData(customData, etherscanData);
-      setComparisonTable(comparisonResult);
+    if (customData.length > 0) {
+      if (ETHERSCAN_API_KEY && Object.keys(etherscanData).length > 0) {
+        const comparisonResult = compareData(customData, etherscanData);
+        setComparisonTable(comparisonResult);
+      } else {
+        setComparisonTable([]);
+      }
     }
   }, [customData, etherscanData]);
 
@@ -72,14 +79,19 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {customTotal > 0 && (
-        <TransactionSummary
-          address={address}
-          customTotal={customTotal}
-          etherscanTotals={etherscanTotals}
-        />
+      {ETHERSCAN_API_KEY && comparisonTable.length > 0 && customTotal > 0 && (
+        <div>
+          <ComparisonTable data={comparisonTable} />
+          <TransactionSummary
+            address={address}
+            customTotal={customTotal}
+            etherscanTotals={etherscanTotals}
+          />
+        </div>
       )}
-      {comparisonTable.length > 0 && <ComparisonTable data={comparisonTable} />}
+      {!ETHERSCAN_API_KEY && customData.length > 0 && (
+        <AddressAppearancesResults data={customData} />
+      )}
       <Footer />
     </div>
   );

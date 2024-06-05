@@ -2,10 +2,9 @@
 
 ## Introduction
 
-This application is designed to fetch and analyze Ethereum transactions associated with a specific address, leveraging the capabilities of QuickNode's [Address Appearances API](https://marketplace.quicknode.com/add-on/address-appearances-api). It provides users with detailed comparisons of transactions found using **Address Appearances API** and Etherscan's API, offering insights into transaction history and differences between these sources.
+This application is designed to fetch and analyze Ethereum transactions associated with a specific address, leveraging the capabilities of QuickNode's [Address Appearances API](https://marketplace.quicknode.com/add-on/address-appearances-api). The primary focus of this application is to provide users with transaction appearances using the **Address Appearances API**. However, if you would like to compare these results with Etherscan's API, you can provide an Etherscan API key to enable the comparison feature.
 
-<!-- TO-DO: ADD GUIDE URL WHEN IT'S READY -->
-<!-- For an in-depth guide on how to fetch data and develop further functionalities, refer to [our comprehensive guide on QuickNode](https://www.quicknode.com/guides). -->
+For an in-depth guide on how to fetch data and develop further functionalities, refer to [our comprehensive guide on QuickNode](https://www.quicknode.com/guides/quicknode-products/marketplace/improve-your-ethereum-audits-with-address-appearances-api).
 
 ### Tech Stack
 - Frontend Framework/Library: React
@@ -15,9 +14,8 @@ This application is designed to fetch and analyze Ethereum transactions associat
 
 ## Features
 
-- **Transaction Comparison**: Compares transactions found using QuickNode's Address Appearances API with those found using Etherscan API.
-- **Duplicate Detection**: Identifies and marks duplicate transactions of Etherscan API.
-- **Filtering**: Excludes internal transactions if associated normal transactions are present.
+- **Transaction Appearances**: Provides detailed transaction appearances using QuickNode's Address Appearances API.
+- **Optional Transaction Comparison**: Enables comparison with Etherscan API if an Etherscan API key is provided.
 
 ## Getting Started
 
@@ -32,8 +30,7 @@ Before you begin, ensure you have the following:
 > You can run the commands below to install TypeScript and ts-node globally to have TypeScript available across all projects.
 
 ```bash
-npm install -g typescript
-npm install -g ts-node
+npm install -g typescript ts-node
 ```
 
 ### Installation Dependencies
@@ -55,10 +52,17 @@ npm install
 
 ### Setting Environment Variables
 
-Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_ETHEREUM_ENDPOINT_URL` and `YOUR_ETHERSCAN_API_KEY` placeholders with your QuickNode Ethereum Node Endpoint and Etherscan API key. Make sure that the [Address Appearances API](https://marketplace.quicknode.com/add-on/address-appearances-api) is enabled.
+Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_ETHEREUM_ENDPOINT_URL` placeholder with your QuickNode Ethereum Node Endpoint. Make sure that the [Address Appearances API](https://marketplace.quicknode.com/add-on/address-appearances-api) is enabled.
 
 ```env
 VITE_QUICKNODE_ENDPOINT = "YOUR_QUICKNODE_ETHEREUM_ENDPOINT_URL"
+```
+
+If you provide an Etherscan API key in the .env file like the one below, the app displays appearance results from both sources for a specified address.
+
+```env
+VITE_QUICKNODE_ENDPOINT="YOUR_QUICKNODE_ETHEREUM_ENDPOINT_URL"
+VITE_ETHERSCAN_API_KEY="YOUR_ETHERSCAN_API_KEY"
 ```
 
 > Please note that while we utilize `dotenv` for environment variable management, sensitive information like endpoints can still be visible on the frontend. This configuration is not recommended for production environments as-is.
@@ -76,12 +80,15 @@ Open [http://localhost:5173/](http://localhost:5173/) with your browser to see t
 ## Using the App
 1. Input an Ethereum address.
 2. Press Generate.
-3. View the comparison of transactions found by QuickNode's Address Appearances API and Etherscan API.
-4. Review the transaction summary and detailed comparison table.
+3. View the transaction appearances.
 
-The **Ethereum Address Appearances Application** will query the Ethereum blockchain for the address's transactions, compare the data from QuickNode and Etherscan, and display the results.
+The **Ethereum Address Appearances Application** will query the Ethereum blockchain for the address's transactions, fetch the data using QuickNode's Address Appearances API, and display the results.
 
-![Preview](public/image.png)
+![Results with Address Appearances API](public/results-address-appearances.png)
+
+If an Etherscan API key is provided, the app will display the comparison of transactions found by QuickNode's Address Appearances API and Etherscan API.
+
+![Results with both API](public/image.png)
 
 ## Conclusion
 
