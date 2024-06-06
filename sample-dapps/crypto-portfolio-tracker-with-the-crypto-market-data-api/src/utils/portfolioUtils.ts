@@ -32,8 +32,6 @@ export const fetchPortfolioData = async (
   currency: string,
   timeInterval: string,
   limit: number,
-  setExchangeRates: (rates: { [key: string]: number }) => void,
-  setTotalValue: (value: number) => void,
   setHistoricalData: (data: HistoricalDataEntry[]) => void,
   setLoading: (loading: boolean) => void
 ) => {
@@ -44,12 +42,6 @@ export const fetchPortfolioData = async (
     const startDate = new Date(
       now.getTime() - limit * parseTimeInterval(timeInterval)
     ).toISOString();
-
-    const currentRates = await Promise.all(
-      holdings.map((holding) =>
-        fetchCurrentExchangeRates(holding.asset, currency)
-      )
-    );
 
     const historicalRates = await Promise.all(
       holdings.map((holding) =>
@@ -63,18 +55,6 @@ export const fetchPortfolioData = async (
         )
       )
     );
-
-    const exchangeRatesMap: { [key: string]: number } = {};
-    currentRates.forEach((rate) => {
-      exchangeRatesMap[`${rate.asset_id_base}-${rate.asset_id_quote}`] =
-        rate.rate;
-    });
-    setExchangeRates(exchangeRatesMap);
-
-    const totalValue = holdings.reduce((acc, holding) => {
-      const rate = exchangeRatesMap[`${holding.asset}-${currency}`] || 0;
-      return acc + holding.amount * rate;
-    }, 0);
 
     // Group historical data by date and include asset values
     const historicalDataMap: { [key: string]: HistoricalDataEntry } = {};
@@ -94,7 +74,6 @@ export const fetchPortfolioData = async (
     const historicalData: HistoricalDataEntry[] =
       Object.values(historicalDataMap);
 
-    setTotalValue(totalValue);
     setHistoricalData(historicalData);
   } catch (error) {
     console.error(error);
@@ -149,7 +128,7 @@ const parseTimeInterval = (interval: string) => {
   switch (unit) {
     case "DAY":
       return parseInt(value) * 24 * 60 * 60 * 1000;
-    case "HOUR":
+    case "HRS":
       return parseInt(value) * 60 * 60 * 1000;
     case "MIN":
       return parseInt(value) * 60 * 1000;

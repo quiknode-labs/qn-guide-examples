@@ -32,6 +32,14 @@ const PortfolioInput: React.FC<PortfolioInputProps> = ({
     }
   };
 
+  const handleRemoveHolding = (index: number) => {
+    console.log("index", index);
+    onRemoveHolding(index);
+    setAsset("");
+    setAmount("");
+    setIsEditing(null);
+  };
+
   const availableAssets = assets.filter(
     (asset) => !holdings.some((holding) => holding.asset === asset.asset_id)
   );
@@ -44,6 +52,7 @@ const PortfolioInput: React.FC<PortfolioInputProps> = ({
             value={asset}
             onChange={(e) => setAsset(e.target.value)}
             className="p-2 border rounded-md"
+            disabled={isEditing !== null}
           >
             <option value="">Select Asset</option>
             {availableAssets.map((asset) => (
@@ -95,7 +104,7 @@ const PortfolioInput: React.FC<PortfolioInputProps> = ({
                 />
                 <DeleteIcon
                   className="cursor-pointer"
-                  onClick={() => onRemoveHolding(index)}
+                  onClick={() => handleRemoveHolding(index)}
                 />
               </div>
             </li>

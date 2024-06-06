@@ -59,20 +59,23 @@ const App: React.FC = () => {
     if (initialized) {
       // Save holdings to local storage
       localStorage.setItem("holdings", JSON.stringify(holdings));
-      // // Clear results when holdings change
-      // setTotalValue(0);
-      setHistoricalData([]);
-      // Automatically fetch total portfolio value
-      const fetchTotalValue = async () => {
-        await fetchTotalPortfolioValue(
-          holdings,
-          currency,
-          setExchangeRates,
-          setTotalValue,
-          setLoading
-        );
-      };
-      fetchTotalValue();
+      if (holdings.length > 0) {
+        // Automatically fetch total portfolio value
+        const fetchTotalValue = async () => {
+          await fetchTotalPortfolioValue(
+            holdings,
+            currency,
+            setExchangeRates,
+            setTotalValue,
+            setLoading
+          );
+        };
+        fetchTotalValue();
+      } else {
+        setTotalValue(0);
+        setExchangeRates({});
+        setLoading(false);
+      }
     }
   }, [holdings, currency, initialized]);
 
@@ -104,8 +107,6 @@ const App: React.FC = () => {
               currency,
               timeInterval,
               100,
-              setExchangeRates,
-              setTotalValue,
               setHistoricalData,
               setLoading
             )
