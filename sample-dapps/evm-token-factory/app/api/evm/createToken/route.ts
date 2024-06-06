@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { RequestBody, CHAINS } from '@/app/utils/ethereum';
-import abi from '@/smart-contracts/abi/factory.json'
+import abi from '@/app/utils/abi.json';
 
 export async function POST(request: Request) {
     try {

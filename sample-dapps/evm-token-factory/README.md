@@ -1,3 +1,4 @@
+
 # QuickNode EVM Token Factory Demo
 
 ## Overview
@@ -12,9 +13,21 @@ The demo uses [Next.js 14](https://nextjs.org/) project bootstrapped with [`crea
 
 ## Getting Started
 
+Open the project directory:
+
+```bash
+cd sample-dapps/evm-token-factory
+```
+
 ### Set Environment Variables
 
 1. Rename `.env.example` to `.env.local `and update it with RPC URLs for each blockchain. Also, include your [WalletConnect](https://cloud.walletconnect.com/). project ID (optionally, you can leave this blank but some features will not be supported). To create RPC URLs for each chain, you can run your own node locally or use a service like [QuickNode](https://quicknode.com) to quickly spin up a node endpoint.
+
+### Configure Smart Contract Addresses
+
+2. Update the `factoryAddress` value in `evm-token-factory/app/utils/ethereum.ts` with your deployed factory contract address. This is the address you received in the output during the [Deployment](https://quicknode.com/guides/ethereum-development/dapps/how-to-create-an-evm-token-factory-dapp#deployment) section.
+
+3. Remove any unused chains (e.g., mainnet) from the `src/context/web3modal.tsx` file.
 
 ### RPC Configuration
 
@@ -26,12 +39,6 @@ This app requires a valid RPC URL for each blockchain you want to support. Here 
 If you do not want to support a blockchain(s), you can remove references of the chain(s) from the `src/context/web3modal.tsx` file.
 
 ### Install Dependencies
-
-Open the project directory:
-
-```bash
-cd sample-dapps/evm-token-factory
-```
 
 Then, install the dependencies:
 
@@ -45,7 +52,7 @@ pnpm install
 bun install
 ```
 
-First, run the development server:
+After, start the development server:
 
 ```bash
 npm run dev
@@ -109,12 +116,7 @@ The ERC-20 Token Factory is built with two smart contracts:
 
 To deploy the Factory contract on a new chain using Foundry, follow these steps:
 
-1. Ensure [Foundry](https://book.getfoundry.sh/) is installed and navigate inside the `smart-contracts` directory. Install the required dependencies with the following commands:
-
-```sh
-forge install OpenZeppelin/openzeppelin-contracts --no-commit
-forge install foundry-rs/forge-std --no-commit
-```
+1. Ensure [Foundry](https://book.getfoundry.sh/) is installed and navigate inside the `contracts` directory. Install the required dependencies with the following commands:
 
 2. Build (compile) the smart contracts using the `forge build` command.
 
