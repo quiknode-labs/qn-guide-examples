@@ -71,30 +71,59 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 1. Connect your wallet
     - Make sure you have enough ETH (or other native EVM gas token) in your wallet to cover the create token transaction
     - If you are using Testnet, you can get free ETH from the [QuickNode Faucet](https://faucet.quicknode.com/)
-2. Click "Create Token" and confirm the transaction to create the ERC-2O token!
+2. Click "Create Token" and confirm the transaction to create the ERC-20 token!
 
 ### Architecture
 
-```bash
-src/
-├── app/
-│   ├── page.tsx # Main page for Token Factory
-│   └── layout.tsx # Import the Web3Modal component
-│   └── api/
-│       └── evm/
-│           └── createToken/route.ts   # Create New ERC-20 Transaction
-└── components/
-|    ├── Connect.tsx     # Web3Modal Component
-|    ├── Navbar.tsx              # Navbar component
-     └── Footer.tsx      # Footer Component
-└── context/
-    ├── web3modal.tsx     # Wallet Adapter Context providers 
-└── smart_contracts/
-│   └── abi/
-│       └── factory.json  # Factory ABI
-│   └── Factory.sol       # Token Factory 
-│   └── Token.sol         # Token Details
-├── .env.local  # Configure RPCs and WalletConnect Project ID
+
+```sh
+├── app
+│   ├── api
+│   │   └── evm
+│   │       └── createToken
+│   │           └── route.ts # API Method for calling CreateToken function
+│   ├── components
+│   │   ├── Connect.tsx # Web3Modal Component
+│   │   ├── Footer.tsx
+│   │   └── Navbar.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx # The Web3Modal component
+│   ├── page.tsx # Main page for Token Factory
+│   └── utils
+│       ├── abi.json # Factory ABI
+│       └── ethereum.ts # Chain configuration and helpers
+├── context
+│   └── web3modal.tsx # Wallet Adapter Context providers 
+├── contracts
+│   ├── README.md
+│   ├── foundry.toml # Forge configuration
+│   ├── lib # Dependencies
+│   ├── remappings.txt # Library mappings
+│   ├── script
+│   │   ├── Counter.s.sol
+│   │   └── CreateToken.s.sol
+│   ├── src
+│   │   ├── Counter.sol
+│   │   ├── Factory.sol
+│   │   └── Token.sol
+│   └── test
+│       ├── Counter.t.sol
+│       ├── Factory.t.sol
+│       └── Token.t.sol
+├── next-env.d.ts
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public
+│   ├── next.svg
+│   ├── preview.png
+│   ├── preview2.png
+│   └── vercel.svg
+├── .env.example # Configure RPCs and WalletConnect Project ID
+├── tailwind.config.ts
+└── tsconfig.json
 ```
 
 ## Smart Contracts
@@ -103,9 +132,9 @@ The ERC-20 Token Factory backend built on smart contracts with Solidity can be d
 
 The ERC-20 Token Factory is built with two smart contracts:
 
-- **Factory**: The Factory contract (`smart-contracts/Factory.sol`) inherits the Token.sol smart contract and acts as a Factory for creating and tracking new ERC-20 tokens.
+- **Factory**: The Factory contract (`contracts/Factory.sol`) inherits the Token.sol smart contract and acts as a Factory for creating and tracking new ERC-20 tokens.
 
-- **Token**: This is an ERC-20 smart contract (`smart-contracts/Token.sol`) defined by the OpenZeppelin standard and includes a `mint` and `transferOwnership` function call in the constructor upon deployment.
+- **Token**: This is an ERC-20 smart contract (`contracts/Token.sol`) defined by the OpenZeppelin standard and includes a `mint` and `transferOwnership` function call in the constructor upon deployment.
 
 ### Supported Chains & Addresses
 
@@ -118,6 +147,11 @@ To deploy the Factory contract on a new chain using Foundry, follow these steps:
 
 1. Ensure [Foundry](https://book.getfoundry.sh/) is installed and navigate inside the `contracts` directory. Install the required dependencies with the following commands:
 
+```sh
+forge install foundry-rs/forge-std --no-commit
+forge install OpenZeppelin/openzeppelin-contracts --no-commit
+```
+
 2. Build (compile) the smart contracts using the `forge build` command.
 
 3. Run tests using the `forge test` command.
@@ -127,7 +161,7 @@ To deploy the Factory contract on a new chain using Foundry, follow these steps:
 ```sh
 forge create --rpc-url QUICKNODE_HTTP_URL \
 --private-key YOUR_PRIVATE_KEY \
-src/Factory.sol:Factory
+src/Factory.sol:TokenFactory
 ```
 
 5. Edit the `src/context/web3modal.tsx` file and add a new chain object with its chain ID (find a list [here](https://chainlist.org/)), name, native gas token currency, explorer URL, and RPC URL (e.g., QuickNode):
