@@ -51,6 +51,7 @@ export default function Home() {
         const chainConfig = CHAINS[chainId ?? 1];
         const populateTxn = await signer.populateTransaction(data.apiResponse)
         const send = await signer.sendTransaction(populateTxn)
+        await send.wait()
         const receipt = await ethersProvider.getTransactionReceipt(send.hash)
         const tokenAddressLogs = receipt?.logs[3].topics[1] as string;
         const tokenAddress = decoder.decode(['address'], tokenAddressLogs)[0]
