@@ -18,7 +18,7 @@ const quoterContract = new ethers.Contract(QUOTER_CONTRACT_ADDRESS, QUOTER_ABI, 
 const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
 
 // Token Configuration
-const tokenIn = {
+const WETH = {
     chainId: 11155111,
     address: '0xfff9976782d46cc05630d1f6ebab18b2324d6b14',
     decimals: 18,
@@ -29,7 +29,7 @@ const tokenIn = {
     wrapped: true
   }
   
-const tokenOut = {
+const USDC = {
     chainId: 11155111,
     address: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
     decimals: 6,
@@ -70,20 +70,18 @@ async function getPoolInfo(factoryContract, tokenIn, tokenOut) {
         throw new Error("Failed to get pool address");
     }
     const poolContract = new ethers.Contract(poolAddress, POOL_ABI, provider);
-    const [token0, token1, fee, liquidity, slot0] = await Promise.all([
+    const [token0, token1, fee] = await Promise.all([
         poolContract.token0(),
         poolContract.token1(),
         poolContract.fee(),
-        poolContract.liquidity(),
-        poolContract.slot0(),
     ]);
-    return { poolContract, token0, token1, fee, liquidity, slot0 };
+    return { poolContract, token0, token1, fee };
 }
 
-async function quoteAndLogSwap(quoterContract, token0, token1, fee, signer, amountIn, tokenOut, tokenIn) {
+async function quoteAndLogSwap(quoterContract, fee, signer, amountIn) {
     const quotedAmountOut = await quoterContract.quoteExactInputSingle.staticCall({
-        tokenIn: token0,
-        tokenOut: token1,
+        tokenIn: WETH.address,
+        tokenOut: USDC.address,
         fee: fee,
         recipient: signer.address,
         deadline: Math.floor(new Date().getTime() / 1000 + 60 * 10),
@@ -91,15 +89,15 @@ async function quoteAndLogSwap(quoterContract, token0, token1, fee, signer, amou
         sqrtPriceLimitX96: 0,
     });
     console.log(`-------------------------------`)
-    console.log(`Token Swap will result in: ${ethers.formatUnits(quotedAmountOut[0].toString(), 18)} ${tokenOut.symbol} for ${ethers.formatEther(amountIn)} ${tokenIn.symbol}`);
-    const amountOut = ethers.formatUnits(quotedAmountOut[0], tokenOut.decimals)
+    console.log(`Token Swap will result in: ${ethers.formatUnits(quotedAmountOut[0].toString(), USDC.decimals)} ${USDC.symbol} for ${ethers.formatEther(amountIn)} ${WETH.symbol}`);
+    const amountOut = ethers.formatUnits(quotedAmountOut[0], USDC.decimals)
     return amountOut;
 }
 
-async function prepareSwapParams(poolContract, tokenIn, tokenOut, signer, amountIn, amountOut) {
+async function prepareSwapParams(poolContract, signer, amountIn, amountOut) {
     return {
-        tokenIn: tokenIn.address,
-        tokenOut: tokenOut.address,
+        tokenIn: WETH.address,
+        tokenOut: USDC.address,
         fee: await poolContract.fee(),
         recipient: signer.address,
         amountIn: amountIn,
@@ -121,17 +119,16 @@ async function main(swapAmount) {
     const amountIn = ethers.parseUnits(inputAmount.toString(), 18);
 
     try {
-        await approveToken(tokenIn.address, TOKEN_IN_ABI, amountIn, signer)
-        const { poolContract, token0, token1, fee } = await getPoolInfo(factoryContract, tokenIn, tokenOut);
+        await approveToken(WETH.address, TOKEN_IN_ABI, amountIn, signer)
+        const { poolContract, token0, token1, fee } = await getPoolInfo(factoryContract, WETH, USDC);
         console.log(`-------------------------------`)
-        console.log(`Fetching Quote for: ${tokenIn.symbol} to ${tokenOut.symbol}`);
+        console.log(`Fetching Quote for: ${WETH.symbol} to ${USDC.symbol}`);
         console.log(`-------------------------------`)
         console.log(`Swap Amount: ${ethers.formatEther(amountIn)}`);
 
-        const quotedAmountOut = await quoteAndLogSwap(quoterContract, token0, token1, fee, signer, amountIn, tokenOut, tokenIn);
+        const quotedAmountOut = await quoteAndLogSwap(quoterContract, fee, signer, amountIn);
 
-        const params = await prepareSwapParams(poolContract, tokenIn, tokenOut, signer, amountIn, quotedAmountOut[0].toString());
-
+        const params = await prepareSwapParams(poolContract, signer, amountIn, quotedAmountOut[0].toString());
         const swapRouter = new ethers.Contract(SWAP_ROUTER_CONTRACT_ADDRESS, SWAP_ROUTER_ABI, signer);
         await executeSwap(swapRouter, params, signer);
     } catch (error) {
