@@ -14,7 +14,7 @@ const Navbar = () => {
       <div className="container mx-auto px-12 h-full">
         <div className="flex justify-between items-center h-full ">
           <Link href="/" className="font-bold text-2xl text-black">
-            <div>Quick-Action</div>            
+            <div>Quick Action Blinker</div>            
           </Link>
           <WalletMultiButtonDynamic />
         </div>
