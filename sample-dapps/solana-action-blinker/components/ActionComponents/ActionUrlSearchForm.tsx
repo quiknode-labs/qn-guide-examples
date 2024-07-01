@@ -29,21 +29,31 @@ const ActionUrlSearchForm: React.FC<ActionUrlSearchFormProps> = ({ onSubmit, loa
         const pathname = parsedUrl.pathname;
     
         for (const rule of rules) {
+            // Special handling for root path
+            if (rule.pathPattern === '/**' && (pathname === '/' || pathname === '')) {
+                return rule.apiPath;
+            }
+    
             const pattern = new RegExp('^' + rule.pathPattern.replace(/\*\*/g, '(.*)').replace(/\*/g, '([^/]*)') + '$');
             const match = pathname.match(pattern);
-            
+    
             if (match) {
                 let apiPath = rule.apiPath;
-                
+    
+                // If apiPath is an absolute URL and doesn't contain wildcards, return it as is
+                if (apiPath.startsWith('http') && !apiPath.includes('*')) {
+                    return apiPath;
+                }
+    
                 // Handle ** wildcard
-                if (rule.apiPath.includes('**')) {
+                if (apiPath.includes('**')) {
                     const wildcardPart = match[1] || '';
                     apiPath = apiPath.replace('**', wildcardPart);
                 }
                 // Handle * wildcards
-                else if (rule.apiPath.includes('*')) {
+                else if (apiPath.includes('*')) {
                     const pathSegments = pathname.split('/').filter(Boolean);
-                    const apiPathSegments = rule.apiPath.split('/');
+                    const apiPathSegments = apiPath.split('/');
                     apiPathSegments.forEach((segment, index) => {
                         if (segment === '*') {
                             apiPath = apiPath.replace(segment, pathSegments[index] || '');
@@ -55,7 +65,7 @@ const ActionUrlSearchForm: React.FC<ActionUrlSearchFormProps> = ({ onSubmit, loa
                 if (parsedUrl.search) {
                     apiPath += parsedUrl.search;
                 }
-                
+    
                 return apiPath;
             }
         }
