@@ -37,6 +37,8 @@ bun install
 
 ### Set Environment Variables
 
+Make sure you have a QuickNode endpoint handy--you can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-action-blinker).
+
 - Rename `.env.example` to `.env.local` and update with your QuickNode Solana Node Endpoint.
 - Make sure to update the cluster to ensure your transaction URLs point to the correct explorer (use only of the enum values provided in the `.env.example` file).
 
