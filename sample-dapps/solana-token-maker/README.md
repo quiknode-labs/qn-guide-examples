@@ -32,6 +32,8 @@ bun install
 
 ### Set Environment Variables
 
+Make sure you have a QuickNode endpoint handy--you can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=token-maker).
+
 - Rename `.env.example` to `.env.local` and update with your QuickNode Solana Node Endpoint and QuickNode IPFS key.
 - Make sure to update the cluster to ensure your transaction URLs point to the correct explorer (use only of the enum values provided in the `.env.example` file).
 - You can use QuickNode's public IPFS Gateway URL or replace it with your own.
