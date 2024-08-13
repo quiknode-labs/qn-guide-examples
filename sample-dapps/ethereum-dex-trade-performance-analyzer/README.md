@@ -1,4 +1,4 @@
-# Wallet Performance Analyzer
+# DEX Trade Performance Analyzer
 
 ## Introduction
 
