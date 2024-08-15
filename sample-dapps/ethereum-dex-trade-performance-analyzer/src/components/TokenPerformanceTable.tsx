@@ -108,7 +108,11 @@ const TokenPerformanceTable: React.FC<TokenPerformanceTableProps> = ({
                       token.pnl >= 0 ? "text-green-600" : "text-red-600"
                     }`}
                   >
-                    ${token.pnl.toFixed(2)}
+                    {new Intl.NumberFormat(undefined, {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 2,
+                    }).format(token.pnl)}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -121,10 +125,18 @@ const TokenPerformanceTable: React.FC<TokenPerformanceTableProps> = ({
                   {token.total_sell_amount.toFixed(4)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  ${token.avg_buy_price.toFixed(4)}
+                  {new Intl.NumberFormat(undefined, {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 4,
+                  }).format(token.avg_buy_price)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  ${token.current_price.toFixed(4)}
+                  {new Intl.NumberFormat(undefined, {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 4,
+                  }).format(token.current_price)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button
@@ -150,22 +162,38 @@ const TokenPerformanceTable: React.FC<TokenPerformanceTableProps> = ({
                           {formatDate(token.last_trade_timestamp)}
                         </p>
                         <p>
-                          <strong>Total Buy Volume:</strong> $
-                          {token.total_buy_volume.toFixed(2)}
+                          <strong>Total Buy Volume:</strong>
+                          {new Intl.NumberFormat(undefined, {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 2,
+                          }).format(token.total_buy_volume)}
                         </p>
                         <p>
-                          <strong>Total Sell Volume:</strong> $
-                          {token.total_sell_volume.toFixed(2)}
+                          <strong>Total Sell Volume:</strong>
+                          {new Intl.NumberFormat(undefined, {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 2,
+                          }).format(token.total_sell_volume)}
                         </p>
                       </div>
                       <div>
                         <p>
-                          <strong>Realized Profit:</strong> $
-                          {token.realized_profit.toFixed(2)}
+                          <strong>Realized Profit:</strong>
+                          {new Intl.NumberFormat(undefined, {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 2,
+                          }).format(token.realized_profit)}
                         </p>
                         <p>
-                          <strong>Unrealized Profit:</strong> $
-                          {token.unrealized_profit.toFixed(2)}
+                          <strong>Unrealized Profit:</strong>
+                          {new Intl.NumberFormat(undefined, {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 2,
+                          }).format(token.unrealized_profit)}
                         </p>
                       </div>
                     </div>

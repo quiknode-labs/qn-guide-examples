@@ -24,11 +24,13 @@ const OverallStatsDisplay: React.FC<OverallStatsDisplayProps> = ({ stats }) => {
         <dl className="sm:divide-y sm:divide-gray-200">
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
             <div>
-              <dt className="text-sm font-medium text-gray-500">
-                PnL
-              </dt>
+              <dt className="text-sm font-medium text-gray-500">PnL</dt>
               <dd className={`mt-1 text-sm ${colorClass(stats.pnl)} sm:mt-0`}>
-                ${stats.pnl.toFixed(2)}
+                {new Intl.NumberFormat(undefined, {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 2,
+                }).format(stats.pnl)}
               </dd>
             </div>
             <div>
@@ -50,7 +52,11 @@ const OverallStatsDisplay: React.FC<OverallStatsDisplayProps> = ({ stats }) => {
             <div>
               <dt className="text-sm font-medium text-gray-500">Total Value</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                ${stats.total_value.toFixed(2)}
+                {new Intl.NumberFormat(undefined, {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 2,
+                }).format(stats.total_value)}
               </dd>
             </div>
           </div>
@@ -78,7 +84,11 @@ const OverallStatsDisplay: React.FC<OverallStatsDisplayProps> = ({ stats }) => {
                   stats.realized_profit
                 )} sm:mt-0`}
               >
-                ${stats.realized_profit.toFixed(2)}
+                {new Intl.NumberFormat(undefined, {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 2,
+                }).format(stats.realized_profit)}
               </dd>
             </div>
             <div>
@@ -104,7 +114,11 @@ const OverallStatsDisplay: React.FC<OverallStatsDisplayProps> = ({ stats }) => {
                   stats.unrealized_profit
                 )} sm:mt-0`}
               >
-                ${stats.unrealized_profit.toFixed(2)}
+                {new Intl.NumberFormat(undefined, {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 2,
+                }).format(stats.unrealized_profit)}
               </dd>
             </div>
             <div>
@@ -126,7 +140,11 @@ const OverallStatsDisplay: React.FC<OverallStatsDisplayProps> = ({ stats }) => {
                 Total Buy Volume
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                ${stats.total_buy_volume.toFixed(2)}
+                {new Intl.NumberFormat(undefined, {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 2,
+                }).format(stats.total_buy_volume)}
               </dd>
             </div>
             <div>
@@ -134,7 +152,11 @@ const OverallStatsDisplay: React.FC<OverallStatsDisplayProps> = ({ stats }) => {
                 Total Sell Volume
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                ${stats.total_sell_volume.toFixed(2)}
+                {new Intl.NumberFormat(undefined, {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 2,
+                }).format(stats.total_sell_volume)}
               </dd>
             </div>
           </div>

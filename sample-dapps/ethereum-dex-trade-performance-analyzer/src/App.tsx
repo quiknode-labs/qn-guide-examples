@@ -33,8 +33,16 @@ const App: React.FC = () => {
       setTokenPerformance(tokenPerformanceData.data || []);
       setDataFetched(true);
     } catch (err) {
-      setError("Error fetching wallet data. Please try again.");
-      console.error(err);
+      if (
+        err instanceof Error &&
+        err.message.includes("does not exist/is not available")
+      ) {
+        setError(
+          "Add-on is not enabled. Please visit your QN dashboard and enable the add-on."
+        );
+      } else {
+        setError("Error fetching wallet data. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
