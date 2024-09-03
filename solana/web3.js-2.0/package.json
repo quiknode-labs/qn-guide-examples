@@ -1,0 +1,21 @@
+{
+  "name": "web3-rc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@solana-program/compute-budget": "^0.5.0",
+    "@solana-program/system": "^0.5.0",
+    "@solana-program/token": "^0.2.1",
+    "@solana/web3.js": "^2.0.0-rc.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.2"
+  }
+}
