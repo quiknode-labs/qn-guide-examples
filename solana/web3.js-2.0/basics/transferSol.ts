@@ -1,3 +1,6 @@
+// Guide walkthrough: 
+// https://www.quicknode.com/guides/solana-development/solana-web3.js-2.0/transfer-sol
+
 import {
     airdropFactory,
     createKeyPairSignerFromBytes,
