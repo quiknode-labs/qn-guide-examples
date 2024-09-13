@@ -1,3 +1,6 @@
+// Source code for Guide: Creating a Fungible Token with Solana Web3.js 2.0
+// https://www.quicknode.com/guides/solana-development/tooling/web3-2/fungibles
+
 import { getCreateAccountInstruction } from "@solana-program/system";
 import {
     findAssociatedTokenPda,
