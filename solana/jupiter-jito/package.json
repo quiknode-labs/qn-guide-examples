@@ -1,0 +1,20 @@
+{
+  "name": "jito-ex",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@jup-ag/api": "^6.0.29",
+    "@solana/web3.js": "^1.95.4",
+    "base58": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.0"
+  }
+}
