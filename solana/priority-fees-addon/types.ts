@@ -4,6 +4,7 @@ interface RequestPayload {
     params: {
         last_n_blocks: number;
         account: string;
+        api_version: number;
     };
     id: number;
     jsonrpc: string;
@@ -36,6 +37,8 @@ interface EstimatePriorityFeesParams {
     last_n_blocks?: number;
     // (Optional) The program account to use for fetching the local estimate (e.g., Jupiter: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4)
     account?: string;
+    // (optional) The API version to use for the request (default: 1)
+    api_version?: number;
     // Your Add-on Endpoint (found in your QuickNode Dashboard - https://dashboard.quicknode.com/endpoints)
     endpoint: string;
 }
