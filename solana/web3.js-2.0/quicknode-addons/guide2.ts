@@ -152,7 +152,8 @@ async function main() {
     try {
         const priorityFees = await quickNodeRpc.qn_estimatePriorityFees({
             account: 'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4',
-            last_n_blocks: 100
+            last_n_blocks: 100,
+            api_version: 2
         }).send();
         console.log(`Priority Fees (Med Per CU): ${priorityFees.per_compute_unit.medium}`);
     } catch (error) {

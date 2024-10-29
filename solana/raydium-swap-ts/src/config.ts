@@ -53,7 +53,8 @@ async function fetchPriorityFee(): Promise<number> {
     method: 'qn_estimatePriorityFees',
     params: {
       last_n_blocks: 100,
-      account: '675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8'
+      account: '675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8',
+      api_version: 2
     }
   });
 
