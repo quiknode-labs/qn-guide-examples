@@ -19,6 +19,7 @@ import { RequestPayload, ResponseData, EstimatePriorityFeesParams } from "./type
 async function fetchEstimatePriorityFees({
     last_n_blocks,
     account,
+    api_version = 1,
     endpoint
 }: EstimatePriorityFeesParams): Promise<ResponseData> {
     const params: any = {};
@@ -27,6 +28,9 @@ async function fetchEstimatePriorityFees({
     }
     if (account !== undefined) {
         params.account = account;
+    }
+    if (api_version !== undefined) {
+        params.api_version = api_version;
     }
 
     const payload: RequestPayload = {
@@ -60,6 +64,7 @@ async function fetchEstimatePriorityFees({
 const params: EstimatePriorityFeesParams = {
     last_n_blocks: 100,
     account: 'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4',
+    api_version: 2,
     endpoint: 'https://YOUR_QUICKNODE_ADDON_URL/'
 };
 

@@ -21,6 +21,7 @@ interface EstimatePriorityFeesResponse {
 interface EstimatePriorityFeesParams {
     last_n_blocks?: number;
     account?: string;
+    api_version?: number;
 }
 
 /* -- METIS API -- */
