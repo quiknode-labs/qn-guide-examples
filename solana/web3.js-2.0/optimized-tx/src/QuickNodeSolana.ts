@@ -101,7 +101,8 @@ export class QuickNodeSolana {
     private async getPriorityFeeMicroLamports(priorityFeeQuery: PriorityFeeQuery): Promise<number> {
         const priorityFees = await this.priorityFeeApi.qn_estimatePriorityFees({
             account: priorityFeeQuery.account,
-            last_n_blocks: priorityFeeQuery.last_n_blocks
+            last_n_blocks: priorityFeeQuery.last_n_blocks,
+            api_version: priorityFeeQuery.api_version
         }).send();
         return priorityFees.per_compute_unit[priorityFeeQuery.level];
     }

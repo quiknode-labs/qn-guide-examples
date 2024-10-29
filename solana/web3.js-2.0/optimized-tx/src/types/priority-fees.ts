@@ -23,6 +23,8 @@ interface EstimatePriorityFeesParams {
     last_n_blocks?: number;
     // (Optional) The program account to use for fetching the local estimate (e.g., Jupiter: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4)
     account?: string;
+    // (Optional) API Version
+    api_version?: number;
 }
 
 type PriorityFeeQuery = PriorityFeeLevel & EstimatePriorityFeesParams;
