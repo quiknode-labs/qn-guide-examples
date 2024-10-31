@@ -15,7 +15,7 @@ A TypeScript utility for executing swaps via Jupiter with Jito MEV bundles.
 
 1. Install dependencies:
 ```bash
-npm install @jup-ag/api @solana/web3.js bs58 dotenv 
+npm install @jup-ag/api @solana/web3.js@1 bs58 dotenv 
 ```
 
 2. Instal dev dependencies:
