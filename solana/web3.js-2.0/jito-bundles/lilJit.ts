@@ -2,7 +2,7 @@ import {
     Rpc,
     createDefaultRpcTransport,
     createRpc,
-    createRpcApi,
+    createJsonRpcApi, // note: in older versions of this library, this function was called: createRpcApi
     Address,
     mainnet,
     Base58EncodedBytes,
@@ -83,7 +83,7 @@ type LilJitAddon = {
 }
 
 function createJitoBundlesRpc({ endpoint }: { endpoint: string }): Rpc<LilJitAddon> {
-    const api = createRpcApi<LilJitAddon>({
+    const api = createJsonRpcApi<LilJitAddon>({
         // parametersTransformer: (params: any[]) => params[0],
         responseTransformer: (response: any) => response.result,
     });
