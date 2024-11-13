@@ -6,7 +6,8 @@ import {
     createDefaultRpcTransport,
     createRpc,
     RpcTransport,
-    createRpcApi,
+    createJsonRpcApi, // note: in older versions of this library, this function was called: createRpcApi,
+    RpcRequest
 } from "@solana/web3.js";
 import {
     EstimatePriorityFeesResponse,
@@ -133,8 +134,8 @@ interface CreateAddonsApiParams {
 
 
 export function createAddonsApi(params: CreateAddonsApiParams): Rpc<QuickNodeAddons> {
-    const api = createRpcApi<QuickNodeAddons>({
-        parametersTransformer: (params: unknown[]) => params[0],
+    const api = createJsonRpcApi<QuickNodeAddons>({
+        requestTransformer: (request: RpcRequest<any>) => request.params[0],
         responseTransformer: (response: any) => response.result,
     });
 

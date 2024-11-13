@@ -1,7 +1,8 @@
 import {
     Rpc,
     createRpc,
-    createRpcApi,
+    createJsonRpcApi, // note: in older versions of this library, this function was called: createRpcApi
+    RpcRequest,
     pipe,
     createTransactionMessage,
     setTransactionMessageLifetimeUsingBlockhash,
@@ -56,8 +57,8 @@ export class QuickNodeSolana {
     }
 
     private createPriorityFeeApi(endpoint: string): Rpc<PriorityFeeApi> {
-        const api = createRpcApi<PriorityFeeApi>({
-            parametersTransformer: (params: any[]) => params[0],
+        const api = createJsonRpcApi<PriorityFeeApi>({
+            requestTransformer: (request: RpcRequest<any>) => request.params[0],
             responseTransformer: (response: any) => response.result,
         });
         const transport = createQuickNodeTransport(endpoint);
