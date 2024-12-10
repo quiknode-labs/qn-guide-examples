@@ -35,8 +35,8 @@ This application uses a completely serverless architecture to track and analyze 
   - Recharts for data visualization
 
 - **Backend (Serverless)**
-  - QuickNode [Streams](https://www.quicknode.com/streams) for real-time blockchain data
-  - QuickNode [Functions](https://www.quicknode.com/functions) for data processing
+  - QuickNode [Streams](https://www.quicknode.com/streams) for historical and real-time blockchain data
+  - QuickNode [Functions](https://www.quicknode.com/functions) for data enrichment and processing
   - [Supabase](https://supabase.com/) (PostgreSQL) for data storage
 
 ## Architecture
