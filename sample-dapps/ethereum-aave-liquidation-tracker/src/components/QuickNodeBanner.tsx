@@ -8,7 +8,7 @@ const QuickNodeBanner = () => {
         <span className="text-sm">
           Powered by QuickNode{" "}
           <a
-            href="https://quicknode.com/streams"
+            href="https://quicknode.com/streams?utm_source=internal&utm_campaign=guides&utm_content=aave-v3-liquidation-tracker"
             target="_blank"
             rel="noopener noreferrer"
             className="font-medium text-blue-500 hover:text-blue-600 transition-colors"
@@ -17,7 +17,7 @@ const QuickNodeBanner = () => {
           </a>
           {" and "}
           <a
-            href="https://quicknode.com/functions"
+            href="https://quicknode.com/functions?utm_source=internal&utm_campaign=guides&utm_content=aave-v3-liquidation-tracker"
             target="_blank"
             rel="noopener noreferrer"
             className="font-medium text-purple-500 hover:text-purple-600 transition-colors"
@@ -29,7 +29,7 @@ const QuickNodeBanner = () => {
       </div>
 
       <a
-        href="https://github.com/yourusername/aave-v3-liquidation-tracker"
+        href="https://github.com/quiknode-labs/qn-guide-examples/tree/main/sample-dapps/ethereum-aave-liquidation-tracker"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors ml-4"

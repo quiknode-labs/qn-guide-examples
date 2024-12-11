@@ -1,6 +1,6 @@
 # Aave V3 Liquidation Tracker
 
-Monitor and analyze liquidation events on the Aave V3 protocol in real-time. This project demonstrates the power of serverless blockchain data streaming using QuickNode's [Streams](https://www.quicknode.com/streams) and [Functions](https://www.quicknode.com/functions).
+Monitor and analyze liquidation events on the Aave V3 protocol in real-time. This project demonstrates the power of serverless blockchain data streaming using QuickNode's [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=guides&utm_content=aave-v3-liquidation-tracker) and [Functions](https://www.quicknode.com/functions?utm_source=internal&utm_campaign=guides&utm_content=aave-v3-liquidation-tracker).
 
 | Dashboard Overview | Liquidations Table |
 | --- | --- |
@@ -14,10 +14,46 @@ Monitor and analyze liquidation events on the Aave V3 protocol in real-time. Thi
 - 🔄 Asset distribution analysis
 - ⚡ Serverless architecture
 
+## Aave Pool Contract and LiquidationCall Event
+
+### Aave V3 Pool Contract Overview
+The **[Pool.sol](https://github.com/aave-dao/aave-v3-origin/blob/main/src/contracts/protocol/pool/Pool.sol)** contract (For Ethereum Mainnet, `0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2`) in the Aave V3 protocol is the core of the lending and borrowing system. It facilitates deposits, borrowing, repayments, and liquidations.
+
+### Event to Track: LiquidationCall
+The **LiquidationCall** event is emitted when a liquidation occurs in the Aave protocol. It provides critical information about the liquidation transaction, including the collateral seized and the debt repaid.
+
+```solidity
+
+// Event Signature 
+// 0xe413a321e8681d831f4dbccbca790d2952b56f977908e45be37335533e005286
+
+LiquidationCall(
+    address collateralAsset,
+    address debtAsset,
+    address user,
+    uint256 debtToCover,
+    uint256 liquidatedCollateralAmount,
+    address liquidator,
+    bool receiveAToken
+)
+```
+
+#### Event Parameters
+| **Parameter**            | **Type**   | **Description**                                             |
+|--------------------------|------------|-------------------------------------------------------------|
+| `collateralAsset`        | `address`  | The address of the asset being seized as collateral.         |
+| `debtAsset`              | `address`  | The address of the asset that the liquidator is repaying.    |
+| `user`                   | `address`  | The address of the borrower being liquidated.               |
+| `debtToCover`            | `uint256`  | The amount of debt being repaid during the liquidation.      |
+| `liquidatedCollateralAmount` | `uint256`  | The amount of collateral seized by the liquidator.          |
+| `liquidator`             | `address`  | The address of the liquidator performing the liquidation.    |
+| `receiveAToken`          | `bool`     | If `true`, liquidator receives aTokens instead of collateral.|
+
+We will be using decoded logs of the `LiquidationCall` event to track liquidations on the Ethereum Mainnet.
+
 ## How It Works
 
 This application uses a completely serverless architecture to track and analyze Aave V3 liquidation events:
-
 1. **Data Collection**: **Streams** monitors the raw blockchain event data for Aave V3's liquidation events in both historical and real-time
 2. **EVM Decoding**: **Streams** decode the raw event data using the [EVM Decoder](https://www.quicknode.com/docs/streams/filters#decoding-evm-data) to extract the relevant information
 3. **Data Processing**: **Functions** process and enrich the decoded event data by fetching token prices and token details
@@ -35,8 +71,8 @@ This application uses a completely serverless architecture to track and analyze 
   - Recharts for data visualization
 
 - **Backend (Serverless)**
-  - QuickNode [Streams](https://www.quicknode.com/streams) for historical and real-time blockchain data
-  - QuickNode [Functions](https://www.quicknode.com/functions) for data enrichment and processing
+  - QuickNode [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=guides) for historical and real-time blockchain data
+  - QuickNode [Functions](https://www.quicknode.com/functions?utm_source=internal&utm_campaign=guides) for data enrichment and processing
   - [Supabase](https://supabase.com/) (PostgreSQL) for data storage
 
 ## Architecture
@@ -50,10 +86,8 @@ flowchart TB
     subgraph QN["QuickNode Infrastructure"]
         Stream["QuickNode Stream<br/>with EVM Decoder"]
         Function["QuickNode Function"]
-    end
-
-    subgraph Processing["Token & Price Sources"]
         ChainData["On-Chain Token Data"]
+        Cache[(Key-Value Store)]
     end
 
     subgraph Storage["Data Storage"]
@@ -67,7 +101,8 @@ flowchart TB
 
     AaveV3 -->|Liquidation Events| Stream
     Stream -->|Decoded Event Data| Function
-    Function <-->|Fetch & Receive<br/>Token Details & Prices| ChainData
+    Function <-->|Token Details| ChainData
+    Function <-->|Cache Token Data| Cache
     Function -->|Enriched Data| DB
     Query -->|Fetch Data| DB
     DB -->|Return Data| Query
@@ -75,7 +110,6 @@ flowchart TB
 
     style Blockchain fill:#ff9999,stroke:#ff0000
     style QN fill:#99ff99,stroke:#00ff00
-    style Processing fill:#9999ff,stroke:#0000ff
     style Storage fill:#ffff99,stroke:#ffff00
     style Frontend fill:#ff99ff,stroke:#ff00ff
 ```
@@ -96,7 +130,7 @@ QuickNode Streams provide real-time blockchain data without running a node:
 
 - Monitors Aave V3 contracts for liquidation events
 - Filters and delivers only relevant events
-- Pay only for the data you use
+- Pay only for the filtered data
 - Ensures reliable data delivery with retry mechanisms
 - Zero infrastructure maintenance required
 
@@ -106,7 +140,7 @@ QuickNode Functions process the raw event data:
 
 - Transforms blockchain data into application-ready format
 - Enriches events with additional data
-  - Token metadata from blockchain (name, symbol, decimals)
+  - Fetching token metadata from blockchain (name, symbol, decimals) and storing them in Key-Value Store for future use
   - Real-time token prices from price feeds
   - Calculated USD values for all amounts
   - Historical price data for analytics
@@ -119,7 +153,7 @@ QuickNode Functions process the raw event data:
 
 - Node.js 18+
 - npm or yarn
-- Free [QuickNode](https://dashboard.quicknode.com/?prompt=signup) account
+- Free [QuickNode](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=guides&utm_content=aave-v3-liquidation-tracker) account
 - Free [Supabase](https://supabase.com/) account
 
 ### Installation
@@ -137,14 +171,16 @@ cd qn-guide-examples/sample-dapps/ethereum-aave-liquidation-tracker
 npm install
 ```
 
-3. Create a `.env` file and add your [Supabase](https://supabase.com/) URL and anonymous key:
+3. Create a new project and database in [Supabase](https://supabase.com). Save the database password for later use.
+
+4. Create a `.env` file and add your [Supabase](https://supabase.com) URL and anonymous key. You can get the URL and key from the Supabase dashboard by clicking the **Connect** button in the project.
 
 ```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-4. Set up your database using the provided schema:
+5. Set up your database using the provided schema:
 
 ```sql
 CREATE TABLE liquidations (
@@ -168,7 +204,7 @@ CREATE TABLE liquidations (
 );
 ```
 
-5. Start the development server:
+6. Start the development server:
 
 ```bash
 npm run dev
@@ -186,6 +222,8 @@ npm run dev
    - Select the destination as `Function` with the option to `Create new function`
 
 > The contract addresses, test blocks, and other configurations may vary depending on the specific project and network you are working with. In this app, we use Ethereum Mainnet and the Aave V3 protocol.
+
+You can get the full code for the Streams Filtering Function below or view it [here](./qnServerless/stream.js).
 
 <details> 
 <summary>View Streams Filtering Code</summary>
@@ -269,6 +307,24 @@ function main(stream) {
 2. Configure database credentials
 3. Deploy the Function
 4. Check the Function logs to ensure it's running correctly
+
+Replace the placeholders (e.g., `QUICKNODE_RPC_URL`) with your own RPC URL and `POSTGRES_USER`, `POSTGRES_HOST`, `POSTGRES_DB`, and `POSTGRES_PASSWORD` with your PostgreSQL credentials.
+
+#### QuickNode Setup
+1. Log in to your [QuickNode dashboard](https://dashboard.quicknode.com).
+2. Create a new Endpoint for your chain and network (e.g., Ethereum Mainnet).
+3. Copy the RPC URL and paste it into the `QUICKNODE_RPC_URL` placeholder in the Function template.
+
+#### Database Setup
+1. Log in to your **Supabase dashboard**.
+2. Navigate to your project and click the **Connect** button.
+3. Under **Connection info**, click **View connection string**. This will display your database credentials such as host, username, and database name.
+4. Get the database password that you saved earlier during the project setup.
+4. Copy the values for `host`, `user`, and`database`.
+5. Replace the corresponding placeholders when defining `pgClient` in the Function template.
+6. Use these credentials to establish a secure connection to your PostgreSQL database within your application.
+
+You can get the full code for the Function below or view it [here](./qnServerless/function.js).
 
 <details> 
 <summary>View Functions Code</summary>
@@ -612,7 +668,7 @@ module.exports = { main };
 
 </details>
 
-### Setting up PostgreSQL Funcions
+### Setting up PostgreSQL Functions
 
 To fetch the data from the database, you can use the following PostgreSQL queries to create some functions. These functions are used in the frontend to display the data.
 
@@ -829,6 +885,20 @@ $$ LANGUAGE plpgsql;
 ```
 
 </details> 
+
+### Setting up PostgreSQL Indexes
+
+For better query performance, we can create indexes on the `liquidations` table. Here's an example of how to create the necessary indexes:
+
+```sql
+CREATE UNIQUE INDEX liquidations_pkey ON liquidations(id int4_ops);
+CREATE INDEX idx_debt_asset ON liquidations(debt_asset_symbol text_ops);
+CREATE INDEX idx_timestamp ON liquidations(timestamp timestamp_ops);
+CREATE INDEX idx_liquidator_address ON liquidations(liquidator_address text_ops);
+CREATE INDEX idx_liquidated_wallet ON liquidations(liquidated_wallet text_ops);
+CREATE INDEX idx_collateral_asset ON liquidations(collateral_asset_symbol text_ops);
+CREATE INDEX idx_liquidations_assets ON liquidations(collateral_asset_symbol text_ops,debt_asset_symbol text_ops);
+```
 
 ## Development
 
