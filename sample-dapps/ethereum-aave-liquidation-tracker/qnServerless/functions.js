@@ -314,7 +314,7 @@ async function main(params) {
     }
 
     // Write enriched data to PostgreSQL
-    await writeToPostgres(enrichedLogs);
+    await writeToPostgres(enrichedLogs, pgClient);
 
     return {
       message: "Streams data processed and written to PostgreSQL",

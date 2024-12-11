@@ -324,7 +324,7 @@ Replace the placeholders (e.g., `QUICKNODE_RPC_URL`) with your own RPC URL and `
 5. Replace the corresponding placeholders when defining `pgClient` in the Function template.
 6. Use these credentials to establish a secure connection to your PostgreSQL database within your application.
 
-You can get the full code for the Function below or view it [here](./qnServerless/function.js).
+You can get the full code for the Function below or view it [here](./qnServerless/functions.js).
 
 <details> 
 <summary>View Functions Code</summary>
@@ -564,7 +564,6 @@ async function main(params) {
   });
 
   try {
-
     await pgClient.connect();
 
     const { timestamp, filteredLogs } = params;
@@ -643,7 +642,7 @@ async function main(params) {
     }
 
     // Write enriched data to PostgreSQL
-    await writeToPostgres(enrichedLogs);
+    await writeToPostgres(enrichedLogs, pgClient);
 
     return {
       message: "Streams data processed and written to PostgreSQL",
