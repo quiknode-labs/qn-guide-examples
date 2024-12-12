@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#4CAF50">
+  <!-- Outer circle for boldness -->
+  <circle cx="50" cy="50" r="45" fill="#4B9CCD" />
+  <!-- Inner triangle for a striking design -->
+  <polygon points="50,20 70,70 30,70" fill="#FFFFFF" />
+</svg>
