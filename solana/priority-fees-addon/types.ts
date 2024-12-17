@@ -28,6 +28,7 @@ interface ResponseData {
         };
         per_compute_unit: FeeEstimates;
         per_transaction: FeeEstimates;
+        recommended: number;
     };
     id: number;
 }

@@ -72,7 +72,7 @@ const params: EstimatePriorityFeesParams = {
 async function createDynamicPriorityFeeInstruction() {
     const { result } = await fetchEstimatePriorityFees(params);
     console.table(result);
-    const priorityFee = result.per_compute_unit.high; // 👈 Replace depending on your transaction requirements (e.g., low, medium, high, or specific percentile)
+    const priorityFee = result.recommended; // 👈 Replace depending on your transaction requirements (e.g., low, medium, high, or specific percentile)
     const priorityFeeInstruction = ComputeBudgetProgram.setComputeUnitPrice({ microLamports: priorityFee });
     return priorityFeeInstruction;
 }

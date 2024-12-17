@@ -105,7 +105,9 @@ export class QuickNodeSolana {
             last_n_blocks: priorityFeeQuery.last_n_blocks,
             api_version: priorityFeeQuery.api_version
         }).send();
-        return priorityFees.per_compute_unit[priorityFeeQuery.level];
+        return priorityFeeQuery.level === "recommended" 
+            ? priorityFees.recommended 
+            : priorityFees.per_compute_unit[priorityFeeQuery.level];
     }
 
     async prepareSmartTransactionMessage({
