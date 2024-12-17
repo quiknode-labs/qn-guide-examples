@@ -1,4 +1,4 @@
-type PriorityFeeLevel = { level: "low" | "medium" | "high" | "extreme" };
+type PriorityFeeLevel = { level: "low" | "medium" | "high" | "extreme" | "recommended" };
 
 interface FeeEstimates {
     extreme: number;
@@ -16,6 +16,7 @@ interface EstimatePriorityFeesResponse {
     };
     per_compute_unit: FeeEstimates;
     per_transaction: FeeEstimates;
+    recommended: number;
 };
 
 interface EstimatePriorityFeesParams {

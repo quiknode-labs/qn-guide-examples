@@ -16,6 +16,7 @@ interface EstimatePriorityFeesResponse {
     };
     per_compute_unit: FeeEstimates;
     per_transaction: FeeEstimates;
+    recommended: number;
 };
 
 interface EstimatePriorityFeesParams {
