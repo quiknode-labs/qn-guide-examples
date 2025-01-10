@@ -30,6 +30,9 @@ const SIMULATE_ONLY = true;
 const ENDPOINT = 'https://example.quiknode.pro/123456/'; // 👈 Replace with your own endpoint
 const POLL_INTERVAL_MS = 3000;
 const POLL_TIMEOUT_MS = 30000;
+const DEFAULT_WAIT_BEFORE_POLL_MS = 5000;
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 type JitoBundleSimulationResponse = {
     context: {
@@ -156,8 +159,11 @@ async function pollBundleStatus(
     rpc: Rpc<LilJitAddon>,
     bundleId: string,
     timeoutMs = 30000,
-    pollIntervalMs = 3000
+    pollIntervalMs = 3000,
+    waitBeforePollMs = DEFAULT_WAIT_BEFORE_POLL_MS
 ) {
+    await sleep(waitBeforePollMs);
+
     const startTime = Date.now();
     let lastStatus = '';
     while (Date.now() - startTime < timeoutMs) {
@@ -174,8 +180,7 @@ async function pollBundleStatus(
             }
 
             if (status === 'Failed') {
-                console.log(`Bundle ${status.toLowerCase()}. Exiting...`);
-                throw new Error(`Bundle failed with status: ${status}`);
+                throw new Error(`Bundle ${status.toLowerCase()} failed with status: ${status}`);
             }
 
             await new Promise(resolve => setTimeout(resolve, pollIntervalMs));
