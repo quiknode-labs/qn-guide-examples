@@ -26,7 +26,8 @@ const CONFIG = {
     WALLET_SECRET: process.env.WALLET_SECRET?.split(',').map(Number) || [],
     JITO_TIP_AMOUNT: 0.0005 * LAMPORTS_PER_SOL, // 500,000 lamports
     POLL_TIMEOUT_MS: 30000,
-    POLL_INTERVAL_MS: 3000
+    POLL_INTERVAL_MS: 3000,
+    DEFAULT_WAIT_BEFORE_POLL_MS: 5000
 };
 
 // Quote request configuration
@@ -52,6 +53,10 @@ class JitoSwapManager {
         this.jupiterApi = createJupiterApiClient({ basePath: CONFIG.METIS_ENDPOINT });
         this.wallet = Keypair.fromSecretKey(new Uint8Array(CONFIG.WALLET_SECRET));
         this.connection = new Connection(CONFIG.JITO_ENDPOINT);
+    }
+
+    private sleep(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async getSwapQuote(): Promise<QuoteResponse> {
@@ -115,6 +120,8 @@ class JitoSwapManager {
     }
 
     async pollBundleStatus(bundleId: string): Promise<boolean> {
+        await this.sleep(CONFIG.DEFAULT_WAIT_BEFORE_POLL_MS);
+
         const startTime = Date.now();
         let lastStatus = '';
         
