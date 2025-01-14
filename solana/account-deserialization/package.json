@@ -1,0 +1,20 @@
+{
+  "name": "account-deserialization",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "ts-node app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@solana/buffer-layout-utils": "^0.2.0",
+    "@solana/web3.js": "^1.98.0",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.6"
+  }
+}
