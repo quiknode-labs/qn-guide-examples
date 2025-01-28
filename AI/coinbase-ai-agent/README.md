@@ -78,8 +78,8 @@ graph TB
 1. Clone the repository
 
   ```sh
-  git clone <repository-url>
-  cd base-ai-agent
+  git clone https://github.com/quiknode-labs/qn-guide-examples.git
+  cd ai/coinbase-ai-agent
   ```
 
 2. Install dependencies:
