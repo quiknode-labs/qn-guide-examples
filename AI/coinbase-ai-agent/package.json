@@ -1,0 +1,29 @@
+{
+  "name": "base-ai-agent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ts-node src/test.ts",
+    "start:mentions": "ts-node src/checkMentions.ts",
+    "start:autonomous": "ts-node src/autonomous.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@coinbase/cdp-agentkit-core": "^0.0.11",
+    "@coinbase/cdp-langchain": "^0.0.12",
+    "@langchain/anthropic": "^0.3.11",
+    "@langchain/core": "^0.3.30",
+    "@langchain/langgraph": "^0.2.40",
+    "@langchain/openai": "^0.3.17",
+    "dotenv": "^16.4.7",
+    "twitter-api-v2": "^1.19.0"
+  }
+}
