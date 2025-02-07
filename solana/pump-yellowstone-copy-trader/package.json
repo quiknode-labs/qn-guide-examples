@@ -1,0 +1,20 @@
+{
+  "name": "pump-yellowstone-copy-trader",
+  "version": "1.0.0",
+  "main": "bot.js",
+  "scripts": {
+    "test": "node bot.js",
+    "pretty": "prettier --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0",
+    "@triton-one/yellowstone-grpc": "^2.0.0",
+    "bs58": "^6.0.0",
+    "dotenv": "^16.4.7",
+    "prettier": "^3.4.2"
+  }
+}
