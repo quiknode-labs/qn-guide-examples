@@ -90,7 +90,7 @@ func main() {
     //   Set `target`        : "docs-demo.tron-mainnet.quiknode.pro:50051"
     //   Set `token`         : "abcd1234xyz"
     //
-    // This ensures proper authentication when connecting to the QuickNode gRPC service.
+    // This ensures proper authentication when connecting to the Tron gRPC.
 
 	target := "my-endpoint-name.tron-mainnet.quiknode.pro:50051"
 	token := "YOUR_TOKEN"
