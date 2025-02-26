@@ -52,66 +52,58 @@ package main
 import (
 	"context"
 	"crypto/tls"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"log"
-	"net/url"
-	"strings"
-
-	"google.golang.org/grpc"
 	pb "tron-grpc/proto"
 )
 
-func getGrpcOptions(endpointURL string) (string, []grpc.DialOption) {
-	parsed, err := url.Parse(endpointURL)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	username := strings.Split(parsed.Host, ".")[0]
-	password := strings.Trim(parsed.Path, "/")
-	grpcOpts := []grpc.DialOption{
-		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024 * 1024 * 1024)),
-	}
-
-	grpcOpts = append(grpcOpts, grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{})))
-	port := 50051
-
-	target := fmt.Sprintf("%s:%d", parsed.Hostname(), port)
-	if password == "" {
-		log.Println("no auth token (password) set, skipping basic auth")
-		return target, grpcOpts
-	}
-
-	creds := basicAuth{username: username, password: password}
-	grpcOpts = append(grpcOpts, grpc.WithPerRPCCredentials(creds))
-
-	return target, grpcOpts
+type tokenAuth struct {
+	token string
 }
 
-type basicAuth struct {
-	username string
-	password string
+// GetRequestMetadata adds the token to the request metadata
+func (t tokenAuth) GetRequestMetadata(ctx context.Context, in ...string) (map[string]string, error) {
+	return map[string]string{"x-token": t.token}, nil
 }
 
-func (b basicAuth) GetRequestMetadata(ctx context.Context, in ...string) (map[string]string, error) {
-	auth := b.username + ":" + b.password
-	enc := base64.StdEncoding.EncodeToString([]byte(auth))
-	return map[string]string{
-		"authorization": "Basic " + enc,
-	}, nil
-}
-
-func (basicAuth) RequireTransportSecurity() bool {
-	return false
+// RequireTransportSecurity indicates whether the credentials require transport security
+func (tokenAuth) RequireTransportSecurity() bool {
+	return true
 }
 
 func main() {
-	endpoint := "YOUR_QUICKNODE_ENDPOINT"
-	target, opts := getGrpcOptions(endpoint)
-	grpcConn, err := grpc.Dial(target, opts...)
+
+    // Configuring QuickNode gRPC endpoint and authentication token:
+    //
+    // Your QuickNode's Tron endpoint will be structured as follows:
+    //   https://<your-endpoint-name>.tron-mainnet.quiknode.pro/<your-api-token>
+    //
+    // To correctly set up the gRPC connection:
+    // - Extract "<your-endpoint-name>" and assign it to the `target` variable, appending ":50051" (the gRPC port).
+    // - Extract "<your-api-token>" and assign it to the `token` variable.
+    //
+    // Example:
+    //   Given QuickNode URL: https://docs-demo.tron-mainnet.quiknode.pro/abcd1234xyz
+    //   Set `target`        : "docs-demo.tron-mainnet.quiknode.pro:50051"
+    //   Set `token`         : "abcd1234xyz"
+    //
+    // This ensures proper authentication when connecting to the QuickNode gRPC service.
+
+	target := "my-endpoint-name.tron-mainnet.quiknode.pro:50051"
+	token := "YOUR_TOKEN"
+	creds := tokenAuth{token: token}
+
+	// Define gRPC options
+	grpcOpts := []grpc.DialOption{
+		grpc.WithPerRPCCredentials(creds),
+		grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{})),
+	}
+
+	// Establish connection
+	grpcConn, err := grpc.Dial(target, grpcOpts...)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -130,9 +122,11 @@ func main() {
 		log.Fatalf("Failed to format block data: %v", err)
 	}
 
+	// Print the formatted JSON block data
 	fmt.Println("Latest Block Information:")
 	fmt.Println(string(blockJSON))
 }
+
 ```
 
 ### Step 6. Install dependencies
@@ -170,9 +164,6 @@ Make sure your files are organized in this structure to ensure everything works 
 
 ## Note
 
-- Remember to replace `"YOUR_QUICKNODE_ENDPOINT"` with your actual Tron node endpoint URL before running the application.
-- Tron gRPC runs on PORT 50051
-
-Your endpoint will be visible on the QuickNode dashboard with a format like: `https://my-endpoint-name.tron-mainnet.quiknode.pro/xxxtoken-1234-abcd/jsonrpc`
+Your endpoint will be visible on the QuickNode dashboard with a format like: `https://your-endpoint-name.tron-mainnet.quiknode.pro/xxxtoken-1234-abcd/jsonrpc`
 
 **Important**: Make sure to remove `/jsonrpc` from the end of your endpoint URL when using it for gRPC calls.
