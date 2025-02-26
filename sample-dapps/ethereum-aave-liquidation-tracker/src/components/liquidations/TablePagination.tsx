@@ -6,7 +6,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
+} from "@/components/ui/pagination";
 
 interface TablePaginationProps {
   currentPage: number;
@@ -22,7 +22,6 @@ export function TablePagination({
   onPageChange,
 }: TablePaginationProps) {
   const totalPages = Math.ceil(totalItems / pageSize);
-  const showEllipsis = totalPages > 7;
 
   const getPageNumbers = () => {
     if (totalPages <= 7) {
@@ -34,7 +33,11 @@ export function TablePagination({
     }
 
     if (currentPage > totalPages - 5) {
-      return [0, null, ...Array.from({ length: 5 }, (_, i) => totalPages - 5 + i)];
+      return [
+        0,
+        null,
+        ...Array.from({ length: 5 }, (_, i) => totalPages - 5 + i),
+      ];
     }
 
     return [
@@ -53,11 +56,14 @@ export function TablePagination({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            onClick={() => onPageChange(Math.max(0, currentPage - 1))}
-            disabled={currentPage === 0}
+            onClick={() => {
+              if (currentPage > 0) {
+                onPageChange(currentPage - 1);
+              }
+            }}
           />
         </PaginationItem>
-        
+
         {getPageNumbers().map((pageNumber, index) =>
           pageNumber === null ? (
             <PaginationItem key={`ellipsis-${index}`}>
@@ -74,12 +80,12 @@ export function TablePagination({
             </PaginationItem>
           )
         )}
-
         <PaginationItem>
-          <PaginationNext
-            onClick={() => onPageChange(Math.min(totalPages - 1, currentPage + 1))}
-            disabled={currentPage === totalPages - 1}
-          />
+          {currentPage < totalPages - 1 ? (
+            <PaginationNext onClick={() => onPageChange(currentPage + 1)} />
+          ) : (
+            <PaginationNext onClick={() => {}} isActive={false} />
+          )}
         </PaginationItem>
       </PaginationContent>
     </Pagination>
