@@ -82,7 +82,7 @@ func main() {
     //   https://<your-endpoint-name>.tron-mainnet.quiknode.pro/<your-api-token>
     //
     // To correctly set up the gRPC connection:
-    // - Extract "<your-endpoint-name>" and assign it to the `target` variable, appending ":50051" (the gRPC port).
+    // - Extract "<your-endpoint-name>.tron-mainnet.quiknode.pro" and assign it to the `target` variable, appending ":50051" (the gRPC port).
     // - Extract "<your-api-token>" and assign it to the `token` variable.
     //
     // Example:
