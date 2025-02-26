@@ -84,9 +84,11 @@ func main() {
     // To correctly set up the gRPC connection:
     // - Extract "<your-endpoint-name>.tron-mainnet.quiknode.pro" and assign it to the `target` variable, appending ":50051" (the gRPC port).
     // - Extract "<your-api-token>" and assign it to the `token` variable.
-    // For gRPC, you don't need to use the /jsonrpc, which is appended to all Tron endpoints by default. 
+
+    // For gRPC, you don't need to use the /jsonrpc, which is appended to all Tron endpoints by default.
+
     // Example:
-    //   Given QuickNode URL: https://docs-demo.tron-mainnet.quiknode.pro/abcd1234xyz
+    //   Given QuickNode URL: https://docs-demo.tron-mainnet.quiknode.pro/abcd1234xyz/jsonrpc
     //   Set `target`        : "docs-demo.tron-mainnet.quiknode.pro:50051"
     //   Set `token`         : "abcd1234xyz"
     //
@@ -161,9 +163,3 @@ tron-grpc/
 ```
 
 Make sure your files are organized in this structure to ensure everything works correctly.
-
-## Note
-
-Your endpoint will be visible on the QuickNode dashboard with a format like: `https://your-endpoint-name.tron-mainnet.quiknode.pro/xxxtoken-1234-abcd/jsonrpc`
-
-**Important**: Make sure to remove `/jsonrpc` from the end of your endpoint URL when using it for gRPC calls.
