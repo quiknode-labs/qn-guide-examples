@@ -79,7 +79,7 @@ func main() {
     // Configuring QuickNode gRPC endpoint and authentication token:
     //
     // Your QuickNode's Tron endpoint will be structured as follows:
-    //   https://<your-endpoint-name>.tron-mainnet.quiknode.pro/<your-api-token>
+    //   https://<your-endpoint-name>.tron-mainnet.quiknode.pro/<your-api-token/jsonrpc>
     //
     // To correctly set up the gRPC connection:
     // - Extract "<your-endpoint-name>.tron-mainnet.quiknode.pro" and assign it to the `target` variable, appending ":50051" (the gRPC port).
