@@ -45,7 +45,9 @@ export function LiquidationTrends() {
       <CardContent>
         <Tabs
           value={timeRange}
-          onValueChange={(v) => setTimeRange(v)}
+          onValueChange={(v) =>
+            setTimeRange(v as "24h" | "7d" | "30d" | "365d")
+          }
           className="mb-4"
         >
           <TabsList>

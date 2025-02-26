@@ -27,7 +27,13 @@ export function AssetDistribution() {
   const { data: { topCollateralAssets, topDebtAssets } = {} } =
     useAssetDistribution(timeRange);
 
-  const formatData = (data: typeof topCollateralAssets) =>
+  interface Asset {
+    symbol: string;
+    totalvalueusd: number;
+    percentageoftotal: number;
+  }
+
+  const formatData = (data: Asset[]) =>
     data?.map((item) => ({
       symbol: item.symbol,
       value: item.totalvalueusd,
@@ -58,7 +64,7 @@ export function AssetDistribution() {
                   `${symbol} (${percentage.toFixed(1)}%)`
                 }
               >
-                {data?.map((_, index) => (
+                {data?.map((_: Asset, index: number) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
