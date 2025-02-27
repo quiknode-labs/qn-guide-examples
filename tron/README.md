@@ -34,7 +34,7 @@ mkdir proto
 
 The `proto` directory is used to store `.pb.go` files for gRPC.
 
-Download the [api.pb.go](https://github.com/quiknode-labs/qn-guide-examples/tron/protobuf-file/api.pb.go) file and place it inside the `proto` directory.
+Download the [api.pb.go](https://github.com/quiknode-labs/qn-guide-examples/blob/main/tron/protobuf-file/api.pb.go) file and place it inside the `proto` directory.
 
 ### Step 4. Create the main Go file
 
