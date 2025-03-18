@@ -6,8 +6,7 @@
 
 This project is deployed on **Base Mainnet** by default. If you choose to use a different network, make sure to update the relevant environment variables accordingly.
 
-<!-- TODO: Add a guide link below -->
-> We have a **detailed step-by-step guide** that walks you through the entire setup process, including deploying the smart contract, configuring Chainlink Functions, and integrating the Risk Assessment API. If you're new to Chainlink Functions or QuickNode add-ons, this guide will help you understand the integration in more depth.
+> We have a **[detailed step-by-step guide](https://www.quicknode.com/guides/ethereum-development/dapps/how-to-build-an-aml-and-cft-compliant-dapp)** that walks you through the entire setup process, including deploying the smart contract, configuring Chainlink Functions, and integrating the Risk Assessment API. If you're new to Chainlink Functions or QuickNode add-ons, this guide will help you understand the integration in more depth.
 
 ## Project Overview
 
@@ -275,7 +274,7 @@ Before proceeding, ensure you have a **QuickNode endpoint** with the **Risk Asse
     cp .env.sample .env
     ```
   - Open `.env` and update the following:
-    ```dotenv
+    ```bash
     BASE_RPC_URL=<your-base-rpc-url>
     BASESCAN_API_KEY=<your-basescan-api-key>
     ```
@@ -285,7 +284,7 @@ Before proceeding, ensure you have a **QuickNode endpoint** with the **Risk Asse
     ```
 
 5. **Update Deployment Script**  
-   - Modify the `router` address in the deployment script.  
+   - Modify the `router` address in the deployment script (script/RiskBasedStaking.s.sol) to the router address of the chain and network you're using.  
    - Refer to [Chainlink Functions Supported Networks](https://docs.chain.link/chainlink-functions/supported-networks) for the correct router address.
 
 6. **Deploy the Smart Contract**  
@@ -293,6 +292,7 @@ Before proceeding, ensure you have a **QuickNode endpoint** with the **Risk Asse
    ```bash
    forge script script/RiskBasedStaking.s.sol:RiskBasedStakingScript --rpc-url $BASE_RPC_URL --account your-wallet-name --broadcast --verify -vvv
    ```
+   - Update the `your-wallet-name` with the name of your wallet. 
    - Remove `--verify` if you don't want to verify the contract.  
    - **Save the contract address**, as you will need it for Chainlink Functions and frontend configurations.
 
@@ -320,10 +320,12 @@ For a detailed setup guide, refer to the [Chainlink Functions Documentation](htt
 
 1. **Install Dependencies**  
 
-  ```bash
-  cd next-app
-  npm install
-  ```
+Go back to your project's root directory (i.e `aml-and-cft-compliant-dapp`), then run the following command:
+
+```bash
+cd next-app
+npm install
+```
 
 2. **Set Up Environment Variables**  
 
@@ -345,8 +347,21 @@ For a detailed setup guide, refer to the [Chainlink Functions Documentation](htt
 - **`CONTRACT_ADDRESS`** – The deployed **Risk-Based Staking** smart contract address.  
 - **`SUBSCRIPTION_ID`** – The Chainlink Functions subscription ID linked to your contract for off-chain risk evaluations.  
 
+3. **Update Chainlink Functions Configuration**
 
-3. **Run the Frontend Application**  
+Update the `src/app/api/check-risk/route.ts` file with the correct router address and DON ID for your chain and network.
+
+```js
+  // Chainlink Functions configuration
+  const routerAddress = "0xf9B8fc078197181C841c296C876945aaa425B278";
+  const donId = "fun-base-mainnet-1";
+  const gatewayUrls = [
+    "https://01.functions-gateway.chain.link/",
+    "https://02.functions-gateway.chain.link/",
+  ];
+```
+
+4. **Run the Frontend Application**  
   Start the development server:
 
   ```bash
