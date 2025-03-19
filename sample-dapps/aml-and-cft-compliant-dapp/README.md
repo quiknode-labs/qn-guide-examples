@@ -2,11 +2,11 @@
 
 ![AML and CFT Compliant dApp Screenshot](./public/app-overview.png)
 
-**AML and CFT Compliant dApp** is a decentralized application (dApp) built on Ethereum-compatible networks (e.g., Base mainnet) that enables secure ETH staking with a compliance layer powered by [Chainlink Functions](https://chain.link/functions) and the [Risk Assessment API](https://marketplace.quicknode.com/add-on/risk-assessment-api) which is on the [QuickNode Marketplace](https://marketplace.quicknode.com/). This project demonstrates a practical integration of off-chain data into smart contracts, ensuring only low-risk wallets can participate in the staking pool.
+**AML and CFT Compliant dApp** is a decentralized application (dApp) built on Ethereum-compatible networks (e.g., Base mainnet) that enables secure ETH staking with a compliance layer powered by [Chainlink Functions](https://chain.link/functions) and the [Risk Assessment API](https://marketplace.quicknode.com/add-on/risk-assessment-api?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp) which is on the [QuickNode Marketplace](https://marketplace.quicknode.com/?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp). This project demonstrates a practical integration of off-chain data into smart contracts, ensuring only low-risk wallets can participate in the staking pool.
 
 This project is deployed on **Base Mainnet** by default. If you choose to use a different network, make sure to update the relevant environment variables accordingly.
 
-> We have a **[detailed step-by-step guide](https://www.quicknode.com/guides/ethereum-development/dapps/how-to-build-an-aml-and-cft-compliant-dapp)** that walks you through the entire setup process, including deploying the smart contract, configuring Chainlink Functions, and integrating the Risk Assessment API. If you're new to Chainlink Functions or QuickNode add-ons, this guide will help you understand the integration in more depth.
+> We have a **[detailed step-by-step guide](https://www.quicknode.com/guides/ethereum-development/dapps/how-to-build-an-aml-and-cft-compliant-dapp?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp)** that walks you through the entire setup process, including deploying the smart contract, configuring Chainlink Functions, and integrating the Risk Assessment API. If you're new to Chainlink Functions or QuickNode add-ons, this guide will help you understand the integration in more depth.
 
 ## Project Overview
 
@@ -205,7 +205,7 @@ The frontend is built with Next.js, leveraging modern React patterns and blockch
 - **Node.js** (v18+)
 - **Foundry** (install with `curl -L https://foundry.paradigm.xyz | bash` then `foundryup`)
 - **A Web3 Wallet:** e.g., Rabby, MetaMask
-- **Base Mainnet RPC URL:** Provided by [QuickNode](https://www.quicknode.com/) with the Risk Assessment API enabled
+- **Base Mainnet RPC URL:** Provided by [QuickNode](https://www.quicknode.com/?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp) with the Risk Assessment API enabled
 - **Chainlink Functions Subscription**
 
 ## Installation
@@ -227,8 +227,8 @@ cd qn-guide-examples/sample-dapps/aml-and-cft-compliant-dapp
 Before proceeding, ensure you have a **QuickNode endpoint** with the **Risk Assessment API** enabled:
 
 1. **Create a QuickNode Endpoint**  
-   - Visit [QuickNode](https://www.quicknode.com/) and set up an endpoint on your preferred network.  
-   - Ensure the selected network is supported by the **Risk Assessment API** (check [supported networks](https://marketplace.quicknode.com/add-on/risk-assessment-api)).
+   - Visit [QuickNode](https://www.quicknode.com/?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp) and set up an endpoint on your preferred network.  
+   - Ensure the selected network is supported by the **Risk Assessment API** (check [supported networks](https://marketplace.quicknode.com/add-on/risk-assessment-api?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp)).
 
 2. **Enable the Risk Assessment API Add-on**  
    - Go to your **QuickNode dashboard**.  
