@@ -4,6 +4,9 @@ import path from "path";
 import { ethers } from "ethers";
 import contractData from "@/lib/RiskBasedStaking";
 
+// Set environment variable to force JS implementation before importing
+process.env.UWS_NO_NATIVE = '1';
+
 import {
   SecretsManager,
   simulateScript,
