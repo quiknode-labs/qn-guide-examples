@@ -36,7 +36,7 @@ const Balance = ({ walletAddress }: BalanceProps) => {
 
   return (
     <div className="text-4xl font-bold">
-      {Number(balance).toFixed(2)} ETH
+      {Number(balance).toFixed(3)} ETH
     </div>
   );
 };
