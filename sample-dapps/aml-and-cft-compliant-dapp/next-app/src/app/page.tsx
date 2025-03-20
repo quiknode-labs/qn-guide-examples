@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react';
-import { HomePage } from '@/pages/HomePage';
-import { Providers } from '@/components/Providers';
+import { HomePage } from "@/components/HomePage";
+import { Providers } from "@/components/Providers";
 
 export default function Page() {
   return (

@@ -1,11 +1,11 @@
-// src/pages/HomePage.tsx
+// src/components/HomePage.tsx
 "use client";
 
 import React from "react";
 import { Container } from "@mantine/core";
-import { Header } from "../components/Header";
+import { Header } from "./Header";
 import { InfoBanner } from "@/components/InfoBanner";
-import { StakingForm } from "../components/StakingForm";
+import { StakingForm } from "./StakingForm";
 
 
 export function HomePage() {

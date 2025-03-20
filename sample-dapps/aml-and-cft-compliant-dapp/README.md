@@ -179,6 +179,7 @@ The frontend is built with Next.js, leveraging modern React patterns and blockch
 │   │   └── page.tsx
 │   ├── components                     # Reusable UI components (e.g., header, forms, banners)
 │   │   ├── Header.tsx
+│       └── HomePage.tsx
 │   │   ├── InfoBanner.tsx
 │   │   ├── Providers.tsx
 │   │   └── StakingForm.tsx
@@ -189,8 +190,6 @@ The frontend is built with Next.js, leveraging modern React patterns and blockch
 │   │   └── useStakingContract.ts
 │   ├── lib                             # Smart contract helper functions and ABIs
 │   │   └── RiskBasedStaking.ts
-│   └── pages                           # Main page structure and routing
-│       └── HomePage.tsx
 └── tsconfig.json
 ```
 
@@ -258,7 +257,7 @@ Before proceeding, ensure you have a **QuickNode endpoint** with the **Risk Asse
   forge remappings > remappings.txt
   ```
 
-3. **Import Your Wallet**  
+4. **Import Your Wallet**  
    Securely import your wallet to Foundry using:  
    ```bash
    cast wallet import your-wallet-name --interactive
@@ -268,7 +267,7 @@ Before proceeding, ensure you have a **QuickNode endpoint** with the **Risk Asse
 
    `-interactive` flag allows you to enter the private key without saving it in your shell history.
 
-4. **Set Up Environment Variables**  
+5. **Set Up Environment Variables**  
   - Copy the sample `.env` file and update it with your configuration:
     ```bash
     cp .env.sample .env
@@ -283,11 +282,11 @@ Before proceeding, ensure you have a **QuickNode endpoint** with the **Risk Asse
     source .env
     ```
 
-5. **Update Deployment Script**  
+6. **Update Deployment Script**  
    - Modify the `router` address in the deployment script (script/RiskBasedStaking.s.sol) to the router address of the chain and network you're using.  
    - Refer to [Chainlink Functions Supported Networks](https://docs.chain.link/chainlink-functions/supported-networks) for the correct router address.
 
-6. **Deploy the Smart Contract**  
+7. **Deploy the Smart Contract**  
    Deploy the contract using Foundry:
    ```bash
    forge script script/RiskBasedStaking.s.sol:RiskBasedStakingScript --rpc-url $BASE_RPC_URL --account your-wallet-name --broadcast --verify -vvv
