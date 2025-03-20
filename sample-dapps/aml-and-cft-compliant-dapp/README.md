@@ -6,7 +6,7 @@
 
 This project is deployed on **Base Mainnet** by default. If you choose to use a different network, make sure to update the relevant environment variables accordingly.
 
-> We have a **[detailed step-by-step guide](https://www.quicknode.com/guides/ethereum-development/dapps/how-to-build-an-aml-and-cft-compliant-dapp?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp)** that walks you through the entire setup process, including deploying the smart contract, configuring Chainlink Functions, and integrating the Risk Assessment API. If you're new to Chainlink Functions or QuickNode add-ons, this guide will help you understand the integration in more depth.
+> We have a **[detailed step-by-step guide](https://www.quicknode.com/guides/ethereum-development/dapps/how-to-build-a-secure-dapp-with-aml-and-cft-compliance?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp)** that walks you through the entire setup process, including deploying the smart contract, configuring Chainlink Functions, and integrating the Risk Assessment API. If you're new to Chainlink Functions or QuickNode add-ons, this guide will help you understand the integration in more depth.
 
 ## Project Overview
 
