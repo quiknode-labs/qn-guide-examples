@@ -247,8 +247,8 @@ Before proceeding, ensure you have a **QuickNode endpoint** with the **Risk Asse
    Navigate to the Foundry directory and install required dependencies:
    ```bash
    cd foundry
-   forge install smartcontractkit/foundry-chainlink-toolkit
-   forge install foundry-rs/forge-std
+   forge install smartcontractkit/foundry-chainlink-toolkit --no-commit
+   forge install foundry-rs/forge-std --no-commit
    ```
 
 3. **Create the Remappings File**
