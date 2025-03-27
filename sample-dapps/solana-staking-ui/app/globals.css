@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+    list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+    scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+    text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+    max-width: 100%;
+    display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Add these styles at the end of the file */
+.rt-BaseMenuItem {
+    cursor: pointer;
+    border: none;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--foreground);
+    background: none;
+    transition: background-color 0.2s ease;
+}
+
+.rt-BaseMenuItem:hover {
+    background-color: var(--gray-a3);
+}
+
+.rt-BaseMenuItem:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.rt-DropdownMenuContent,
+.rt-DropdownMenuSubContent {
+    z-index: 100;
+    background-color: var(--color-panel);
+    border: 1px solid var(--gray-a6);
+    border-radius: var(--radius-4);
+    padding: var(--space-1);
+    box-shadow: var(--shadow-5);
+}
+
+.rt-DropdownMenuItem,
+.rt-DropdownMenuSubTrigger {
+    all: unset;
+    font-size: var(--font-size-2);
+    line-height: var(--line-height-2);
+    color: var(--gray-12);
+    border-radius: var(--radius-2);
+    display: flex;
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+    position: relative;
+    user-select: none;
+    outline: none;
+    gap: var(--space-2);
+    cursor: pointer;
+}
+
+.rt-DropdownMenuItem[data-disabled],
+.rt-DropdownMenuSubTrigger[data-disabled] {
+    color: var(--gray-8);
+    pointer-events: none;
+}
+
+.rt-DropdownMenuItem[data-highlighted],
+.rt-DropdownMenuSubTrigger[data-highlighted] {
+    background-color: var(--gray-a3);
+}
+
+.rt-DropdownMenuSeparator {
+    height: 1px;
+    background-color: var(--gray-a6);
+    margin: var(--space-1) calc(var(--space-1) * -1);
+}
+
+.rt-DropdownMenuLabel {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-1);
+    line-height: var(--line-height-1);
+    color: var(--gray-11);
+}
