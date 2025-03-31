@@ -1,0 +1,22 @@
+{
+    "name": "solana-jupiter-bot",
+    "version": "1.0.0",
+    "description": "Example trading bot for Solana using QuickNode and Metis API",
+    "scripts": {
+      "start": "ts-node index.ts"
+    },
+    "dependencies": {
+      "@jup-ag/api": "^6.0.0",
+      "@solana/spl-token": "^0.4.13",
+      "@solana/web3.js": "^1.98.0",
+      "dotenv": "^16.3.1"
+    },
+    "devDependencies": {
+      "@types/node": "^22.13.14",
+      "ts-node": "^10.9.1",
+      "typescript": "^5.2.2"
+    },
+    "engines": {
+      "node": ">=16.0.0"
+    }
+  }
