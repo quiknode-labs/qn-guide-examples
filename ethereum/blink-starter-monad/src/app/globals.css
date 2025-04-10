@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.blink.x-dark {
+  --blink-button: #ffffff;
+  --blink-button-hover: #999999;
+  --blink-text-button: #000000;
+  --blink-stroke-primary: #666666;
+  --blink-text-brand: #ffffff;
+  --blink-shadow-container: 0px 0px 0px 0.1px #666666;
+}
