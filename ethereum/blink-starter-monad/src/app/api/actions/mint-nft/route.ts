@@ -1,11 +1,11 @@
-import { ActionGetResponse, ActionPostResponse } from "@solana/actions";
+import { ActionGetResponse, ActionPostResponse, ActionError } from "@solana/actions";
 import { serialize, http } from "wagmi";
 import { parseEther, encodeFunctionData, createPublicClient } from "viem";
 import { monad } from "@/monad";
 
 const blockchain = "eip155:10143";
 const NFT_CONTRACT_ADDRESS = "YOUR_NFT_ADDRESS"; // Input your NFT contract address
-const MINT_PRICE_ETH = "YOUR_NFT_MINT_PRICE"; // Price per NFT in MON (adjust as configured by your smart contract)
+const MINT_PRICE_MON = "YOUR_NFT_MINT_PRICE"; // Price per NFT in MON (adjust as configured by your smart contract)
 
 const client = createPublicClient({
   chain: monad,
@@ -54,35 +54,45 @@ export const OPTIONS = async () => {
 };
 
 export const GET = async (req: Request) => {
-  const response: ActionGetResponse = {
-    type: "action",
-    icon: `${new URL("/nft-mint.png", req.url).toString()}`,
-    label: "",
-    title: "",
-    description:
-      `1 ProtoMON = 0.0069420 MON`,
-    links: {
-      actions: [
-        {
-          type: "transaction",
-          href: `/api/actions/mint-nft?amount={amount}`,
-          label: "Mint NFT",
-          parameters: [
-            {
-              name: "amount",
-              label: `Enter MON amount in wei`,
-              type: "number",
-            },
-          ],
-        }
-      ],
-    },
-  };
+  try {
+    const response: ActionGetResponse = {
+      type: "action",
+      icon: `${new URL("/nft-mint.png", req.url).toString()}`,
+      label: "",
+      title: "",
+      description: `1 ProtoMON = 0.0069420 MON`,
+      links: {
+        actions: [
+          {
+            type: "transaction",
+            href: `/api/actions/mint-nft?amount={amount}`,
+            label: "Mint NFT",
+            parameters: [
+              {
+                name: "amount",
+                label: `Enter MON amount in wei`,
+                type: "number",
+              },
+            ],
+          }
+        ],
+      },
+    };
 
-  return new Response(JSON.stringify(response), {
-    status: 200,
-    headers,
-  });
+    return new Response(JSON.stringify(response), {
+      status: 200,
+      headers,
+    });
+  } catch (error) {
+    console.error("Error in GET request:", error);
+    const actionError: ActionError = {
+      message: error instanceof Error ? error.message : "An unknown error occurred"
+    };
+    return Response.json(actionError, {
+      status: 400,
+      headers,
+    });
+  }
 };
 
 export const POST = async (req: Request) => {
@@ -107,11 +117,11 @@ export const POST = async (req: Request) => {
       throw new Error(`Invalid MON amount: ${monAmount}`);
     }
     
-    const pricePerNFT = parseFloat(MINT_PRICE_ETH);
+    const pricePerNFT = parseFloat(MINT_PRICE_MON);
     const numNFTs = Math.floor(monValue / pricePerNFT);
     
     if (numNFTs < 1) {
-      throw new Error(`Amount too small. Minimum is ${MINT_PRICE_ETH} MON for 1 NFT.`);
+      throw new Error(`Amount too small. Minimum is ${MINT_PRICE_MON} MON for 1 NFT.`);
     }
     
     const actualMonAmount = (numNFTs * pricePerNFT).toFixed(8);
@@ -151,10 +161,10 @@ export const POST = async (req: Request) => {
     });
   } catch (error) {
     console.error("Error processing request:", error);
-    return new Response(JSON.stringify({ 
-      error: "Error processing request", 
-      details: error instanceof Error ? error.message : "Unknown error"
-    }), {
+    const actionError: ActionError = {
+      message: error instanceof Error ? error.message : "An unknown error occurred"
+    };
+    return Response.json(actionError, {
       status: 400,
       headers,
     });
