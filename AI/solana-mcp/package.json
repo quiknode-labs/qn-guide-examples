@@ -1,0 +1,31 @@
+{
+  "name": "solana-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for Solana blockchain interactions",
+  "main": "build/mcp-server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js",
+    "dev": "tsc && node build/index.js",
+    "pretty": "prettier --write '**/*.{ts,tsx}'"
+  },
+  "keywords": [
+    "solana",
+    "blockchain",
+    "mcp",
+    "model-context-protocol",
+    "llm"
+  ],
+  "author": "amilz",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.9.0",
+    "@solana/kit": "^2.1.0",
+    "prettier": "^3.5.3",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "typescript": "^5.8.3"
+  }
+}
