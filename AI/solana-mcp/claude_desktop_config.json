@@ -1,0 +1,15 @@
+{
+    "mcpServers": {
+        "solana": {
+            "command": "node",
+            "args": [
+                "/absolute/path/to/build/index.js"
+            ],
+            "env": {
+                "SOLANA_RPC_ENDPOINT": "https://example.solana-mainnet.quiknode.pro/123456/"
+            }
+        }
+    }
+}
+
+
