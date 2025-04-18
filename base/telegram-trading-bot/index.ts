@@ -5,15 +5,10 @@ import { initDatabase, closeDatabase } from "./src/lib/database";
 import { verifyEncryptionKey } from "./src/lib/encryption";
 
 // Import commands
-import startHandler from "./src/commands/start";
-import walletHandler from "./src/commands/wallet";
-import createHandler from "./src/commands/create";
-import importHandler, { handlePrivateKeyInput } from "./src/commands/import";
-import exportHandler, { handleExportConfirmation } from "./src/commands/export";
-import balanceHandler from "./src/commands/balance";
-import historyHandler, {
-  handleTimeframeChange,
-} from "./src/commands/history";
+import {startHandler, helpHandler} from "./src/commands/start-help";
+import {walletHandler, createHandler} from "./src/commands/wallet";
+import {importHandler, exportHandler, handlePrivateKeyInput, handleExportConfirmation } from "./src/commands/import-export";
+import {balanceHandler, historyHandler, handleTimeframeChange} from "./src/commands/balance-history";
 import buyHandler, {
   handleTokenSelection,
   handleCustomTokenInput,
@@ -37,7 +32,6 @@ import withdrawHandler, {
   handleWithdrawAmount,
   handleWithdrawConfirmation,
 } from "./src/commands/withdraw";
-import helpHandler from "./src/commands/help";
 
 // Load environment variables
 dotenv.config();

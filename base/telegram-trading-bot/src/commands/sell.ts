@@ -3,7 +3,6 @@ import {
   getTokenInfo,
   getTokenAllowance,
   getWallet,
-  getEthBalance,
   executeTransaction,
   executeContractMethod,
 } from "../lib/token-wallet";
@@ -16,13 +15,12 @@ import {
 import { isValidAddress, isValidAmount } from "../utils/validators";
 import {
   createConfirmationKeyboard,
-  createTokenSelectionKeyboard,
 } from "../utils/keyboardHelper";
 import { CommandHandler } from "../types/commands";
 import { saveTransaction } from "../lib/database";
 import { getTokenBalance } from "../lib/history";
 import { NATIVE_TOKEN_ADDRESS, MAX_UINT256 } from "../utils/constants";
-import { Address, parseUnits, formatEther, formatUnits } from "viem";
+import { Address, parseUnits, formatUnits } from "viem";
 import { InlineKeyboard } from "grammy";
 import { erc20Abi } from "../utils/abis";
 

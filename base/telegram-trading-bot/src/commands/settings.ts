@@ -9,7 +9,7 @@ import {
 import { UserSettings } from "../types/config";
 import { SettingsOption } from "../types/commands";
 import { isValidGasPriority, isValidSlippage } from "../utils/validators";
-import { getGasPriorityLabel } from "../lib/gas";
+import { getGasPriorityLabel } from "../lib/swap";
 
 const settingsHandler: CommandHandler = {
   command: "settings",

@@ -3,7 +3,6 @@ import {
   getWallet,
   getEthBalance,
   withdrawEth,
-  estimateWithdrawalGas,
 } from "../lib/token-wallet";
 import { CommandHandler } from "../types/commands";
 import {
@@ -13,11 +12,9 @@ import {
 import {
   isValidAddress,
   isValidAmount,
-  hasEnoughBalance,
 } from "../utils/validators";
 import { createConfirmationKeyboard } from "../utils/keyboardHelper";
-import { parseEther, formatEther, formatUnits } from "viem";
-import { getGasParams } from "../lib/gas";
+import { parseEther} from "viem";
 import { saveTransaction } from "../lib/database";
 import { NATIVE_TOKEN_ADDRESS } from "../utils/constants";
 
