@@ -63,6 +63,7 @@ const sellHandler: CommandHandler = {
           const contract = token.contract?.toLowerCase();
           return (
             contract &&
+            token.type === "ERC20" &&
             BigInt(token.balance) > 0n &&
             interactedTokens.includes(contract)
           );
@@ -90,13 +91,9 @@ const sellHandler: CommandHandler = {
       };
 
       // Display token selection options
-      await ctx.reply(
-        `💱 *Sell Tokens for ETH*\n\n` +
-          `Please select a token to sell:`,
-        {
-          parse_mode: "Markdown",
-        }
-      );
+      await ctx.reply(`💱 *Sell Tokens for ETH*\n\n`, {
+        parse_mode: "Markdown",
+      });
 
       // Create custom keyboard based on user's tokens
       const tokenKeyboard = new InlineKeyboard();
@@ -114,7 +111,6 @@ const sellHandler: CommandHandler = {
           tokenKeyboard.text(`${token.symbol}`, `sell_token_${token.contract}`);
         }
       }
-
 
       await ctx.reply("Select a token to sell:", {
         reply_markup: tokenKeyboard,
