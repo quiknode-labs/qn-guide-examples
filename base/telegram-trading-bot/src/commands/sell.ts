@@ -264,7 +264,7 @@ export async function handleSellCustomTokenInput(
 export async function handleSellAmountInput(ctx: BotContext): Promise<void> {
   try {
     const userId = ctx.session.userId;
-    const amountInput = ctx.message?.text;
+    let amountInput = ctx.message?.text;
 
     if (!userId || !amountInput) {
       await ctx.reply("❌ Invalid request. Please try again.");
@@ -288,6 +288,12 @@ export async function handleSellAmountInput(ctx: BotContext): Promise<void> {
           "Try again or type /cancel to abort."
       );
       return;
+    }
+
+    // Check for decimal inputs that start with a period and modify the original variable
+    if (amountInput.startsWith(".")) {
+      amountInput = "0" + amountInput;
+      await ctx.reply("ℹ️ I've interpreted your input as " + amountInput);
     }
 
     // Convert amount to token units

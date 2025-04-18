@@ -128,7 +128,7 @@ export async function handleWithdrawAddress(ctx: BotContext): Promise<void> {
 export async function handleWithdrawAmount(ctx: BotContext): Promise<void> {
   try {
     const userId = ctx.session.userId;
-    const amountInput = ctx.message?.text;
+    let amountInput = ctx.message?.text;
 
     if (!userId || !amountInput) {
       await ctx.reply("❌ Invalid request. Please try again.");
@@ -147,6 +147,12 @@ export async function handleWithdrawAmount(ctx: BotContext): Promise<void> {
       return;
     }
 
+    // Check for decimal inputs that start with a period and modify the original variable
+    if (amountInput.startsWith(".")) {
+      amountInput = "0" + amountInput;
+      await ctx.reply("ℹ️ I've interpreted your input as " + amountInput);
+    }
+
     // Convert amount to wei
     const amountWei = parseEther(amountInput).toString();
 
@@ -162,11 +168,7 @@ export async function handleWithdrawAmount(ctx: BotContext): Promise<void> {
 
     // Store amount and continue to confirmation
     ctx.session.tempData!.amount = amountWei;
-    await showWithdrawalConfirmation(
-      ctx,
-      amountWei,
-      toAddress,
-    );
+    await showWithdrawalConfirmation(ctx, amountWei, toAddress);
   } catch (error) {
     console.error("Error handling withdrawal amount:", error);
     await ctx.reply("❌ An error occurred. Please try again later.");

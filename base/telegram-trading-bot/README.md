@@ -246,7 +246,7 @@ This software is provided for educational and demonstration purposes only. Use a
 
 If you encounter the following error when starting the bot:
 ```bash
-Error: Could not locate the bindings file. Tried:
+Error: Could not locate the bindings file.
 ```
 
 This indicates that `better-sqlite3` native bindings failed to build correctly, often due to mismatched Node.js versions or incomplete dependency compilation.
