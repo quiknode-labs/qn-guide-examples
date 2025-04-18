@@ -169,7 +169,6 @@ DEFAULT_SLIPPAGE=default_slippage_tolerance (default: 1)
 DEFAULT_GAS_PRIORITY=default_gas_priority (default: medium)
 ```
 
-
 ### Running the Bot
 
 For development:
@@ -181,6 +180,44 @@ For production:
 ```bash
 npm run start
 ``` 
+
+### Troubleshooting Common Issues
+
+If you encounter the following error when starting the bot:
+```bash
+Error: Could not locate the bindings file. Tried:
+```
+
+This indicates that `better-sqlite3` native bindings failed to build correctly, often due to mismatched Node.js versions or incomplete dependency compilation.
+
+#### Recommended Fix: Manual Rebuild
+Rebuild the native bindings from source:
+
+```bash
+cd node_modules/better-sqlite3
+npm run build-release
+# or
+pnpm run build-release
+ls build  # Verify that a .node file (e.g., better_sqlite3.node) appears
+cd ../..
+```
+
+This command compiles the bindings for your system’s Node.js version, resolving the error.
+
+#### Alternative Fixes:
+
+**Clean and Reinstall Dependencies:** If the rebuild fails, clear the `node_modules` directory and reinstall:
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
+
+# Or, if using pnpm:
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
+```
+
+**Check Node.js Version**: Ensure you’re using Node.js 20.x or higher, as better-sqlite3 may not support older versions.
 
 ## Usage
 
