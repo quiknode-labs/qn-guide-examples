@@ -54,54 +54,49 @@ flowchart TD
     end
 
     subgraph "Command Groups"
-        WalletCmds["Wallet Commands\n/start, /wallet, /create\n/import, /export"]
+        WalletCmds["Wallet Commands\n/start, /wallet, /import, /export"]
         BalanceCmds["Balance Commands\n/balance, /history"]
-        TradeCmds["Trading Commands\n/buy, /sell, /trade"]
+        TradeCmds["Trading Commands\n/buy, /sell"]
         ConfigCmds["Configuration\n/settings"]
+        DepositCmds["Deposit/Withdraw\n/deposit, /withdraw"]
     end
     
     subgraph "Core Libraries"
-        LibWallet["wallet.ts\nWallet Management"]
-        LibStorage["storage.ts\nSecure Storage"]
-        LibGas["gas.ts\nGas Estimation"]
-        LibSwap["openocean.ts\nSwap Integration"]
+        LibWallet["token-wallet.ts\nWallet Management"]
+        LibDatabase["database.ts\nSecure Storage"]
+        LibEncryption["encryption.ts\nData Protection"]
         LibHistory["history.ts\nBalance Tracking"]
+        LibSwap["swap.ts\nSwap & Gas Management"]
     end
     
     User <-->|Commands & Responses| Bot
     
-    Bot --> WalletCmds & BalanceCmds & TradeCmds & ConfigCmds
+    Bot --> WalletCmds & BalanceCmds & TradeCmds & ConfigCmds & DepositCmds
     
     WalletCmds <--> LibWallet
-    WalletCmds <--> LibStorage
+    WalletCmds <--> LibDatabase
     
     BalanceCmds <--> LibWallet
     BalanceCmds <--> LibHistory
     
     TradeCmds <--> LibWallet
     TradeCmds <--> LibSwap
-    TradeCmds <--> LibGas
     
-    ConfigCmds <--> LibStorage
-    LibWallet <--> LibStorage
+    DepositCmds <--> LibWallet
+    
+    ConfigCmds <--> LibDatabase
     
     subgraph "External Services"
-        APIGas["Gas Estimation API"]
-        APISwap["OpenOcean Swap API"]
+        APISwap["Gas Estimation and OpenOcean Swap API"]
         APIHistory["Base Blockbook"]
-        APIMev["Merkle's MEV Protection"]
+        Blockchain["Base Blockchain"]
     end
     
-    LibGas <-->|Fee Estimation| APIGas
     LibSwap <-->|Quote & Execution| APISwap
     LibHistory <-->|Balance & History| APIHistory
-    LibWallet <-->|Transaction Submission| APIMev
+    LibWallet <-->|Transactions| Blockchain
     
-    subgraph "Blockchain"
-        BaseChain["Base Blockchain"]
-    end
-    
-    APIGas & APISwap & APIHistory & APIMev <--> BaseChain
+    APISwap & APIHistory <--> Blockchain
 ```
 
 ## Database
