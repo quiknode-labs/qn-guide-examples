@@ -1,5 +1,5 @@
 import { BotContext } from "../context";
-import { getWallet, getAccount, getPrivateKey } from "../lib/wallet";
+import { getWallet, getAccount, getPrivateKey } from "../lib/token-wallet";
 import { CommandHandler } from "../types/commands";
 import { createConfirmationKeyboard } from "../utils/keyboardHelper";
 

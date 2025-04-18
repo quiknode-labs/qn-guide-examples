@@ -1,5 +1,5 @@
 import { BotContext } from "../context";
-import { getWallet } from "../lib/wallet";
+import { getWallet } from "../lib/token-wallet";
 import { CommandHandler } from "../types/commands";
 import { InlineKeyboard } from "grammy";
 

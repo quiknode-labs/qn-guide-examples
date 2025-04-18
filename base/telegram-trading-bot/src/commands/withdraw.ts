@@ -4,7 +4,7 @@ import {
   getEthBalance,
   withdrawEth,
   estimateWithdrawalGas,
-} from "../lib/wallet";
+} from "../lib/token-wallet";
 import { CommandHandler } from "../types/commands";
 import {
   formatEthBalance,

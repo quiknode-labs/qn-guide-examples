@@ -1,8 +1,11 @@
 import { BotContext } from "../context";
-import { getWallet, getEthBalance, executeTransaction } from "../lib/wallet";
-import { getQuote, getSwap } from "../lib/openocean";
-import { getTokenInfo, getTokenAddressFromSymbol } from "../lib/tokens";
-import { getGasParams } from "../lib/gas";
+import {
+  getTokenInfo,
+  getTokenAddressFromSymbol, getWallet,
+  getEthBalance,
+  executeTransaction,
+} from "../lib/token-wallet";
+import { getQuote, getSwap, getGasParams } from "../lib/swap";
 import {
   formatEthBalance,
   formatTransactionDetails,

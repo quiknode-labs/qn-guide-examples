@@ -1,14 +1,14 @@
 import { BotContext } from "../context";
 import {
+  getTokenInfo,
+  getTokenAllowance,
   getWallet,
   getEthBalance,
   executeTransaction,
   executeContractMethod,
-} from "../lib/wallet";
-import { getQuote, getSwap } from "../lib/openocean";
-import { getTokenInfo, getTokenAllowance } from "../lib/tokens";
+} from "../lib/token-wallet";
+import { getQuote, getSwap, getGasParams } from "../lib/swap";
 import { getUniqueTokensByUserId } from "../lib/database";
-import { getGasParams } from "../lib/gas";
 import {
   formatEthBalance,
   formatTransactionDetails,
@@ -534,7 +534,6 @@ export async function handleSellConfirmation(
       ctx.session.tempData!.toAmount,
       receipt.gasUsed
     );
-
 
     // Format receipt for display
     if (receipt.status === "success") {

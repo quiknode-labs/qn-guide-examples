@@ -1,5 +1,5 @@
 import { BotContext } from "../context";
-import { getWallet, getEthBalance } from "../lib/wallet";
+import { getWallet, getEthBalance } from "../lib/token-wallet";
 import { getTokenBalance } from "../lib/history";
 import { getUniqueTokensByUserId } from "../lib/database";
 import { formatBalanceMessage } from "../utils/formatters";
