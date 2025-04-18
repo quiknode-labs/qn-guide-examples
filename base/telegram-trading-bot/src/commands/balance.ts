@@ -49,16 +49,18 @@ const balanceHandler: CommandHandler = {
       if (tokenData && tokenData.tokens && Array.isArray(tokenData.tokens)) {
         for (const token of tokenData.tokens) {
           // Only include tokens with non-zero balance and that the user has interacted with
-          if (
-            BigInt(token.balance) > BigInt(0) &&
-            interactedTokens.includes(token.contract.toLowerCase())
-          ) {
-            tokens.push({
-              address: token.contract,
-              symbol: token.symbol,
-              decimals: token.decimals,
-              balance: token.balance,
-            });
+          if (token.type === "ERC20") {
+            if (
+              BigInt(token.balance) > BigInt(0) &&
+              interactedTokens.includes(token.contract.toLowerCase())
+            ) {
+              tokens.push({
+                address: token.contract,
+                symbol: token.symbol,
+                decimals: token.decimals,
+                balance: token.balance,
+              });
+            }
           }
         }
       }
