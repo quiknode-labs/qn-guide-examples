@@ -2,6 +2,8 @@
 
 A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainnet with MEV protection, leveraging QuickNode's [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle).
 
+![Telegram Trading Bot Screenshot](public/telegram-test-combined.png)
+
 ## Features
 
 - 🔐 **Secure Wallet Management**:
@@ -102,12 +104,29 @@ flowchart TD
     APIGas & APISwap & APIHistory & APIMev <--> BaseChain
 ```
 
+## Database
+
+This bot uses a local **SQLite database** (powered by `better-sqlite3`) to securely manage user sessions, wallets, trading settings, and transaction history.
+
+#### Here's what gets stored:
+
+| Table        | Purpose                                                                 |
+|--------------|-------------------------------------------------------------------------|
+| `users`      | Maps Telegram users to unique user IDs, stores basic metadata          |
+| `wallets`    | Stores each user’s encrypted private key and wallet address            |
+| `settings`   | Persists user-defined trading preferences (slippage, gas priority, etc.) |
+| `transactions` | Records details of swap activity, including from/to tokens, gas used, and status |
+
+All wallet private keys are **encrypted using AES-256-CBC** and decrypted only in memory during bot operations. This ensures strong security while allowing persistent wallet access across sessions.
+
+The database is initialized automatically on first run (`src/lib/database.ts`), so no setup is needed beyond ensuring you have a valid `WALLET_ENCRYPTION_KEY` in your `.env`.
+
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 20.x or higher
-- QuickNode Base Mainnet Endpoint URL with the Base DeFi Power Bundle enabled
+- QuickNode Base Mainnet Endpoint URL with the [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle) enabled
 - Telegram Bot token (get from @BotFather)
 
 ### Installation
@@ -146,9 +165,9 @@ cp .env.example .env
 
 5. Get a QuickNode Base Mainnet Endpoint URL
 
-    - [Sign up](https://quicknode.com/signup) for a QuickNode account
+    - [Sign up](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=telegram-trading-bot) for a QuickNode account
     - Create a Base Mainnet endpoint
-    - Activate the Base DeFi Power Bundle for your endpoint
+    - Activate the [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle) for your endpoint
     - Keep the endpoint URL handy
 
 6. Create a wallet encryption key to encrypt your private keys
@@ -156,6 +175,8 @@ cp .env.example .env
 ```bash
 openssl rand -base64 32
 ```
+
+> **Important**: This key is used to encrypt and decrypt users' private keys. Without it, or if it's lost, it's impossible to decrypt stored wallets. Store it securely and never share it with anyone.
 
 7. Fill in your environment variables in the `.env` file:
 
@@ -180,6 +201,46 @@ For production:
 ```bash
 npm run start
 ``` 
+
+## Usage
+
+After creating your bot with [@BotFather](https://t.me/BotFather), **open Telegram and send a message to your bot by searching for the bot username you just created** (e.g., `@mytradingbot`). 
+
+### Basic Commands
+
+- `/start` - Initialize the bot and register
+- `/help` - Show all available commands
+- `/wallet` - Display wallet information
+- `/balance` - Show token balances
+- `/history` - Display balance history
+- `/help` - Show all available commands
+
+### Wallet Management
+
+- `/create` - Create a new wallet
+- `/import` - Import an existing wallet via private key
+- `/export` - Export your private key (with security confirmation)
+
+### Trading
+
+- `/buy` - Buy tokens with ETH
+- `/sell` - Sell tokens for ETH
+- `/settings` - Configure trading parameters
+
+### Transfers
+
+- `/deposit` - Show your wallet address for deposits
+- `/withdraw` - Withdraw ETH to another address
+
+## Security Considerations
+
+- Private keys are encrypted using AES-256 before storage
+- Sensitive operations require confirmation
+- All transactions use MEV protection to prevent front-running
+
+## Disclaimer
+
+This software is provided for educational and demonstration purposes only. Use at your own risk. Always verify transactions and conduct proper security reviews before using in production environments.
 
 ### Troubleshooting Common Issues
 
@@ -218,41 +279,3 @@ pnpm install
 ```
 
 **Check Node.js Version**: Ensure you’re using Node.js 20.x or higher, as better-sqlite3 may not support older versions.
-
-## Usage
-
-### Basic Commands
-
-- `/start` - Initialize the bot and register
-- `/help` - Show all available commands
-- `/wallet` - Display wallet information
-- `/balance` - Show token balances
-- `/history` - Display balance history
-- `/help` - Show all available commands
-
-### Wallet Management
-
-- `/create` - Create a new wallet
-- `/import` - Import an existing wallet via private key
-- `/export` - Export your private key (with security confirmation)
-
-### Trading
-
-- `/buy` - Buy tokens with ETH
-- `/sell` - Sell tokens for ETH
-- `/settings` - Configure trading parameters
-
-### Transfers
-
-- `/deposit` - Show your wallet address for deposits
-- `/withdraw` - Withdraw ETH to another address
-
-## Security Considerations
-
-- Private keys are encrypted using AES-256 before storage
-- Sensitive operations require confirmation
-- All transactions use MEV protection to prevent front-running
-
-## Disclaimer
-
-This software is provided for educational and demonstration purposes only. Use at your own risk. Always verify transactions and conduct proper security reviews before using in production environments.
