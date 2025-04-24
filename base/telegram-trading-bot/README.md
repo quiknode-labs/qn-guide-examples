@@ -54,19 +54,19 @@ flowchart TD
     end
 
     subgraph "Command Groups"
-        WalletCmds["Wallet Commands\n/start, /wallet, /import, /export"]
-        BalanceCmds["Balance Commands\n/balance, /history"]
-        TradeCmds["Trading Commands\n/buy, /sell"]
-        ConfigCmds["Configuration\n/settings"]
-        DepositCmds["Deposit/Withdraw\n/deposit, /withdraw"]
+        WalletCmds["Wallet Commands /start, /wallet, /import, /export"]
+        BalanceCmds["Balance Commands /balance, /history"]
+        TradeCmds["Trading Commands /buy, /sell"]
+        ConfigCmds["Configuration /settings"]
+        DepositCmds["Deposit/Withdraw /deposit, /withdraw"]
     end
     
     subgraph "Core Libraries"
-        LibWallet["token-wallet.ts\nWallet Management"]
-        LibDatabase["database.ts\nSecure Storage"]
-        LibEncryption["encryption.ts\nData Protection"]
-        LibHistory["history.ts\nBalance Tracking"]
-        LibSwap["swap.ts\nSwap & Gas Management"]
+        LibWallet["token-wallet.ts Wallet Management"]
+        LibDatabase["database.ts Secure Storage"]
+        LibEncryption["encryption.ts Data Protection"]
+        LibHistory["history.ts Balance Tracking"]
+        LibSwap["swap.ts Swap & Gas Management"]
     end
     
     User <-->|Commands & Responses| Bot
@@ -86,17 +86,27 @@ flowchart TD
     
     ConfigCmds <--> LibDatabase
     
-    subgraph "External Services"
-        APISwap["Gas Estimation and OpenOcean Swap API"]
-        APIHistory["Base Blockbook"]
+    subgraph "QuickNode Infrastructure"
+        QuickNode["QuickNode RPC Services"]
+        
+        subgraph "External Services"
+            APISwap["Gas Estimation and OpenOcean Swap API"]
+            APIHistory["Base Blockbook"]
+            MEVProtection["Merkle MEV Protection"]
+        end
+        
         Blockchain["Base Blockchain"]
     end
     
     LibSwap <-->|Quote & Execution| APISwap
     LibHistory <-->|Balance & History| APIHistory
-    LibWallet <-->|Transactions| Blockchain
+    LibWallet <-->|Transactions through Merkle MEV Protection| MEVProtection
     
-    APISwap & APIHistory <--> Blockchain
+    APISwap --> QuickNode
+    APIHistory --> QuickNode
+    MEVProtection --> QuickNode
+    
+    QuickNode <-->|RPC Communication| Blockchain
 ```
 
 ## Database
