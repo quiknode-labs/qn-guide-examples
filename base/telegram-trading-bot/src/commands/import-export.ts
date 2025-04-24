@@ -44,7 +44,7 @@ export const importHandler: CommandHandler = {
       await ctx.reply(
         "🔑 Please send your private key.\n\n" +
           "*For security reasons*:\n" +
-          "- Private keys are stored encrypted\n" +
+          "- Private keys are stored in an encrypted format\n" +
           "- You can delete this message after I process it\n" +
           "- Never share your private key with anyone else\n" +
           "- You can cancel this operation by typing /cancel",
