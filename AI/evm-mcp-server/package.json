@@ -1,0 +1,22 @@
+{
+  "name": "evm-mcp-server",
+  "version": "1.0.0",
+  "description": "A console-based MCP-compliant server for EVM blockchain data access",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2",
+    "viem": "^2.28.0",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "typescript": "^5.8.3"
+  }
+}
