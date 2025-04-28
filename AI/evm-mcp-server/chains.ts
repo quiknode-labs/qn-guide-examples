@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 // Chain configuration with QuickNode RPC endpoints
 export type ChainConfig = {
   network: string;
