@@ -1,0 +1,13 @@
+// Sample Claude Desktop configuration file
+{
+  "mcpServers": {
+    "evm": {
+      "command": "node",
+      "args": ["/absolute-path-to/build/index.js"],
+      "env": {
+        "QN_ENDPOINT_NAME": "your-quicknode-endpoint-name",
+        "QN_TOKEN_ID": "your-quicknode-token-id"
+      }
+    }
+  }
+}
