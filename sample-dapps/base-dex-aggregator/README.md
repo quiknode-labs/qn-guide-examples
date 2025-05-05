@@ -1,45 +1,46 @@
 # Base DEX Aggregator App
 
-A modern, user-friendly web application for performing token swaps on the Base blockchain. This application leverages QuickNode’s Base DeFi Bundle APIs to provide real-time gas estimation, optimized swap routing, and wallet tracking.
+A modern, user-friendly web application for performing token swaps on the Base blockchain. This web app uses QuickNode’s [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) to deliver **real-time gas estimation**, **optimized swap routing**, and **wallet analytics** — all in one modern interface.
 
-![Base DEX Aggregator App](./public/screenshot.png)
+![Base DEX Aggregator App Screenshot](./public/screenshot.png)
+ 
+## 🚀 Features
 
-## Features
+- 🔁 **Token Swaps**: Execute token swaps on Base using [OpenOcean v4 Swap API](https://marketplace.quicknode.com/add-on/openocean-v4-swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator)
+- ⛽ **Gas Estimation**: Real-time gas price predictions at 70%, 90%, and 99% confidence levels
+- 👛 **Wallet Integration**: Easily connect wallets (MetaMask, WalletConnect, Rabby, etc.) via [connectkit](https://docs.family.co/connectkit)
+- 📊 **Wallet History**: View token balances and past transactions with Blockbook RPC
+ 
+## 🛠️ Tech Stack
 
-- **Token Swapping**: Swap tokens on Base blockchain using OpenOcean v4 Swap API
-- **Real-time Gas Estimation**: View gas prices at different confidence levels (70%, 90%, 99%)
-- **Wallet Integration**: Connect with popular wallets via RainbowKit (MetaMask, Rabby, WalletConnect, etc.)
-- **Wallet History**: View your wallet balance, token holdings, and recent transactions
+| Layer     | Technology                |
+| --------- | ------------------------- |
+| Frontend  | React + TypeScript        |
+| Web3      | Viem, Wagmi, QuickNode    |
+| Wallets   | connectkit, WalletConnect |
+| Styling   | Tailwind CSS              |
+| API Calls | Axios                     |
+| Tooling   | Vite                      |
+ 
+## 📦 Prerequisites
 
-## Tech Stack
+Before running the app, ensure you have:
 
-- **Frontend**: React with TypeScript
-- **Web3 Libraries**: Viem, Wagmi
-- **Wallet Adapter**: RainbowKit
-- **Styling**: Tailwind CSS
-- **API Client**: Axios
-- **Build Tool**: Vite
-
-## Prerequisites
-
-Before you begin, ensure you have the following:
-
-- Node.js 20.x or later
+- [Node.js](https://nodejs.org/) v20.x or later
 - npm, yarn, or pnpm
-- A QuickNode endpoint URL with Base DeFi Bundle access
-- A WalletConnect Project ID (for wallet connections)
+- A [QuickNode](https://quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) Base endpoint with the **Base DeFi Power Bundle** enabled
+- A [WalletConnect Project ID](https://cloud.walletconnect.com)
+ 
+## ⚙️ Getting Started
 
-## Installation
-
-1. Clone the repository:
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/quiknode-labs/qn-guide-examples.git
 cd qn-guide-examples/sample-dapps/base-dex-aggregator
 ```
 
-2. Install dependencies:
-
+### 2. Install Dependencies
 
 ```bash
 npm install
@@ -49,20 +50,22 @@ yarn install
 pnpm install
 ```
 
-## Environment Variables
+### 3. Configure Environment
 
-Create a `.env` file in the root directory with the following variables:
+Copy the `.env.sample` file and fill in your credentials:
 
 ```bash
-VITE_WALLETCONNECT_PROJECT_ID="YOUR_WALLETCONNECT_PROJECT_ID"
-VITE_QUICKNODE_ENDPOINT_URL="YOUR_QUICKNODE_ENDPOINT_URL"
+cp .env.sample .env
 ```
 
-You can get a WalletConnect Project ID by signing up at [WalletConnect Cloud](https://cloud.walletconnect.com).
+```env
+VITE_WALLETCONNECT_PROJECT_ID="your-walletconnect-project-id"
+VITE_QUICKNODE_ENDPOINT_URL="your-quicknode-base-endpoint"
+```
 
-## Running Locally
-
-To start the development server:
+📌 You can get your Project ID from [WalletConnect Cloud](https://cloud.walletconnect.com).
+ 
+## 🧪 Running the App Locally
 
 ```bash
 npm run dev
@@ -72,11 +75,11 @@ yarn dev
 pnpm dev
 ```
 
-The application will be available at [http://localhost:5173](http://localhost:5173).
+Open your browser to: [http://localhost:5173](http://localhost:5173)
+ 
+## 📦 Building for Production
 
-## Building for Production
-
-To create a production build:
+To create an optimized build:
 
 ```bash
 npm run build
@@ -86,122 +89,221 @@ yarn build
 pnpm build
 ```
 
-To preview the production build locally:
+To preview it locally:
 
 ```bash
 npm run preview
-# or
-yarn preview
-# or
-pnpm preview
 ```
+ 
+## 🌐 Deploying to Vercel
 
-## Deploying to Vercel
+### Quick Steps:
 
-This project can be easily deployed to Vercel:
+1. Push the project to GitHub
 
-1. Push your code to a GitHub repository
-2. Sign up or log in to [Vercel](https://vercel.com)
-3. Click "New Project" and import your GitHub repository
-4. Configure the project:
+2. Go to [Vercel](https://vercel.com) and import the repository
 
-1. Framework Preset: Vite
-2. Build Command: `npm run build` or `yarn build`
-3. Output Directory: `dist`
+3. Configure the project:
 
+   - **Framework Preset**: Vite
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
 
+4. Add environment variables:
 
-5. Add your environment variables in the Vercel project settings:
+   - `VITE_QUICKNODE_ENDPOINT_URL`
+   - `VITE_WALLETCONNECT_PROJECT_ID`
 
-  -  `VITE_QUICKNODE_ENDPOINT_URL`: Your QuickNode Base Endpoint URL
-  -  `VITE_WALLETCONNECT_PROJECT_ID`: Your WalletConnect Project ID
+5. Click **Deploy**
 
-6. Click "Deploy"
-
-Alternatively, you can use the Vercel CLI:
+### Or use the Vercel CLI:
 
 ```bash
-# Install Vercel CLI
 npm install -g vercel
-
-# Deploy
 vercel
 ```
+ 
+## 🔌 API Integrations via QuickNode
 
-## API Integrations
+This app connects to the following APIs via the Base DeFi Power Bundle:
 
-This application integrates with the following QuickNode [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle) APIs:
+| Feature        | Add-on / Method                                  |
+| -------------- | ------------------------------------------------ |
+| Gas Estimation | `sentio_gasPrice` RPC method                     |
+| Token Swaps    | OpenOcean v4 Swap API (`quote` and `swap` paths) |
+| Wallet History | `bb_getAddress` (Blockbook RPC)                  |
+ 
+## 🧠 How It Works
 
-1. **Gas Estimation API** (`sentio_gasPrice`): Provides real-time gas estimates for Base.
-2. **OpenOcean v4 Swap API**: Used for token lists, swap quotes, and swap transactions.
-3. **Base Blockbook JSON-RPC** (`bb_getAddress`): Fetches wallet balance, token holdings, and transaction history.
+### 🟡 Gas Estimation with Sentio API
 
-## Application Logic and Base Bundle Integration
+File: `src/lib/api.ts`
 
-This application demonstrates how to build a full-featured DeFi application using QuickNode's Base Bundle add-ons. Here's how each component of the Base Bundle is utilized:
-
-### Gas Estimation with Sentio Gas API
-
-The application uses the `sentio_gasPrice` RPC method to fetch real-time gas estimates for the Base network:
-
-1. The `useGasEstimate` hook in `src/hooks/useGasEstimate.tsx` provides gas price data
-2. Gas prices are used in swap calculations to provide accurate cost estimates
-3. The implementation uses the JSON-RPC interface via axios in `src/lib/api.ts`
-
-```typescript
-// Example: Fetching gas estimates
+```ts
+// Fetch gas estimates
 export async function fetchGasEstimates() {
-  const response = await axios.post(
-    QUICKNODE_ENDPOINT_URL,
-    {
-      id: 1,
-      jsonrpc: "2.0",
-      method: "sentio_gasPrice",
-      params: { chainId: BASE_CHAIN_ID },
-    }
-  );
-  return response.data.blockPrices[0].estimatedPrices;
+  try {
+    const response = await axios.post(
+      QUICKNODE_ENDPOINT_URL,
+      {
+        id: 1,
+        jsonrpc: "2.0",
+        method: "sentio_gasPrice",
+        params: { chainId: BASE_CHAIN_ID },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data.blockPrices[0].estimatedPrices;
+  } catch (error) {
+    console.error("Error fetching gas estimates:", error);
+    throw error;
+  }
 }
 ```
 
-### Token Swaps with OpenOcean v4 API
+- Fetches accurate Base gas prices
+- Used in real-time to calculate transaction costs
+ 
+### 🟢 Swapping via OpenOcean v4
 
-The application integrates OpenOcean's v4 API through QuickNode's Base Bundle:
+File: `src/lib/api.ts`
 
-1. Token list retrieval for displaying available tokens
-2. Swap quote generation with price impact and routing information
-3. Swap execution
-4. All OpenOcean endpoints are accessed via the QuickNode endpoint URL
+```ts
+// Fetch token list from OpenOcean API
+export async function fetchTokenList(): Promise<Token[]> {
+  try {
+    const response = await axios.get(`${OPENOCEAN_API_URL}/tokenList`);
+    return response.data.data || [];
+  } catch (error) {
+    console.error("Error fetching token list:", error);
+    throw error;
+  }
+}
 
-```typescript
-// Example: OpenOcean API URL construction
-const OPENOCEAN_API_URL = `${QUICKNODE_ENDPOINT_URL}addon/807/v4/base`;
+// Fetch swap quote
+export async function fetchSwapQuote({
+  inTokenAddress,
+  outTokenAddress,
+  amount,
+  gasPrice,
+}: {
+  inTokenAddress: Address;
+  outTokenAddress: Address;
+  amount: string;
+  gasPrice: string;
+}) {
+  try {
+    const response = await axios.get(`${OPENOCEAN_API_URL}/quote`, {
+      params: {
+        inTokenAddress,
+        outTokenAddress,
+        amount,
+        gasPrice,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching swap quote:", error);
+    throw error;
+  }
+}
+
+// Execute swap
+export async function executeSwap({
+  inTokenAddress,
+  outTokenAddress,
+  amount,
+  slippage,
+  gasPrice,
+  userAddress,
+}: {
+  inTokenAddress: Address;
+  outTokenAddress: Address;
+  amount: string;
+  slippage: string;
+  gasPrice: string;
+  userAddress: Address;
+}) {
+  try {
+    // 1. Get the swap transaction data from OpenOcean
+    const swapResponse = await axios.get(`${OPENOCEAN_API_URL}/swap`, {
+      params: {
+        inTokenAddress,
+        outTokenAddress,
+        amount,
+        slippage,
+        gasPrice,
+        account: userAddress,
+      },
+    });
+
+    const swapData = swapResponse.data.data;
+
+    return swapData;
+  } catch (error) {
+    console.error("Error executing swap:", error);
+    throw error;
+  }
+}
 ```
 
-### Wallet History with Base Blockbook
+- Token list retrieval
+- Quote generation
+- Swap execution
 
-The wallet history feature uses the Blockbook JSON-RPC interface:
+All routed through the QuickNode Base endpoint.
+ 
+### 🔵 Wallet History via Blockbook
 
-1. The `useWalletHistory` hook fetches transaction history and token balances
-2. The `bb_getAddress` method provides comprehensive wallet information
-3. The wallet panel displays transaction history with timestamps and status
+File: `src/hooks/useWalletHistory.ts`
 
-```typescript
-// Example: Fetching wallet history
+```ts
+// Fetch wallet history using Base Blockbook JSON-RPC
 export async function fetchWalletHistory(address: string) {
-  const response = await axios.post(
-    QUICKNODE_ENDPOINT_URL,
-    {
-      id: 1,
-      jsonrpc: "2.0",
-      method: "bb_getAddress",
-      params: [address, { page: 1, size: 20, details: "txids" }],
-    }
-  );
-  return response.data;
+  try {
+    const response = await axios.post(
+      QUICKNODE_ENDPOINT_URL,
+      {
+        id: 1,
+        jsonrpc: "2.0",
+        method: "bb_getAddress",
+        params: [address, { page: 1, size: 20, details: "txids" }],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("response", response.data)
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching wallet history:", error);
+    throw error;
+  }
 }
 ```
 
-This architecture demonstrates how QuickNode's Base Bundle provides a complete toolkit for building secure, high-performance DeFi applications without managing complex infrastructure.
+- Transaction history
+- Balance snapshots
 
+## 🧭 Next Steps
 
+Want to expand this project?
+
+- Integrate price charts using TradingView or CoinGecko API
+- Add alerts using [QuickNode Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator)
+- Optimize UI with responsive mobile support
+
+## 🙋 Need Help?
+
+Join the community or reach out:
+
+- [Discord](https://discord.gg/quicknode)
+- [Twitter](https://twitter.com/QuickNode)
+- [Telegram](https://t.me/quicknodehq)
