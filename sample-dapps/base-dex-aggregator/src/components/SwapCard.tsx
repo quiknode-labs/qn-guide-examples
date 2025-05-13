@@ -111,9 +111,7 @@ export default function SwapCard() {
   // Handle transaction confirmation
   useEffect(() => {
     if (isTxSuccess && hash) {
-      toast.success(
-        `Swap confirmed!`
-      );
+      toast.success(`Swap confirmed!`);
       setAmount(""); // Reset input amount
       refreshBalances(); // Refresh balances after successful swap
       setIsSwapping(false);
@@ -123,7 +121,8 @@ export default function SwapCard() {
   // Handle transaction errors
   useEffect(() => {
     if (txError || receiptError) {
-      toast.error(`Swap failed! ${txError?.message}`);
+      toast.error(`Swap failed! Check console for details.`);
+      console.error("Transaction error:", txError || receiptError);
       setIsSwapping(false);
     }
   }, [txError, receiptError, toast]);
@@ -159,7 +158,7 @@ export default function SwapCard() {
       sendTransaction(txRequest); // Send the transaction (hash will be tracked by useWaitForTransactionReceipt)
     } catch (error: any) {
       console.error("Swap execution error:", error);
-      toast.error("Swap failed. An unexpected error occurred.")
+      toast.error("Swap failed. An unexpected error occurred.");
       setIsSwapping(false);
     }
   }
@@ -167,11 +166,11 @@ export default function SwapCard() {
   async function handleApprove() {
     try {
       await approve();
-      toast.success("Token approval successful.")
+      toast.success("Token approval successful.");
       return true;
     } catch (error: any) {
       console.error("Approval error:", error);
-      toast.error("Approval failed.")
+      toast.error("Approval failed.");
       return false;
     }
   }
@@ -185,7 +184,7 @@ export default function SwapCard() {
       }
     } catch (error: any) {
       console.error("Approve & Swap error:", error);
-      toast.error("Approve & Swap failed.")
+      toast.error("Approve & Swap failed.");
       setIsSwapping(false);
     }
   }
@@ -285,7 +284,10 @@ export default function SwapCard() {
                   type="text"
                   value={amount}
                   onChange={(e) => {
-                    const value = e.target.value;
+                    let value = e.target.value;
+                    if (value.startsWith(".")) {
+                      value = "0" + value; // Prepend 0 if input starts with a decimal point
+                    }
                     if (/^\d*\.?\d*$/.test(value)) {
                       setAmount(value);
                     }
