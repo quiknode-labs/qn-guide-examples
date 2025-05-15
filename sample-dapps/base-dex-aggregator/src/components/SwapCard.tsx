@@ -248,7 +248,7 @@ export default function SwapCard() {
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">Base DEX Aggregator</h1>
-            <ConnectKitButton showBalance={true} theme="soft" />
+            <ConnectKitButton showBalance={false} theme="soft" />
           </div>
 
           {/* FROM TOKEN + AMOUNT */}
