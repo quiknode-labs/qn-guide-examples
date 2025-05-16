@@ -28,7 +28,7 @@ This project demonstrates how to implement a paywall for video content using the
    npm install
    ```
 
-3. Create a `.env.local` file with the following variables:
+3. Rename `.env.local` to `.env` and add the following variables (remember to replace `WALLET_ADDRESS` with your actual wallet address you want to receive payments for)
 
    ```
    WALLET_ADDRESS=your_ethereum_wallet_address
