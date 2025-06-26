@@ -41,6 +41,7 @@ contract BatchCallAndSponsorScript is Script {
         token = new MockERC20();
 
         // // Fund accounts
+        vm.deal(ALICE_ADDRESS, 10 ether);
         token.mint(ALICE_ADDRESS, 1000e18);
 
         vm.stopBroadcast();
