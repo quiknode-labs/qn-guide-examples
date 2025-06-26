@@ -1,6 +1,6 @@
 # Base DEX Aggregator App
 
-A modern, user-friendly web application for performing token swaps on the Base blockchain. This web app uses QuickNode’s [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) to deliver **real-time gas estimation**, **optimized swap routing**, and **wallet analytics** — all in one modern interface.
+A modern, user-friendly web application for performing token swaps on the Base blockchain. This web app uses QuickNode’s [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) to deliver **real-time gas estimation** and **optimized swap routing** — all in one modern interface.
 
 ![Base DEX Aggregator App Screenshot](./public/screenshot.png)
  
@@ -9,7 +9,6 @@ A modern, user-friendly web application for performing token swaps on the Base b
 - 🔁 **Token Swaps**: Execute token swaps on Base using [OpenOcean v4 Swap API](https://marketplace.quicknode.com/add-on/openocean-v4-swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator)
 - ⛽ **Gas Estimation**: Real-time gas price predictions at 70%, 90%, and 99% confidence levels
 - 👛 **Wallet Integration**: Easily connect wallets (MetaMask, WalletConnect, Rabby, etc.) via [connectkit](https://docs.family.co/connectkit)
-- 📊 **Wallet History**: View token balances and past transactions with Blockbook RPC
  
 ## 🛠️ Tech Stack
 
@@ -131,7 +130,6 @@ This app connects to the following APIs via the Base DeFi Power Bundle:
 | -------------- | ------------------------------------------------ |
 | Gas Estimation | `sentio_gasPrice` RPC method                     |
 | Token Swaps    | OpenOcean v4 Swap API (`quote` and `swap` paths) |
-| Wallet History | `bb_getAddress` (Blockbook RPC)                  |
  
 ## 🧠 How It Works
 
@@ -258,39 +256,6 @@ export async function executeSwap({
 
 All routed through the QuickNode Base endpoint.
  
-### 🔵 Wallet History via Blockbook
-
-File: `src/hooks/useWalletHistory.ts`
-
-```ts
-// Fetch wallet history using Base Blockbook JSON-RPC
-export async function fetchWalletHistory(address: string) {
-  try {
-    const response = await axios.post(
-      QUICKNODE_ENDPOINT_URL,
-      {
-        id: 1,
-        jsonrpc: "2.0",
-        method: "bb_getAddress",
-        params: [address, { page: 1, size: 20, details: "txids" }],
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log("response", response.data)
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching wallet history:", error);
-    throw error;
-  }
-}
-```
-
-- Transaction history
-- Balance snapshots
 
 ## 🧭 Next Steps
 

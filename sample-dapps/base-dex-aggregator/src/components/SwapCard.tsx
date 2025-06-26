@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowDown, ChevronDown, ChevronUp, Info } from "lucide-react";
+import { ArrowDown, Info } from "lucide-react";
 import {
   useAccount,
   useSendTransaction,
@@ -8,7 +8,6 @@ import {
 import { ConnectKitButton } from "connectkit";
 
 import TokenSelector from "./TokenSelector";
-import WalletHistory from "./WalletHistory";
 
 import { OPENOCEAN_EXCHANGE_CONTRACT_ADDRESS } from "../lib/constants";
 
@@ -24,7 +23,6 @@ export default function SwapCard() {
   const { address, isConnected } = useAccount();
 
   const [amount, setAmount] = useState("");
-  const [isHistoryExpanded, setIsHistoryExpanded] = useState(false);
   const [isSwapping, setIsSwapping] = useState(false);
   const [showDexList, setShowDexList] = useState(false);
 
@@ -536,21 +534,6 @@ export default function SwapCard() {
         </div>
       </div>
 
-      {/* Wallet & History */}
-      <div className="border border-gray-200 rounded-lg overflow-hidden">
-        <button
-          onClick={() => setIsHistoryExpanded(!isHistoryExpanded)}
-          className="w-full flex justify-between items-center p-4 bg-white hover:bg-gray-50 transition-colors"
-        >
-          <span className="font-medium">Wallet & History</span>
-          {isHistoryExpanded ? (
-            <ChevronUp size={20} />
-          ) : (
-            <ChevronDown size={20} />
-          )}
-        </button>
-        {isHistoryExpanded && <WalletHistory />}
-      </div>
     </div>
   );
 }

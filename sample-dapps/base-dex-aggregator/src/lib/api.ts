@@ -175,27 +175,3 @@ export async function executeSwap({
   }
 }
 
-// Fetch wallet history using Base Blockbook JSON-RPC
-export async function fetchWalletHistory(address: string) {
-  try {
-    const response = await axios.post(
-      QUICKNODE_ENDPOINT_URL,
-      {
-        id: 1,
-        jsonrpc: "2.0",
-        method: "bb_getAddress",
-        params: [address, { page: 1, size: 20, details: "txids" }],
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log("response", response.data)
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching wallet history:", error);
-    throw error;
-  }
-}
