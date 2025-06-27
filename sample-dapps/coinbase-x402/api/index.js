@@ -1,13 +1,13 @@
 import express from "express";
 import { paymentMiddleware } from "x402-express";
-import { facilitator } from "@coinbase/x402"; // For mainnet
 import dotenv from "dotenv";
 import path from "path";
-import { log } from "./utils/log.js";
-import { videoAccessHandler } from "./handlers/videoAccessHandler.js";
+import { log } from "../utils/log.js";
+import { videoAccessHandler } from "../handlers/videoAccessHandler.js";
 
 dotenv.config();
 
+// Create and configure the Express app
 const app = express();
 
 // Use Base Sepolia (testnet) for development
@@ -60,12 +60,16 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
 
+// Handle 404s
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
+// Export the app for Vercel serverless functions
 export default app;
 
-// This block runs the server locally
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 4021;
-  app.listen(PORT, () => {
-    console.log(`Server listening at http://localhost:${PORT}`);
-  });
-}
+// Start the server for local development
+const PORT = process.env.PORT || 4021;
+app.listen(PORT, () => {
+  log(`Server is running on http://localhost:${PORT}`);
+});

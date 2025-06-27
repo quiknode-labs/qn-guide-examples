@@ -56,6 +56,6 @@ This project demonstrates how to implement a paywall for video content using the
 
 ## Customizing
 
-- To change the price of the video, modify the `price` parameter in `server.js`
+- To change the price of the video, modify the `price` parameter in `api/index.js`
 - To use a different video, update the video source in `public/video-content.html`
-- To deploy on Base mainnet, update the network configuration in `server.js` (you will need also need CDP API Keys and need to use a different Facilitator)
+- To deploy on Base mainnet, update the network configuration in `api/index.js` (you will need also need CDP API Keys and need to use a different Facilitator)
