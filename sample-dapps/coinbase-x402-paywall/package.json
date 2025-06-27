@@ -1,0 +1,32 @@
+{
+  "name": "x402-video-paywall",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js",
+    "vercel-dev": "vercel dev",
+    "test": "node testAccess.js",
+    "build": "echo 'No build step required'",
+    "vercel-build": "echo 'No build step required'"
+  },
+  "keywords": ["x402", "paywall", "video", "cryptocurrency", "blockchain"],
+  "author": "",
+  "license": "MIT",
+  "description": "A demo application showing how to implement a video paywall using the x402 payment protocol",
+  "dependencies": {
+    "@coinbase/x402": "^0.3.2",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "viem": "^2.29.0",
+    "x402-express": "^0.3.2",
+    "x402-fetch": "^0.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "vercel": "latest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
