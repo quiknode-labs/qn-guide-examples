@@ -5,7 +5,7 @@ import {
     CompilableTransactionMessage,
     TransactionMessageWithBlockhashLifetime,
     Commitment,
-} from "@solana/web3.js";
+} from "@solana/kit";
 
 
 export const createSignAndSendTransaction = (sendAndConfirmTransaction: ReturnType<typeof sendAndConfirmTransactionFactory>) => {

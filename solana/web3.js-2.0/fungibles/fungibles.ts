@@ -22,7 +22,7 @@ import {
     setTransactionMessageLifetimeUsingBlockhash,
     setTransactionMessageFeePayerSigner,
     appendTransactionMessageInstructions,
-} from "@solana/web3.js";
+} from "@solana/kit";
 import { createSignAndSendTransaction } from "../helpers";
 
 const LAMPORTS_PER_SOL = BigInt(1_000_000_000);

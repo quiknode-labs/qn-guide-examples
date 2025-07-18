@@ -1,4 +1,4 @@
-import { RpcTransport, createDefaultRpcTransport } from "@solana/web3.js";
+import { RpcTransport, createDefaultRpcTransport } from "@solana/kit";
 
 export function createQuickNodeTransport(endpoint: string): RpcTransport {
     const jsonRpcTransport = createDefaultRpcTransport({ url: endpoint });

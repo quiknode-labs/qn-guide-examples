@@ -6,7 +6,7 @@ import {
     SolanaRpcApi, 
     SolanaRpcSubscriptionsApi, 
     TransactionMessageBytesBase64 
-} from "@solana/web3.js";
+} from "@solana/kit";
 
 type PumpFunType = 'BUY' | 'SELL';
 type PriorityFeeLevel = 'low' | 'medium' | 'high' | 'extreme';

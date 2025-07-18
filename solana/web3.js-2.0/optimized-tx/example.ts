@@ -1,6 +1,6 @@
 import { QuickNodeSolana } from './src';
 import { getAddMemoInstruction } from "@solana-program/memo";
-import { createKeyPairSignerFromBytes, lamports } from "@solana/web3.js";
+import { createKeyPairSignerFromBytes, lamports } from "@solana/kit";
 import { getTransferSolInstruction } from "@solana-program/system";
 import secret from "./secret.json";
 
