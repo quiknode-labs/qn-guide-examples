@@ -24,25 +24,6 @@ interface AIOptimizationResponse {
   };
 }
 
-const POOL_CATEGORIES = {
-  stable: "Low-risk stable pairs with minimal impermanent loss",
-  major: "Established tokens with good liquidity and moderate risk",
-  volatile: "Higher risk/reward pairs with potential for greater returns",
-  concentrated: "Advanced liquidity strategies requiring active management"
-};
-
-const RISK_TOLERANCE_DESCRIPTIONS = {
-  conservative: "Prefers stable returns with minimal risk, focusing on capital preservation",
-  moderate: "Balanced approach seeking reasonable returns with controlled risk",
-  aggressive: "Willing to accept higher risk for potentially greater rewards"
-};
-
-const TIME_HORIZON_DESCRIPTIONS = {
-  short: "Short-term investment (1-3 months) requiring high liquidity",
-  medium: "Medium-term investment (3-6 months) with balanced growth approach",
-  long: "Long-term investment (6+ months) focused on maximum growth potential"
-};
-
 /**
  * Generate an AI-powered portfolio optimization using a structured prompt
  */

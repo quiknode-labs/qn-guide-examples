@@ -89,7 +89,7 @@ An AI-powered DeFi yield farming optimizer that helps users build personalized p
    - Sign up at [console.anthropic.com](https://console.anthropic.com/)
    - Get API key
 
-2. **QuickNode Account** (Optional):
+2. **QuickNode Account**:
    - Sign up at [quicknode.com](https://www.quicknode.com/)
    - Subscribe to Aerodrome API add-on
    - Get endpoint URL
