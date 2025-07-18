@@ -18,9 +18,8 @@ import {
     SolanaRpcApi,
     RpcSubscriptions,
     SolanaRpcSubscriptionsApi,
-    getAddressDecoder,
     getAddressFromPublicKey
-} from "@solana/web3.js";
+} from "@solana/kit";
 import {
     HttpRequestMethod,
     PumpFunEndpoint,

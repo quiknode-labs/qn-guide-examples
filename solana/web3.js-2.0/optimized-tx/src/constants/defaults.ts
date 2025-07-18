@@ -1,4 +1,4 @@
-import { Blockhash } from "@solana/web3.js";
+import { Blockhash } from "@solana/kit";
 
 export const DEFAULTS = {
     PLACEHOLDER_BLOCKHASH: {

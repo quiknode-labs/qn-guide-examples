@@ -19,7 +19,7 @@ import {
     Base64EncodedWireTransaction,
     getTransactionEncoder,
     getBase58Decoder,
-} from "@solana/web3.js";
+} from "@solana/kit";
 import secret from "./secret.json";
 import { getAddMemoInstruction } from "@solana-program/memo";
 import { getTransferSolInstruction } from "@solana-program/system";

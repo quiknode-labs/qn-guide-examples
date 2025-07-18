@@ -1,13 +1,9 @@
 import {
-    createSolanaRpc
-} from "@solana/rpc"
-import {
+    createSolanaRpc,
     Address,
     address,
     getAddressDecoder,
     getProgramDerivedAddress,
-} from "@solana/addresses";
-import {
     Endian,
     getU16Encoder,
     getBase64Encoder,
@@ -21,7 +17,7 @@ import {
     getU64Decoder,
     getArrayDecoder,
     ReadonlyUint8Array
-} from "@solana/codecs";
+} from "@solana/kit";
 import dotenv from "dotenv";
 
 dotenv.config();

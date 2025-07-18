@@ -8,9 +8,7 @@ import {
     setTransactionMessageLifetimeUsingBlockhash,
     createSolanaRpc,
     prependTransactionMessageInstruction,
-    getComputeUnitEstimateForTransactionMessageFactory,
     Blockhash,
-    U64UnsafeBeyond2Pow53Minus1,
     CompilableTransactionMessage,
     BaseTransactionMessage,
     setTransactionMessageFeePayer,
@@ -18,7 +16,7 @@ import {
     signTransaction,
     appendTransactionMessageInstructions,
     compileTransaction,
-    assertTransactionIsFullySigned,
+    assertIsFullySignedTransaction,
     sendAndConfirmTransactionFactory,
     createSolanaRpcSubscriptions,
     getSignatureFromTransaction,
@@ -26,10 +24,11 @@ import {
     SolanaRpcApi,
     RpcSubscriptions,
     SolanaRpcSubscriptionsApi
-} from "@solana/web3.js";
+} from "@solana/kit";
 import {
     getSetComputeUnitLimitInstruction,
     getSetComputeUnitPriceInstruction,
+    estimateComputeUnitLimitFactory
 } from "@solana-program/compute-budget";
 import { DEFAULTS } from './constants/defaults';
 import { QuickNodeSolanaConfig } from './types/config';
@@ -70,7 +69,7 @@ export class QuickNodeSolana {
         instructions: ReadonlyArray<BaseTransactionMessage['instructions'][number]>,
         blockHash: Readonly<{
             blockhash: Blockhash;
-            lastValidBlockHeight: U64UnsafeBeyond2Pow53Minus1;
+            lastValidBlockHeight: bigint;
         }> = DEFAULTS.PLACEHOLDER_BLOCKHASH,
         computeUnits: number = DEFAULTS.PLACEHOLDER_COMPUTE_UNIT,
         priorityFeeMicroLamports: number = DEFAULTS.PLACEHOLDER_PRIORITY_FEE,
@@ -92,7 +91,7 @@ export class QuickNodeSolana {
     }
 
     private async estimateComputeUnits(sampleMessage: CompilableTransactionMessage): Promise<number> {
-        const computeUnitsEstimator = getComputeUnitEstimateForTransactionMessageFactory({
+        const computeUnitsEstimator = estimateComputeUnitLimitFactory({
             rpc: this.solanaCore
         });
         const estimatedComputeUnits = await computeUnitsEstimator(sampleMessage);
@@ -158,7 +157,7 @@ export class QuickNodeSolana {
         assertIsTransactionMessageWithBlockhashLifetime(smartMessage);
         const compiledTransaction = compileTransaction(smartMessage);
         const signedTransaction = await signTransaction([signer.keyPair], compiledTransaction);
-        assertTransactionIsFullySigned(signedTransaction);
+        assertIsFullySignedTransaction(signedTransaction);
         const signature = getSignatureFromTransaction(signedTransaction);
 
         try {
