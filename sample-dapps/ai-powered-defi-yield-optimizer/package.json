@@ -1,0 +1,39 @@
+{
+  "name": "ai-powered-defi-yield-optimizer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@radix-ui/react-checkbox": "latest",
+    "@radix-ui/react-label": "2.1.1",
+    "@radix-ui/react-progress": "latest",
+    "@radix-ui/react-radio-group": "latest",
+    "@radix-ui/react-select": "latest",
+    "@radix-ui/react-slider": "latest",
+    "@radix-ui/react-slot": "1.1.1",
+    "autoprefixer": "^10.4.20",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.454.0",
+    "next": "15.2.4",
+    "next-themes": "^0.4.4",
+    "react": "^19",
+    "react-dom": "^19",
+    "recharts": "latest",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "postcss": "^8.5",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5"
+  }
+}
