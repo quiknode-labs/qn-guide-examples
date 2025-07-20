@@ -16,8 +16,7 @@ import {
     appendTransactionMessageInstruction,
     signTransactionMessageWithSigners,
     getSignatureFromTransaction,
-    address,
-} from "@solana/web3.js";
+} from "@solana/kit";
 import { getTransferSolInstruction } from "@solana-program/system";
 import user2secret from "./keypair.json"; // Create with `solana-keygen new -o ./keypair.json --no-bip39-passphrase`
 

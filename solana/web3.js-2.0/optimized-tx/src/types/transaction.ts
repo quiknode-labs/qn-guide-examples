@@ -1,4 +1,4 @@
-import { BaseTransactionMessage, Commitment, Address, KeyPairSigner } from "@solana/web3.js";
+import { BaseTransactionMessage, Commitment, Address, KeyPairSigner } from "@solana/kit";
 import { PriorityFeeQuery } from "./priority-fees";
 
 export interface SmartTransactionBaseArgs {

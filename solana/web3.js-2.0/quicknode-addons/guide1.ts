@@ -9,7 +9,7 @@ import {
     createJsonRpcApi, // note: in older versions of this library, this function was called: createRpcApi
     RpcRequest,
     createSolanaRpcApi,
-} from "@solana/web3.js";
+} from "@solana/kit";
 import {
     EstimatePriorityFeesResponse,
     EstimatePriorityFeesParams
