@@ -12,10 +12,8 @@ A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainne
   - Encrypted storage of private keys
   - Export option with security confirmations
 
-- 💰 **Balance & History**:
-  - Display ETH and ERC-20 token balances
-  - Track balance history with tables
-  - View monthly, weekly, or daily history
+- 💰 **Balance**:
+  - Display ETH balance
 
 - 💱 **Trading Functionality**:
   - Buy tokens with ETH
@@ -55,7 +53,7 @@ flowchart TD
 
     subgraph "Command Groups"
         WalletCmds["Wallet Commands /start, /wallet, /import, /export"]
-        BalanceCmds["Balance Commands /balance, /history"]
+        BalanceCmds["Balance Commands /balance"]
         TradeCmds["Trading Commands /buy, /sell"]
         ConfigCmds["Configuration /settings"]
         DepositCmds["Deposit/Withdraw /deposit, /withdraw"]
@@ -65,7 +63,6 @@ flowchart TD
         LibWallet["token-wallet.ts Wallet Management"]
         LibDatabase["database.ts Secure Storage"]
         LibEncryption["encryption.ts Data Protection"]
-        LibHistory["history.ts Balance Tracking"]
         LibSwap["swap.ts Swap & Gas Management"]
     end
     
@@ -77,7 +74,6 @@ flowchart TD
     WalletCmds <--> LibDatabase
     
     BalanceCmds <--> LibWallet
-    BalanceCmds <--> LibHistory
     
     TradeCmds <--> LibWallet
     TradeCmds <--> LibSwap
@@ -91,7 +87,6 @@ flowchart TD
         
         subgraph "External Services"
             APISwap["Gas Estimation and OpenOcean Swap API"]
-            APIHistory["Base Blockbook"]
             MEVProtection["Merkle MEV Protection"]
         end
         
@@ -99,11 +94,11 @@ flowchart TD
     end
     
     LibSwap <-->|Quote & Execution| APISwap
-    LibHistory <-->|Balance & History| APIHistory
+    LibBalance <-->|Balance| APIBalance
     LibWallet <-->|Transactions through Merkle MEV Protection| MEVProtection
     
     APISwap --> QuickNode
-    APIHistory --> QuickNode
+    APIBalance --> QuickNode
     MEVProtection --> QuickNode
     
     QuickNode <-->|RPC Communication| Blockchain
@@ -217,8 +212,8 @@ After creating your bot with [@BotFather](https://t.me/BotFather), **open Telegr
 - `/help` - Show all available commands
 - `/wallet` - Display wallet information
 - `/balance` - Show token balances
-- `/history` - Display balance history
 - `/help` - Show all available commands
+
 
 ### Wallet Management
 

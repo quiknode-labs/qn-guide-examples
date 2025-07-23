@@ -55,7 +55,6 @@ export const startHandler: CommandHandler = {
             `- /deposit — Get your deposit address\n` +
             `- /withdraw — Withdraw ETH to another address\n` +
             `- /balance — Check your current token balances\n` +
-            `- /history — View your balance history\n` +
             `- /export — Export your private key\n\n` +
             `📈 *Trading Commands*\n` +
             `- /buy — Buy tokens with ETH\n` +
@@ -77,7 +76,6 @@ export const startHandler: CommandHandler = {
         // Welcome back message for existing users
         const keyboard = new InlineKeyboard()
           .text("💰 Balance", "check_balance")
-          .text("📊 History", "check_history")
           .row()
           .text("💱 Buy Token", "buy_token")
           .text("💱 Sell Token", "sell_token")
@@ -118,7 +116,6 @@ export const helpHandler: CommandHandler = {
           `- /deposit — Get your deposit address\n` +
           `- /withdraw — Withdraw ETH to another address\n` +
           `- /balance — Check your current token balances\n` +
-          `- /history — View your balance history\n` +
           `- /export — Export your private key\n\n` +
           `📈 *Trading Commands*\n` +
           `- /buy — Buy tokens with ETH\n` +

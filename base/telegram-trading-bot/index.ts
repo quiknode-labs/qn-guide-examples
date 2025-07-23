@@ -8,7 +8,7 @@ import { verifyEncryptionKey } from "./src/lib/encryption";
 import {startHandler, helpHandler} from "./src/commands/start-help";
 import {walletHandler, createHandler} from "./src/commands/wallet";
 import {importHandler, exportHandler, handlePrivateKeyInput, handleExportConfirmation } from "./src/commands/import-export";
-import {balanceHandler, historyHandler, handleTimeframeChange} from "./src/commands/balance-history";
+import {balanceHandler} from "./src/commands/balance";
 import buyHandler, {
   handleTokenSelection,
   handleCustomTokenInput,
@@ -64,7 +64,6 @@ bot.command(createHandler.command, createHandler.handler);
 bot.command(importHandler.command, importHandler.handler);
 bot.command(exportHandler.command, exportHandler.handler);
 bot.command(balanceHandler.command, balanceHandler.handler);
-bot.command(historyHandler.command, historyHandler.handler);
 bot.command(buyHandler.command, buyHandler.handler);
 bot.command(sellHandler.command, sellHandler.handler);
 bot.command(settingsHandler.command, settingsHandler.handler);
@@ -79,7 +78,6 @@ bot.api.setMyCommands([
   { command: importHandler.command, description: importHandler.description },
   { command: exportHandler.command, description: exportHandler.description },
   { command: balanceHandler.command, description: balanceHandler.description },
-  { command: historyHandler.command, description: historyHandler.description },
   { command: buyHandler.command, description: buyHandler.description },
   { command: sellHandler.command, description: sellHandler.description },
   {
@@ -149,8 +147,6 @@ bot.on("callback_query:data", async (ctx) => {
   // Main menu callbacks
   else if (callbackData === "check_balance") {
     await balanceHandler.handler(ctx);
-  } else if (callbackData === "check_history") {
-    await historyHandler.handler(ctx);
   } else if (callbackData === "buy_token") {
     await buyHandler.handler(ctx);
   } else if (callbackData === "sell_token") {
@@ -188,7 +184,6 @@ bot.on("callback_query:data", async (ctx) => {
       // Go back to main menu
       const keyboard = new InlineKeyboard()
         .text("💰 Balance", "check_balance")
-        .text("📊 History", "check_history")
         .row()
         .text("💱 Buy Token", "buy_token")
         .text("💱 Sell Token", "sell_token")
@@ -221,27 +216,6 @@ bot.on("callback_query:data", async (ctx) => {
       | "medium"
       | "high";
     await updateGasPriority(ctx, priority);
-  }
-
-
-  // // History view callbacks
-  // else if (
-  //   callbackData === "history_table"
-  // ) {
-  //   const viewType = callbackData.replace("history_", "") as "table";
-  //   await handleHistoryViewChange(ctx, viewType);
-  // }
-
-  // History timeframe callbacks
-  else if (
-    callbackData.startsWith("history_") &&
-    ["day", "week", "month"].includes(callbackData.replace("history_", ""))
-  ) {
-    const timeframe = callbackData.replace("history_", "") as
-      | "day"
-      | "week"
-      | "month";
-    await handleTimeframeChange(ctx, timeframe);
   }
 
   // Other callbacks
@@ -338,7 +312,6 @@ bot.command("help", async (ctx) => {
       "/export - Display private key (with confirmation)\n\n" +
       "*Balance Commands:*\n" +
       "/balance - Show current token balances\n" +
-      "/history - Display balance history\n\n" +
       "*Trading Commands:*\n" +
       "/buy - Buy tokens with ETH\n" +
       "/sell - Sell tokens for ETH\n" +
