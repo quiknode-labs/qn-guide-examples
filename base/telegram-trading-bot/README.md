@@ -13,7 +13,7 @@ A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainne
   - Export option with security confirmations
 
 - 💰 **Balance**:
-  - Display ETH balance
+  - Display ETH and token balances
 
 - 💱 **Trading Functionality**:
   - Buy tokens with ETH
@@ -40,7 +40,6 @@ A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainne
     - OpenOcean API for swaps
     - Sentio Gas Price API for gas estimates
     - MEV Protection & Gas Recovery for MEV-protected transactions
-    - Base Blockbook JSON-RPC for fetching historical data and transactions
 
 ## Architecture
 
