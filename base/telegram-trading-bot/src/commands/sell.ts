@@ -5,6 +5,8 @@ import {
   getWallet,
   executeTransaction,
   executeContractMethod,
+  getTokenBalance,
+  getMultipleTokenBalances,
 } from "../lib/token-wallet";
 import { getQuote, getSwap, getGasParams } from "../lib/swap";
 import { getUniqueTokensByUserId } from "../lib/database";
@@ -18,7 +20,6 @@ import {
 } from "../utils/keyboardHelper";
 import { CommandHandler } from "../types/commands";
 import { saveTransaction } from "../lib/database";
-import { getTokenBalance } from "../lib/history";
 import { NATIVE_TOKEN_ADDRESS, MAX_UINT256 } from "../utils/constants";
 import { Address, parseUnits, formatUnits } from "viem";
 import { InlineKeyboard } from "grammy";
@@ -47,28 +48,26 @@ const sellHandler: CommandHandler = {
         return;
       }
 
-      // Check if user has any tokens
-      const tokenData = await getTokenBalance(wallet.address);
-
       // Get list of tokens this user has interacted with
-      const interactedTokens = getUniqueTokensByUserId(userId).map((t) =>
-        t.toLowerCase()
+      const interactedTokens = getUniqueTokensByUserId(userId)
+        .map((t) => t.toLowerCase())
+        .filter((t) => t !== NATIVE_TOKEN_ADDRESS.toLowerCase());
+
+
+      console.log("Interacted tokens:", interactedTokens);
+
+      // Get token balances for interacted tokens
+      const tokenBalances = await getMultipleTokenBalances(
+        interactedTokens as Address[],
+        wallet.address as Address
       );
 
-      // Filter out tokens the user hasn’t interacted with
-      if (tokenData && Array.isArray(tokenData.tokens)) {
-        tokenData.tokens = tokenData.tokens.filter((token) => {
-          const contract = token.contract?.toLowerCase();
-          return (
-            contract &&
-            token.type === "ERC20" &&
-            BigInt(token.balance) > 0n &&
-            interactedTokens.includes(contract)
-          );
-        });
-      }
+      // Filter tokens with positive balances
+      const tokensWithBalance = tokenBalances.filter(
+        (token) => BigInt(token.balance) > 0n
+      );
 
-      if (!tokenData || !tokenData.tokens || tokenData.tokens.length === 0) {
+      if (tokensWithBalance.length === 0) {
         await ctx.reply(
           "❌ You don't have any tokens to sell.\n\n" +
             "Use /buy to buy some tokens first"
@@ -85,7 +84,7 @@ const sellHandler: CommandHandler = {
         toSymbol: "ETH",
         toDecimals: 18,
         walletAddress: wallet.address,
-        tokens: tokenData.tokens,
+        tokens: tokensWithBalance,
       };
 
       // Display token selection options
@@ -97,8 +96,8 @@ const sellHandler: CommandHandler = {
       const tokenKeyboard = new InlineKeyboard();
       let row = 0;
 
-      for (let i = 0; i < Math.min(tokenData.tokens.length, 6); i++) {
-        const token = tokenData.tokens[i];
+      for (let i = 0; i < Math.min(tokensWithBalance.length, 6); i++) {
+        const token = tokensWithBalance[i];
 
         if (BigInt(token.balance) > BigInt(0)) {
           if (i % 2 === 0 && i > 0) {
@@ -106,7 +105,7 @@ const sellHandler: CommandHandler = {
             row++;
           }
 
-          tokenKeyboard.text(`${token.symbol}`, `sell_token_${token.contract}`);
+          tokenKeyboard.text(`${token.symbol}`, `sell_token_${token.address}`);
         }
       }
 
@@ -157,7 +156,7 @@ export async function handleSellTokenSelection(
 
     // Find token balance
     const token = ctx.session.tempData!.tokens.find(
-      (t: any) => t.contract.toLowerCase() === tokenAddress.toLowerCase()
+      (t: any) => t.address.toLowerCase() === tokenAddress.toLowerCase()
     );
 
     if (!token || BigInt(token.balance) <= BigInt(0)) {
@@ -225,12 +224,13 @@ export async function handleSellCustomTokenInput(
     ctx.session.tempData!.fromSymbol = tokenInfo.symbol;
     ctx.session.tempData!.fromDecimals = tokenInfo.decimals;
 
-    // Check token balance
-    const token = ctx.session.tempData!.tokens.find(
-      (t: any) => t.address.toLowerCase() === tokenAddress.toLowerCase()
+    // Check token balance using getTokenBalance
+    const balance = await getTokenBalance(
+      tokenAddress as Address,
+      ctx.session.tempData!.walletAddress as Address
     );
 
-    if (!token || BigInt(token.balance) <= BigInt(0)) {
+    if (!balance || BigInt(balance) <= BigInt(0)) {
       await ctx.reply(
         `❌ You don't have any ${tokenInfo.symbol} balance to sell.\n\n` +
           `Please use /buy to buy this token first or /deposit to receive it.`
@@ -238,12 +238,12 @@ export async function handleSellCustomTokenInput(
       return;
     }
 
-    ctx.session.tempData!.tokenBalance = token.balance;
+    ctx.session.tempData!.tokenBalance = balance;
 
     // Move to amount input
     ctx.session.currentAction = "sell_amount";
 
-    const formattedBalance = formatUnits(token.balance, tokenInfo.decimals);
+    const formattedBalance = formatUnits(BigInt(balance), tokenInfo.decimals);
 
     await ctx.reply(
       `💱 *Sell ${tokenInfo.symbol}*\n\n` +
