@@ -1,8 +1,11 @@
 import { BotContext } from "../context";
-import { getWallet, getEthBalance } from "../lib/token-wallet";
+import { getWallet, getEthBalance, getMultipleTokenBalances } from "../lib/token-wallet";
 import { formatBalanceMessage } from "../utils/formatters";
 import { CommandHandler } from "../types/commands";
 import { InlineKeyboard } from "grammy";
+import { getUniqueTokensByUserId } from "../lib/database";
+import { Address } from "viem";
+import { TokenInfo } from "../types/config";
 
 // Handler for balance command
 export const balanceHandler: CommandHandler = {
@@ -33,6 +36,22 @@ export const balanceHandler: CommandHandler = {
       // Get ETH balance
       const ethBalance = await getEthBalance(wallet.address);
 
+      // Get list of tokens this user has interacted with (already filtered and unique)
+      const interactedTokens = getUniqueTokensByUserId(userId);
+
+      // Get token balances for interacted tokens
+      let tokenBalances: TokenInfo[] = [];
+      if (interactedTokens.length > 0) {
+        const allTokenBalances = await getMultipleTokenBalances(
+          interactedTokens as Address[],
+          wallet.address as Address
+        );
+        // Filter tokens with positive balances
+        tokenBalances = allTokenBalances.filter(
+          (token) => BigInt(token.balance) > 0n
+        );
+      }
+
       // Create actions keyboard
       const keyboard = new InlineKeyboard()
         .text("📥 Deposit", "deposit")
@@ -43,7 +62,7 @@ export const balanceHandler: CommandHandler = {
         .text("📤 Withdraw", "withdraw");
 
       // Format and send balance message
-      const message = formatBalanceMessage(ethBalance);
+      const message = formatBalanceMessage(ethBalance, tokenBalances);
 
       await ctx.reply(message, {
         parse_mode: "Markdown",

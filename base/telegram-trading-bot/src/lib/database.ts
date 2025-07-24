@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 import { WalletData } from "../types/wallet";
 import { UserSettings } from "../types/config";
-import { DB_PATH, DB_TABLES } from "../utils/constants";
+import { DB_PATH, DB_TABLES, NATIVE_TOKEN_ADDRESS } from "../utils/constants";
 
 const db = new Database(DB_PATH);
 
@@ -236,14 +236,17 @@ export function getTransactionsByUserId(
 
 export function getUniqueTokensByUserId(userId: string): string[] {
   const stmt = db.prepare(`
-    SELECT DISTINCT fromToken AS token FROM ${DB_TABLES.TRANSACTIONS}
-    WHERE userId = ?
-    UNION
-    SELECT DISTINCT toToken AS token FROM ${DB_TABLES.TRANSACTIONS}
-    WHERE userId = ?
+    SELECT DISTINCT LOWER(token) as token FROM (
+      SELECT fromToken AS token FROM ${DB_TABLES.TRANSACTIONS}
+      WHERE userId = ? AND LOWER(fromToken) != LOWER(?)
+      UNION
+      SELECT toToken AS token FROM ${DB_TABLES.TRANSACTIONS}
+      WHERE userId = ? AND LOWER(toToken) != LOWER(?)
+    )
+    ORDER BY token
   `);
 
-  const rows = stmt.all(userId, userId) as { token: string }[];
+  const rows = stmt.all(userId, NATIVE_TOKEN_ADDRESS, userId, NATIVE_TOKEN_ADDRESS) as { token: string }[];
 
   return rows.map((row) => row.token);
 }

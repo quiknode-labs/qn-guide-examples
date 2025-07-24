@@ -48,10 +48,8 @@ const sellHandler: CommandHandler = {
         return;
       }
 
-      // Get list of tokens this user has interacted with
-      const interactedTokens = getUniqueTokensByUserId(userId)
-        .map((t) => t.toLowerCase())
-        .filter((t) => t !== NATIVE_TOKEN_ADDRESS.toLowerCase());
+      // Get list of tokens this user has interacted with (already filtered and unique)
+      const interactedTokens = getUniqueTokensByUserId(userId);
 
 
       console.log("Interacted tokens:", interactedTokens);
