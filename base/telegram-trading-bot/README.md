@@ -45,62 +45,46 @@ A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainne
 
 ```mermaid
 flowchart TD
-    subgraph "User Interaction"
+ subgraph subGraph0["User Interaction"]
         User["Telegram User"]
         Bot["Telegram Bot"]
-    end
-
-    subgraph "Command Groups"
+  end
+ subgraph subGraph1["Command Groups"]
         WalletCmds["Wallet Commands /start, /wallet, /import, /export"]
         BalanceCmds["Balance Commands /balance"]
         TradeCmds["Trading Commands /buy, /sell"]
         ConfigCmds["Configuration /settings"]
         DepositCmds["Deposit/Withdraw /deposit, /withdraw"]
-    end
-    
-    subgraph "Core Libraries"
+  end
+ subgraph subGraph2["Core Libraries"]
         LibWallet["token-wallet.ts Wallet Management"]
+        LibBalance["balance.ts Balance Tracking"]
         LibDatabase["database.ts Secure Storage"]
         LibEncryption["encryption.ts Data Protection"]
         LibSwap["swap.ts Swap & Gas Management"]
-    end
-    
-    User <-->|Commands & Responses| Bot
-    
-    Bot --> WalletCmds & BalanceCmds & TradeCmds & ConfigCmds & DepositCmds
-    
-    WalletCmds <--> LibWallet
-    WalletCmds <--> LibDatabase
-    
-    BalanceCmds <--> LibWallet
-    
-    TradeCmds <--> LibWallet
-    TradeCmds <--> LibSwap
-    
-    DepositCmds <--> LibWallet
-    
-    ConfigCmds <--> LibDatabase
-    
-    subgraph "QuickNode Infrastructure"
+  end
+ subgraph subGraph3["External Services"]
+        APISwap["Gas Estimation and OpenOcean Swap API"]
+        MEVProtection["Merkle MEV Protection"]
+  end
+ subgraph subGraph4["QuickNode Infrastructure"]
+        subGraph3
         QuickNode["QuickNode RPC Services"]
-        
-        subgraph "External Services"
-            APISwap["Gas Estimation and OpenOcean Swap API"]
-            MEVProtection["Merkle MEV Protection"]
-        end
-        
         Blockchain["Base Blockchain"]
-    end
-    
-    LibSwap <-->|Quote & Execution| APISwap
-    LibBalance <-->|Balance| APIBalance
-    LibWallet <-->|Transactions through Merkle MEV Protection| MEVProtection
-    
+  end
+    User <-- Commands & Responses --> Bot
+    Bot --> WalletCmds & BalanceCmds & TradeCmds & ConfigCmds & DepositCmds
+    WalletCmds <--> LibWallet & LibDatabase
+    BalanceCmds <--> LibWallet & LibBalance
+    TradeCmds <--> LibWallet & LibSwap
+    DepositCmds <--> LibWallet
+    ConfigCmds <--> LibDatabase
+    LibSwap <-- Quote & Execution --> APISwap
+    LibBalance <-- Balance --> QuickNode
+    LibWallet <-- Transactions through Merkle MEV Protection --> MEVProtection
     APISwap --> QuickNode
-    APIBalance --> QuickNode
     MEVProtection --> QuickNode
-    
-    QuickNode <-->|RPC Communication| Blockchain
+    QuickNode <-- RPC Communication --> Blockchain
 ```
 
 ## Database
