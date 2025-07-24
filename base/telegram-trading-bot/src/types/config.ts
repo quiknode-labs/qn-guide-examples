@@ -71,47 +71,6 @@ export interface TokenInfo {
   usd?: number;
 }
 
-export interface BalanceResponse {
-  address: Address;
-  balance: string;
-  tokens: {
-    type: string;
-    name: string;
-    symbol: string;
-    decimals: number;
-    balance: string;
-    address: Address;
-  }[];
-}
-
-export interface BalanceHistoryEntry {
-  time: number;
-  txs: number;
-  received: string; // in wei
-  sent: string; // in wei
-  sentToSelf: string; // in wei
-  rates: {
-    usd: number;
-  };
-}
-
-
-export interface TokenBalanceResult {
-  address: string;
-  balance: string; // Native token balance
-  unconfirmedBalance?: string;
-  tokens?: Array<{
-    type: string; // Token type (e.g., "ERC20")
-    name: string; // Token name
-    symbol: string; // Token symbol
-    decimals: number; // Token decimals
-    balance: string; // Token balance as string (needs conversion)
-    contract: Address; // Token contract address
-  }>;
-  nonce?: string;
-  nonTokenTxs?: number; // Number of non-token transactions
-}
-
 export interface OpenOceanErrorResponse {
   error: string;
   code?: number;

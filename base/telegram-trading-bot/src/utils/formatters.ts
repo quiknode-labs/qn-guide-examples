@@ -60,24 +60,20 @@ export function formatAddress(address: string): string {
  */
 export function formatBalanceMessage(
   ethBalance: string,
-  tokens: TokenInfo[]
+  tokenBalances: TokenInfo[] = []
 ): string {
   let message = `💰 *Your Balances*\n\n`;
-  message += `*ETH*: ${formatEthBalance(ethBalance)} ETH\n\n`;
+  message += `*ETH*: ${formatEthBalance(ethBalance)} ETH\n`;
 
-  if (tokens.length > 0) {
-    message += `*Tokens:*\n`;
-    tokens.forEach((token) => {
-      const formattedBalance = formatTokenBalance(
-        token.balance,
-        token.decimals
-      );
-      message += `${token.symbol}: ${formattedBalance}\n`;
+  if (tokenBalances.length > 0) {
+    message += `\n*ERC-20 Tokens:*\n`;
+    tokenBalances.forEach((token) => {
+      const formattedBalance = formatTokenBalance(token.balance, token.decimals);
+      message += `*${token.symbol}*: ${formattedBalance} ${token.symbol}\n`;
     });
-  } else {
-    message += `No other token balances found.`;
   }
 
+  message += `\n`;
   return message;
 }
 
