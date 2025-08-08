@@ -12,102 +12,19 @@ Token Sweeper is a DeFi application that enables users to efficiently **sweep** 
 - **🌐 Multi-Chain Support**: Full support for Base (8453) and Optimism (10) with native DEX integration (Aerodrome and Velodrome)
 - **📱 Social Achievement Cards**: Generate and share beautiful post-swap achievement cards
 
-## 📊 Application Workflow
+<img src="public/review-your-swap.png" alt="Review Your Swap" width="50%" />
 
-```mermaid
-flowchart TD
-    A[Connect Wallet] --> B[Covalent: Fetch ERC-20 Tokens]
-    B --> C[DEX API: Filter by listed_only]
-    C --> D[Display Tokens with USD Values]
-    D --> E[User Selects Output Token]
-    E --> F[DEX API: Calculate Quotes]
-    F --> G[Display Total Outcome]
-    G --> H[DEX API: Build Swap Data]
-    H --> I{Smart Account Support?}
-    
-    I -->|Yes| J[Single Batch Transaction]
-    I -->|No| K[Sequential Transactions]
-    
-    J --> L[Transaction Complete]
-    K --> L
+## 📊 Technical Architecture
 
-    L --> M[Generate Social Card]
-    
-    style B fill:#059669
-    style C fill:#7c3aed
-    style F fill:#7c3aed
-    style H fill:#7c3aed
-    style J fill:#dc2626
-```
+### Application Workflow Diagram
+<img src="public/application-workflow-diagram.png" alt="Application Workflow" width="30%" />
 
-## 🏗️ Technical Architecture
+### Application Sequence Diagram
 
-### Sequence Diagram
+<img src="public/application-sequence-diagram.png" alt="Application Sequence Diagram" width="30%" />
 
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant F as Frontend
-    participant C as Covalent API
-    participant D as DEX API
-    participant W as Wallet
-    
-    U->>F: Connect Wallet
-    F->>C: Get ERC-20 balances
-    C->>F: Token data + USD values
-    
-    F->>D: Filter tokens (listed_only)
-    D->>F: Available tokens list
-    F->>U: Display selectable tokens
-    
-    U->>F: Select tokens + output
-    F->>D: Get swap quotes
-    D->>F: Quote responses
-    F->>U: Show total outcome
-    
-    U->>F: Confirm swap
-    F->>D: Build swap data
-    D->>F: Transaction calldata
-    F->>W: Send transaction(s)
-```
 
-### 🔄 Data Flow Architecture
-
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant W as Wallet
-    participant C as Component
-    participant H as Hooks
-    participant A as APIs
-    participant B as Blockchain
-    
-    U->>W: Connect Wallet
-    W->>C: Address & Chain ID
-    C->>H: useTokenBalances(address, chainId)
-    H->>A: Covalent GoldRush API
-    A->>H: Token Balances Response
-    H->>C: Formatted Token Data
-    C->>U: Display Token Portfolio
-    
-    U->>C: Select Tokens + Outcome Token
-    C->>H: useSwapQuotes(tokens, outcome)
-    H->>A: Aerodrome/Velodrome API
-    A->>H: Swap Quotes Response
-    H->>C: Quote Data
-    C->>U: Display Swap Configuration
-    
-    U->>C: Execute Swap
-    C->>H: useSwapBuilder(quotes)
-    H->>C: Transaction Data
-    C->>W: Send Batch Transaction
-    W->>B: Execute on Blockchain
-    B->>W: Transaction Hash
-    W->>C: Transaction Result
-    C->>U: Success/Failure Status
-```
-
-## 📁 Project Structure
+### 📁 Project Structure
 
 ```
 token-sweeper/
@@ -273,4 +190,3 @@ http://localhost:3000
 |---------|----------|-----------------|---------|
 | Base Mainnet | 8453 | Aerodrome | ✅ Active |
 | Optimism Mainnet | 10 | Velodrome | ✅ Active |
-
