@@ -1,0 +1,41 @@
+# Node.js dependencies
+node_modules/
+.pnpm/
+
+# Build output
+.next/
+out/
+
+# Vercel
+.vercel/
+
+# Local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Log files
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Optional: Editor settings
+.vscode/
+.idea/
+
+# Optional: Testing outputs
+coverage/
+
+# Optional: MacOS folder attributes
+.AppleDouble
+.LSOverride
+
+# Optional: Static analysis cache
+.eslintcache
+.next/cache
