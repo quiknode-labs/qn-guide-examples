@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { GoldRushClient } from "@covalenthq/client-sdk"
+import { GoldRushClient, ChainName } from "@covalenthq/client-sdk"
 import { isAddress } from "viem"
 import { getServerConfig } from "@/lib/config"
 
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 
     const client = new GoldRushClient(covalentApiKey)
     const response = await client.BalanceService.getTokenBalancesForWalletAddress(
-      chainName,
+      chainName as ChainName,
       address
     )
 

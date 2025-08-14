@@ -55,7 +55,7 @@ export default function TokenSweeperApp() {
     if (status === 'connected' && address) {
       refetch()
     }
-  }, [status, address, chainId, refetch]) // Include refetch for proper dependency tracking
+  }, [status, address, chainId])
 
   // Handle account connection/disconnection events
   useAccountEffect({

@@ -5,7 +5,7 @@ import type { Address, Hash, Hex } from "viem"
  */
 export const APP_CONFIG = {
   SLIPPAGE_TOLERANCE: 0.01, // 1% slippage
-  CACHE_TTL: 30 * 1000, // 30 seconds
+  CACHE_TTL: 2 * 60 * 1000, // 2 minutes - standardized across all hooks
   MIN_TOKEN_VALUE_USD: 0.01, // Minimum $0.01 value
 } as const
 

@@ -8,8 +8,21 @@ import type { Token, ApiStatus, SupportedChainId } from "@/types"
 import { APP_CONFIG } from "@/types"
 import { logger } from "@/lib/logger"
 
-// Cache to prevent duplicate API calls
-const cache = new Map<string, { data: Token[], timestamp: number }>()
+// Cache to prevent duplicate API calls with versioning
+interface TokenCacheEntry {
+  data: Token[]
+  timestamp: number
+  version: number
+}
+
+const cache = new Map<string, TokenCacheEntry>()
+let tokenCacheVersion = 1
+
+// Utility function to invalidate token balance cache
+export const invalidateTokenBalanceCache = () => {
+  tokenCacheVersion++
+  console.log(`🧹 Invalidated token balance cache, new version: ${tokenCacheVersion}`)
+}
 
 
 
@@ -19,7 +32,7 @@ export function useTokenBalances(address: string | undefined, chainId: Supported
   const [error, setError] = useState<string | null>(null)
   const [apiStatus, setApiStatus] = useState<ApiStatus>('untested')
   
-  const { isTokenVerified, loading: verifiedLoading, apiStatus: verifiedApiStatus } = useVerifiedTokens(chainId)
+  const { isTokenVerified, loading: verifiedLoading, apiStatus: verifiedApiStatus, isReady: verificationReady } = useVerifiedTokens(chainId)
   const prevAddressRef = useRef<string | undefined>(address)
 
   const cacheKey = useMemo(() => `${address}-${chainId}`, [address, chainId])
@@ -37,12 +50,16 @@ export function useTokenBalances(address: string | undefined, chainId: Supported
   const fetchTokens = useCallback(async () => {
     if (!address) return
     
-    // Wait for verified tokens to load first
-    if (verifiedLoading) return
+    // Wait for verified tokens to be ready before filtering
+    if (!verificationReady) {
+      console.log('🔄 Waiting for token verification to be ready...')
+      return
+    }
 
-    // Check cache first
+    // Check cache first (with version check)
     const cached = cache.get(cacheKey)
-    if (cached && Date.now() - cached.timestamp < APP_CONFIG.CACHE_TTL) {
+    if (cached && Date.now() - cached.timestamp < APP_CONFIG.CACHE_TTL && cached.version === tokenCacheVersion) {
+      console.log(`📋 Loading tokens from cache for ${address}:`, cached.data.length, 'tokens')
       setTokens(cached.data)
       setApiStatus('working')
       return
@@ -55,7 +72,7 @@ export function useTokenBalances(address: string | undefined, chainId: Supported
       const chainName = getCovalentChainName(chainId)
       
       const response = await fetch(`/api/covalent?chain=${chainName}&address=${address}`)
-      
+            
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
         throw new Error(errorData.error || `API request failed: ${response.status}`)
@@ -74,9 +91,18 @@ export function useTokenBalances(address: string | undefined, chainId: Supported
             const isNotNative = !tokenObj.native_token
             const hasValue = typeof tokenObj.quote === 'number' && tokenObj.quote > APP_CONFIG.MIN_TOKEN_VALUE_USD
             const hasBalance = tokenObj.balance && tokenObj.balance !== "0"
+            const isNotSpam = !tokenObj.is_spam
             const isVerified = typeof tokenObj.contract_address === 'string' && isTokenVerified(tokenObj.contract_address)
             
-            return isErc20 && isNotNative && hasValue && hasBalance && isVerified
+            // Log filtering decisions for debugging
+            const tokenAddress = String(tokenObj.contract_address)
+            if (isErc20 && isNotNative && hasValue && hasBalance && isNotSpam && !isVerified) {
+
+              console.log(`🚫 Filtering out token: ${tokenObj.contract_ticker_symbol} (${tokenAddress})`)
+              console.log(`Checks passed: isErc20=${isErc20}, isNotNative=${isNotNative}, hasValue=${hasValue}, hasBalance=${hasBalance}, isNotSpam=${isNotSpam}, isVerified=${isVerified}`)
+            }
+            
+            return isErc20 && isNotNative && hasValue && hasBalance && isNotSpam && isVerified
           })
             .map((token: unknown): Token => {
               const tokenObj = token as Record<string, unknown>
@@ -100,17 +126,23 @@ export function useTokenBalances(address: string | undefined, chainId: Supported
             })
             .sort((a: Token, b: Token) => b.quote - a.quote) // Sort by USD value descending
 
+        console.log(`✅ Filtered ${data.items.length} raw tokens down to ${filteredTokens.length} verified tokens`)
+        
         if (filteredTokens.length === 0) {
+          console.log(`⚠️ No valid ERC-20 tokens found for ${address} on chain ${chainId}`)
           setError("No valid ERC-20 tokens found in this wallet")
         }
         
         setTokens(filteredTokens)
         
-        // Cache the result
+        // Cache the result with version
         cache.set(cacheKey, {
           data: filteredTokens,
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          version: tokenCacheVersion
         })
+        
+        console.log(`💾 Cached ${filteredTokens.length} tokens for ${address}:`, filteredTokens.map((t: Token) => t.contract_ticker_symbol))
       } else {
         throw new Error("No token data received from API - response.data is null")
       }
@@ -130,7 +162,7 @@ export function useTokenBalances(address: string | undefined, chainId: Supported
     } finally {
       setLoading(false)
     }
-  }, [address, chainId, isTokenVerified, verifiedLoading, verifiedApiStatus, cacheKey])
+  }, [address, chainId, isTokenVerified, verificationReady, cacheKey])
 
   useEffect(() => {
     fetchTokens()
@@ -143,5 +175,6 @@ export function useTokenBalances(address: string | undefined, chainId: Supported
     apiStatus,
     verificationStatus: verifiedApiStatus,
     refetch: fetchTokens,
+    verificationReady, // Export so components know when filtering is ready
   }
 }
