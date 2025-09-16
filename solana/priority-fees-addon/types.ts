@@ -44,4 +44,10 @@ interface EstimatePriorityFeesParams {
     endpoint: string;
 }
 
-export type { RequestPayload, FeeEstimates, ResponseData, EstimatePriorityFeesParams };
+interface SolanaKitEstimatePriorityFeesParams {
+    last_n_blocks?: number;
+    account?: string;
+    api_version?: number;
+  }
+
+export type { RequestPayload, FeeEstimates, ResponseData, EstimatePriorityFeesParams, SolanaKitEstimatePriorityFeesParams };
