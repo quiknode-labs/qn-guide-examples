@@ -52,19 +52,6 @@ interface RequestPayload {
     recommended: number;
   }
   
-  interface SolanaKitEstimatePriorityFeesResponse {
-    id: string;
-    jsonrpc: string;
-    result: {
-      context: {
-          slot: number;
-      };
-      per_compute_unit: FeeEstimates;
-      per_transaction: FeeEstimates;
-      recommended: number;
-    };
-  }
-  
   interface SolanaKitEstimatePriorityFeesParams {
     last_n_blocks?: number;
     account?: string;
@@ -77,7 +64,6 @@ interface RequestPayload {
     ResponseData,
     EstimatePriorityFeesParams,
     EstimatePriorityFeesResponse, 
-    SolanaKitEstimatePriorityFeesParams,
-    SolanaKitEstimatePriorityFeesResponse
+    SolanaKitEstimatePriorityFeesParams
   };
   
