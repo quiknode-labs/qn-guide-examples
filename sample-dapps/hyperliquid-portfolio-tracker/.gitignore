@@ -1,0 +1,49 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+package-lock.json
+
+# Build outputs
+dist
+dist-ssr
+build
+
+# Environment variables
+.env
+*.local
+
+# Cache and temp files
+.cache
+.temp
+.tmp
+.eslintcache
+*.tsbuildinfo
+
+# Lock files (project specific)
+.indexer.lock
+
+# Metadata
+_metadata.json
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.claude
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+Thumbs.db
