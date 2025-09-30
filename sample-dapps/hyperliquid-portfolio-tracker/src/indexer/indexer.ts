@@ -162,14 +162,14 @@ class MinimalIndexer {
     }
   }
 
-  private async storeClearinghouseState(data: ClearinghouseStateResponse): Promise<string | null> {
+  private async storeClearinghouseState(data: ClearinghouseStateResponse, timestamp: number): Promise<string | null> {
     try {
       const record = {
         wallet_address: CURRENT_WALLET_ADDRESS,
         account_value: this.parseNumericValue(data.marginSummary.accountValue),
         total_margin_used: this.parseNumericValue(data.marginSummary.totalMarginUsed),
         withdrawable: this.parseNumericValue(data.withdrawable),
-        timestamp: data.time
+        timestamp: timestamp
       };
 
       const { data: insertedData, error } = await supabase
@@ -190,15 +190,40 @@ class MinimalIndexer {
     }
   }
 
+  private deduplicatePositions(positions: ClearinghouseStateResponse['assetPositions']): ClearinghouseStateResponse['assetPositions'] {
+    // Filter out zero-size positions and deduplicate by (coin, sign(size))
+    // Keep the last occurrence for each unique (coin, direction) pair
+    const positionMap = new Map<string, ClearinghouseStateResponse['assetPositions'][0]>();
+
+    for (const pos of positions) {
+      const size = this.parseNumericValue(pos.position.szi);
+
+      // Skip zero-size positions
+      if (size === 0) continue;
+
+      // Create key based on coin and direction (long/short)
+      const direction = size > 0 ? 'long' : 'short';
+      const key = `${pos.position.coin}-${direction}`;
+
+      // Keep the last occurrence (will overwrite previous)
+      positionMap.set(key, pos);
+    }
+
+    return Array.from(positionMap.values());
+  }
+
   private async storeAssetPositions(
     positions: ClearinghouseStateResponse['assetPositions'],
     timestamp: number
   ): Promise<void> {
     try {
+      // Deduplicate and filter positions before storing
+      const dedupedPositions = this.deduplicatePositions(positions);
+
       // Use a transaction to make delete-insert atomic, preventing UI flicker
       const { error: transactionError } = await supabase.rpc('replace_asset_positions', {
         p_wallet_address: CURRENT_WALLET_ADDRESS,
-        p_positions: positions.map(pos => ({
+        p_positions: dedupedPositions.map(pos => ({
           wallet_address: CURRENT_WALLET_ADDRESS,
           coin: pos.position.coin,
           size: this.parseNumericValue(pos.position.szi),
@@ -216,17 +241,19 @@ class MinimalIndexer {
       if (transactionError) {
         console.error('Error in atomic position replacement:', transactionError);
         // Fallback to original method if RPC function doesn't exist yet
-        await this.storeAssetPositionsFallback(positions);
+        await this.storeAssetPositionsFallback(dedupedPositions, timestamp);
       }
     } catch (error) {
       console.error('Error storing asset positions:', error);
       // Fallback to original method
-      await this.storeAssetPositionsFallback(positions);
+      const dedupedPositions = this.deduplicatePositions(positions);
+      await this.storeAssetPositionsFallback(dedupedPositions, timestamp);
     }
   }
 
   private async storeAssetPositionsFallback(
-    positions: ClearinghouseStateResponse['assetPositions']
+    positions: ClearinghouseStateResponse['assetPositions'],
+    timestamp: number
   ): Promise<void> {
     try {
       // First, delete all existing positions for this wallet to ensure fresh data
@@ -256,7 +283,8 @@ class MinimalIndexer {
         position_value: this.parseNumericValue(pos.position.positionValue),
         unrealized_pnl: this.parseNumericValue(pos.position.unrealizedPnl),
         liquidation_price: pos.position.liquidationPx ? this.parseNumericValue(pos.position.liquidationPx) : undefined,
-        margin_used: this.parseNumericValue(pos.position.marginUsed)
+        margin_used: this.parseNumericValue(pos.position.marginUsed),
+        timestamp
       }));
 
       const { error: insertError } = await supabase
@@ -507,7 +535,7 @@ class MinimalIndexer {
 
       // Fetch clearinghouse state
       const data = await hyperliquidAPI.getClearinghouseState(CURRENT_WALLET_ADDRESS);
-      const stateId = await this.storeClearinghouseState(data);
+      const stateId = await this.storeClearinghouseState(data, timestamp);
 
       // Fetch and store user rate limit
       try {
@@ -592,13 +620,14 @@ async function initializeIndexer() {
 // Initialize with clean state
 initializeIndexer();
 
-// Run indexing every 500ms for high-frequency data collection (faster than frontend)
+// Indexing interval - adjust to optimize QuickNode API costs
+// Examples: 500ms (0.5 seconds), 1000ms (1 second), 2000ms (2 seconds)
 const startIndexer = () => {
   setInterval(async () => {
     // Check for wallet switch signals before each indexing cycle
     await indexer.checkForWalletSwitch();
     await indexer.indexData();
-  }, 500); // 500ms = twice as fast as frontend queries
+  }, 500);
 };
 
 // Start the indexer

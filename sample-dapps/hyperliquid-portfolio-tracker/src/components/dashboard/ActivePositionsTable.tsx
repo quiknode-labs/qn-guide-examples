@@ -1,7 +1,8 @@
 import React from 'react';
-import { Activity } from 'lucide-react';
+import { Activity, Info } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { AssetPosition } from '../../shared/types';
 
 interface ActivePositionsTableProps {
@@ -28,6 +29,7 @@ export const ActivePositionsTable: React.FC<ActivePositionsTableProps> = ({
       <CardContent className="pt-0">
         {positions.length > 0 ? (
           <div className="overflow-x-auto">
+            <TooltipProvider delayDuration={300}>
             <table className="w-full">
               <thead>
                 <tr className="border-b border-slate-700">
@@ -37,9 +39,33 @@ export const ActivePositionsTable: React.FC<ActivePositionsTableProps> = ({
                   <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">Entry Price</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">Position Value</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">PnL</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">Liquidation</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">
+                    <div className="flex items-center gap-1">
+                      Liquidation
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="w-3.5 h-3.5 cursor-help text-slate-400 hover:text-slate-300" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs bg-slate-800 border-slate-700">
+                          <p>Price at which the position will be automatically closed to prevent further losses</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">Leverage</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">Margin</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">
+                    <div className="flex items-center gap-1">
+                      Margin
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="w-3.5 h-3.5 cursor-help text-slate-400 hover:text-slate-300" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs bg-slate-800 border-slate-700">
+                          <p>Cross margin uses all available balance as collateral. Isolated margin only uses margin allocated to this position</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700/50">
@@ -97,6 +123,7 @@ export const ActivePositionsTable: React.FC<ActivePositionsTableProps> = ({
                 ))}
               </tbody>
             </table>
+            </TooltipProvider>
           </div>
         ) : (
           <div className="h-32 flex items-center justify-center">

@@ -257,7 +257,8 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     // Only start auto-refresh if we have a wallet, have started, and have initial data
     if (currentWallet && hasStarted && hasInitialData) {
-      // Auto-refresh every 1000ms - fetch all data
+      // Auto-refresh interval - adjust to optimize costs
+      // Examples: 1000ms (1 second), 2000ms (2 seconds), 5000ms (5 seconds)
       const interval = setInterval(async () => {
         await fetchData(currentWallet);
       }, 1000);

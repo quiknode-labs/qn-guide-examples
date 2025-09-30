@@ -12,7 +12,7 @@ CREATE TABLE clearinghouse_states (
   withdrawable DECIMAL(20, 5),
 
   timestamp BIGINT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() 
 );
 
 -- Create asset_positions table for individual position data
@@ -135,8 +135,9 @@ CREATE INDEX idx_wallet_switch_requests_status ON wallet_switch_requests(status)
 CREATE INDEX idx_wallet_switch_requests_created_at ON wallet_switch_requests(created_at);
 
 -- Add unique constraints to prevent duplicate entries
-ALTER TABLE asset_positions ADD CONSTRAINT unique_position_per_wallet
-UNIQUE (wallet_address, coin);
+-- Allows one long position and one short position per coin per wallet
+CREATE UNIQUE INDEX unique_position_per_wallet
+ON asset_positions (wallet_address, coin, SIGN(size));
 
 ALTER TABLE user_vault_equities ADD CONSTRAINT unique_vault_per_user
 UNIQUE (user_address, vault_address);
@@ -162,6 +163,27 @@ begin
 
   -- Insert new positions if any exist
   if jsonb_array_length(p_positions) > 0 then
+    -- Deduplicate and filter positions
+    with numbered_positions as (
+      select
+        pos->>'wallet_address' as wallet_address,
+        pos->>'coin' as coin,
+        (pos->>'size')::numeric as size,
+        pos->>'leverage_type' as leverage_type,
+        (pos->>'leverage_value')::integer as leverage_value,
+        (pos->>'entry_price')::numeric as entry_price,
+        (pos->>'position_value')::numeric as position_value,
+        (pos->>'unrealized_pnl')::numeric as unrealized_pnl,
+        (pos->>'liquidation_price')::numeric as liquidation_price,
+        (pos->>'margin_used')::numeric as margin_used,
+        (pos->>'timestamp')::bigint as timestamp,
+        row_number() over (
+          partition by pos->>'coin', sign((pos->>'size')::numeric)
+          order by ordinality desc
+        ) as rn
+      from jsonb_array_elements(p_positions) with ordinality as t(pos, ordinality)
+      where (pos->>'size')::numeric != 0  -- Filter out zero-size positions
+    )
     insert into asset_positions (
       wallet_address,
       coin,
@@ -176,18 +198,19 @@ begin
       timestamp
     )
     select
-      pos->>'wallet_address',
-      pos->>'coin',
-      (pos->>'size')::numeric,
-      pos->>'leverage_type',
-      (pos->>'leverage_value')::integer,
-      (pos->>'entry_price')::numeric,
-      (pos->>'position_value')::numeric,
-      (pos->>'unrealized_pnl')::numeric,
-      (pos->>'liquidation_price')::numeric,
-      (pos->>'margin_used')::numeric,
-      (pos->>'timestamp')::bigint
-    from jsonb_array_elements(p_positions) as pos;
+      wallet_address,
+      coin,
+      size,
+      leverage_type,
+      leverage_value,
+      entry_price,
+      position_value,
+      unrealized_pnl,
+      liquidation_price,
+      margin_used,
+      timestamp
+    from numbered_positions
+    where rn = 1;  -- Keep only the last occurrence per (coin, sign)
   end if;
 
   -- Transaction commits automatically on function success
