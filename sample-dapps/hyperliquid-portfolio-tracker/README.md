@@ -159,7 +159,7 @@ Make sure your endpoint URL ends with `/info` instead of `/evm`. Check your Quic
 
 For detailed technical explanations, see the full guide:
 
-- [Build a Real-Time Hyperliquid Portfolio Tracker](https://www.quicknode.com/guides/hyperliquid/build-real-time-hyperliquid-portfolio-tracker) 
+- [Build a Real-Time Hyperliquid Portfolio Tracker](https://www.quicknode.com/guides/other-chains/hyperliquid/build-portfolio-tracker-using-hypercore-data) 
 - [QuickNode Hyperliquid Docs](https://www.quicknode.com/docs/hyperliquid) 
 - [Hyperliquid Documentation](https://hyperliquid.gitbook.io/hyperliquid-docs)
 
