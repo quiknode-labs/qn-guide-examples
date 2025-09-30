@@ -6,8 +6,6 @@ A real-time portfolio tracker for Hyperliquid perpetual traders. Monitor positio
 
 This demo uses React + Vite with TypeScript, Tailwind CSS, and Supabase PostgreSQL for real-time data updates.
 
-**Written guide**: [Build a Real-Time Hyperliquid Portfolio Tracker](https://www.quicknode.com/guides/hyperliquid/build-portfolio-tracker-using-hypercore-data)
-
 ## Features
 
 - **Live Position Tracking** - Real-time updates on perpetual positions with profit & loss
