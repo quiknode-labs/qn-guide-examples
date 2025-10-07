@@ -4,7 +4,7 @@ global:
 scrape_configs:
   - job_name: "quicknode_prometheus_exporter"
     metrics_path: "v0/prometheus/metrics"
-    scheme: "http"
+    scheme: "https"
     authorization:
       type: "bearer"
       credentials: "<API_KEY>"
