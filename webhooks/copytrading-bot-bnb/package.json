@@ -1,0 +1,24 @@
+{
+  "name": "copytrading-bnb",
+  "version": "1.0.0",
+  "description": "A copytrading bot for memecoins launched on four.meme platform on BNB Chain using QuickNode Webhooks.",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "viem": "^2.38.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.9.1",
+    "tsx": "^4.20.6"
+  }
+}
