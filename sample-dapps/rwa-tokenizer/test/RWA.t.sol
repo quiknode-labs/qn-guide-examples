@@ -82,10 +82,13 @@ contract RWATest is Test {
         assertEq(rwa.ownerOf(tokenId2), user2);
     }
 
-    function testMintOnlyOwner() public {
+    function testMintByNonOwner() public {
         vm.prank(user1);
-        vm.expectRevert();
-        rwa.mint(user2, TEST_URI);
+        uint256 tokenId = rwa.mint(user2, TEST_URI);
+
+        assertEq(tokenId, 1);
+        assertEq(rwa.ownerOf(tokenId), user2);
+        assertEq(rwa.tokenURI(tokenId), TEST_URI);
     }
 
     function testMintInvalidAddress() public {

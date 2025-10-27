@@ -17,8 +17,8 @@ import "../contracts/Config.sol";
  *   4. Run on Sepolia: forge script script/WireONFT.s.sol:WireONFT --rpc-url sepolia --broadcast
  */
 contract WireONFT is Script {
-    address constant BASE_SEPOLIA_RWA = 0xF2d8D81Fd10972405b461F144cc6d2694631b98A;
-    address constant SEPOLIA_RWA = 0xdDe7fD2032A22078109ef0EECA5B658b1F058778;
+    address constant BASE_SEPOLIA_RWA = 0xA3576B5971e1d4628014555501B46d548ae818BD;
+    address constant SEPOLIA_RWA = 0x61D8F8E069fC985FaDEee2cEc182603B97f1D055;
 
     function run() external {
         require(BASE_SEPOLIA_RWA != address(0), "Set BASE_SEPOLIA_RWA address");

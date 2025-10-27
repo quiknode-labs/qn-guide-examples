@@ -23,11 +23,11 @@ contract SetEnforcedOptions is Script {
 
         if (block.chainid == 11155111) {
             // Sepolia -> Base Sepolia
-            rwaAddress = 0x74907F94954c60a60cC93aaE4691C3B5341d514B;
+            rwaAddress = 0xAA490D756571F48c7E0Add9056081C9Ae97d4746;
             dstEid = Config.LZ_CHAIN_ID_BASE_SEPOLIA;
         } else if (block.chainid == 84532) {
             // Base Sepolia -> Sepolia
-            rwaAddress = 0xce2C693E7f87508A4ab587a994659Eb9a3c429e3;
+            rwaAddress = 0x9773D00FdE6Cf785CbFc8777514D69e7F84FF6c1;
             dstEid = Config.LZ_CHAIN_ID_SEPOLIA;
         } else {
             revert("Unsupported chain");

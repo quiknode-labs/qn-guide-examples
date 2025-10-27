@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -17,11 +17,24 @@ import { LocationPicker } from '@/components/location-picker'
 import { OutrunBackground } from '@/components/outrun-background'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import { formatTokenId } from '@/lib/tokenId'
 
 export default function MintPage() {
   const { address, chainId, isConnected } = useAccount()
   const { writeContract, data: hash, isPending } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
+
+  const contractAddress = chainId ? getContractAddress(chainId, 'rwa721') : undefined
+
+  // Fetch the next token ID that will be minted
+  const { data: nextTokenId } = useReadContract({
+    address: contractAddress,
+    abi: RWA721_ABI,
+    functionName: 'nextTokenId',
+    query: {
+      enabled: !!contractAddress && isConnected,
+    },
+  })
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -319,8 +332,16 @@ export default function MintPage() {
               <CardTitle className="text-3xl glow-text-pink" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
                 Mint RWA Token
               </CardTitle>
-              <CardDescription className="text-base">
-                Create a new tokenized real world asset on {chainId === 84532 ? 'Base Sepolia' : 'Ethereum Sepolia'}
+              <CardDescription className="text-base space-y-1">
+                <div>Create a new tokenized real world asset on {chainId === 84532 ? 'Base Sepolia' : 'Ethereum Sepolia'}</div>
+                {nextTokenId && (
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-xs text-muted-foreground">Next token ID:</span>
+                    <Badge variant="secondary" className="font-mono text-xs">
+                      {formatTokenId(nextTokenId)}
+                    </Badge>
+                  </div>
+                )}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

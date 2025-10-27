@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(forge script script/DeployRWA.s.sol:DeployRWA --rpc-url sepolia --broadcast:*)",
+      "Bash(forge script script/DeployMarketplace.s.sol:DeployMarketplace --rpc-url base_sepolia --broadcast:*)",
+      "Bash(forge script script/DeployMarketplace.s.sol:DeployMarketplace --rpc-url sepolia --broadcast:*)",
+      "Bash(find:*)",
+      "Bash(forge script:*)",
+      "WebFetch(domain:sepolia.etherscan.io)",
+      "Bash(npm install:*)",
+      "Bash(cast code:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(forge install:*)",
+      "Bash(git clone:*)",
+      "Bash(cast run:*)",
+      "Bash(node:*)",
+      "Bash(cast 4byte:*)",
+      "WebFetch(domain:developers.google.com)",
+      "Bash(git push:*)",
+      "Bash(pnpm install:*)",
+      "Bash(forge test:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

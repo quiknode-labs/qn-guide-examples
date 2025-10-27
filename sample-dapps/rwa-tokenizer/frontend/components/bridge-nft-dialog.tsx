@@ -139,11 +139,18 @@ export function BridgeNFTDialog({ tokenId, tokenName, open: controlledOpen, onOp
   // Close dialog after successful bridge
   useEffect(() => {
     if (isBridgeSuccess && chainId && address) {
-      // Invalidate cache for this token on current chain
+      // Invalidate cache for this token on current chain IMMEDIATELY
       console.log('[Bridge] Invalidating cache for bridged token:', tokenId.toString())
       invalidateTokenCache(chainId, address, tokenId.toString())
 
-      setTimeout(() => {
+      // Also clear cache for destination chain to be safe
+      if (destinationChain) {
+        const destChainId = Number(destinationChain)
+        console.log('[Bridge] Pre-clearing destination chain cache:', destChainId)
+        invalidateTokenCache(destChainId, address, tokenId.toString())
+      }
+
+      const timeoutId = setTimeout(() => {
         setOpen(false)
         // Reset form
         setStep('approval')
@@ -153,8 +160,17 @@ export function BridgeNFTDialog({ tokenId, tokenName, open: controlledOpen, onOp
         // Reload page to show updated NFT ownership
         window.location.reload()
       }, 3000)
+
+      // Cleanup: ensure cache stays cleared even if component unmounts
+      return () => {
+        clearTimeout(timeoutId)
+        if (chainId && address) {
+          console.log('[Bridge] Cleanup: Re-clearing cache on unmount')
+          invalidateTokenCache(chainId, address, tokenId.toString())
+        }
+      }
     }
-  }, [isBridgeSuccess, chainId, address, tokenId])
+  }, [isBridgeSuccess, chainId, address, tokenId, destinationChain])
 
   // Calculate fee estimation parameters for LayerZero V2
   const dstLzChainId = destinationChain
@@ -175,7 +191,7 @@ export function BridgeNFTDialog({ tokenId, tokenName, open: controlledOpen, onOp
     tokenId: tokenId,
     extraOptions: '0x' as `0x${string}`, // Empty - enforced options on contract
     composeMsg: '0x' as `0x${string}`,
-    oftCmd: '0x' as `0x${string}`,
+    onftCmd: '0x' as `0x${string}`,
   } : undefined
 
   // Estimate bridge fee using quoteSend (LayerZero V2)

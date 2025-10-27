@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useAccount, useReadContract, usePublicClient } from 'wagmi'
 import { Navigation } from '@/components/navigation'
@@ -16,6 +16,7 @@ import { RWA721_ABI } from '@/lib/abi/rwa721'
 import { getIPFSGatewayUrl, fetchFromIPFS, NFTMetadata } from '@/lib/ipfs'
 import { TokenCache, initializeCache } from '@/lib/cache'
 import { staggerContainer, staggerItem, fadeInUp, hoverLift } from '@/lib/animations'
+import { formatTokenId, extractChainShortName, getLocalTokenId } from '@/lib/tokenId'
 
 interface TokenData {
   tokenId: bigint
@@ -33,6 +34,9 @@ export default function AssetsPage() {
   const [bridgeDialogOpen, setBridgeDialogOpen] = useState(false)
   const [bridgeTokenId, setBridgeTokenId] = useState<bigint | null>(null)
   const [bridgeTokenName, setBridgeTokenName] = useState<string | undefined>(undefined)
+
+  // Use ref to persist loaded token IDs across effect runs to prevent duplicates
+  const loadedTokenIdsRef = useRef<Set<string>>(new Set())
 
   const contractAddress = chainId ? getContractAddress(chainId, 'rwa721') : undefined
 
@@ -65,8 +69,8 @@ export default function AssetsPage() {
       setTokens([])
       setIsLoadingTokens(true)
 
-      // Track loaded token IDs to prevent duplicates
-      const loadedTokenIds = new Set<string>()
+      // Clear the ref to start fresh for this chain/address combination
+      loadedTokenIdsRef.current.clear()
 
       // Check cache first - but still show loading animation briefly
       const cachedTokens = TokenCache.get(chainId, address)
@@ -78,7 +82,7 @@ export default function AssetsPage() {
 
         // Then show actual cards directly (skip individual loading for cached tokens)
         const tokenData: TokenData[] = cachedTokens.map(ct => {
-          loadedTokenIds.add(ct.tokenId)
+          loadedTokenIdsRef.current.add(ct.tokenId)
           return {
             tokenId: BigInt(ct.tokenId),
             metadata: ct.metadata,
@@ -213,9 +217,9 @@ export default function AssetsPage() {
 
         // Verify ownership and load tokens one by one, only adding verified ones to state
         for (const tokenIdStr of Array.from(allTokenIds)) {
-          // Skip if already loaded from cache
-          if (loadedTokenIds.has(tokenIdStr)) {
-            console.log(`[Assets] Token ${tokenIdStr} already loaded from cache, skipping`)
+          // Skip if already loaded from cache or by another concurrent effect run
+          if (loadedTokenIdsRef.current.has(tokenIdStr)) {
+            console.log(`[Assets] Token ${tokenIdStr} already loaded, skipping`)
             continue
           }
 
@@ -238,8 +242,15 @@ export default function AssetsPage() {
 
             // Token is owned by user, add it to state in loading state
             console.log(`[Assets] Token ${tokenId} verified, adding to state`)
-            loadedTokenIds.add(tokenIdStr)
-            setTokens(prev => [...prev, { tokenId, isLoading: true }])
+            loadedTokenIdsRef.current.add(tokenIdStr)
+            setTokens(prev => {
+              // Extra safety: check if token already exists in state
+              if (prev.some(t => t.tokenId === tokenId)) {
+                console.log(`[Assets] Token ${tokenId} already in state, skipping add`)
+                return prev
+              }
+              return [...prev, { tokenId, isLoading: true }]
+            })
 
             // Fetch tokenURI and metadata
             console.log(`[Assets] Fetching tokenURI for ${tokenId}...`)
@@ -436,11 +447,16 @@ export default function AssetsPage() {
                               className="text-xl font-bold text-white glow-text-pink"
                               style={{ fontFamily: 'var(--font-space-grotesk)' }}
                             >
-                              {token.metadata.name || `Token #${token.tokenId.toString()}`}
+                              {token.metadata.name || formatTokenId(token.tokenId)}
                             </h3>
-                            <p className="text-xs text-white/80 font-mono">
-                              Token ID: {token.tokenId.toString()}
-                            </p>
+                            <div className="flex items-center gap-2 text-xs">
+                              <span className="px-2 py-0.5 bg-primary/20 text-primary rounded-full font-mono">
+                                {extractChainShortName(token.tokenId)}
+                              </span>
+                              <span className="text-white/80 font-mono">
+                                #{getLocalTokenId(token.tokenId)}
+                              </span>
+                            </div>
                           </div>
                         </motion.div>
                       )}

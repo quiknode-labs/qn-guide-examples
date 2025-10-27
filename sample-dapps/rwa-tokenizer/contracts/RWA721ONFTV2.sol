@@ -23,6 +23,10 @@ contract RWA721ONFTV2 is ONFT721, ERC2981, Pausable {
     uint32 public immutable ORIGIN_CHAIN_ID;
     uint256 private _nextTokenId;
 
+    /// @notice Multiplier for encoding chain ID into token IDs
+    /// @dev Allows 1 billion tokens per chain (token IDs: chainId * 1B + localId)
+    uint256 private constant CHAIN_ID_MULTIPLIER = 1_000_000_000;
+
     mapping(uint256 => Types.BridgeInfo) public bridgeInfo;
     mapping(uint256 => string) private _tokenURIs;
 
@@ -51,7 +55,7 @@ contract RWA721ONFTV2 is ONFT721, ERC2981, Pausable {
      * @notice Mint a new RWA NFT with metadata
      * @param to Recipient address
      * @param uri IPFS URI for token metadata
-     * @return tokenId The ID of the newly minted token
+     * @return tokenId The ID of the newly minted token (chain-encoded)
      */
     function mint(address to, string calldata uri)
         external
@@ -60,18 +64,40 @@ contract RWA721ONFTV2 is ONFT721, ERC2981, Pausable {
     {
         if (to == address(0)) revert Errors.InvalidAddress();
 
-        uint256 tokenId = _nextTokenId++;
-        _safeMint(to, tokenId);
-        _tokenURIs[tokenId] = uri;
+        // Get local token ID and increment counter
+        uint256 localTokenId = _nextTokenId++;
 
-        bridgeInfo[tokenId] = Types.BridgeInfo({
+        // Encode chain ID into global token ID to prevent cross-chain collisions
+        // Format: (chainId * 1_000_000_000) + localTokenId
+        uint256 globalTokenId = (uint256(ORIGIN_CHAIN_ID) * CHAIN_ID_MULTIPLIER) + localTokenId;
+
+        _safeMint(to, globalTokenId);
+        _tokenURIs[globalTokenId] = uri;
+
+        bridgeInfo[globalTokenId] = Types.BridgeInfo({
             originChainId: ORIGIN_CHAIN_ID,
             isBridged: false,
             bridgeCount: 0
         });
 
-        emit Minted(to, tokenId, uri);
-        return tokenId;
+        emit Minted(to, globalTokenId, uri);
+        return globalTokenId;
+    }
+
+    /**
+     * @notice Get the next token ID that will be minted (chain-encoded)
+     * @return The next global token ID
+     */
+    function nextTokenId() external view returns (uint256) {
+        return (uint256(ORIGIN_CHAIN_ID) * CHAIN_ID_MULTIPLIER) + _nextTokenId;
+    }
+
+    /**
+     * @notice Get the next local token ID (not chain-encoded)
+     * @return The next local token ID counter value
+     */
+    function nextLocalTokenId() external view returns (uint256) {
+        return _nextTokenId;
     }
 
     /**
@@ -98,7 +124,7 @@ contract RWA721ONFTV2 is ONFT721, ERC2981, Pausable {
     /**
      * @dev Override _credit to mint token and restore URI from extraData
      * @param to Address receiving the token
-     * @param tokenId Token ID being received
+     * @param tokenId Token ID being received (already chain-encoded)
      * @param srcEid Source endpoint ID
      */
     function _credit(
@@ -108,6 +134,16 @@ contract RWA721ONFTV2 is ONFT721, ERC2981, Pausable {
     ) internal virtual override {
         // Mint the token
         _safeMint(to, tokenId);
+
+        // Extract chain ID and local ID from the global token ID
+        uint32 tokenOriginChain = uint32(tokenId / CHAIN_ID_MULTIPLIER);
+        uint256 localTokenId = tokenId % CHAIN_ID_MULTIPLIER;
+
+        // Only update _nextTokenId if this token was originally minted on this chain
+        // and the local ID would collide with our counter
+        if (tokenOriginChain == ORIGIN_CHAIN_ID && localTokenId >= _nextTokenId) {
+            _nextTokenId = localTokenId + 1;
+        }
 
         // Initialize bridge info if this is first time seeing this token
         if (bridgeInfo[tokenId].originChainId == 0) {
@@ -199,6 +235,33 @@ contract RWA721ONFTV2 is ONFT721, ERC2981, Pausable {
         }
 
         return super.tokenURI(tokenId);
+    }
+
+    /**
+     * @notice Extract the origin chain EID from a token ID
+     * @param tokenId The global token ID
+     * @return The LayerZero chain EID where this token was originally minted
+     */
+    function getOriginChainEid(uint256 tokenId) public pure returns (uint32) {
+        return uint32(tokenId / CHAIN_ID_MULTIPLIER);
+    }
+
+    /**
+     * @notice Extract the local token ID from a global token ID
+     * @param tokenId The global token ID
+     * @return The local token number on its origin chain
+     */
+    function getLocalTokenId(uint256 tokenId) public pure returns (uint256) {
+        return tokenId % CHAIN_ID_MULTIPLIER;
+    }
+
+    /**
+     * @notice Check if a token was originally minted on this chain
+     * @param tokenId The global token ID
+     * @return True if token was minted on this chain
+     */
+    function isNativeToken(uint256 tokenId) public view returns (bool) {
+        return getOriginChainEid(tokenId) == ORIGIN_CHAIN_ID;
     }
 
     /**

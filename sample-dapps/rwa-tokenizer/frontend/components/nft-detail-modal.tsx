@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { BridgeButton } from '@/components/bridge-button'
 import { getIPFSGatewayUrl, NFTMetadata } from '@/lib/ipfs'
 import { X } from 'lucide-react'
+import { formatTokenId, extractChainShortName, getLocalTokenId } from '@/lib/tokenId'
 
 interface NFTDetailModalProps {
   open: boolean
@@ -34,11 +35,16 @@ export function NFTDetailModal({
                 className="text-3xl font-bold glow-text-pink mb-2"
                 style={{ fontFamily: 'var(--font-space-grotesk)' }}
               >
-                {metadata?.name || `Token #${tokenId.toString()}`}
+                {metadata?.name || formatTokenId(tokenId)}
               </DialogTitle>
-              <p className="text-sm text-muted-foreground font-mono">
-                Token ID: {tokenId.toString()}
-              </p>
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="font-mono text-xs">
+                  {extractChainShortName(tokenId)}
+                </Badge>
+                <span className="text-sm text-muted-foreground font-mono">
+                  #{getLocalTokenId(tokenId)}
+                </span>
+              </div>
             </div>
           </div>
         </DialogHeader>
