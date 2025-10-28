@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-frontend";
 import type { DashboardMetrics } from "@/types/liquidation";
 
 export function useDashboardMetrics() {
