@@ -1,6 +1,6 @@
 # Aave V3 Liquidation Tracker
 
-Monitor and analyze liquidation events on the Aave V3 protocol in real-time. This project demonstrates the power of serverless blockchain data streaming using QuickNode's [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=guides&utm_content=aave-v3-liquidation-tracker).
+Monitor and analyze liquidation events on the Aave V3 protocol in real-time. This project demonstrates the power of serverless blockchain data streaming using QuickNode's [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps&utm_content=aave-v3-liquidation-tracker).
 
 | Dashboard Overview | Liquidations Table |
 | --- | --- |
@@ -71,51 +71,12 @@ This application uses a completely serverless architecture to track and analyze 
   - Recharts for data visualization
 
 - **Backend (Serverless)**
-  - QuickNode [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=guides) for historical and real-time blockchain data
+  - QuickNode [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps) for historical and real-time blockchain data
   - [Supabase](https://supabase.com/) (PostgreSQL) for data storage
 
 ## Architecture
 
-```mermaid
-flowchart TB
-    subgraph Blockchain["Ethereum Blockchain"]
-        AaveV3[Aave V3 Protocol]
-    end
-
-    subgraph QN["QuickNode Infrastructure"]
-        Stream["QuickNode Stream<br/>with EVM Decoder"]
-        ChainData["On-Chain Token Data"]
-    end
-
-    subgraph Server["Webhook Server"]
-        Webhook["Webhook Endpoint"]
-        Cache[(Token Cache)]
-    end
-
-    subgraph Storage["Data Storage"]
-        DB[(Supabase DB)]
-    end
-
-    subgraph Frontend["React Application"]
-        UI["Web Interface"]
-        Query["TanStack Query"]
-    end
-
-    AaveV3 -->|Liquidation Events| Stream
-    Stream -->|Decoded Event Data| Webhook
-    Webhook <-->|Token Details| ChainData
-    Webhook <-->|Cache Token Data| Cache
-    Webhook -->|Enriched Data| DB
-    Query -->|Fetch Data| DB
-    DB -->|Return Data| Query
-    Query -->|Display| UI
-
-    style Blockchain fill:#ff9999,stroke:#ff0000
-    style QN fill:#99ff99,stroke:#00ff00
-    style Server fill:#9999ff,stroke:#0000ff
-    style Storage fill:#ffff99,stroke:#ffff00
-    style Frontend fill:#ff99ff,stroke:#ff00ff
-```
+[Architecture Diagram](./images/architecture-chart.png)
 
 The architecture demonstrates how the system leverages QuickNode's infrastructure to process blockchain data efficiently:
 
@@ -156,7 +117,7 @@ We are using a webhook server to:
 
 - Node.js 18+
 - npm or yarn
-- Free trial [QuickNode](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=guides&utm_content=aave-v3-liquidation-tracker) account
+- Free trial [QuickNode](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=aave-v3-liquidation-tracker) account
 - Free [Supabase](https://supabase.com/) account
 
 ### Installation
