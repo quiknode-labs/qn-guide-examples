@@ -70,7 +70,7 @@ This application uses a completely serverless architecture to track and analyze 
   - shadcn/ui for UI components
   - Recharts for data visualization
 
-- **Backend (Serverless)**
+- **Backend**
   - QuickNode [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps) for historical and real-time blockchain data
   - [Supabase](https://supabase.com/) (PostgreSQL) for data storage
 
@@ -81,7 +81,7 @@ This application uses a completely serverless architecture to track and analyze 
 The architecture demonstrates how the system leverages QuickNode's infrastructure to process blockchain data efficiently:
 
 1. QuickNode Stream monitors Aave V3 contract events
-2. Events are sent to webhook server for processing
+2. Events are sent to a webhook server for processing
 3. Data is enriched with token and price information
 4. Processed data is stored in Supabase
 5. Frontend fetches and displays real-time data

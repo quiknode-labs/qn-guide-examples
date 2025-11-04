@@ -1,4 +1,4 @@
-import { createPublicClient, http, formatUnits, parseAbi, hexToString, trim } from 'viem';
+import { createPublicClient, http, formatUnits, parseAbi, hexToString } from 'viem';
 import { mainnet } from 'viem/chains';
 import { supabaseServer } from './supabase-backend';
 // Blockchain provider setup
@@ -135,9 +135,9 @@ async function getTokenDetails(tokenAddress: `0x${string}`): Promise<TokenDetail
           } as any),
         ]);
 
-        // Convert bytes32 to string and remove null bytes
-        name = hexToString(trim(nameBytes as `0x${string}`));
-        symbol = hexToString(trim(symbolBytes as `0x${string}`));
+        // Convert bytes32 to string (size parameter handles null bytes automatically)
+        name = hexToString(nameBytes as `0x${string}`, { size: 32 });
+        symbol = hexToString(symbolBytes as `0x${string}`, { size: 32 });
         decimals = decimalsResult as number;
 
         console.log(`✅ Successfully decoded bytes32 token: ${name} (${symbol})`);
