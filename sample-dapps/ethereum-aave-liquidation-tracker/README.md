@@ -498,7 +498,6 @@ $$ LANGUAGE plpgsql;
 For better query performance, we can create indexes on the `liquidations` table. Here's an example of how to create the necessary indexes:
 
 ```sql
-CREATE UNIQUE INDEX liquidations_pkey ON liquidations(id int4_ops);
 CREATE INDEX idx_debt_asset ON liquidations(debt_asset_symbol text_ops);
 CREATE INDEX idx_timestamp ON liquidations(timestamp timestamp_ops);
 CREATE INDEX idx_liquidator_address ON liquidations(liquidator_address text_ops);
