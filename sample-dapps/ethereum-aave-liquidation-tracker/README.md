@@ -193,7 +193,7 @@ npm run dev
 
 > The contract addresses, test blocks, and other configurations may vary depending on the specific project and network you are working with. In this app, we use Ethereum Mainnet and the Aave V3 protocol.
 
-You can get the full code for the Streams Filtering Function below or view it [here](./qn-related/stream.js).
+You can get the full code for the Streams Filtering Function below or view it [here](https://github.com/quiknode-labs/qn-guide-examples/blob/main/sample-dapps/ethereum-aave-liquidation-tracker/qn-related/stream.js).
 
 <details>  
 <summary>View Streams Filtering Code</summary>
