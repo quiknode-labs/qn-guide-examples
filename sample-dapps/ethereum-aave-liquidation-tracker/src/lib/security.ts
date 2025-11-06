@@ -6,7 +6,7 @@ interface WebhookRequest extends Request {
 }
 
 // Trim whitespace - keep the key exactly as provided (including qnsec_ prefix if present)
-const SECRET_KEY = process.env.SECURITY_TOKEN?.trim();
+const SECRET_KEY = process.env.WEBHOOK_SECURITY_KEY?.trim();
 
 /**
  * Verify webhook signature using HMAC-SHA256
