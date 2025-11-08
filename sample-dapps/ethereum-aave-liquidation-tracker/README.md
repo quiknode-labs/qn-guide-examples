@@ -284,7 +284,7 @@ To fetch the data from the database, you can use the following PostgreSQL querie
 
 ```sql
 -- get_asset_distributions
-CREATE OR REPLACE FUNCTION get_asset_distributions()
+CREATE OR REPLACE FUNCTION get_asset_distributions(time_range text)
 RETURNS json AS $$
 DECLARE
   interval_start timestamp;
@@ -450,13 +450,13 @@ $$ LANGUAGE plpgsql;
 
 ```sql
 -- get_liquidation_trends
-CREATE OR REPLACE FUNCTION get_liquidation_trends()
+CREATE OR REPLACE FUNCTION get_liquidation_trends(time_range text)
 RETURNS json AS $$
 DECLARE
   interval_start timestamp;
   grouping_interval text;
 BEGIN
-  SELECT 
+  SELECT
     CASE time_range
       WHEN '24h' THEN NOW() - INTERVAL '24 hours'
       WHEN '7d' THEN NOW() - INTERVAL '7 days'
