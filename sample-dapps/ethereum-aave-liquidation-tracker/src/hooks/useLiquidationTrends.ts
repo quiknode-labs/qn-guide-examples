@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-frontend";
 
 export function useLiquidationTrends(
   timeRange: "24h" | "7d" | "30d" | "365d" = "30d"

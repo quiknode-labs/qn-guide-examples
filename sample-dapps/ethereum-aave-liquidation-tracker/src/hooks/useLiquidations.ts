@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase-frontend';
 import type {
-  DbLiquidation,
   LiquidationFilters,
 } from "@/types/liquidation";
 
@@ -51,11 +50,46 @@ export function useLiquidations({
         );
       }
 
-      const { data, error, count } = await query.returns<DbLiquidation[]>();
+      const { data, error } = await query;
 
       if (error) {
         throw error;
       }
+
+      // Return early if no data
+      if (!data || data.length === 0) {
+        return { data: [], count: 0 };
+      }
+
+      // Get total count for pagination (using same filters as main query)
+      let countQuery = supabase
+        .from("liquidations")
+        .select("*", { count: "exact", head: true });
+
+      // Apply same filters to count query
+      if (filters?.dateRange) {
+        countQuery = countQuery
+          .gte("timestamp", filters.dateRange[0].toISOString())
+          .lte("timestamp", filters.dateRange[1].toISOString());
+      }
+
+      if (filters?.assets?.length) {
+        countQuery = countQuery.or(
+          `collateral_asset_symbol.in.(${filters.assets.join(
+            ","
+          )}),debt_asset_symbol.in.(${filters.assets.join(",")})`
+        );
+      }
+
+      if (filters?.addresses?.length) {
+        countQuery = countQuery.or(
+          `liquidator_address.in.(${filters.addresses.join(
+            ","
+          )}),liquidated_wallet.in.(${filters.addresses.join(",")})`
+        );
+      }
+
+      const { count } = await countQuery;
 
       const transformedData = data.map((row) => ({
         id: row.id,

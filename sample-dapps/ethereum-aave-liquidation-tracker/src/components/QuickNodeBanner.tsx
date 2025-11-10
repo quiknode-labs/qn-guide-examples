@@ -15,16 +15,7 @@ const QuickNodeBanner = () => {
           >
             Streams
           </a>
-          {" and "}
-          <a
-            href="https://quicknode.com/functions?utm_source=internal&utm_campaign=guides&utm_content=aave-v3-liquidation-tracker"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-purple-500 hover:text-purple-600 transition-colors"
-          >
-            Functions
-          </a>{" "}
-          — Serverless historical and real-time blockchain data.
+          — serverless historical and real-time blockchain data.
         </span>
       </div>
 
