@@ -462,7 +462,7 @@ The marketplace includes scaffolded cross-chain purchase functionality. To compl
 
 See `ICCTPScaffold.sol` and `Marketplace.buyCrossChain()` for implementation notes.
 
-## Frontend (Coming Soon)
+## Frontend
 
 Next.js application with:
 
