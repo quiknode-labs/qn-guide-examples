@@ -1,0 +1,35 @@
+[profile.default]
+src = "contracts"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.23"
+optimizer = true
+optimizer_runs = 200
+via_ir = false
+remappings = [
+    "@layerzerolabs/oapp-evm/=lib/LayerZero-v2/packages/layerzero-v2/evm/oapp/",
+    "@layerzerolabs/onft-evm/=lib/devtools/packages/onft-evm/",
+    "@layerzerolabs/lz-evm-protocol-v2/=lib/LayerZero-v2/packages/layerzero-v2/evm/protocol/",
+    "@layerzerolabs/lz-evm-messagelib-v2/=lib/LayerZero-v2/packages/layerzero-v2/evm/messagelib/",
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    "solidity-bytes-utils/=lib/solidity-bytes-utils/"
+]
+
+# Test configuration
+fs_permissions = [{ access = "read-write", path = "./" }]
+gas_reports = ["*"]
+
+# Formatting
+line_length = 100
+tab_width = 4
+bracket_spacing = true
+
+# RPC endpoints
+[rpc_endpoints]
+sepolia = "${NEXT_PUBLIC_RPC_SEPOLIA}"
+base_sepolia = "${NEXT_PUBLIC_RPC_BASE_SEPOLIA}"
+
+# Etherscan configuration
+[etherscan]
+sepolia = { key = "${ETHERSCAN_API_KEY}" }
+base_sepolia = { key = "${BASESCAN_API_KEY}" }

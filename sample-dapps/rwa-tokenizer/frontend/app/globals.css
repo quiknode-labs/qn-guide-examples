@@ -1,0 +1,292 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-heading: var(--font-space-grotesk);
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Synthwave Color System */
+  --neon-pink: 330 100% 50%;
+  --neon-cyan: 187 100% 50%;
+  --neon-purple: 270 100% 50%;
+  --neon-orange: 16 100% 50%;
+
+  /* Base dark theme - will be used by default */
+  --background: 260 80% 3%;
+  --foreground: 0 0% 100%;
+  --card: 264 45% 12%;
+  --card-foreground: 0 0% 100%;
+  --popover: 264 45% 12%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 330 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 187 100% 50%;
+  --secondary-foreground: 260 80% 3%;
+  --muted: 264 45% 20%;
+  --muted-foreground: 270 20% 75%;
+  --accent: 270 100% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --border: 270 60% 30%;
+  --input: 270 60% 30%;
+  --ring: 330 100% 50%;
+
+  --chart-1: 330 100% 50%;
+  --chart-2: 187 100% 50%;
+  --chart-3: 270 100% 50%;
+  --chart-4: 16 100% 50%;
+  --chart-5: 50 100% 50%;
+
+  --sidebar: 264 45% 12%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 330 100% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 264 45% 20%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 270 60% 30%;
+  --sidebar-ring: 330 100% 50%;
+}
+
+/* Dark mode is default - keep same values for consistency */
+.dark {
+  --background: 260 80% 3%;
+  --foreground: 0 0% 100%;
+  --card: 264 45% 12%;
+  --card-foreground: 0 0% 100%;
+  --popover: 264 45% 12%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 330 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 187 100% 50%;
+  --secondary-foreground: 260 80% 3%;
+  --muted: 264 45% 20%;
+  --muted-foreground: 270 20% 75%;
+  --accent: 270 100% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --border: 270 60% 30%;
+  --input: 270 60% 30%;
+  --ring: 330 100% 50%;
+
+  --chart-1: 330 100% 50%;
+  --chart-2: 187 100% 50%;
+  --chart-3: 270 100% 50%;
+  --chart-4: 16 100% 50%;
+  --chart-5: 50 100% 50%;
+
+  --sidebar: 264 45% 12%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 330 100% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 264 45% 20%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 270 60% 30%;
+  --sidebar-ring: 330 100% 50%;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Neon glow effects */
+  .glow-pink {
+    box-shadow: 0 0 20px rgba(255, 0, 110, 0.3),
+                0 0 40px rgba(255, 0, 110, 0.2),
+                0 0 60px rgba(255, 0, 110, 0.1);
+  }
+
+  .glow-cyan {
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.3),
+                0 0 40px rgba(0, 245, 255, 0.2),
+                0 0 60px rgba(0, 245, 255, 0.1);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(139, 0, 255, 0.3),
+                0 0 40px rgba(139, 0, 255, 0.2),
+                0 0 60px rgba(139, 0, 255, 0.1);
+  }
+
+  .glow-orange {
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.3),
+                0 0 40px rgba(255, 69, 0, 0.2),
+                0 0 60px rgba(255, 69, 0, 0.1);
+  }
+
+  .glow-text-pink {
+    text-shadow: 0 0 10px rgba(255, 0, 110, 0.8),
+                 0 0 20px rgba(255, 0, 110, 0.6),
+                 0 0 30px rgba(255, 0, 110, 0.4);
+  }
+
+  .glow-text-cyan {
+    text-shadow: 0 0 10px rgba(0, 245, 255, 0.8),
+                 0 0 20px rgba(0, 245, 255, 0.6),
+                 0 0 30px rgba(0, 245, 255, 0.4);
+  }
+
+  /* Gradient backgrounds */
+  .bg-synthwave-sunset {
+    background: linear-gradient(180deg, #FF006E 0%, #FF4500 50%, #FFD700 100%);
+  }
+
+  .bg-synthwave-sky {
+    background: linear-gradient(180deg, #1A0B2E 0%, #3B0F70 50%, #8B00FF 100%);
+  }
+
+  .bg-synthwave-neon {
+    background: linear-gradient(135deg, #00F5FF 0%, #8B00FF 50%, #FF006E 100%);
+  }
+
+  /* Grid background */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(139, 0, 255, 0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 0, 255, 0.15) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .bg-grid-large {
+    background-image:
+      linear-gradient(rgba(139, 0, 255, 0.15) 2px, transparent 2px),
+      linear-gradient(90deg, rgba(139, 0, 255, 0.15) 2px, transparent 2px);
+    background-size: 100px 100px;
+  }
+
+  /* Border gradients */
+  .border-gradient-pink-cyan {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--background), var(--background)) padding-box,
+                linear-gradient(135deg, #FF006E, #00F5FF) border-box;
+  }
+
+  .border-gradient-purple-pink {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--background), var(--background)) padding-box,
+                linear-gradient(135deg, #8B00FF, #FF006E) border-box;
+  }
+}
+
+/* Keyframe animations */
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes grid-flow {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    border-color: hsl(var(--primary) / 0.3);
+    box-shadow: 0 0 20px rgba(255, 0, 110, 0.2);
+  }
+  33% {
+    border-color: hsl(var(--secondary) / 0.3);
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
+  }
+  66% {
+    border-color: hsl(var(--accent) / 0.3);
+    box-shadow: 0 0 20px rgba(139, 0, 255, 0.2);
+  }
+}
+
+/* Animation utilities */
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+}
+
+.animate-grid-flow {
+  animation: grid-flow 20s linear infinite;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
