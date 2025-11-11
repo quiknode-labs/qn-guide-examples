@@ -71,12 +71,6 @@ forge script script/DeployRWA.s.sol:DeployRWA \
   --rpc-url base_sepolia \
   --broadcast \
   --verify
-
-# Deploy Marketplace
-forge script script/DeployMarketplace.s.sol:DeployMarketplace \
-  --rpc-url base_sepolia \
-  --broadcast \
-  --verify
 ```
 
 ### Option B: Ethereum Sepolia
@@ -84,12 +78,6 @@ forge script script/DeployMarketplace.s.sol:DeployMarketplace \
 ```bash
 # Deploy RWA721ONFT
 forge script script/DeployRWA.s.sol:DeployRWA \
-  --rpc-url sepolia \
-  --broadcast \
-  --verify
-
-# Deploy Marketplace
-forge script script/DeployMarketplace.s.sol:DeployMarketplace \
   --rpc-url sepolia \
   --broadcast \
   --verify
@@ -135,16 +123,6 @@ cast call <RWA_ADDRESS> "originChainId()(uint16)" --rpc-url <RPC_URL>
 # Expected: 10245 (Base Sepolia) or 10161 (Sepolia)
 ```
 
-### Check Marketplace
-
-```bash
-cast call <MARKETPLACE_ADDRESS> "platformFeeBps()(uint256)" --rpc-url <RPC_URL>
-# Expected: 250 (2.5%)
-
-cast call <MARKETPLACE_ADDRESS> "usdc()(address)" --rpc-url <RPC_URL>
-# Expected: USDC testnet address
-```
-
 ## Interact with Contracts
 
 ### Mint an NFT
@@ -159,31 +137,6 @@ cast send <RWA_ADDRESS> \
   "mint(address,string)(uint256)" \
   $RECIPIENT \
   $METADATA_URI \
-  --rpc-url <RPC_URL> \
-  --private-key $PRIVATE_KEY
-```
-
-### Create a Listing
-
-```bash
-NFT_ADDRESS="<RWA_ADDRESS>"
-TOKEN_ID="1"
-PRICE="1000000000"  # 1000 USDC (6 decimals)
-
-# First, approve marketplace
-cast send $NFT_ADDRESS \
-  "approve(address,uint256)" \
-  <MARKETPLACE_ADDRESS> \
-  $TOKEN_ID \
-  --rpc-url <RPC_URL> \
-  --private-key $PRIVATE_KEY
-
-# Then create listing
-cast send <MARKETPLACE_ADDRESS> \
-  "createListing(address,uint256,uint256)(uint256)" \
-  $NFT_ADDRESS \
-  $TOKEN_ID \
-  $PRICE \
   --rpc-url <RPC_URL> \
   --private-key $PRIVATE_KEY
 ```
@@ -222,16 +175,7 @@ cast send <RWA_ADDRESS> \
 
 ## Get Testnet Tokens
 
-### Base Sepolia ETH
-- [Base Sepolia Faucet](https://www.coinbase.com/faucets/base-ethereum-goerli-faucet)
-
-### Sepolia ETH
-- [Sepolia Faucet](https://sepoliafaucet.com/)
-
-### USDC (Testnet)
-- Use Circle's testnet faucet or bridge tools
-- Base Sepolia USDC: `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
-- Sepolia USDC: `0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238`
+Use QuickNode's [multi-chain faucet](https://faucet.quicknode.com/drip) to get testnet ETH.
 
 ## Troubleshooting
 

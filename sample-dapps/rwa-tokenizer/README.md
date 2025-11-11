@@ -1,13 +1,11 @@
 # RWA Tokenizer v2
 
-A decentralized platform for tokenizing Real World Assets (RWAs) as NFTs with cross-chain bridging and USDC-based marketplace functionality.
+A decentralized platform for tokenizing Real World Assets (RWAs) as NFTs with cross-chain bridging functionality.
 
 ## Features
 
 - **No-Code RWA Mint Studio**: Create ERC-721 NFTs with IPFS metadata storage
 - **LayerZero ONFT V2 Bridging**: Cross-chain NFT transfers between Base and Ethereum
-- **Multichain USDC Marketplace**: Fixed-price listings with Permit2 gasless approvals
-- **CCTP Integration** (Scaffolded): Cross-chain USDC settlement via Circle's CCTP
 
 ## ⚠️ Important: Contract Versions
 
@@ -23,7 +21,6 @@ This repository contains **two contract versions**:
 ### Smart Contracts
 
 - **RWA721ONFTV2.sol**: ERC-721 NFT with LayerZero ONFT V2 for cross-chain transfers
-- **Marketplace.sol**: Fixed-price marketplace with USDC payments and platform fees
 - **Config.sol**: Centralized chain configuration and constants
 - **Libraries**: Custom errors and shared types
 
@@ -39,21 +36,44 @@ This repository contains **two contract versions**:
 - [Foundry](https://book.getfoundry.sh/getting-started/installation)
 - Node.js 18+
 - Private key for deployment
+- Some testnet ETH for gas fees (Use [QuickNode Multi-Chain Faucet](https://faucet.quicknode.com/) to get some testnet ETH)
+- WalletConnect Project ID (for frontend wallet connections)
+- IPFS Pinata JWT (for frontend IPFS uploads)
+- [QuickNode endpoints](https://www.quicknode.com/signup) for Base Sepolia and Ethereum Sepolia (optional, but suggested)
 - [Google Maps API Key](https://developers.google.com/maps/documentation/javascript/get-api-key) (optional, for location features)
 
-### Installation
+#### WalletConnect Project ID
+
+To get a WalletConnect Project ID, sign up at [Reown, formerly WalletConnect](https://cloud.reown.com/) and create a new project. You will use this ID in the frontend environment variables to enable wallet connections.
+
+#### IPFS Pinata JWT
+
+To upload NFT metadata to IPFS, you can use Pinata. Sign up at [Pinata](https://pinata.cloud/) and create a JWT (JSON Web Token) for authentication. You will use this JWT in the frontend environment variables to enable IPFS uploads.
+
+#### QuickNode Endpoints (Optional)
+
+While not strictly required, it is highly recommended to use QuickNode endpoints for better reliability and performance.
+
+If you don't have a QuickNode account, you can sign up [here](https://www.quicknode.com/signup). Then, create your endpoints for Base Sepolia and Ethereum Sepolia.
+
+You will use these endpoint URLs in the main project (`.env`) and frontend (`frontend/.env.local`) environment variables.
 
 ```bash
-# Clone the repository
-git clone <repo-url>
-cd rwa-tokenizer-v2
+# RPC URLs
+NEXT_PUBLIC_RPC_BASE_SEPOLIA=
+NEXT_PUBLIC_RPC_SEPOLIA=
+```
 
-# Install Foundry dependencies
-forge install OpenZeppelin/openzeppelin-contracts
+#### Block Explorer API Keys (Optional)
 
-# Copy environment file
-cp .env.example .env
-# Edit .env and add your PRIVATE_KEY
+Foundry needs API keys to verify contracts after deployment. You can get a multichain API key (Etherscan V2 API) from [Etherscan](https://etherscan.io).
+
+Since verification is not required for this project, you can leave these keys blank.
+
+```bash
+# Etherscan API Keys (for verification)
+ETHERSCAN_API_KEY=
+BASESCAN_API_KEY=
 ```
 
 #### Google Maps API Setup (Optional)
@@ -66,13 +86,30 @@ For location features in the minting studio:
    - Places API
    - Geocoding API
    - Maps Static API
-3. Add the key to your `frontend/.env.local` file:
+
+You will use this key in the frontend environment variables (`frontend/.env.local`).
 
 ```bash
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
 ```
 
 **Note:** Without this key, the location picker will show a warning but the mint studio will still work.
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/quiknode-labs/qn-guide-examples.git  
+cd qn-guide-examples/sample-dapps/rwa-tokenizer
+
+# Install Foundry dependencies
+forge install OpenZeppelin/openzeppelin-contracts
+
+# Copy environment file
+cp .env.example .env
+```
+
+Then, edit the `.env` file with your private key and other optional settings.
 
 ### Build & Test
 
@@ -171,53 +208,7 @@ forge script script/SetEnforcedOptions.s.sol:SetEnforcedOptions \
   --broadcast
 ```
 
-<!-- #### Step 5: Deploy Marketplace Contracts
-
-Deploy to Base Sepolia:
-
-```bash
-forge script script/DeployMarketplace.s.sol:DeployMarketplace \
-  --rpc-url base_sepolia \
-  --broadcast
-```
-
-**Save the deployed address**
-
-Deploy to Ethereum Sepolia:
-
-```bash
-forge script script/DeployMarketplace.s.sol:DeployMarketplace \
-  --rpc-url sepolia \
-  --broadcast
-``` -->
-
-**Save the deployed address**
-
-#### Step 6: Update Frontend Environment Variables
-
-Edit `frontend/.env.local` with your deployed addresses:
-
-```bash
-# Contract Addresses (UPDATE THESE)
-NEXT_PUBLIC_RWA721_ADDRESS_BASE_SEPOLIA=0xYourBaseSepolia RWA Address
-# NEXT_PUBLIC_MARKETPLACE_ADDRESS_BASE_SEPOLIA=0xYourBaseSepoliaMarketplaceAddress
-NEXT_PUBLIC_RWA721_ADDRESS_SEPOLIA=0xYourSepoliaRWAAddress
-# NEXT_PUBLIC_MARKETPLACE_ADDRESS_SEPOLIA=0xYourSepoliaMarketplaceAddress
-
-# LayerZero V2 Configuration (DO NOT CHANGE)
-NEXT_PUBLIC_LZ_CHAIN_ID_BASE_SEPOLIA=40245
-NEXT_PUBLIC_LZ_CHAIN_ID_SEPOLIA=40161
-
-# Other Configuration (from .env.example)
-NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
-NEXT_PUBLIC_PINATA_JWT=your_pinata_jwt
-NEXT_PUBLIC_PINATA_GATEWAY=gateway.pinata.cloud
-NEXT_PUBLIC_USDC_BASE_SEPOLIA=0x036CbD53842c5426634e7929541eC2318f3dCF7e
-NEXT_PUBLIC_USDC_SEPOLIA=0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238
-NEXT_PUBLIC_PERMIT2_ADDRESS=0x000000000022D473030F116dDEE9F6B43aC78BA3
-```
-
-#### Step 7: Verify Deployment
+#### Step 5: Verify Deployment
 
 Verify peers are set correctly (LayerZero V2):
 
@@ -233,6 +224,55 @@ cast call 0xYourBaseSepoliaRWAAddress "peers(uint32)(bytes32)" 40161 \
 
 Both should return non-zero bytes32 values (padded addresses). If they return `0x0000...`, the wiring failed.
 
+#### Step 6: Update Frontend Environment Variables
+
+Create `frontend/.env.local` from the example:
+
+```bash
+cp frontend/.env.example frontend/.env.local
+```
+
+Then, edit `frontend/.env.local` with your deployed addresses, RPC URLs, WalletConnect Project ID, and Pinata JWT:
+
+```bash
+# RPC URLs (UPDATE THESE)
+NEXT_PUBLIC_RPC_BASE_SEPOLIA=
+NEXT_PUBLIC_RPC_SEPOLIA=
+
+# WalletConnect/Rainbow (UPDATE THIS)
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
+
+# IPFS - Pinata (UPDATE THESE)
+NEXT_PUBLIC_PINATA_JWT=
+NEXT_PUBLIC_PINATA_GATEWAY=gateway.pinata.cloud
+
+# Contract Addresses (UPDATE THESE)
+NEXT_PUBLIC_RWA721_ADDRESS_BASE_SEPOLIA=0xYourBaseSepoliaRWAAddress
+NEXT_PUBLIC_RWA721_ADDRESS_SEPOLIA=0xYourSepoliaRWAAddress
+
+# LayerZero V2 Configuration (DO NOT CHANGE)
+NEXT_PUBLIC_LZ_CHAIN_ID_BASE_SEPOLIA=40245
+NEXT_PUBLIC_LZ_CHAIN_ID_SEPOLIA=40161
+
+# USDC Addresses (DO NOT CHANGE)
+NEXT_PUBLIC_USDC_BASE_SEPOLIA=0x036CbD53842c5426634e7929541eC2318f3dCF7e
+NEXT_PUBLIC_USDC_SEPOLIA=0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238
+
+# Permit2 Address (Universal)
+NEXT_PUBLIC_PERMIT2_ADDRESS=0x000000000022D473030F116dDEE9F6B43aC78BA3
+
+# Google Maps API (OPTIONAL)
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
+```
+
+#### Step 7: Start Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
 #### Step 8: Test the Deployment
 
 1. Mint an NFT on one chain
@@ -240,39 +280,15 @@ Both should return non-zero bytes32 values (padded addresses). If they return `0
 3. Bridge it to the other chain
 4. Verify it appears on the destination chain
 
-### Complete Fresh Deployment Checklist
-
-- [ ] Deploy RWA721ONFTV2 to Ethereum Sepolia
-- [ ] Deploy RWA721ONFTV2 to Base Sepolia
-- [ ] Update WireONFTV2.s.sol with both addresses
-- [ ] Wire Base Sepolia → Sepolia (setPeer)
-- [ ] Wire Sepolia → Base Sepolia (setPeer)
-- [ ] Verify wiring with `cast call peers`
-- [ ] **Set enforced options on Sepolia** ⚠️ CRITICAL
-- [ ] **Set enforced options on Base Sepolia** ⚠️ CRITICAL
-- [ ] Deploy Marketplace to Base Sepolia
-- [ ] Deploy Marketplace to Ethereum Sepolia
-- [ ] Update frontend/.env.local with all 4 addresses
-- [ ] Restart frontend dev server
-- [ ] Test mint, bridge, and marketplace functions
-
 ## Contract Addresses
 
 ### Base Sepolia
 
 - **RWA721ONFTV2**: `0xd85db7a6E816Ef8898e5790767718cA0e6438D7B` ✅ **LayerZero V2 + TokenURI Transfer**
-- Marketplace: `0x5605CEf208c1BBDCE0ad9E3fDa9f6C53F64b73aE`
-- USDC: `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
-- LayerZero V2 Endpoint: `0x6EDCE65403992e310A62460808c4b910D972f10f`
-- LayerZero V2 Endpoint ID: `40245`
 
 ### Ethereum Sepolia
 
-- **RWA721ONFTV2**: `0xBa1361556Dd87a05b276963Df9FE3A52CaAd5f17` ✅ **LayerZero V2 + TokenURI Transfer**
-- Marketplace: `0x7973Da8485Adf37D00A8aD2967d490B7A01e88F4`
-- USDC: `0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238`
-- LayerZero V2 Endpoint: `0x6EDCE65403992e310A62460808c4b910D972f10f`
-- LayerZero V2 Endpoint ID: `40161`
+- **RWA721ONFTV2**: `0xAA490D756571F48c7E0Add9056081C9Ae97d4746` ✅ **LayerZero V2 + TokenURI Transfer**
 
 ### Universal
 
@@ -280,7 +296,7 @@ Both should return non-zero bytes32 values (padded addresses). If they return `0
 
 **Note:** Using LayerZero V2 with `uint32` chain IDs (40245/40161), not V1 `uint16` IDs (10245/10161)
 
-## Usage
+## Usage on Smart Contract Level
 
 ### Minting an RWA NFT
 
@@ -313,49 +329,6 @@ MessagingFee memory fee = rwa.quoteSend(sendParam, false);
 
 // Send NFT to destination chain
 rwa.send{value: fee.nativeFee}(sendParam, fee, payable(msg.sender));
-```
-
-### Creating a Marketplace Listing
-
-```solidity
-// Approve marketplace to transfer NFT
-nft.approve(address(marketplace), tokenId);
-
-// Create listing (price in USDC, 6 decimals)
-uint256 listingId = marketplace.createListing(
-    address(nft),
-    tokenId,
-    1000 * 1e6  // 1000 USDC
-);
-```
-
-### Buying from Marketplace
-
-```solidity
-// Prepare Permit2 data
-IPermit2.PermitTransferFrom memory permit = IPermit2.PermitTransferFrom({
-    permitted: IPermit2.TokenPermissions({
-        token: address(usdc),
-        amount: listingPrice
-    }),
-    nonce: nonce,
-    deadline: block.timestamp + 1 hours
-});
-
-// Sign permit off-chain (EIP-712)
-bytes memory signature = signPermit(permit);
-
-// Buy NFT (gasless USDC approval)
-marketplace.buy(
-    listingId,
-    msg.sender,
-    permit,
-    IPermit2.SignatureTransferDetails({
-        to: address(marketplace),
-        requestedAmount: listingPrice
-    }),
-    signature
-);
 ```
 
 ## RWA Metadata Schema
@@ -424,7 +397,6 @@ The location data is powered by Google Maps API and can be set via:
 ## Security Considerations
 
 - All contracts use OpenZeppelin audited libraries
-- ReentrancyGuard on marketplace buy functions
 - Pausable functionality for emergency stops
 - Custom errors for gas-efficient reverts
 - Permit2 for gasless USDC approvals
@@ -437,8 +409,6 @@ Test coverage includes:
 - RWA721ONFT/RWA721ONFTV2 minting, URI storage, and ownership
 - TokenID collision prevention after bridging (V2)
 - Bridge send/receive with LayerZero simulation
-- Marketplace listing, cancellation, and purchases
-- Platform fee calculations
 - Access control and pause functionality
 - Revert conditions and error handling
 
@@ -447,20 +417,7 @@ Run specific test file:
 ```bash
 forge test --match-contract RWATest              # V1 tests
 forge test --match-contract RWA721ONFTV2Test     # V2 tests
-forge test --match-contract MarketplaceTest
-forge test --match-contract BridgeStubTest
 ```
-
-## CCTP Integration (TODO)
-
-The marketplace includes scaffolded cross-chain purchase functionality. To complete:
-
-1. Integrate Circle's CCTP TokenMessenger contract
-2. Implement attestation fetching from Circle API
-3. Add cross-chain message handling for listing settlement
-4. Test on CCTP-supported testnets
-
-See `ICCTPScaffold.sol` and `Marketplace.buyCrossChain()` for implementation notes.
 
 ## Frontend
 
@@ -468,7 +425,6 @@ Next.js application with:
 
 - Mint studio with IPFS upload
 - Asset gallery with bridge UI
-- Marketplace with Permit2 integration
 - WalletConnect/RainbowKit support
 
 ## License
@@ -478,6 +434,5 @@ MIT
 ## Resources
 
 - [LayerZero Docs](https://layerzero.gitbook.io/)
-- [Circle CCTP](https://developers.circle.com/stablecoins/docs/cctp-getting-started)
 - [Uniswap Permit2](https://github.com/Uniswap/permit2)
 - [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/)
