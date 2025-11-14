@@ -1,0 +1,250 @@
+openapi: 3.0.3
+info:
+  title: x402 Payment Protocol API
+  description: |
+    Weather API with blockchain micropayments using the x402 protocol.
+
+    ## How it works
+
+    1. **Request without payment** - Returns 402 Payment Required with payment instructions
+    2. **Generate payment signature** - Use the payment requirements to create an EIP-712 signature
+    3. **Request with payment** - Include X-PAYMENT header with signed payment
+    4. **Receive response** - Get your data plus settlement confirmation
+
+    ## Payment Flow
+
+    ```
+    Client → GET /api/weather/paywalled_info (no payment)
+           ← 402 Payment Required + payment requirements
+
+    Client → Sign payment with wallet
+           → GET /api/weather/paywalled_info + X-PAYMENT header
+           ← 200 OK + data + X-PAYMENT-RESPONSE header with blockchain tx
+    ```
+
+  version: 1.0.0
+  contact:
+    name: x402 Protocol
+    url: https://x402.org
+
+servers:
+  - url: http://localhost:3001
+    description: Local development server
+  - url: https://your-api.com
+    description: Production server
+
+paths:
+  /api/weather/current:
+    get:
+      summary: Get current weather (requires payment)
+      description: |
+        Returns current weather data. Requires a micropayment of 0.001 USDC.
+
+        **First request (no payment):**
+        - Returns 402 Payment Required
+        - Response includes payment requirements (amount, wallet, chain, etc.)
+
+        **Second request (with payment):**
+        - Include X-PAYMENT header with signed payment
+        - Returns 200 OK with weather data
+        - Response includes X-PAYMENT-RESPONSE header with blockchain transaction
+
+      tags:
+        - Weather
+      parameters:
+        - name: X-PAYMENT
+          in: header
+          required: false
+          description: |
+            Base64-encoded payment payload with EIP-712 signature.
+
+            Generate this using:
+            1. Get payment requirements from 402 response
+            2. Sign with your wallet using EIP-712
+            3. Encode as base64 JSON
+
+          schema:
+            type: string
+            example: eyJ4NDAyVmVyc2lvbiI6IDEsICJzY2hlbWUiOiAiZXhhY3QiLCAibmV0d29yayI6ICJiYXNlLXNlcG9saWEiLCAicGF5bG9hZCI6IHsic2lnbmF0dXJlIjogIjB4Li4uIiwgImF1dGhvcml6YXRpb24iOiB7fX19
+
+      responses:
+        '200':
+          description: Successful response with weather data (payment accepted)
+          headers:
+            X-PAYMENT-RESPONSE:
+              description: Base64-encoded settlement response with blockchain transaction
+              schema:
+                type: string
+                example: eyJzdWNjZXNzIjp0cnVlLCJ0cmFuc2FjdGlvbiI6IjB4YTAyY2QzMzIzMTFhNmI0MjEyNTA1OTJjNGExMzE2YTFmY2Q4Y2ZkMDc2NDFjNjhmYjA3MzJlMWRlODJkM2Y1YSIsIm5ldHdvcmsiOiJiYXNlLXNlcG9saWEifQ==
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  temperature:
+                    type: integer
+                    example: 72
+                    description: Temperature in Fahrenheit
+                  condition:
+                    type: string
+                    example: sunny
+                    description: Weather condition
+                  humidity:
+                    type: integer
+                    example: 65
+                    description: Humidity percentage
+                  paid_by:
+                    type: string
+                    example: "0x63eb313AD58184F4c25F68d456e8276b77Fdce0f"
+                    description: Ethereum address that made the payment
+                  payment_amount:
+                    type: string
+                    example: "1000"
+                    description: Payment amount in atomic units (1000 = 0.001 USDC)
+                  network:
+                    type: string
+                    example: base-sepolia
+                    description: Blockchain network used
+              example:
+                temperature: 72
+                condition: sunny
+                humidity: 65
+                paid_by: "0x63eb313AD58184F4c25F68d456e8276b77Fdce0f"
+                payment_amount: "1000"
+                network: base-sepolia
+
+        '402':
+          description: Payment Required (no payment or invalid payment)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  x402Version:
+                    type: integer
+                    example: 1
+                  error:
+                    type: string
+                    example: Payment required to access this resource
+                  accepts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        scheme:
+                          type: string
+                          example: exact
+                        network:
+                          type: string
+                          example: base-sepolia
+                        maxAmountRequired:
+                          type: string
+                          example: "1000"
+                          description: Amount in atomic units (1000 = 0.001 USDC)
+                        asset:
+                          type: string
+                          example: "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+                          description: USDC contract address
+                        payTo:
+                          type: string
+                          example: "0xd086Ef8F2c0F9d642120cCf0898BD101b1d18Db6"
+                          description: Payment recipient address
+                        resource:
+                          type: string
+                          example: http://localhost:3001/api/weather/paywalled_info
+                        description:
+                          type: string
+                          example: Payment required for /api/weather/paywalled_info
+                        maxTimeoutSeconds:
+                          type: integer
+                          example: 600
+                        mimeType:
+                          type: string
+                          example: application/json
+                        extra:
+                          type: object
+                          description: EIP-712 domain info for signature
+                          properties:
+                            name:
+                              type: string
+                              example: USDC
+                            version:
+                              type: string
+                              example: "2"
+              example:
+                x402Version: 1
+                error: Payment required to access this resource
+                accepts:
+                  - scheme: exact
+                    network: base-sepolia
+                    maxAmountRequired: "1000"
+                    asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+                    payTo: "0xd086Ef8F2c0F9d642120cCf0898BD101b1d18Db6"
+                    resource: http://localhost:3001/api/weather/current
+                    description: Payment required for /api/weather/current
+                    maxTimeoutSeconds: 600
+                    mimeType: application/json
+                    extra:
+                      name: USDC
+                      version: "2"
+
+components:
+  schemas:
+    PaymentRequirements:
+      type: object
+      description: x402 payment requirements returned in 402 response
+      properties:
+        x402Version:
+          type: integer
+        error:
+          type: string
+        accepts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentRequirement'
+
+    PaymentRequirement:
+      type: object
+      properties:
+        scheme:
+          type: string
+          enum: [exact]
+        network:
+          type: string
+          example: base-sepolia
+        maxAmountRequired:
+          type: string
+        asset:
+          type: string
+        payTo:
+          type: string
+        resource:
+          type: string
+        description:
+          type: string
+        maxTimeoutSeconds:
+          type: integer
+        mimeType:
+          type: string
+        extra:
+          type: object
+
+    WeatherResponse:
+      type: object
+      properties:
+        temperature:
+          type: integer
+        condition:
+          type: string
+        humidity:
+          type: integer
+        paid_by:
+          type: string
+        payment_amount:
+          type: string
+        network:
+          type: string
+
+tags:
+  - name: Weather
+    description: Weather data endpoints requiring micropayments
