@@ -1,0 +1,121 @@
+{
+  "info": {
+    "name": "x402 Payment Protocol API",
+    "description": "Weather API with blockchain micropayments using x402 protocol",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Weather",
+      "item": [
+        {
+          "name": "Get Weather (No Payment) - Returns 402",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json" 
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/weather/paywalled_info",
+              "host": ["{{base_url}}"],
+              "path": ["api", "weather", "paywalled_info"]
+            },
+            "description": "Request without payment. Returns 402 Payment Required with payment instructions including amount, wallet address, chain info, and EIP-712 domain."
+          },
+          "response": [
+            {
+              "name": "402 Payment Required",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/weather/paywalled_info",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "weather", "paywalled_info"]
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"x402Version\": 1,\n  \"error\": \"Payment required to access this resource\",\n  \"accepts\": [\n    {\n      \"scheme\": \"exact\",\n      \"network\": \"base-sepolia\",\n      \"maxAmountRequired\": \"1000\",\n      \"asset\": \"0x036CbD53842c5426634e7929541eC2318f3dCF7e\",\n      \"payTo\": \"0xd086Ef8F2c0F9d642120cCf0898BD101b1d18Db6\",\n      \"resource\": \"http://localhost:3001/api/weather/current\",\n      \"description\": \"Payment required for /api/weather/current\",\n      \"maxTimeoutSeconds\": 600,\n      \"mimeType\": \"application/json\",\n      \"extra\": {\n        \"name\": \"USDC\",\n        \"version\": \"2\"\n      }\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Weather (With Payment) - Returns 200",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-PAYMENT",
+                "value": "REPLACE_WITH_YOUR_PAYMENT_HEADER",
+                "description": "Base64-encoded payment payload with EIP-712 signature. Generate using generate_payment.py script."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/weather/paywalled_info",
+              "host": ["{{base_url}}"],
+              "path": ["api", "weather", "paywalled_info"]
+            },
+            "description": "Request with valid payment. Returns 200 OK with weather data and blockchain transaction confirmation.\n\n**To generate payment:**\n1. Run: `cd /Users/zachp/Dev/gems/x402-test-app && source venv/bin/activate && python generate_payment.py`\n2. Copy the X-PAYMENT value from output\n3. Replace REPLACE_WITH_YOUR_PAYMENT_HEADER with the value"
+          },
+          "response": [
+            {
+              "name": "200 OK (Payment Accepted)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-PAYMENT",
+                    "value": "eyJ4NDAyVmVyc2lvbiI6IDEsICJzY2hlbWUiOiAiZXhhY3QiLCAibmV0d29yayI6ICJiYXNlLXNlcG9saWEiLCAicGF5bG9hZCI6IHsic2lnbmF0dXJlIjogIjB4Li4uIn19"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/weather/paywalled_info",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "weather", "paywalled_info"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-PAYMENT-RESPONSE",
+                  "value": "eyJzdWNjZXNzIjp0cnVlLCJ0cmFuc2FjdGlvbiI6IjB4YTAyY2QzMzIzMTFhNmI0MjEyNTA1OTJjNGExMzE2YTFmY2Q4Y2ZkMDc2NDFjNjhmYjA3MzJlMWRlODJkM2Y1YSIsIm5ldHdvcmsiOiJiYXNlLXNlcG9saWEiLCJwYXllciI6IjB4NjNlYjMxM0FENTgxODRGNGMyNUY2OGQ0NTZlODI3NmI3N0ZkY2UwZiJ9",
+                  "description": "Base64-encoded settlement response with blockchain transaction hash"
+                }
+              ],
+              "body": "{\n  \"temperature\": 72,\n  \"condition\": \"sunny\",\n  \"humidity\": 65,\n  \"paid_by\": \"0x63eb313AD58184F4c25F68d456e8276b77Fdce0f\",\n  \"payment_amount\": \"1000\",\n  \"network\": \"base-sepolia\"\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Weather data endpoints requiring micropayments"
+    }
+  ]
+}
