@@ -1,0 +1,44 @@
+{
+  "name": "qn-solana-mobile",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "react-native-snackbar"
+        ],
+        "listUnknownPackages": false
+      }
+    }
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@solana-mobile/mobile-wallet-adapter-protocol-web3js": "^2.2.4",
+    "@solana/kit": "^4.0.0",
+    "@solana/web3.js": "^1.98.4",
+    "expo": "~54.0.12",
+    "expo-clipboard": "~8.0.7",
+    "expo-font": "~14.0.8",
+    "expo-router": "~6.0.10",
+    "expo-web-browser": "~15.0.8",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.4",
+    "react-native-get-random-values": "^1.11.0",
+    "react-native-webview": "13.15.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.3",
+    "@types/react": "~19.1.17",
+    "expo-dev-client": "^6.0.15",
+    "prettier": "^3.6.2"
+  },
+  "private": true
+}
