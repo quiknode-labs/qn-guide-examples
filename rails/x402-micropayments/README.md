@@ -338,7 +338,6 @@ x402 settlement successful: 0x...
 - `generate_payment.py` - Python payment signature generator
 - `decode_payment.ts` - TypeScript X-PAYMENT header decoder
 - `decode_payment.py` - Python X-PAYMENT header decoder
-- `public/pay.html` - Browser-based payment test interface
 
 ### Documentation
 - `README.md` - This file

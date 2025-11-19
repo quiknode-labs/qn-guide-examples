@@ -10,7 +10,6 @@ Rails.application.routes.draw do
     # Weather API endpoints (direct x402_paywall usage)
     get "weather/paywalled_info", to: "weather#paywalled_info"
     get "weather/paywalled_info_sol", to: "weather#paywalled_info_sol"
-    get "weather/forecast", to: "weather#forecast"
     get "weather/public", to: "weather#public_info"
 
     # Premium API endpoints (before_action usage)

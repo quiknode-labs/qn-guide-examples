@@ -77,7 +77,7 @@
               "host": ["{{base_url}}"],
               "path": ["api", "weather", "paywalled_info"]
             },
-            "description": "Request with valid payment. Returns 200 OK with weather data and blockchain transaction confirmation.\n\n**To generate payment:**\n1. Run: `cd /Users/zachp/Dev/gems/x402-test-app && source venv/bin/activate && python generate_payment.py`\n2. Copy the X-PAYMENT value from output\n3. Replace REPLACE_WITH_YOUR_PAYMENT_HEADER with the value"
+            "description": "Request with valid payment. Returns 200 OK with weather data and blockchain transaction confirmation.\n\n**To generate payment:**\n1. Run: `ruby generate_payment.rb`\n2. Copy the X-PAYMENT value from output\n3. Replace REPLACE_WITH_YOUR_PAYMENT_HEADER with the value"
           },
           "response": [
             {

@@ -29,19 +29,19 @@ console.log();
 
 // Payment requirements (matching what the Rails app expects)
 const requirements = {
-  scheme: 'exact',
-  network: 'base-sepolia',
-  asset: '0x036CbD53842c5426634e7929541eC2318f3dCF7e', // USDC on base-sepolia
+  scheme: "exact",
+  network: "base-sepolia",
+  asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e", // USDC on base-sepolia
   pay_to: PAY_TO,
-  max_amount_required: '1000', // $0.001 in atomic units
-  resource: `http://localhost:${PORT}/api/weather/current`,
-  description: 'Payment required for /api/weather/current',
+  max_amount_required: "1000", // $0.001 in atomic units
+  resource: `http://localhost:${PORT}/api/weather/paywalled_info`,
+  description: "Payment required for /api/weather/paywalled_info",
   max_timeout_seconds: 600,
-  mime_type: 'application/json',
+  mime_type: "application/json",
   output_schema: null,
   extra: {
-    name: 'USDC', // base-sepolia uses "USDC" not "USD Coin"
-    version: '2',
+    name: "USDC", // base-sepolia uses "USDC" not "USD Coin"
+    version: "2",
   },
 };
 
@@ -140,7 +140,9 @@ async function generatePaymentHeader() {
     console.log(paymentHeaderBase64);
 
     console.log('\n\nCurl command:');
-    console.log(`curl -i -H "X-PAYMENT: ${paymentHeaderBase64}" http://localhost:${PORT}/api/weather/current`);
+    console.log(
+      `curl -i -H "X-PAYMENT: ${paymentHeaderBase64}" http://localhost:${PORT}/api/weather/paywalled_info`
+    );
 
     console.log('\n\nDecoded Payment Header (for debugging):');
     console.log(JSON.stringify(paymentHeader, null, 2));
