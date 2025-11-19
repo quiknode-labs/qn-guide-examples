@@ -28,13 +28,13 @@ info:
     url: https://x402.org
 
 servers:
-  - url: http://localhost:3001
+  - url: http://localhost:3000
     description: Local development server
   - url: https://your-api.com
     description: Production server
 
 paths:
-  /api/weather/current:
+  /api/weather/paywalled_info:
     get:
       summary: Get current weather (requires payment)
       description: |
@@ -151,7 +151,7 @@ paths:
                           description: Payment recipient address
                         resource:
                           type: string
-                          example: http://localhost:3001/api/weather/paywalled_info
+                          example: http://localhost:3000/api/weather/paywalled_info
                         description:
                           type: string
                           example: Payment required for /api/weather/paywalled_info
@@ -180,8 +180,8 @@ paths:
                     maxAmountRequired: "1000"
                     asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
                     payTo: "0xd086Ef8F2c0F9d642120cCf0898BD101b1d18Db6"
-                    resource: http://localhost:3001/api/weather/current
-                    description: Payment required for /api/weather/current
+                    resource: http://localhost:3000/api/weather/paywalled_info
+                    description: Payment required for /api/weather/paywalled_info
                     maxTimeoutSeconds: 600
                     mimeType: application/json
                     extra:

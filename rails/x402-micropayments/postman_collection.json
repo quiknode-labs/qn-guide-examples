@@ -7,7 +7,7 @@
   "variable": [
     {
       "key": "base_url",
-      "value": "http://localhost:3001",
+      "value": "http://localhost:3000",
       "type": "string"
     }
   ],
@@ -53,7 +53,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"x402Version\": 1,\n  \"error\": \"Payment required to access this resource\",\n  \"accepts\": [\n    {\n      \"scheme\": \"exact\",\n      \"network\": \"base-sepolia\",\n      \"maxAmountRequired\": \"1000\",\n      \"asset\": \"0x036CbD53842c5426634e7929541eC2318f3dCF7e\",\n      \"payTo\": \"0xd086Ef8F2c0F9d642120cCf0898BD101b1d18Db6\",\n      \"resource\": \"http://localhost:3001/api/weather/current\",\n      \"description\": \"Payment required for /api/weather/current\",\n      \"maxTimeoutSeconds\": 600,\n      \"mimeType\": \"application/json\",\n      \"extra\": {\n        \"name\": \"USDC\",\n        \"version\": \"2\"\n      }\n    }\n  ]\n}"
+              "body": "{\n  \"x402Version\": 1,\n  \"error\": \"Payment required to access this resource\",\n  \"accepts\": [\n    {\n      \"scheme\": \"exact\",\n      \"network\": \"base-sepolia\",\n      \"maxAmountRequired\": \"1000\",\n      \"asset\": \"0x036CbD53842c5426634e7929541eC2318f3dCF7e\",\n      \"payTo\": \"0xd086Ef8F2c0F9d642120cCf0898BD101b1d18Db6\",\n      \"resource\": \"http://localhost:3000/api/weather/paywalled_info\",\n      \"description\": \"Payment required for /api/weather/paywalled_info\",\n      \"maxTimeoutSeconds\": 600,\n      \"mimeType\": \"application/json\",\n      \"extra\": {\n        \"name\": \"USDC\",\n        \"version\": \"2\"\n      }\n    }\n  ]\n}"
             }
           ]
         },

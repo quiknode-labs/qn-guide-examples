@@ -31,7 +31,6 @@ Rails.application.routes.draw do
         ],
         paid: [
           { path: "/api/weather/paywalled_info", price: "$0.001", description: "Current weather" },
-          { path: "/api/weather/forecast", price: "$0.01", description: "Weather forecast" },
           { path: "/api/premium", price: "$0.005", description: "Premium content list" },
           { path: "/api/premium/:id", price: "$0.005", description: "Premium content details" }
         ]
