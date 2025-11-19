@@ -17,8 +17,11 @@ import "../contracts/Config.sol";
  *   4. Run on Sepolia: forge script script/WireONFTV2.s.sol:WireONFTV2 --rpc-url sepolia --broadcast
  */
 contract WireONFTV2 is Script {
-    address constant BASE_SEPOLIA_RWA = 0x9773D00FdE6Cf785CbFc8777514D69e7F84FF6c1;
-    address constant SEPOLIA_RWA = 0xAA490D756571F48c7E0Add9056081C9Ae97d4746;
+    // 👇 UPDATE THE PLACEHOLDER WITH THE RWA CONTRACT YOU DEPLOYED ON BASE SEPOLIA
+    address constant BASE_SEPOLIA_RWA = YOUR_RWA721ONFTV2_CONTRACT_ON_BASE_SEPOLIA;
+
+    // 👇 UPDATE THE PLACEHOLDER WITH THE RWA CONTRACT YOU DEPLOYED ON SEPOLIA
+    address constant SEPOLIA_RWA = YOUR_RWA721ONFTV2_CONTRACT_ON_SEPOLIA;
 
     function run() external {
         require(BASE_SEPOLIA_RWA != address(0), "Set BASE_SEPOLIA_RWA address");

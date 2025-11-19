@@ -22,12 +22,12 @@ contract SetEnforcedOptions is Script {
         uint32 dstEid;
 
         if (block.chainid == 11155111) {
-            // Sepolia -> Base Sepolia
-            rwaAddress = 0xAA490D756571F48c7E0Add9056081C9Ae97d4746;
+            // Sepolia -> Base Sepolia 👇 UPDATE THE PLACEHOLDER WITH THE RWA CONTRACT YOU DEPLOYED ON SEPOLIA
+            rwaAddress = 0xYourSepoliaRWAAddress;
             dstEid = Config.LZ_CHAIN_ID_BASE_SEPOLIA;
         } else if (block.chainid == 84532) {
-            // Base Sepolia -> Sepolia
-            rwaAddress = 0x9773D00FdE6Cf785CbFc8777514D69e7F84FF6c1;
+            // Base Sepolia -> Sepolia 👇 UPDATE THE PLACEHOLDER WITH THE RWA CONTRACT YOU DEPLOYED ON BASE SEPOLIA
+            rwaAddress = 0xYourBaseSepoliaRWAAddress;
             dstEid = Config.LZ_CHAIN_ID_SEPOLIA;
         } else {
             revert("Unsupported chain");
