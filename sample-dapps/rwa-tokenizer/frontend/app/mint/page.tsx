@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi'
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract, useSwitchChain } from 'wagmi'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -23,8 +23,11 @@ export default function MintPage() {
   const { address, chainId, isConnected } = useAccount()
   const { writeContract, data: hash, isPending } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
+  const { switchChain } = useSwitchChain()
 
-  const contractAddress = chainId ? getContractAddress(chainId, 'rwa721') : undefined
+  // Check if the current chain is supported
+  const isSupportedChain = chainId === 84532 || chainId === 11155111
+  const contractAddress = chainId && isSupportedChain ? getContractAddress(chainId, 'rwa721') : undefined
 
   // Fetch the next token ID that will be minted
   const { data: nextTokenId } = useReadContract({
@@ -55,6 +58,16 @@ export default function MintPage() {
       return `https://sepolia.etherscan.io/tx/${txHash}`
     }
     return ''
+  }
+
+  // Helper to get chain name for display
+  const getChainName = (chainId: number | undefined) => {
+    if (!chainId) return 'Unknown'
+    if (chainId === 84532) return 'Base Sepolia'
+    if (chainId === 11155111) return 'Ethereum Sepolia'
+    if (chainId === 1) return 'Ethereum Mainnet'
+    if (chainId === 8453) return 'Base Mainnet'
+    return `Chain ID ${chainId}`
   }
 
   // Handle transaction state changes with toasts
@@ -348,6 +361,34 @@ export default function MintPage() {
               {!isConnected && (
                 <div className="p-4 border rounded-lg bg-muted text-center">
                   Please connect your wallet to mint an NFT
+                </div>
+              )}
+
+              {isConnected && !isSupportedChain && (
+                <div className="p-4 border border-yellow-500 rounded-lg bg-yellow-500/10 text-yellow-500 space-y-3">
+                  <div className="font-semibold">Unsupported Network</div>
+                  <p className="text-sm">
+                    You are currently connected to {getChainName(chainId)}.
+                    Please switch to Base Sepolia or Ethereum Sepolia to mint RWA tokens.
+                  </p>
+                  <div className="flex gap-2 justify-center">
+                    <Button
+                      onClick={() => switchChain?.({ chainId: 84532 })}
+                      variant="outline"
+                      size="sm"
+                      className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/20"
+                    >
+                      Switch to Base Sepolia
+                    </Button>
+                    <Button
+                      onClick={() => switchChain?.({ chainId: 11155111 })}
+                      variant="outline"
+                      size="sm"
+                      className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/20"
+                    >
+                      Switch to Ethereum Sepolia
+                    </Button>
+                  </div>
                 </div>
               )}
 

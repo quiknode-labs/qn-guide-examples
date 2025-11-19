@@ -47,7 +47,9 @@ export function BridgeNFTDialog({ tokenId, tokenName, open: controlledOpen, onOp
   const [error, setError] = useState<string | null>(null)
   const [bridgeAnimationStage, setBridgeAnimationStage] = useState<'burning' | 'transferring' | 'minting' | null>(null)
 
-  const contractAddress = chainId ? getContractAddress(chainId, 'rwa721') : undefined
+  // Check if the current chain is supported
+  const isSupportedChain = chainId === 84532 || chainId === 11155111
+  const contractAddress = chainId && isSupportedChain ? getContractAddress(chainId, 'rwa721') : undefined
 
   // Check if NFT is already approved
   const { data: approvedAddress, refetch: refetchApproval } = useReadContract({

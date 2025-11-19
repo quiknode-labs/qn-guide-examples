@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { useAccount, useReadContract, usePublicClient } from 'wagmi'
+import { useAccount, useReadContract, usePublicClient, useSwitchChain } from 'wagmi'
 import { Navigation } from '@/components/navigation'
 import { OutrunBackground } from '@/components/outrun-background'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,6 +11,7 @@ import { NFTCardLoading } from '@/components/nft-card-loading'
 import { NFTDetailModal } from '@/components/nft-detail-modal'
 import { BridgeButton } from '@/components/bridge-button'
 import { BridgeNFTDialog } from '@/components/bridge-nft-dialog'
+import { Button } from '@/components/ui/button'
 import { getContractAddress } from '@/config/addresses'
 import { RWA721_ABI } from '@/lib/abi/rwa721'
 import { getIPFSGatewayUrl, fetchFromIPFS, NFTMetadata } from '@/lib/ipfs'
@@ -28,6 +29,7 @@ interface TokenData {
 export default function AssetsPage() {
   const { address, chainId, isConnected } = useAccount()
   const publicClient = usePublicClient()
+  const { switchChain } = useSwitchChain()
   const [tokens, setTokens] = useState<TokenData[]>([])
   const [isLoadingTokens, setIsLoadingTokens] = useState(false)
   const [selectedToken, setSelectedToken] = useState<TokenData | null>(null)
@@ -38,7 +40,19 @@ export default function AssetsPage() {
   // Use ref to persist loaded token IDs across effect runs to prevent duplicates
   const loadedTokenIdsRef = useRef<Set<string>>(new Set())
 
-  const contractAddress = chainId ? getContractAddress(chainId, 'rwa721') : undefined
+  // Check if the current chain is supported
+  const isSupportedChain = chainId === 84532 || chainId === 11155111
+  const contractAddress = chainId && isSupportedChain ? getContractAddress(chainId, 'rwa721') : undefined
+
+  // Helper to get chain name for display
+  const getChainName = (chainId: number | undefined) => {
+    if (!chainId) return 'Unknown'
+    if (chainId === 84532) return 'Base Sepolia'
+    if (chainId === 11155111) return 'Ethereum Sepolia'
+    if (chainId === 1) return 'Ethereum Mainnet'
+    if (chainId === 8453) return 'Base Mainnet'
+    return `Chain ID ${chainId}`
+  }
 
   // Initialize cache on mount
   useEffect(() => {
@@ -371,6 +385,43 @@ export default function AssetsPage() {
                 <p className="text-center text-muted-foreground">
                   Please connect your wallet to view your assets
                 </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
+        {isConnected && !isSupportedChain && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <Card className="bg-card/50 backdrop-blur-sm border-2 border-yellow-500/40">
+              <CardContent className="pt-6 space-y-4">
+                <div className="text-center">
+                  <h3 className="font-semibold text-yellow-500 mb-2">Unsupported Network</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    You are currently connected to {getChainName(chainId)}.
+                    Please switch to Base Sepolia or Ethereum Sepolia to view your RWA tokens.
+                  </p>
+                  <div className="flex gap-2 justify-center">
+                    <Button
+                      onClick={() => switchChain?.({ chainId: 84532 })}
+                      variant="outline"
+                      size="sm"
+                      className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/20"
+                    >
+                      Switch to Base Sepolia
+                    </Button>
+                    <Button
+                      onClick={() => switchChain?.({ chainId: 11155111 })}
+                      variant="outline"
+                      size="sm"
+                      className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/20"
+                    >
+                      Switch to Ethereum Sepolia
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
