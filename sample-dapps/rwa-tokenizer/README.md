@@ -104,6 +104,10 @@ cd qn-guide-examples/sample-dapps/rwa-tokenizer
 
 # Install Foundry dependencies
 forge install OpenZeppelin/openzeppelin-contracts
+forge install foundry-rs/forge-std
+forge install LayerZero-Labs/LayerZero-v2
+forge install https://github.com/LayerZero-Labs/devtools
+forge install GNSPS/solidity-bytes-utils
 
 # Copy environment file
 cp .env.example .env
@@ -155,7 +159,7 @@ forge script script/DeployRWAV2.s.sol:DeployRWAV2 \
   --broadcast
 ```
 
-**Save the deployed address**
+**Save the deployed address** (shown as "RWA721ONFTV2 deployed at:")
 
 #### Step 2: Update WireONFTV2 Script
 
