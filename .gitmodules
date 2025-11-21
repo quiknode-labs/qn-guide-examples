@@ -4,3 +4,18 @@
 [submodule "sample-dapps/evm-token-factory/smart-contracts/lib/openzeppelin-contracts"]
 	path = sample-dapps/evm-token-factory/smart-contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "sample-dapps/rwa-tokenizer/lib/openzeppelin-contracts"]
+	path = sample-dapps/rwa-tokenizer/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "sample-dapps/rwa-tokenizer/lib/forge-std"]
+	path = sample-dapps/rwa-tokenizer/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "sample-dapps/rwa-tokenizer/lib/LayerZero-v2"]
+	path = sample-dapps/rwa-tokenizer/lib/LayerZero-v2
+	url = https://github.com/LayerZero-Labs/LayerZero-v2
+[submodule "sample-dapps/rwa-tokenizer/lib/devtools"]
+	path = sample-dapps/rwa-tokenizer/lib/devtools
+	url = https://github.com/LayerZero-Labs/devtools
+[submodule "sample-dapps/rwa-tokenizer/lib/solidity-bytes-utils"]
+	path = sample-dapps/rwa-tokenizer/lib/solidity-bytes-utils
+	url = https://github.com/GNSPS/solidity-bytes-utils

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/zachp/Dev/hackathons/rwa-tokenizer-v2/contracts/**)",
+      "Read(//Users/zachp/Dev/hackathons/rwa-tokenizer-v2/lib/devtools/packages/onft-evm/contracts/onft721/**)",
+      "Read(//Users/zachp/Dev/hackathons/rwa-tokenizer-v2/lib/devtools/packages/onft-evm/test/onft/onft721/mocks/**)",
+      "Read(//Users/zachp/Dev/hackathons/rwa-tokenizer-v2/lib/devtools/packages/onft-evm/test/onft/onft721/**)",
+      "WebSearch",
+      "Read(//Users/zachp/Dev/hackathons/rwa-tokenizer-v2/test/**)",
+      "Read(//Users/zachp/Dev/hackathons/rwa-tokenizer-v2/**)",
+      "Bash(npm run build:*)",
+      "Bash(forge inspect:*)",
+      "Bash(cat:*)",
+      "Bash(forge build:*)",
+      "Bash(node:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
