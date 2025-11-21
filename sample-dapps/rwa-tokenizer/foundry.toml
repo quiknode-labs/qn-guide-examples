@@ -19,11 +19,6 @@ remappings = [
 fs_permissions = [{ access = "read-write", path = "./" }]
 gas_reports = ["*"]
 
-# Formatting
-line_length = 100
-tab_width = 4
-bracket_spacing = true
-
 # RPC endpoints
 [rpc_endpoints]
 sepolia = "${NEXT_PUBLIC_RPC_SEPOLIA}"
