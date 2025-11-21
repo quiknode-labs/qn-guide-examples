@@ -190,7 +190,7 @@ export function getIPFSGatewayHeaders(): HeadersInit {
   }
 
   if (IPFS_GATEWAY_TOKEN && PINATA_GATEWAY.includes('quicknode')) {
-    console.log('[IPFS] Adding QuickNode gateway authentication')
+    console.log('[IPFS] Adding Quicknode gateway authentication')
     headers['x-api-key'] = IPFS_GATEWAY_TOKEN
   }
 
@@ -213,7 +213,7 @@ export async function fetchFromIPFS(ipfsUrl: string): Promise<NFTMetadata> {
     {
       url: `https://${PINATA_GATEWAY}/ipfs/${cid}`,
       headers: getIPFSGatewayHeaders(),
-      name: 'Primary (QuickNode/Pinata)',
+      name: 'Primary (Quicknode/Pinata)',
     },
     {
       url: `https://ipfs.io/ipfs/${cid}`,

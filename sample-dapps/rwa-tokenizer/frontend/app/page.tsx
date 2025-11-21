@@ -118,7 +118,7 @@ export default function Home() {
           >
             <p className="flex items-center justify-center gap-2">
               <span className="inline-block w-2 h-2 bg-primary rounded-full animate-glow-pulse" />
-              Powered by QuickNode and LayerZero
+              Powered by Quicknode and LayerZero
             </p>
           </motion.div>
         </motion.div>

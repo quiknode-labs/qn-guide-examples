@@ -175,7 +175,7 @@ cast send <RWA_ADDRESS> \
 
 ## Get Testnet Tokens
 
-Use QuickNode's [multi-chain faucet](https://faucet.quicknode.com/drip) to get testnet ETH.
+Use Quicknode's [multi-chain faucet](https://faucet.quicknode.com/drip) to get testnet ETH.
 
 ## Troubleshooting
 

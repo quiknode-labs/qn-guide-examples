@@ -36,10 +36,10 @@ This repository contains **two contract versions**:
 - [Foundry](https://book.getfoundry.sh/getting-started/installation)
 - Node.js 18+
 - Private key for deployment
-- Some testnet ETH for gas fees (Use [QuickNode Multi-Chain Faucet](https://faucet.quicknode.com/) to get some testnet ETH)
+- Some testnet ETH for gas fees (Use [Quicknode Multi-Chain Faucet](https://faucet.quicknode.com/) to get some testnet ETH)
 - WalletConnect Project ID (for frontend wallet connections)
 - IPFS Pinata JWT (for frontend IPFS uploads)
-- [QuickNode endpoints](https://www.quicknode.com/signup) for Base Sepolia and Ethereum Sepolia (optional, but suggested)
+- [Quicknode endpoints](https://www.quicknode.com/signup) for Base Sepolia and Ethereum Sepolia (optional, but suggested)
 - [Google Maps API Key](https://developers.google.com/maps/documentation/javascript/get-api-key) (optional, for location features)
 
 #### WalletConnect Project ID
@@ -50,11 +50,11 @@ To get a WalletConnect Project ID, sign up at [Reown, formerly WalletConnect](ht
 
 To upload NFT metadata to IPFS, you can use Pinata. Sign up at [Pinata](https://pinata.cloud/) and create a JWT (JSON Web Token) for authentication. You will use this JWT in the frontend environment variables to enable IPFS uploads.
 
-#### QuickNode Endpoints (Optional)
+#### Quicknode Endpoints (Optional)
 
-While not strictly required, it is highly recommended to use QuickNode endpoints for better reliability and performance.
+While not strictly required, it is highly recommended to use Quicknode endpoints for better reliability and performance.
 
-If you don't have a QuickNode account, you can sign up [here](https://www.quicknode.com/signup). Then, create your endpoints for Base Sepolia and Ethereum Sepolia.
+If you don't have a Quicknode account, you can sign up [here](https://www.quicknode.com/signup). Then, create your endpoints for Base Sepolia and Ethereum Sepolia.
 
 You will use these endpoint URLs in the main project (`.env`) and frontend (`frontend/.env.local`) environment variables.
 
