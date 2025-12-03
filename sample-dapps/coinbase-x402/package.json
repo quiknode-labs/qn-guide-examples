@@ -29,8 +29,7 @@
     "x402-fetch": "^0.7.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0",
-    "vercel": "^41.0.2"
+    "nodemon": "^3.1.0"
   },
   "engines": {
     "node": ">=18.0.0"
