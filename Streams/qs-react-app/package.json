@@ -12,7 +12,7 @@
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-json-view-lite": "^0.9.6",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "react18-json-view": "^0.2.7",
     "socket.io-client": "^4.6.2",
     "web-vitals": "^2.1.4",
@@ -44,5 +44,10 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.1"
+  },
+  "overrides": {
+    "nth-check": "^2.1.1",
+    "postcss": "^8.4.31",
+    "webpack-dev-server": "^5.2.1"
   }
 }
