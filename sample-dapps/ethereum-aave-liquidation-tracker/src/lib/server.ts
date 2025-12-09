@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3005;
 // Middleware to parse JSON with raw body for signature verification
 app.use(
   express.json({
+    limit: '50mb', // Increase payload limit for large webhook data
     verify: (req: any, _res, buf) => {
       req.rawBody = buf.toString('utf8');
     },
