@@ -1,32 +1,43 @@
-# This is where you will add the heading and link a guide if a guide on this topic exists.
+# Project Name
 
-#### Prerequisites
-- Prerequisites for the project will go here in bullet points manner.
+> One-liner on what this example does. If a related Quicknode Guide exists, link it here.
 
----
-### Step 1️⃣ - Step number one
+## Prerequisites
 
+- Language/runtime and versions (e.g., Node.js 20, Python 3.10)
+- Tooling (e.g., npm, yarn, pnpm, pip, go)
+- Quicknode endpoint(s) needed
+- Any external services or wallets required
 
+## Setup
 
----
-### Step 2️⃣ - Step number two
+1. Clone the repo and enter this project:
+   ```bash
+   git clone https://github.com/quiknode-labs/qn-guide-examples.git
+   cd qn-guide-examples/<this-directory>
+   ```
+2. Install dependencies:
+   ```bash
+   npm install   # or yarn / pnpm / pip / go mod download
+   ```
+3. Copy env template (if present) and set required values:
+   ```bash
+   cp .env.example .env
+   # add your Quicknode endpoint keys and any secrets
+   ```
 
-This can be first step too if there is no setup required before cloning the repo
+## Run
 
-#### Clone Example Monorepo
+- Local start command (e.g., `npm run dev`, `npm start`, `go run .`, `python main.py`)
+- Any build steps if needed
 
-To begin, clone the `qn-guide-examples` repo, navigate to this project's directory, install dependencies and open the project directory in a code editor (VS code in this case).
+## Notes
 
-```bash
-git clone https://github.com/quiknode-labs/qn-guide-examples.git
-cd qn-guide-examples/ (Update this line with the particular directory)
-npm install
-code .
-```
+- Describe key folders/files and how to customize.
+- Call out chain/network defaults and how to switch.
+- Link back to the related guide or Sample App Library entry if applicable.
 
-If you are adding a link to QuickNode website use the following format for link
-```bash
-https://www.quicknode.com/?utm_source=qn-github&utm_campaign=<update this part>&utm_content=sign-up&utm_medium=generic
-```
+## Support & Feedback
 
-Update the value of `utm_campaign` with the name of your directory.
+- Repo issues: please open a GitHub issue for bugs/requests related to this example.
+- Need help with Quicknode products? Reach out via support: https://support.quicknode.com/
