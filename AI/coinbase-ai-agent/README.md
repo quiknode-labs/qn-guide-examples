@@ -2,7 +2,7 @@
 
 An AI-powered agent that operates on the Base blockchain and interacts with users through Twitter. Built with Coinbase's CDP Agentkit, this agent can perform various blockchain operations and engage in autonomous social interactions.
 
-For an in-depth guide, refer to our **[How to Create a Web3 AI Agent with Coinbase AgentKit](http://www.quicknode.com/guides/ai/create-a-web3-ai-agent-with-coinbase-agent-kit)** guide on QuickNode.
+For an in-depth guide, refer to our **[How to Create a Web3 AI Agent with Coinbase AgentKit](http://www.quicknode.com/guides/ai/create-a-web3-ai-agent-with-coinbase-agent-kit)** guide on Quicknode.
 
 ## Features
 
@@ -146,5 +146,5 @@ CDP_API_KEY_PRIVATE_KEY="your-cdp-api-key-private-key"
 
 ## Author
 
-Created as part of the QuickNode guide preparation.
+Created as part of the Quicknode guide preparation.
 

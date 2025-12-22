@@ -1,10 +1,10 @@
-# Audit ERC20, ERC721, and ERC1155 Token Activity using QuickNode SDK
+# Audit ERC20, ERC721, and ERC1155 Token Activity using Quicknode SDK
 
-This project is based on the guide, [How to Audit ERC20, ERC721, and ERC1155 Token Activity using QuickNode SDK](https://www.quicknode.com/guides/ethereum-development/transactions/how-to-audit-token-activity-using-quicknode-sdk) by Sergen Uysal. Using JavaScript and the QuickNode SDK, this tool fetches and analyzes transactions across ERC20, ERC721, and ERC1155 token standards to conducting comprehensive audits on blockchain wallets, specifically tailored for EVM-compatible chains.
+This project is based on the guide, [How to Audit ERC20, ERC721, and ERC1155 Token Activity using Quicknode SDK](https://www.quicknode.com/guides/ethereum-development/transactions/how-to-audit-token-activity-using-quicknode-sdk) by Sergen Uysal. Using JavaScript and the Quicknode SDK, this tool fetches and analyzes transactions across ERC20, ERC721, and ERC1155 token standards to conducting comprehensive audits on blockchain wallets, specifically tailored for EVM-compatible chains.
 
 ### Prerequisites
 
-- A [QuickNode account](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=explorer&utm_content=sign-up&utm_medium=generic).
+- A [Quicknode account](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=explorer&utm_content=sign-up&utm_medium=generic).
 - [Node.JS](https://nodejs.org/en/) installed.
 
 ## Clone Example Monorepo
@@ -21,7 +21,7 @@ npm install
 
 ### Configuring the Endpoint
 
-1. Obtain a QuickNode endpoint URL for the EVM chain that you want.
+1. Obtain a Quicknode endpoint URL for the EVM chain that you want.
 2. Open the `index.js` file.
 3. Locate the `Core` object instantiation. It should look like this:
 
@@ -30,7 +30,7 @@ const core = new Core({
   endpointUrl: "QUICKNODE_ENDPOINT",
 });
 ```
-4. Replace `QUICKNODE_ENDPOINT` with your actual QuickNode endpoint URL.
+4. Replace `QUICKNODE_ENDPOINT` with your actual Quicknode endpoint URL.
 
 ### Audit Configuration
 

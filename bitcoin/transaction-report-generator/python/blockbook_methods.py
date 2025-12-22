@@ -8,7 +8,7 @@ from interfaces import Result, PriceData, Transaction, Vin, Vout  # Ensure corre
 # Initialize dotenv to use environment variables
 load_dotenv()
 
-# Retrieve the QuickNode endpoint URL from environment variables
+# Retrieve the Quicknode endpoint URL from environment variables
 QUICKNODE_ENDPOINT = os.getenv("QUICKNODE_ENDPOINT")
 
 # Utility function to parse transaction data

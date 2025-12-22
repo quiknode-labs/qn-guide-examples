@@ -1,6 +1,6 @@
 ## Quick Tac Toe
 
-This is the progress example of the [QuickNode Solana Basics Course](https://www.quicknode.com/courses/solana/solana-basics/overview). 
+This is the progress example of the [Quicknode Solana Basics Course](https://www.quicknode.com/courses/solana/solana-basics/overview). 
 Use this course at the start of [Lesson 2](https://www.quicknode.com/courses/solana/solana-basics/read-write-solana/wallet-adapter).
 
 ## Getting Started

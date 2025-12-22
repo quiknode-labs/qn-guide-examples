@@ -351,7 +351,7 @@ export function PoolOverview({ onStartQuiz, onPoolsLoaded }: PoolOverviewProps) 
           <AlertDescription className="text-green-800">
             <div className="flex items-center justify-between">
               <span>
-                Connected to QuickNode Aerodrome API - Live verified pools
+                Connected to Quicknode Aerodrome API - Live verified pools
               </span>
               {verificationStatus && (
                 <div className="flex items-center gap-2">

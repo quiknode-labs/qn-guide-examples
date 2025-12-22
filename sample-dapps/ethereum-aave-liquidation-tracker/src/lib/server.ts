@@ -26,7 +26,7 @@ app.get('/health', (_req: Request, res: Response) => {
 });
 
 /**
- * Webhook endpoint for receiving QuickNode Stream data
+ * Webhook endpoint for receiving Quicknode Stream data
  * Responds immediately and processes data asynchronously to avoid timeouts
  */
 app.post('/webhook', webhookSignatureMiddleware, async (req: any, res: Response) => {
@@ -44,15 +44,15 @@ app.post('/webhook', webhookSignatureMiddleware, async (req: any, res: Response)
     // Extract timestamp and filteredLogs from webhook payload
     const { timestamp, filteredLogs } = webhookData;
 
-    // Handle QuickNode test/ping requests (empty or minimal payload)
+    // Handle Quicknode test/ping requests (empty or minimal payload)
     if (!timestamp || !filteredLogs) {
-      console.log('Received test/ping request from QuickNode');
+      console.log('Received test/ping request from Quicknode');
       return res.status(200).json({
         message: 'Webhook endpoint is healthy and ready to receive events'
       });
     }
 
-    // Respond immediately to avoid timeout (QuickNode expects response within 30s)
+    // Respond immediately to avoid timeout (Quicknode expects response within 30s)
     res.status(202).json({
       message: 'Webhook received, processing asynchronously',
       timestamp,
@@ -99,7 +99,7 @@ Webhook endpoint: http://localhost:${PORT}/webhook
 Health check: http://localhost:${PORT}/health
 
 Signature verification: ${process.env.WEBHOOK_SECRET_KEY ? 'ENABLED' : 'DISABLED'}
-QuickNode RPC: ${process.env.QUICKNODE_RPC_URL ? 'CONFIGURED' : 'NOT CONFIGURED'}
+Quicknode RPC: ${process.env.QUICKNODE_RPC_URL ? 'CONFIGURED' : 'NOT CONFIGURED'}
 
 Waiting for webhook events...
   `);

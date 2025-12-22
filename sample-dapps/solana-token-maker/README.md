@@ -1,8 +1,8 @@
-# QuickNode Solana Token-Minter Demo
+# Quicknode Solana Token-Minter Demo
 
 ## Overview
 This is a simple demo let's you create a fungible token on the Solana blockchain. The demo will:
-- Upload your image to IPFS using [QuickNode's IPFS API](https://www.quicknode.com/ipfs).
+- Upload your image to IPFS using [Quicknode's IPFS API](https://www.quicknode.com/ipfs).
 
 ![Preview](public/preview.png)
 
@@ -32,11 +32,11 @@ bun install
 
 ### Set Environment Variables
 
-Make sure you have a QuickNode endpoint handy--you can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=token-maker).
+Make sure you have a Quicknode endpoint handy--you can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=token-maker).
 
-- Rename `.env.example` to `.env.local` and update with your QuickNode Solana Node Endpoint and QuickNode IPFS key.
+- Rename `.env.example` to `.env.local` and update with your Quicknode Solana Node Endpoint and Quicknode IPFS key.
 - Make sure to update the cluster to ensure your transaction URLs point to the correct explorer (use only of the enum values provided in the `.env.example` file).
-- You can use QuickNode's public IPFS Gateway URL or replace it with your own.
+- You can use Quicknode's public IPFS Gateway URL or replace it with your own.
 
 ```env
 QN_IPFS_API=QN_abc123456789xyz_REPLACE_THIS
@@ -90,7 +90,7 @@ src/
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-token-maker&env=QN_IPFS_API,QN_ENDPOINT,NEXT_PUBLIC_CLUSTER,NEXT_PUBLIC_GATEWAY_URL&envDescription=Requires%20QuickNode%20Endpoint%20and%20QN%20IPFS%20API%20Key&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=quicknode-token-minter&repository-name=quicknode-token-minter&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-token-maker%2Fpublic%2Fpreview.png)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-token-maker&env=QN_IPFS_API,QN_ENDPOINT,NEXT_PUBLIC_CLUSTER,NEXT_PUBLIC_GATEWAY_URL&envDescription=Requires%20Quicknode%20Endpoint%20and%20QN%20IPFS%20API%20Key&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=quicknode-token-minter&repository-name=quicknode-token-minter&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-token-maker%2Fpublic%2Fpreview.png)
 
 ## Next.js Documentation
 

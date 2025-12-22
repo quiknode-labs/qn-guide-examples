@@ -7,7 +7,7 @@
   "scripts": {
     "mint": "node mint.js"
   },
-  "keywords": [ "QuickNode", "Polygon", "Ethers" ],
+  "keywords": [ "Quicknode", "Polygon", "Ethers" ],
   "license": "MIT",
   "devDependencies": {
     "dotenv": "^16.0.3",

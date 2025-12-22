@@ -4,7 +4,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config(); // Initialize dotenv to use environment variables
 
-// Retrieve the QuickNode endpoint URL from environment variables
+// Retrieve the Quicknode endpoint URL from environment variables
 const QUICKNODE_ENDPOINT = process.env.QUICKNODE_ENDPOINT as string;
 
 // Fetches detailed transaction data for a specified Bitcoin address
@@ -21,7 +21,7 @@ export async function bb_getaddress(address: string): Promise<Result> {
       jsonrpc: "2.0",
     };
 
-    // Make the POST request to the QuickNode endpoint
+    // Make the POST request to the Quicknode endpoint
     const response = await axios.post(QUICKNODE_ENDPOINT, postData, {
       headers: { "Content-Type": "application/json" },
       maxBodyLength: Infinity,
@@ -50,7 +50,7 @@ export async function bb_gettickers(timestamp: number): Promise<PriceData> {
       jsonrpc: "2.0",
     };
 
-    // Make the POST request to the QuickNode endpoint
+    // Make the POST request to the Quicknode endpoint
     const response = await axios.post(QUICKNODE_ENDPOINT, postData, {
       headers: { "Content-Type": "application/json" },
       maxBodyLength: Infinity,

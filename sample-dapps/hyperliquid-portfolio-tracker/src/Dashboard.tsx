@@ -305,7 +305,7 @@ const Dashboard: React.FC = () => {
               <div className="mb-8">
                 <div className="inline-flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 mb-6">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                  <span className="text-sm text-slate-300">Powered by QuickNode</span>
+                  <span className="text-sm text-slate-300">Powered by Quicknode</span>
                 </div>
 
                 <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent mb-6 leading-tight">

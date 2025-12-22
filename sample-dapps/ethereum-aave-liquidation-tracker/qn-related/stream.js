@@ -27,7 +27,7 @@ function main(stream) {
     // Handle both payload and stream parameter styles
     const data = stream?.data ? stream.data : stream;
 
-    // Early validation - return null to skip (per QuickNode docs)
+    // Early validation - return null to skip (per Quicknode docs)
     if (!data?.[0]?.block?.timestamp || !data?.[0]?.receipts?.length) {
       return null;
     }
@@ -52,12 +52,12 @@ function main(stream) {
         normalizedAddresses.includes(log.address.toLowerCase())
       );
 
-    // Return data if found, null otherwise (per QuickNode docs)
+    // Return data if found, null otherwise (per Quicknode docs)
     return filteredLogs?.length > 0
       ? { timestamp, filteredLogs }
       : null;
   } catch (e) {
-    // Return null to skip on error (per QuickNode docs)
+    // Return null to skip on error (per Quicknode docs)
     return null;
   }
 }

@@ -1,11 +1,11 @@
 // Importing necessary modules and libraries
-import { Core, viem } from "@quicknode/sdk"; // Importing Core and viem from the QuickNode SDK
+import { Core, viem } from "@quicknode/sdk"; // Importing Core and viem from the Quicknode SDK
 import fs from "fs-extra"; // Importing the file system module for file operations
 import * as cli from "cli-progress"; // Importing the CLI progress bar module for visual progress feedback in the console
 
-// Creating a new instance of Core from the QuickNode SDK
+// Creating a new instance of Core from the Quicknode SDK
 const core = new Core({
-  endpointUrl: "QUICKNODE_ENDPOINT", // The endpoint URL of your QuickNode. Replace "QUICKNODE_ENDPOINT" with your actual QuickNode endpoint URL.
+  endpointUrl: "QUICKNODE_ENDPOINT", // The endpoint URL of your Quicknode. Replace "QUICKNODE_ENDPOINT" with your actual Quicknode endpoint URL.
 });
 
 // Function to get ERC20 token transfers for a specific address within a given block

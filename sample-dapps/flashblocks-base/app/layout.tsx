@@ -8,7 +8,7 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "Flashblocks Demo - Faster Confirmations on Base",
   description:
-    "Experience the speed difference between Flashblocks and traditional blocks. Built with QuickNode infrastructure.",
+    "Experience the speed difference between Flashblocks and traditional blocks. Built with Quicknode infrastructure.",
   generator: "v0.dev",
 }
 

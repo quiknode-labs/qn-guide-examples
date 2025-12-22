@@ -1,12 +1,12 @@
 import { Zap, Github } from "lucide-react";
 
-const QuickNodeBanner = () => {
+const QuicknodeBanner = () => {
   return (
     <div className="flex items-center justify-between px-4 py-2 mt-4 rounded-lg bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-200/20">
       <div className="flex items-center gap-2">
         <Zap size={20} className="text-blue-500 flex-shrink-0" />
         <span className="text-sm">
-          Powered by QuickNode{" "}
+          Powered by Quicknode{" "}
           <a
             href="https://quicknode.com/streams?utm_source=internal&utm_campaign=guides&utm_content=aave-v3-liquidation-tracker"
             target="_blank"
@@ -32,4 +32,4 @@ const QuickNodeBanner = () => {
   );
 };
 
-export default QuickNodeBanner;
+export default QuicknodeBanner;

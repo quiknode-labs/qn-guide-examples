@@ -106,7 +106,7 @@ You can use **Ruby**, **TypeScript**, or **Python** to generate payment signatur
 
 ##### Option A: Ruby (Recommended)
 
-Uses QuickNode's open-source `x402-payments` gem:
+Uses Quicknode's open-source `x402-payments` gem:
 
 ```bash
 # Set your test private key
@@ -191,7 +191,7 @@ See `API_TEST_COMMANDS.md` for detailed instructions.
 ## Payment Generation
 
 Three scripts are available for generating valid EIP-712 payment signatures for testing:
-- `generate_payment.rb` (Ruby) - **Recommended** - Uses QuickNode's `x402-payments` gem
+- `generate_payment.rb` (Ruby) - **Recommended** - Uses Quicknode's `x402-payments` gem
 - `generate_payment.ts` (TypeScript) - Uses Viem library
 - `generate_payment.py` (Python) - Uses eth-account library
 
@@ -210,7 +210,7 @@ PORT=3001 ruby generate_payment.rb
 X402_TEST_PRIVATE_KEY=0x... PORT=3001 ruby generate_payment.rb
 ```
 
-**Why Ruby?** The `x402-payments` gem is QuickNode's open-source library. It uses `bundler/inline` so the gem auto-installs on first run - no separate setup needed!
+**Why Ruby?** The `x402-payments` gem is Quicknode's open-source library. It uses `bundler/inline` so the gem auto-installs on first run - no separate setup needed!
 
 #### TypeScript
 

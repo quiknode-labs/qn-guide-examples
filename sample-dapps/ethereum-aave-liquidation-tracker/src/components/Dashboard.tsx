@@ -3,7 +3,7 @@ import { LiquidationsTable } from "./liquidations/LiquidationsTable";
 import { MetricsPanel } from "./analytics/MetricsPanel";
 import { LiquidationTrends } from "./analytics/LiquidationTrends";
 import { AssetDistribution } from "./analytics/AssetDistribution";
-import QuickNodeBanner from "./QuickNodeBanner";
+import QuicknodeBanner from "./QuicknodeBanner";
 
 export function Dashboard() {
   return (
@@ -13,7 +13,7 @@ export function Dashboard() {
         <p className="text-muted-foreground mt-2">
           Monitor and analyze liquidation events on the Aave V3 protocol
         </p>
-        <QuickNodeBanner />
+        <QuicknodeBanner />
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">

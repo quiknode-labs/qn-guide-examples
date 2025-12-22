@@ -8,7 +8,7 @@ export default function Banner() {
         rel="noopener noreferrer"
         className="underline hover:text-blue-100 transition-colors"
       >
-        QuickNode Base DeFi Bundle
+        Quicknode Base DeFi Bundle
       </a>{" "}
       - Check out the codebase {}
       <a

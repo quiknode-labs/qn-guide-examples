@@ -1,4 +1,4 @@
-// API client for QuickNode Aerodrome Swap API
+// API client for Quicknode Aerodrome Swap API
 import type { DetailedPool } from "@/types/pool"
 import type { TokensResponse } from "@/types/token";
 

@@ -57,7 +57,7 @@ const App = () => {
   return (
     <div className="min-h-screen flex flex-col bg-blue-50">
       <header className="bg-blue-200 text-xl text-center p-4">
-        Bitcoin Transaction Report Generator by QuickNode
+        Bitcoin Transaction Report Generator by Quicknode
       </header>
       <main className="flex-grow container mx-auto p-4">
         <ReportForm onSubmit={handleFormSubmit} isLoading={loading} />
@@ -66,7 +66,7 @@ const App = () => {
       <footer className="bg-blue-200 text-center p-4">
         Created with ❤️ and{" "}
         <a href="https://www.quicknode.com" className="text-blue-500">
-          QuickNode
+          Quicknode
         </a>
       </footer>
     </div>

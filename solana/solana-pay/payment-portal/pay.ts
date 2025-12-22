@@ -7,9 +7,9 @@ import BigNumber from 'bignumber.js';
 const myWallet = 'DemoKMZWkk483hX4mUrcJoo3zVvsKhm8XXs28TuwZw9H'; // Replace with your wallet address (this is the destination where the payment will be sent)
 const recipient = new PublicKey(myWallet);
 const amount = new BigNumber(0.0001); // 0.0001 SOL
-const label = 'QuickNode Guide Store';
+const label = 'Quicknode Guide Store';
 const memo = 'QN Solana Pay Demo Public Memo';
-const quicknodeEndpoint = 'https://example.solana-devnet.quiknode.pro/123456/'; // Replace with your QuickNode endpoint
+const quicknodeEndpoint = 'https://example.solana-devnet.quiknode.pro/123456/'; // Replace with your Quicknode endpoint
 
 const paymentRequests = new Map<string, { recipient: PublicKey; amount: BigNumber; memo: string }>();
 
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
         try {
             const reference = new Keypair().publicKey;
-            const message = `QuickNode Demo - Order ID #0${Math.floor(Math.random() * 999999) + 1}`;
+            const message = `Quicknode Demo - Order ID #0${Math.floor(Math.random() * 999999) + 1}`;
             const urlData = await generateUrl(
                 recipient,
                 amount,

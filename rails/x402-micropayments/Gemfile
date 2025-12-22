@@ -6,7 +6,7 @@ gem "rails", "~> 8.1.0"
 # x402 payment protocol for Rails
 gem "x402-rails", "~> 0.2.1"
 
-# x402 payment header generation (QuickNode open-source gem)
+# x402 payment header generation (Quicknode open-source gem)
 gem "x402-payments"
 
 # Use sqlite3 as the database for Active Record

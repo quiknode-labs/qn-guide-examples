@@ -40,7 +40,7 @@ interface EstimatePriorityFeesParams {
     account?: string;
     // (optional) The API version to use for the request (default: 1)
     api_version?: number;
-    // Your Add-on Endpoint (found in your QuickNode Dashboard - https://dashboard.quicknode.com/endpoints)
+    // Your Add-on Endpoint (found in your Quicknode Dashboard - https://dashboard.quicknode.com/endpoints)
     endpoint: string;
 }
 

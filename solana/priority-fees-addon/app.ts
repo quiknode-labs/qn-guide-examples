@@ -1,9 +1,9 @@
 /**
  * 
- *  Sample Usage of QuickNode's Solana Priority Fees Add-on
+ *  Sample Usage of Quicknode's Solana Priority Fees Add-on
  *  
  *  Description:
- *  This script demonstrates how to use QuickNode's Solana Priority Fees Add-on to estimate the cost of a transaction
+ *  This script demonstrates how to use Quicknode's Solana Priority Fees Add-on to estimate the cost of a transaction
  *  and create a dynamic priority fee instruction for a Solana transaction based on your own business logic.
  * 
  *  Resources:

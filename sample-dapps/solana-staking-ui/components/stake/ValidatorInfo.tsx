@@ -23,13 +23,13 @@ export function ValidatorInfo({ apy }: ValidatorInfoProps) {
         <Flex align="center" gap="2">
           <Image
             src="/quicknode.svg"
-            alt="QuickNode Logo"
+            alt="Quicknode Logo"
             width={40}
             height={40}
             style={{ borderRadius: "50%", padding: "2px" }}
           />
           <Flex direction="column" gap="1">
-            <Text size="3">QuickNode</Text>
+            <Text size="3">Quicknode</Text>
             <Link
               size="1"
               target="_blank"

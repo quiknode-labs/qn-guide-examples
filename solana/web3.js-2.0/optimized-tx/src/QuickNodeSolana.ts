@@ -31,18 +31,18 @@ import {
     estimateComputeUnitLimitFactory
 } from "@solana-program/compute-budget";
 import { DEFAULTS } from './constants/defaults';
-import { QuickNodeSolanaConfig } from './types/config';
+import { QuicknodeSolanaConfig } from './types/config';
 import { PrepareSmartTransactionMessageArgs, SendSmartTransactionArgs } from './types/transaction';
-import { createQuickNodeTransport } from './utils/transport'
+import { createQuicknodeTransport } from './utils/transport'
 import { PriorityFeeApi, PriorityFeeQuery } from "./types";
 
-export class QuickNodeSolana {
+export class QuicknodeSolana {
     private readonly solanaCore: Rpc<SolanaRpcApi>;
     private readonly priorityFeeApi: Rpc<PriorityFeeApi>;
     private readonly solanaSubscriptions: RpcSubscriptions<SolanaRpcSubscriptionsApi>;
     private readonly computeMargin: number;
     
-    constructor({ endpoint, wssEndpoint, computeMargin = DEFAULTS.DEFAULT_COMPUTE_MARGIN }: QuickNodeSolanaConfig) {
+    constructor({ endpoint, wssEndpoint, computeMargin = DEFAULTS.DEFAULT_COMPUTE_MARGIN }: QuicknodeSolanaConfig) {
         if (!wssEndpoint) {
             const httpProviderUrl = new URL(endpoint);
             httpProviderUrl.protocol = "wss:";
@@ -60,7 +60,7 @@ export class QuickNodeSolana {
             requestTransformer: (request: RpcRequest<any>) => request.params[0],
             responseTransformer: (response: any) => response.result,
         });
-        const transport = createQuickNodeTransport(endpoint);
+        const transport = createQuicknodeTransport(endpoint);
         return createRpc({ api, transport });
     }
 

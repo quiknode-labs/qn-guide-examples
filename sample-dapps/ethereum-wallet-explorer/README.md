@@ -1,10 +1,10 @@
-# QuickNode Ethereum Explorer Demo
+# Quicknode Ethereum Explorer Demo
 
 ## Overview
 
-This is a simple demo of how to use your QuickNode Ethereum Node Endpoint and APIs from the QuickNode Marketplace to query the Ethereum blockchain for tokens, transactions, and NFTs for a given wallet.
+This is a simple demo of how to use your Quicknode Ethereum Node Endpoint and APIs from the Quicknode Marketplace to query the Ethereum blockchain for tokens, transactions, and NFTs for a given wallet.
 
-To run this demo to its full capabilities, you will need both the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle?utm_source=internal&utm_content=courses) (free) and [`Trueblocks Key`](https://marketplace.quicknode.com/add-on/trueblocks-key?utm_source=internal&utm_content=course) (paid) add-ons from the [QuickNode Marketplace](https://www.quicknode.com/marketplace?utm_source=internal&utm_content=course) installed.
+To run this demo to its full capabilities, you will need both the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle?utm_source=internal&utm_content=courses) (free) and [`Trueblocks Key`](https://marketplace.quicknode.com/add-on/trueblocks-key?utm_source=internal&utm_content=course) (paid) add-ons from the [Quicknode Marketplace](https://www.quicknode.com/marketplace?utm_source=internal&utm_content=course) installed.
 
 The demo uses [Next.js 14](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -26,7 +26,7 @@ bun install
 
 ### Set Environment Variables
 
-Rename `.env.example` to `.env.local` and update with your QuickNode Ethereum Node Endpoint.
+Rename `.env.example` to `.env.local` and update with your Quicknode Ethereum Node Endpoint.
 
 ```env
 ETHEREUM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
@@ -62,7 +62,7 @@ src/
     └── header/
 ```
 
-- `api` - Contains the API routes for the Ethereum RPC calls. These can be accessed from the client via `/api/wallet/[method]?walletAddress=[address]`. These GET requests utilize the [`Ethers`](https://docs.ethers.org/v6/) library, which lets us interact with Ethereum via our RPC URL and helps us parse and decode data, the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle?utm_source=internal&utm_content=courses) add-on from the [QuickNode Marketplace](https://www.quicknode.com/marketplace?utm_source=internal&utm_content=course) to get information about NFTs and ERC-20 Tokens via simple RPC request, and the [`Trueblocks Key`](https://marketplace.quicknode.com/add-on/trueblocks-key?utm_source=internal&utm_content=course) add-on to obtain a complete historical list of appearances (block number, transaction id) for any Ethereum address.
+- `api` - Contains the API routes for the Ethereum RPC calls. These can be accessed from the client via `/api/wallet/[method]?walletAddress=[address]`. These GET requests utilize the [`Ethers`](https://docs.ethers.org/v6/) library, which lets us interact with Ethereum via our RPC URL and helps us parse and decode data, the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle?utm_source=internal&utm_content=courses) add-on from the [Quicknode Marketplace](https://www.quicknode.com/marketplace?utm_source=internal&utm_content=course) to get information about NFTs and ERC-20 Tokens via simple RPC request, and the [`Trueblocks Key`](https://marketplace.quicknode.com/add-on/trueblocks-key?utm_source=internal&utm_content=course) add-on to obtain a complete historical list of appearances (block number, transaction id) for any Ethereum address.
 
 - `components` - Contains the React components for the dapp. 
     - The `explorer` component contains client-side components that call the API routes and render the results.
@@ -70,7 +70,7 @@ src/
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer&env=ETHEREUM_RPC_URL&envDescription=ETHEREUM_RPC_URL%3A%20Use%20QuickNode%20Ethereum%20Mainnet%20Endpoint&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=ethereum-wallet-explorer&repository-name=ethereum-wallet-explorer&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-title=QuickNode%20Starter%20Ethereum%20Wallet%20Explorer&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fblob%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer%2Fpublic%2Fdemo1.png)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer&env=ETHEREUM_RPC_URL&envDescription=ETHEREUM_RPC_URL%3A%20Use%20Quicknode%20Ethereum%20Mainnet%20Endpoint&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=ethereum-wallet-explorer&repository-name=ethereum-wallet-explorer&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-title=Quicknode%20Starter%20Ethereum%20Wallet%20Explorer&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fblob%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer%2Fpublic%2Fdemo1.png)
 
 
 ## Preview 

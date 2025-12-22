@@ -6,7 +6,7 @@ import crypto from 'crypto';
 const programId = new PublicKey('yV5T4jugYYqkPfA2REktXugfJ3HvmvRLEw7JxuB2TUf'); // 👈 You can use this program or create/use your own
 const counterSeed = 'counter'; // This is the seed used to generate the counter account (may be different if you use a different program)
 const functionName = 'increment'; // This is the name of our anchor instruction (may be different if you use a different program)
-const message = `QuickNode Demo - Increment Counter`;
+const message = `Quicknode Demo - Increment Counter`;
 const quickNodeEndpoint = 'https://example.solana-devnet.quiknode.pro/0123456/'; // 👈 Replace with your own devnet endpoint
 const connection = new Connection(quickNodeEndpoint, 'confirmed');
 const label = 'QuickCount +1';

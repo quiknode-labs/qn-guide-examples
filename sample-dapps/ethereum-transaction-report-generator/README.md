@@ -3,9 +3,9 @@
 
 ## Introduction
 
-This application is designed to fetch and analyze Ethereum transactions associated with a specific address, leveraging the capabilities of QuickNode's [EVM Blockbook add-on](https://marketplace.quicknode.com/add-on/evm-blockbook-json-rpc). It provides users with detailed reports within a specified date range, offering insights into transaction history.
+This application is designed to fetch and analyze Ethereum transactions associated with a specific address, leveraging the capabilities of Quicknode's [EVM Blockbook add-on](https://marketplace.quicknode.com/add-on/evm-blockbook-json-rpc). It provides users with detailed reports within a specified date range, offering insights into transaction history.
 
-For an in-depth guide on how to build this app, refer to [our comprehensive guide on QuickNode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-generate-ethereum-transaction-reports-with-blockbook)
+For an in-depth guide on how to build this app, refer to [our comprehensive guide on Quicknode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-generate-ethereum-transaction-reports-with-blockbook)
 
 ### Tech Stack
 - Frontend Framework/Library: React
@@ -29,7 +29,7 @@ For an in-depth guide on how to build this app, refer to [our comprehensive guid
 
 Before you begin, ensure you have the following:
 - [Node.js](https://nodejs.org/en/) installed on your system.
-- A QuickNode account with the [EVM Blockbook JSON-RPC Add-On](https://marketplace.quicknode.com/add-on/evm-blockbook-json-rpc) add-on enabled. 
+- A Quicknode account with the [EVM Blockbook JSON-RPC Add-On](https://marketplace.quicknode.com/add-on/evm-blockbook-json-rpc) add-on enabled. 
     > Blockbook RPC is a paid add-on. Please check the details [here](https://marketplace.quicknode.com/add-on/evm-blockbook-json-rpc) and compare plans based on your needs.
 - A code editor or an IDE (e.g., [VS Code](https://code.visualstudio.com/))
 - [Typescript](https://www.typescriptlang.org/) and [ts-node](https://typestrong.org/ts-node/)
@@ -59,7 +59,7 @@ npm install
 
 ### Setting Environment Variables
 
-Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_ETHEREUM_ENDPOINT_URL` placeholder with your QuickNode Ethereum Node Endpoint. Make sure that the Blockbook RPC add-on is enabled.
+Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_ETHEREUM_ENDPOINT_URL` placeholder with your Quicknode Ethereum Node Endpoint. Make sure that the Blockbook RPC add-on is enabled.
 
 ```env
 VITE_QUICKNODE_ENDPOINT = "YOUR_QUICKNODE_ETHEREUM_ENDPOINT_URL"
@@ -92,9 +92,9 @@ The **Ethereum Transaction Report Generator** application will query the Ethereu
 
 ## Conclusion
 
-[QuickNode's EVM Blockbook add-on](https://marketplace.quicknode.com/add-on/evm-blockbook-json-rpc) facilitates the creation of detailed Ethereum transaction reports for developers and businesses alike. While this application covers the fundamentals, there's a vast scope for customization and extended functionalities. Whether for audit purposes, regulatory compliance, or market analysis, the Blockbook add-on streamlines the process of extracting blockchain data.
+[Quicknode's EVM Blockbook add-on](https://marketplace.quicknode.com/add-on/evm-blockbook-json-rpc) facilitates the creation of detailed Ethereum transaction reports for developers and businesses alike. While this application covers the fundamentals, there's a vast scope for customization and extended functionalities. Whether for audit purposes, regulatory compliance, or market analysis, the Blockbook add-on streamlines the process of extracting blockchain data.
 
-To discover more about how QuickNode assists auditing firms and individuals in extracting this type of data from blockchains, please [contact us](https://www.quicknode.com/contact-us); we're eager to engage with you!
+To discover more about how Quicknode assists auditing firms and individuals in extracting this type of data from blockchains, please [contact us](https://www.quicknode.com/contact-us); we're eager to engage with you!
 
 
 

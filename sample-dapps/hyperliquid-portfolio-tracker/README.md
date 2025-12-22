@@ -1,8 +1,8 @@
-# QuickNode Hyperliquid Portfolio Tracker
+# Quicknode Hyperliquid Portfolio Tracker
 
 ## Overview
 
-A real-time portfolio tracker for Hyperliquid perpetual traders. Monitor positions, profit & loss, margin usage, vault holdings, and spot balances for any wallet address using QuickNode's Hyperliquid endpoint.
+A real-time portfolio tracker for Hyperliquid perpetual traders. Monitor positions, profit & loss, margin usage, vault holdings, and spot balances for any wallet address using Quicknode's Hyperliquid endpoint.
 
 This demo uses React + Vite with TypeScript, Tailwind CSS, and Supabase PostgreSQL for real-time data updates.
 
@@ -17,7 +17,7 @@ This demo uses React + Vite with TypeScript, Tailwind CSS, and Supabase PostgreS
 ## What You Will Need
 
 - Node.js v20 or higher
-- [QuickNode Hyperliquid Endpoint](https://www.quicknode.com/chains/hyperliquid) 
+- [Quicknode Hyperliquid Endpoint](https://www.quicknode.com/chains/hyperliquid) 
 - [Supabase account](https://supabase.com/dashboard/sign-up) 
 
 ## Getting Started
@@ -54,9 +54,9 @@ cp .env.example .env
 5. Navigate to **SQL Editor** in the Supabase dashboard
 6. Paste the contents of `supabase/schema.sql` and click **Run**
 
-### Setup QuickNode Endpoint
+### Setup Quicknode Endpoint
 
-1. Create a Hyperliquid endpoint at [QuickNode Dashboard](https://dashboard.quicknode.com/endpoints)
+1. Create a Hyperliquid endpoint at [Quicknode Dashboard](https://dashboard.quicknode.com/endpoints)
 2. Copy your endpoint URL
 3. **Important**: Remove `/evm` and add `/info` at the end
    - Example: `https://example-name.hyperliquid.quiknode.pro/token-id/info`
@@ -126,7 +126,7 @@ supabase/
 **Data Flow:**
 1. User enters wallet address → Frontend stores request in database
 2. Indexer detects request (polls every 500ms) → Switches to new wallet
-3. Indexer fetches data from QuickNode endpoint → Stores in database
+3. Indexer fetches data from Quicknode endpoint → Stores in database
 4. Frontend polls database (every 1000ms) → UI updates with live data
 
 **Components:**
@@ -149,16 +149,16 @@ Then search for a wallet address again in the frontend.
 
 Verify your Supabase credentials in `.env` are correct and the database schema has been applied using the SQL Editor.
 
-**QuickNode endpoint errors:**
+**Quicknode endpoint errors:**
 
-Make sure your endpoint URL ends with `/info` instead of `/evm`. Check your QuickNode dashboard to confirm the endpoint is active.
+Make sure your endpoint URL ends with `/info` instead of `/evm`. Check your Quicknode dashboard to confirm the endpoint is active.
 
 ## Learn More
 
 For detailed technical explanations, see the full guide:
 
 - [Build a Real-Time Hyperliquid Portfolio Tracker](https://www.quicknode.com/guides/other-chains/hyperliquid/build-portfolio-tracker-using-hypercore-data) 
-- [QuickNode Hyperliquid Docs](https://www.quicknode.com/docs/hyperliquid) 
+- [Quicknode Hyperliquid Docs](https://www.quicknode.com/docs/hyperliquid) 
 - [Hyperliquid Documentation](https://hyperliquid.gitbook.io/hyperliquid-docs)
 
 ## Extending the Tracker

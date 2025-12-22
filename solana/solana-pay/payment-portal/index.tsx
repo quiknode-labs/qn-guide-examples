@@ -51,8 +51,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>QuickNode Solana Pay Demo</title>
-        <meta name="description" content="QuickNode Guide: Solana Pay" />
+        <title>Quicknode Solana Pay Demo</title>
+        <meta name="description" content="Quicknode Guide: Solana Pay" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

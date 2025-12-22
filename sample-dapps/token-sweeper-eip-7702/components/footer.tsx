@@ -16,7 +16,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1"
           >
-            QuickNode
+            Quicknode
             <ExternalLink className="w-3 h-3" />
           </a>
           <span className="text-xs text-gray-400 ml-4">

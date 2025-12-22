@@ -1,6 +1,6 @@
 # Base MEV-Protected Telegram Trading Bot
 
-A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainnet with MEV protection, leveraging QuickNode's [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot).
+A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainnet with MEV protection, leveraging Quicknode's [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot).
 
 ![Telegram Trading Bot Screenshot](public/telegram-test-combined.png)
 
@@ -36,7 +36,7 @@ A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainne
 - **EVM Toolkit**: [viem](https://viem.sh/)
 - **Database**: SQLite via better-sqlite3
 - **Integrations**:
-  - [QuickNode Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot)
+  - [Quicknode Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot)
     - OpenOcean API for swaps
     - Sentio Gas Price API for gas estimates
     - MEV Protection & Gas Recovery for MEV-protected transactions
@@ -67,9 +67,9 @@ flowchart TD
         APISwap["Gas Estimation and OpenOcean Swap API"]
         MEVProtection["Merkle MEV Protection"]
   end
- subgraph subGraph4["QuickNode Infrastructure"]
+ subgraph subGraph4["Quicknode Infrastructure"]
         subGraph3
-        QuickNode["QuickNode RPC Services"]
+        Quicknode["Quicknode RPC Services"]
         Blockchain["Base Blockchain"]
   end
     User <-- Commands & Responses --> Bot
@@ -80,11 +80,11 @@ flowchart TD
     DepositCmds <--> LibWallet
     ConfigCmds <--> LibDatabase
     LibSwap <-- Quote & Execution --> APISwap
-    LibBalance <-- Balance --> QuickNode
+    LibBalance <-- Balance --> Quicknode
     LibWallet <-- Transactions through Merkle MEV Protection --> MEVProtection
-    APISwap --> QuickNode
-    MEVProtection --> QuickNode
-    QuickNode <-- RPC Communication --> Blockchain
+    APISwap --> Quicknode
+    MEVProtection --> Quicknode
+    Quicknode <-- RPC Communication --> Blockchain
 ```
 
 ## Database
@@ -109,7 +109,7 @@ The database is initialized automatically on first run (`src/lib/database.ts`), 
 ### Prerequisites
 
 - Node.js 20.x or higher
-- QuickNode Base Mainnet Endpoint URL with the [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot) enabled
+- Quicknode Base Mainnet Endpoint URL with the [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot) enabled
 - Telegram Bot token (get from @BotFather)
 
 ### Installation
@@ -146,9 +146,9 @@ cp .env.example .env
     - Follow the instructions to name your bot
     - Keep the token provided by BotFather handy
 
-5. Get a QuickNode Base Mainnet Endpoint URL
+5. Get a Quicknode Base Mainnet Endpoint URL
 
-    - [Sign up](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot) for a QuickNode account
+    - [Sign up](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot) for a Quicknode account
     - Create a Base Mainnet endpoint
     - Activate the [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot) for your endpoint
     - Keep the endpoint URL handy
