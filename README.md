@@ -197,7 +197,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Getting Started with Create React App](./Streams/wallet-allowance-checker-app)
 
 ### Tron
-- [protobuf-file](./tron/protobuf-file)
+- [Tron gRPC Project Setup Guide](./tron/tron-grpc)
 
 ### Webhooks
 - [BNB Chain Copytrading Bot with Quicknode Webhooks](./webhooks/copytrading-bot-bnb) - *A copytrading bot for memecoins launched on four.meme platform on BNB Chain using Quicknode Webhooks.*
