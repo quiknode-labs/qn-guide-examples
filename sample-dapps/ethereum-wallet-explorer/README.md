@@ -4,7 +4,7 @@
 
 This is a simple demo of how to use your Quicknode Ethereum Node Endpoint and APIs from the Quicknode Marketplace to query the Ethereum blockchain for tokens, transactions, and NFTs for a given wallet.
 
-To run this demo to its full capabilities, you will need both the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle?utm_source=internal&utm_content=courses) (free) and [`Trueblocks Key`](https://marketplace.quicknode.com/add-on/trueblocks-key?utm_source=internal&utm_content=course) (paid) add-ons from the [Quicknode Marketplace](https://www.quicknode.com/marketplace?utm_source=internal&utm_content=course) installed.
+To run this demo to its full capabilities, you will need both the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle) (free) and [`EVM Blockbook JSON-RPC`](https://marketplace.quicknode.com/add-on/evm-blockbook-json-rpc) (paid) add-ons from the [Quicknode Marketplace](https://www.quicknode.com/marketplace) installed.
 
 The demo uses [Next.js 14](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -62,7 +62,7 @@ src/
     └── header/
 ```
 
-- `api` - Contains the API routes for the Ethereum RPC calls. These can be accessed from the client via `/api/wallet/[method]?walletAddress=[address]`. These GET requests utilize the [`Ethers`](https://docs.ethers.org/v6/) library, which lets us interact with Ethereum via our RPC URL and helps us parse and decode data, the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle?utm_source=internal&utm_content=courses) add-on from the [Quicknode Marketplace](https://www.quicknode.com/marketplace?utm_source=internal&utm_content=course) to get information about NFTs and ERC-20 Tokens via simple RPC request, and the [`Trueblocks Key`](https://marketplace.quicknode.com/add-on/trueblocks-key?utm_source=internal&utm_content=course) add-on to obtain a complete historical list of appearances (block number, transaction id) for any Ethereum address.
+- `api` - Contains the API routes for the Ethereum RPC calls. These can be accessed from the client via `/api/wallet/[method]?walletAddress=[address]`. These GET requests utilize the [`Ethers`](https://docs.ethers.org/v6/) library, which lets us interact with Ethereum via our RPC URL and helps us parse and decode data, the [`Token and NFT API v2 bundle`](https://marketplace.quicknode.com/add-on/token-and-nft-api-v2-bundle) add-on from the [Quicknode Marketplace](https://www.quicknode.com/marketplace) to get information about NFTs and ERC-20 Tokens via simple RPC request, and the [`EVM Blockbook JSON-RPC`](https://marketplace.quicknode.com/add-on/evm-blockbook-json-rpc) add-on to obtain a complete historical list of appearances (block number, transaction id) for any Ethereum address.
 
 - `components` - Contains the React components for the dapp. 
     - The `explorer` component contains client-side components that call the API routes and render the results.

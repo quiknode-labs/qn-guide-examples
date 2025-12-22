@@ -2,6 +2,14 @@
 
 > One-liner on what this example does. If a related Quicknode Guide exists, link it here.
 
+## Features
+
+> List the key features of this project.
+
+## Preview
+
+> Provide a screenshot or GIF to showcase the project.
+
 ## Prerequisites
 
 - Language/runtime and versions (e.g., Node.js 20, Python 3.10)
