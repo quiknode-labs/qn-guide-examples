@@ -107,7 +107,6 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [uniswap-v3-swaps](./defi/uniswap-v3-swaps)
 
 ### Enhanced APIs
-- [:warning: The RPC method used in this app is under maintenance and is not usable at the moment :warning:](./enhanced-apis/get-receipts-by-address) - *How to use qn_getTransactionReceiptsByAddress method with Ethers.js*
 - [Quicknode NFT Collection Explorer](./enhanced-apis/NFT-Collection-Explorer)
 - [Getting Started with Create React App](./enhanced-apis/token_balance_app)
 
