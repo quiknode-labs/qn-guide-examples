@@ -191,9 +191,9 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Deploy a Clarity Smart Contract on Stacks](./stacks/stacks-smart-contract)
 
 ### Streams
-- [ai-bot-discord](./Streams/ai-bot-discord)
-- [Getting Started with Create React App](./Streams/qs-react-app)
-- [Getting Started with Create React App](./Streams/wallet-allowance-checker-app)
+- [Streams Discord AI Bot (Block Metrics Q&A)](./Streams/ai-bot-discord)
+- [Quicknode Streams React Dashboard](./Streams/qs-react-app)
+- [Wallet Allowance Checker (Streams + Postgres + Quicknode)](./Streams/wallet-allowance-checker-app)
 
 ### Tron
 - [Tron gRPC Project Setup Guide](./tron/tron-grpc)
