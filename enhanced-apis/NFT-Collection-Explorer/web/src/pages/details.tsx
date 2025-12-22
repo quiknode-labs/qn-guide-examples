@@ -10,21 +10,35 @@ const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_QN
 export default function FetchNFTCollectionDetails() {
   const [details, setDetails] = useState([])
   const [address, setAddress] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   async function fetchNFTCollectionDetails() {
+    if (!address) {
+      setError('Please enter a contract address')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+    setDetails([])
+
     try {
       const method = "qn_fetchNFTCollectionDetails"
-      const params = {
+      const params = [{
         contracts: [
           address,
         ],
-      }
+      }]
 
+      console.log('Fetching NFT collection details for:', address)
       const data = await provider.send(method, params)
       setDetails(data)
-      console.log(data)
     } catch (err) {
-      console.log("Error: ", err)
+      console.error("Error fetching NFT collection details:", err)
+      setError(err instanceof Error ? err.message : 'Failed to fetch NFT collection details. Please check the contract address and try again.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -37,11 +51,18 @@ export default function FetchNFTCollectionDetails() {
       <input
         onChange={e => setAddress(e.target.value)}
         placeholder="Enter Address"
+        value={address}
       />
 
-      <button onClick={fetchNFTCollectionDetails}>
-        Fetch NFT Collection Details
+      <button onClick={fetchNFTCollectionDetails} disabled={loading}>
+        {loading ? 'Loading...' : 'Fetch NFT Collection Details'}
       </button>
+
+      {error && (
+        <div style={{ color: 'red', margin: '1rem', padding: '1rem', border: '1px solid red', borderRadius: '4px' }}>
+          {error}
+        </div>
+      )}
 
       <span className="fetch">
         {details.map(d => (
