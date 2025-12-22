@@ -42,7 +42,7 @@ Make sure you have a Quicknode endpoint handy--you can [get one free](https://ww
 - Rename `.env.example` to `.env` and update with your Quicknode Solana Node Endpoint.
 - Specify which cluster you are using (mainnet-beta, devnet) (using `NEXT_PUBLIC_NETWORK_ENV`).
 - Specify the validator vote address that your staker should stake to (using `NEXT_PUBLIC_VALIDATOR_ADDRESS`). The default value, `5s3vajJvaAbabQvxFdiMfg14y23b2jvK6K2Mw4PYcYK` is Quicknode's validator.
-- Add your Jupiter API key (using `NEXT_PUBLIC_JUPITER_API_KEY`) for fetching SOL price data.
+- Add your [Jupiter API key](https://dev.jup.ag/portal/setup) (using `NEXT_PUBLIC_JUPITER_API_KEY`) for fetching SOL price data.
 
 ```sh
 DEVNET_RPC_ENDPOINT=https://example.solana-devnet.quiknode.pro/12345/
