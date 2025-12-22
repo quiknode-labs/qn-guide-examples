@@ -9,7 +9,6 @@ import {
 } from "@radix-ui/react-form";
 import { useState, useEffect, useContext, useCallback } from "react";
 import {
-  fetchSolanaPrice,
   formatUsdPrice,
   WRAPPED_SOL_ADDRESS
 } from "@/utils/solana/price";
@@ -75,7 +74,11 @@ export function StakingForm() {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const priceData = await fetchSolanaPrice();
+        const response = await fetch("/api/price");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch price: ${response.status}`);
+        }
+        const priceData = await response.json();
         const price = priceData?.[WRAPPED_SOL_ADDRESS]?.usdPrice;
         if (price) {
           setSolPrice(price);
