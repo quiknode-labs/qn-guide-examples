@@ -76,9 +76,9 @@ export function StakingForm() {
     const fetchPrice = async () => {
       try {
         const priceData = await fetchSolanaPrice();
-        const price = priceData?.data?.[WRAPPED_SOL_ADDRESS]?.price;
+        const price = priceData?.[WRAPPED_SOL_ADDRESS]?.usdPrice;
         if (price) {
-          setSolPrice(parseFloat(price));
+          setSolPrice(price);
         } else {
           console.error("Invalid price data structure:", priceData);
         }

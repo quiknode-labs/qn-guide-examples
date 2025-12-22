@@ -13,7 +13,7 @@ export function FeaturesList() {
   return (
     <Flex direction="column" gap="2">
       <Text size="2" weight="bold">
-        Why stake with QuickNode:
+        Why stake with Quicknode:
       </Text>
       {FEATURES.map((feature) => (
         <Flex align="center" gap="2" key={feature}>

@@ -222,7 +222,7 @@ export function StakeButton({
                 >
                   <Image
                     src="/quicknode.svg"
-                    alt="QuickNode Logo"
+                    alt="Quicknode Logo"
                     width={48}
                     height={48}
                     style={{

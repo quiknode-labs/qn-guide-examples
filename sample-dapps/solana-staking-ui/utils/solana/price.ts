@@ -5,7 +5,7 @@ export const WRAPPED_SOL_ADDRESS = address(
 );
 
 // TODO update to METIS
-const JUPITER_PRICE_ENDPOINT = "https://api.jup.ag/price/v2";
+const JUPITER_PRICE_ENDPOINT = "https://api.jup.ag/price/v3";
 
 interface LastSwappedPrice {
   lastJupiterSellAt: number;
@@ -43,15 +43,15 @@ interface ExtraInfo {
 }
 
 interface TokenPrice {
-  id: string;
-  type: string;
-  price: string;
-  extraInfo?: ExtraInfo;
+  createdAt: string;
+  liquidity: number;
+  usdPrice: number;
+  blockId: number;
+  decimals: number;
 }
 
 interface JupiterPriceResponse {
-  data: Record<Address, TokenPrice>;
-  timeTaken: number;
+  [address: string]: TokenPrice;
 }
 
 interface FetchTokenPricesOptions {
@@ -69,7 +69,16 @@ export const fetchSolanaPrice = async (
       url.searchParams.set("showExtraInfo", "true");
     }
 
-    const response = await fetch(url);
+    const apiKey = process.env.NEXT_PUBLIC_JUPITER_API_KEY;
+    if (!apiKey) {
+      throw new Error("JUPITER_API_KEY is not set in environment variables");
+    }
+
+    const response = await fetch(url, {
+      headers: {
+        "x-api-key": apiKey,
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

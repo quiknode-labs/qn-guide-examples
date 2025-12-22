@@ -48,7 +48,7 @@ export function StakeSuccessModal({
             <div style={{ margin: "0 auto", position: "relative" }}>
               <Image
                 src="/quicknode.svg"
-                alt="QuickNode Logo"
+                alt="Quicknode Logo"
                 width={64}
                 height={64}
                 style={{
@@ -160,7 +160,7 @@ export function StakeSuccessModal({
                     color: "#009fd1"
                   }}
                 >
-                  QuickNode
+                  Quicknode
                   <ExternalLinkIcon width={12} height={12} />
                 </Link>
               </Flex>

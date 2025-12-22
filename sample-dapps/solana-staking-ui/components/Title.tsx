@@ -45,7 +45,7 @@ export const Title = () => {
           padding: "0 16px"
         }}
       >
-        Stake Smarter. Earn Faster. With QuickNode.
+        Stake Smarter. Earn Faster. With Quicknode.
       </Text>
     </Flex>
   );

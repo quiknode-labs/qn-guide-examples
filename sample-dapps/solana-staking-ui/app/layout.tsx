@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stake with QuickNode",
-  description: "Stake Smarter. Earn Faster. With QuickNode.",
+  title: "Stake with Quicknode",
+  description: "Stake Smarter. Earn Faster. With Quicknode.",
   icons: [
     { rel: "icon", url: "/favicon.ico" },
     { rel: "icon", url: "/favicon.png", type: "image/png" }
@@ -34,6 +34,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         <Theme
           appearance="dark"
