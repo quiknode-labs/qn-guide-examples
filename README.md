@@ -48,7 +48,7 @@ git clone https://github.com/quiknode-labs/qn-guide-examples.git
 cd qn-guide-examples/<example-folder>
 # Install dependencies for the chosen runtime (e.g., npm install, yarn, pip, go mod download)
 cp .env.example .env    # if provided
-# Update .env with your Quicknode endpoint keys and any required secrets
+# Update .env with your Quicknode endpoint URLs and any required secrets
 ```
 
 ## Contributing
@@ -63,9 +63,9 @@ We welcome fixes, new examples, and improvements! See [CONTRIBUTING.md](./CONTRI
 
 ## Community & Support
 
-- Join the Quicknode Discord for questions and collaboration: https://discord.gg/quicknode
+- Join the [Quicknode Discord](https://discord.gg/quicknode) for questions and collaboration
 - Repo-specific bugs or requests: open a GitHub issue so we can track it.
-- Need help with Quicknode products? Reach out via support: https://support.quicknode.com/
+- Need help with Quicknode products? [Reach out via support](https://support.quicknode.com/)
 
 ## Project Directory (auto-generated)
 

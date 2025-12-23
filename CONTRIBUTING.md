@@ -106,23 +106,19 @@ git commit -m "Add example for XYZ"
 
 ## Project Directory
 
-The project directory in README.md is auto-generated. **Do not edit it manually.** 
+The project directory in README.md is auto-generated. **Do not edit it manually.**
 
-To update the project directory, run:
+If you configured the pre-commit hook during **[Setup](#setup)**, this list updates automatically on every commit. 
+
+To trigger an update manually, run:
 
 ```bash
 npm run generate-directory
 ```
 
 The directory pulls:
-- **Title** from the first `# Heading` in your README.md
+- **Title** from the first `# Heading` in the sub-folder's README.md
 - **Description** from `package.json`'s `description` field
-
-Optional: Install the pre-commit hook to update automatically on each commit:
-
-```bash
-ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
-```
 
 ## Reporting Issues
 
