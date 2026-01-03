@@ -13,6 +13,14 @@ export default function GetWalletTokenBalance() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const formatTokenBalance = (totalBalance: string, decimals: number) => {
+    try {
+      return ethers.utils.formatUnits(totalBalance, decimals)
+    } catch {
+      return totalBalance
+    }
+  }
+
   async function getWalletTokenBalance() {
     if (!wallet) {
       setError('Please enter a wallet address')
@@ -31,6 +39,8 @@ export default function GetWalletTokenBalance() {
 
       console.log('Fetching wallet token balance for:', wallet)
       const data = await provider.send(method, params)
+
+      console.log('Received data:', data)
       
       const { result } = data
 
@@ -69,6 +79,7 @@ export default function GetWalletTokenBalance() {
           <div className="card" key={b.name}>
             <h3>Name: {b.name}</h3>
             <p>Symbol: {b.symbol} - #{b.amount}</p>
+            <p>Balance: {formatTokenBalance(b.totalBalance, b.decimals)}</p>
           </div>
         ))}
       </span>
