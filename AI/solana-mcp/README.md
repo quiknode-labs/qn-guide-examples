@@ -51,7 +51,7 @@ bun build
 
 Update your `claude_desktop_config.json` file with the content from [example Claude desktop config](./claude_desktop_config.json). You can find instructions [here](https://www.quicknode.com/guides/ai/solana-mcp-server#setup-claude-desktop).
 
-Make sure to update `SOLANA_RPC_ENDPOINT` with your QuickNode RPC endpoint. You can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-mcp).
+Make sure to update `SOLANA_RPC_ENDPOINT` with your Quicknode RPC endpoint. You can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-mcp).
 
 Make sure your `args` pass in the absolute path to the built server (for us it is `/YOUR_PATH/build/index.js`).
 

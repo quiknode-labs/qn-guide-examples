@@ -53,7 +53,7 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="text-sm text-blue-600 hover:text-blue-800 underline"
               >
-                Powered by QuickNode Aerodrome API
+                Powered by Quicknode Aerodrome API
               </a>
             </div>
           </div>

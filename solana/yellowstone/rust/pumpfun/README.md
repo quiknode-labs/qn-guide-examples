@@ -1,6 +1,6 @@
 # Solana Geyser Yellowstone gRPC Rust Example
 
-The example demonstrates a simple Rust script that uses the [QuickNode Yellowstone gRPC Add-on](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust) to monitor transactions related to Pump.fun minting operations.
+The example demonstrates a simple Rust script that uses the [Quicknode Yellowstone gRPC Add-on](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust) to monitor transactions related to Pump.fun minting operations.
 
 ```bash
 [2025-04-09T16:08:21Z INFO  solana_account_monitor] Connected to gRPC endpoint
@@ -11,8 +11,8 @@ The example demonstrates a simple Rust script that uses the [QuickNode Yellowsto
 
 ## Requirements
 
-- [QuickNode Account](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust)
-- [QuickNode Yellowstone gRPC Add-on Enabled](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust)
+- [Quicknode Account](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust)
+- [Quicknode Yellowstone gRPC Add-on Enabled](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust)
 - [Rust](https://rustup.rs/)
 
 
@@ -32,12 +32,12 @@ cd solana/yellowstone/rust/pumpfun
 
 ## Configuration
 
-Get your [QuickNode Yellowstone gRPC Add-on Enabled](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust) RPC endpoint. 
+Get your [Quicknode Yellowstone gRPC Add-on Enabled](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust) RPC endpoint. 
 
 Yellowstone gRPC operates on port 10000. This is a dedicated secure port for gRPC communication and is separate from the standard Solana RPC endpoint. When connecting to the service the port must be specified in the URL:
 
 - **Endpoint**: The name of your gRPC-enabled endpoint (by default, this is three randomly generated words) followed by `.solana-mainnet.quiknode.pro` and the port number `10000` (e.g., `https://example-guide-demo.solana-mainnet.quiknode.pro:10000`)
-- **Token**: The alphanumeric string that follows the endpoint name in the URL (additional tokens can be generated from the [QuickNode Dashboard](https://dashboard.quicknode.com/)) Endpoint Security tab.
+- **Token**: The alphanumeric string that follows the endpoint name in the URL (additional tokens can be generated from the [Quicknode Dashboard](https://dashboard.quicknode.com/)) Endpoint Security tab.
 
 Given the following example HTTP Provider URL: `https://example-guide-demo.solana-mainnet.quiknode.pro/123456789/`, your authentication your credentials would be:
 - Endpoint: `https://example-guide-demo.solana-mainnet.quiknode.pro:10000`

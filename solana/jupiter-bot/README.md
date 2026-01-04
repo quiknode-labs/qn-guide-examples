@@ -1,9 +1,9 @@
 # Jupiter Trading Bot Example
 
 ## Overview
-This is a simple demo uses Jupiter's v6 API and QuickNode's Metis add-on to create a simple Solana trading bot. The bot monitors price differences between token pairs and executes trades when profitable opportunities arise.
+This is a simple demo uses Jupiter's v6 API and Quicknode's Metis add-on to create a simple Solana trading bot. The bot monitors price differences between token pairs and executes trades when profitable opportunities arise.
 
-_This example is for educational purposes only. QuickNode does not provide financial advice or endorse any trading strategies. Always do your own research and consult with a financial advisor before making any investment decisions._
+_This example is for educational purposes only. Quicknode does not provide financial advice or endorse any trading strategies. Always do your own research and consult with a financial advisor before making any investment decisions._
 
 The demo uses:
 - [Solana Web3.js - 1.x](https://github.com/solana-labs/solana-web3.js/)
@@ -38,9 +38,9 @@ bun install
 
 ### Set Environment Variables
 
-Make sure you have a QuickNode endpoint handy--you can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-staking-ui).
+Make sure you have a Quicknode endpoint handy--you can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-staking-ui).
 
-- Rename `.env.example` to `.env` and update with your QuickNode Solana Node Endpoint.
+- Rename `.env.example` to `.env` and update with your Quicknode Solana Node Endpoint.
 - Specify your `SECRET_KEY` (the private key of the wallet you want to use for the bot) -- you can generate a new one with `solana-keygen new` command using the Solana CLI.
 - Specify your `SOLANA_ENDPOINT` (get one [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=jupiter-api-trading-bot)) and `METIS_ENDPOINT` (get one [here](https://marketplace.quicknode.com/add-on/metis-jupiter-v6-swap-api?_gl=1*jztoq8*_gcl_au*NTA3NDE0ODY0LjE3MzY0NDI2MDA.*_ga*MTY4NjIxODQzMi4xNjkwNjY3NjQ5*_ga_DYE4XLEMH3*MTc0MzQ0NDYyOC43LjEuMTc0MzQ0NTgwMC40OS4wLjA)) or use the public endpoint, `https://public.jupiterapi.com`.
 
@@ -109,4 +109,4 @@ The bot uses a simple arbitrage strategy:
 3. Update parameters for the reverse trade with a profit margin
 4. Continue the cycle as long as profitable opportunities exist
 
-_This example is for educational purposes only. QuickNode does not provide financial advice or endorse any trading strategies. Always do your own research and consult with a financial advisor before making any investment decisions._
+_This example is for educational purposes only. Quicknode does not provide financial advice or endorse any trading strategies. Always do your own research and consult with a financial advisor before making any investment decisions._

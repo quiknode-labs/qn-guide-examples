@@ -1,7 +1,7 @@
 // Extract parameters from arguments
 const address = args[0];
 
-// Check if QuickNode endpoint secret exists
+// Check if Quicknode endpoint secret exists
 if (!secrets.QUICKNODE_ENDPOINT) {
   throw new Error(
     "QUICKNODE_ENDPOINT secret is required. Please set it in your secrets configuration."
@@ -33,7 +33,7 @@ const payload = {
 
 // Log the endpoint being used (masked for security)
 console.log(
-  `Making request to QuickNode endpoint: ${quicknodeEndpoint.substring(
+  `Making request to Quicknode endpoint: ${quicknodeEndpoint.substring(
     0,
     15
   )}...`
@@ -52,7 +52,7 @@ const apiResponse = await Functions.makeHttpRequest({
 // Check for errors
 if (apiResponse.error) {
   console.error("Request failed:", apiResponse.error);
-  throw new Error("Request to QuickNode endpoint failed");
+  throw new Error("Request to Quicknode endpoint failed");
 }
 
 const { data } = apiResponse;
@@ -65,8 +65,8 @@ if (data.result) {
   return Functions.encodeUint256(data.result.score);
 } else if (data.error) {
   throw new Error(
-    `QuickNode API error: ${data.error.message || JSON.stringify(data.error)}`
+    `Quicknode API error: ${data.error.message || JSON.stringify(data.error)}`
   );
 } else {
-  throw new Error("Unexpected response format from QuickNode");
+  throw new Error("Unexpected response format from Quicknode");
 }

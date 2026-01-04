@@ -1,6 +1,6 @@
 # EVM MCP Server
 
-An MCP server built in TypeScript that enables LLM agents to perceive blockchain data across multiple EVM-compatible networks using QuickNode endpoints.
+An MCP server built in TypeScript that enables LLM agents to perceive blockchain data across multiple EVM-compatible networks using Quicknode endpoints.
 
 **Written tutorial of this project**: [Create an EVM MCP Server with Claude Desktop](https://www.quicknode.com/guides/ai/evm-mcp-server?utm_source=internal&utm_campaign=sample-apps&utm_content=evm-mcp-server)
 
@@ -11,7 +11,7 @@ An MCP server built in TypeScript that enables LLM agents to perceive blockchain
 - [MCP TypeScript SDK](https://www.npmjs.com/package/@modelcontextprotocol/sdk)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Viem](https://viem.sh/)
-- [QuickNode](https://www.quicknode.com?utm_source=internal&utm_campaign=sample-apps&utm_content=evm-mcp-server)
+- [Quicknode](https://www.quicknode.com?utm_source=internal&utm_campaign=sample-apps&utm_content=evm-mcp-server)
 
 ## Features
 
@@ -23,13 +23,13 @@ An MCP server built in TypeScript that enables LLM agents to perceive blockchain
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en) >= 18
-- QuickNode account (create a free one [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=evm-mcp-server))
+- Quicknode account (create a free one [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=evm-mcp-server))
 - TypeScript
 - Claude Desktop or any other MCP-compatible agent runner
 
-### QuickNode Endpoint and Token ID
-1. Sign up at [QuickNode](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=evm-mcp-server)
-2. Create a multichain endpoint. See the [How to Use the QuickNode Multichain Endpoint](https://www.quicknode.com/guides/quicknode-products/how-to-use-multichain-endpoint?utm_source=internal&utm_campaign=sample-apps&utm_content=evm-mcp-server) for more details.
+### Quicknode Endpoint and Token ID
+1. Sign up at [Quicknode](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=evm-mcp-server)
+2. Create a multichain endpoint. See the [How to Use the Quicknode Multichain Endpoint](https://www.quicknode.com/guides/quicknode-products/how-to-use-multichain-endpoint?utm_source=internal&utm_campaign=sample-apps&utm_content=evm-mcp-server) for more details.
 3. From the endpoint URL `https://your-endpoint.quiknode.pro/your-token-id/` (for Ethereum) or 
    `https://your-endpoint.NETWORK.quiknode.pro/your-token-id/` (for other chains):
    - Extract the endpoint name (replace `your-endpoint`)
@@ -62,7 +62,7 @@ npm run build
 ## Project Structure
 
 ```bash
-├── chains.ts           # Chain configuration and QuickNode endpoint mapping
+├── chains.ts           # Chain configuration and Quicknode endpoint mapping
 ├── clients.ts          # Viem public client creator for RPC connections
 ├── index.ts            # Main entry point that sets up the MCP server
 ├── package.json        # Package configuration
@@ -96,8 +96,8 @@ To configure, open the **Claude Desktop** app, go to **Claude** > **Settings** >
 }
 ```
 
-- Replace `your-quicknode-endpoint-name` with the name of your QuickNode endpoint.
-- Replace `your-quicknode-token-id` with the token ID of your QuickNode endpoint.
+- Replace `your-quicknode-endpoint-name` with the name of your Quicknode endpoint.
+- Replace `your-quicknode-token-id` with the token ID of your Quicknode endpoint.
 - Replace `/absolute-path-to` with the absolute path to the `evm-mcp-server` directory.
 
 ## Test the MCP Server

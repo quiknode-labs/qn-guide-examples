@@ -18,7 +18,7 @@ contract scoreboard {
         @bump bytes1 bump,
         address player
     ) {
-        print("New QuickNode UserScore account initialized");
+        print("New Quicknode UserScore account initialized");
         accountData = UserScore (player, 0, 0, bump);
     }
 

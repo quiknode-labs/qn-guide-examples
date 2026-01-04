@@ -1,4 +1,4 @@
-// QuickNode Base Endpoint URL
+// Quicknode Base Endpoint URL
 export const QUICKNODE_ENDPOINT_URL = import.meta.env.VITE_QUICKNODE_ENDPOINT_URL || "";
 
 export const WALLETCONNECT_PROJECT_ID =

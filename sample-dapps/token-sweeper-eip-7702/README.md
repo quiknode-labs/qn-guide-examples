@@ -100,16 +100,16 @@ token-sweeper/
 To run and use this application, you will need the following:
 
 - Node.js 20+
-- A [QuickNode](http://dashboard.quicknode.com/) account with Base or Optimism endpoints
+- A [Quicknode](http://dashboard.quicknode.com/) account with Base or Optimism endpoints
 - The [Covalent Token API](https://marketplace.quicknode.com/add-on/covalent-wallet-api) add-on (_free tier not available_) and [Aerodrome](https://marketplace.quicknode.com/add-on/aerodrome-swap-api) or [Velodrome Swap API](https://marketplace.quicknode.com/add-on/velodrome-swap-api) add-on (_free tier available_)
 - Project ID from [Reown, formerly WalletConnect](https://cloud.reown.com/)
 - MetaMask or compatible wallet with EIP-7702 support
 
-#### Setting Up QuickNode
+#### Setting Up Quicknode
 
-1. **Create Endpoints**: Log in to your [QuickNode account](http://dashboard.quicknode.com/) and create a new endpoint for each chain you want to support. For this guide, we will use Base and Optimism.
+1. **Create Endpoints**: Log in to your [Quicknode account](http://dashboard.quicknode.com/) and create a new endpoint for each chain you want to support. For this guide, we will use Base and Optimism.
 
-> Since these API add-ons are available on mainnet only, you will need to set up your QuickNode account with a mainnet endpoint.
+> Since these API add-ons are available on mainnet only, you will need to set up your Quicknode account with a mainnet endpoint.
 
 2. **Install Add-ons**:
 

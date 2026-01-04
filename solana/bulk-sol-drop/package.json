@@ -6,7 +6,7 @@
     "start": "ts-node app.ts",
     "kp": "ts-node wallet.ts"
   },
-  "keywords": [ "QuickNode", "Solana" ],
+  "keywords": [ "Quicknode", "Solana" ],
   "license": "MIT",
   "dependencies": {
     "@solana/web3.js": "^1.63.1"

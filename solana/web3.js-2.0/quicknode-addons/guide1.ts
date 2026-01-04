@@ -1,4 +1,4 @@
-// Source code for Guide: How to Use QuickNode Add-ons using Solana Web3.js 2.0 (Part 1)
+// Source code for Guide: How to Use Quicknode Add-ons using Solana Web3.js 2.0 (Part 1)
 // https://www.quicknode.com/guides/solana-development/tooling/web3-2/qn-add-ons
 
 import {
@@ -19,11 +19,11 @@ type PriorityFeeApi = {
     qn_estimatePriorityFees(params: EstimatePriorityFeesParams): EstimatePriorityFeesResponse;
 }
 
-interface createQuickNodeTransportParams {
+interface createQuicknodeTransportParams {
     endpoint: string;
 }
 
-function createQuickNodeTransport({ endpoint }: createQuickNodeTransportParams): RpcTransport {
+function createQuicknodeTransport({ endpoint }: createQuicknodeTransportParams): RpcTransport {
     const jsonRpcTransport = createDefaultRpcTransport({ url: endpoint });
 
     return async <TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> => {
@@ -46,7 +46,7 @@ export function createPriorityFeeApi(endpoint: string): Rpc<PriorityFeeApi> {
         requestTransformer: (request: RpcRequest<any>) => request.params[0],
         responseTransformer: (response: any) => response.result,
     });
-    const transport = createQuickNodeTransport({
+    const transport = createQuicknodeTransport({
         endpoint,
     });
     return createRpc({ api, transport });

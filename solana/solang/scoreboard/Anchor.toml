@@ -9,7 +9,7 @@ scoreboard = "F1ipperKF9EfD821ZbbYjS319LXYiBmjhzkkf5a26rC"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet" # Update this to your QuickNode endpoint for mainnet
+cluster = "Localnet" # Update this to your Quicknode endpoint for mainnet
 wallet = "/Users/qn-guides/.config/solana/id.json" # Update this to your localnet wallet path
 
 [scripts]

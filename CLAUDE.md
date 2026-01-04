@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is QuickNode's guide examples repository containing sample applications, tutorials, and reference implementations for various blockchain technologies and Web3 development patterns. The codebase is organized by blockchain networks and use cases, with a focus on educational content.
+This is Quicknode's guide examples repository containing sample applications, tutorials, and reference implementations for various blockchain technologies and Web3 development patterns. The codebase is organized by blockchain networks and use cases, with a focus on educational content.
 
 ## Architecture Structure
 
@@ -14,7 +14,7 @@ This is QuickNode's guide examples repository containing sample applications, tu
 - **ethereum/**: Ethereum-specific examples (smart contracts, DeFi protocols, NFTs)
 - **solana/**: Solana ecosystem examples (token creation, staking, Jupiter integration)
 - **defi/**: Cross-chain DeFi implementations
-- **enhanced-apis/**: QuickNode API integration examples
+- **enhanced-apis/**: Quicknode API integration examples
 - **Streams/**: Real-time blockchain data streaming applications
 - **QuickAlerts/**: Notification and alerting systems
 
@@ -84,7 +84,7 @@ npm test           # Uses: ts-node src/test.ts
 - Solana projects often use anchor framework or direct web3.js
 
 ### Environment Setup
-- Projects require API keys for QuickNode endpoints
+- Projects require API keys for Quicknode endpoints
 - Many use .env files (check example.env when present)
 - Solana projects need local validator setup for development
 - Ethereum projects may require local Hardhat network
@@ -96,7 +96,7 @@ npm test           # Uses: ts-node src/test.ts
 - **ABIs/IDLs**: Located in contracts/, abis/, or generated directories
 
 ### API Integration Patterns
-- QuickNode RPC endpoints are central to most examples
+- Quicknode RPC endpoints are central to most examples
 - Enhanced APIs (NFT, token data) used extensively
 - Streaming APIs for real-time data applications
 - Authentication patterns for protected endpoints

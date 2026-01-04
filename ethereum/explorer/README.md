@@ -1,6 +1,6 @@
-# Create a Block Explorer with QuickNode
+# Create a Block Explorer with Quicknode
 
-This project is based on the guide, [How to Create a Block Explorer with QuickNode](https://www.quicknode.com/guides/ethereum-development/how-to-create-a-block-explorer-with-quicknode?utm_source=qn-github&utm_campaign=explorer&utm_content=sign-up&utm_medium=generic).
+This project is based on the guide, [How to Create a Block Explorer with Quicknode](https://www.quicknode.com/guides/ethereum-development/how-to-create-a-block-explorer-with-quicknode?utm_source=qn-github&utm_campaign=explorer&utm_content=sign-up&utm_medium=generic).
 
 ## Clone Example Monorepo
 
@@ -14,7 +14,7 @@ code .
 
 Save any PNG format image in the `img` folder and name it **logo.png**.
 
-Open the **explorer.html** file and replace **ADD_YOUR_QUICKNODE_HERE** on [Line 78](https://github.com/quiknode-labs/qn-guide-examples/blob/main/ethereum/explorer/explorer.html#L78) with a [QuickNode](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=explorer&utm_content=sign-up&utm_medium=generic) Ethereum HTTPS endpoint.
+Open the **explorer.html** file and replace **ADD_YOUR_QUICKNODE_HERE** on [Line 78](https://github.com/quiknode-labs/qn-guide-examples/blob/main/ethereum/explorer/explorer.html#L78) with a [Quicknode](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=explorer&utm_content=sign-up&utm_medium=generic) Ethereum HTTPS endpoint.
 
 Now open the **explorer.html** file in your browser and you will see a page like the below:
 

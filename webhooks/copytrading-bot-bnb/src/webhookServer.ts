@@ -10,7 +10,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.raw({ type: "application/json", limit: "10mb" }));
 
 /**
- * Verify HMAC signature from QuickNode
+ * Verify HMAC signature from Quicknode
  */
 function verifyHMAC(
   payload: string,

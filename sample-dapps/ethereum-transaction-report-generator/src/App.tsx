@@ -60,7 +60,7 @@ const App = () => {
       <footer className="bg-blue-200 text-center p-4">
         Created with ❤️ and{" "}
         <a href="https://www.quicknode.com" className="text-blue-500">
-          QuickNode
+          Quicknode
         </a>
       </footer>
     </div>

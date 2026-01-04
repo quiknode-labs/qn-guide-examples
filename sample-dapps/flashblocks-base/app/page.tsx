@@ -33,7 +33,7 @@ export default function Home() {
               This demo showcases Base Flashblocks technology. Flashblocks provide faster confirmation times compared to
               traditional blocks, enabling near-instant transaction experiences.
             </p>
-            <p className="mt-2">Built with Next.js, Viem, and QuickNode infrastructure.</p>
+            <p className="mt-2">Built with Next.js, Viem, and Quicknode infrastructure.</p>
           </CardContent>
         </Card>
       </main>

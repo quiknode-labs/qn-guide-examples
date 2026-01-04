@@ -1,4 +1,4 @@
-# QuickNode Solana Staking UI
+# Quicknode Solana Staking UI
 
 ## Overview
 This is a simple demo let's stand up a staking page to easily empower your users to stake to your validator. The demo will:
@@ -35,11 +35,11 @@ bun install
 
 ### Set Environment Variables
 
-Make sure you have a QuickNode endpoint handy--you can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-staking-ui).
+Make sure you have a Quicknode endpoint handy--you can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-staking-ui).
 
-- Rename `.env.example` to `.env` and update with your QuickNode Solana Node Endpoint.
+- Rename `.env.example` to `.env` and update with your Quicknode Solana Node Endpoint.
 - Specify which cluster you are using (mainnet-beta, devnet) (using `NEXT_PUBLIC_NETWORK_ENV`).
-- Specify the validator vote address that your staker should stake to (using `NEXT_PUBLIC_VALIDATOR_ADDRESS`). The default value, `5s3vajJvaAbabQvxFdiMfg14y23b2jvK6K2Mw4PYcYK` is QuickNode's validator.
+- Specify the validator vote address that your staker should stake to (using `NEXT_PUBLIC_VALIDATOR_ADDRESS`). The default value, `5s3vajJvaAbabQvxFdiMfg14y23b2jvK6K2Mw4PYcYK` is Quicknode's validator.
 
 ```sh
 DEVNET_RPC_ENDPOINT=https://example.solana-devnet.quiknode.pro/12345/
@@ -99,4 +99,4 @@ src/
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fsample-dapps%2Fsolana-staking-ui&env=DEVNET_RPC_ENDPOINT,MAINNET_RPC_ENDPOINT,NEXT_PUBLIC_NETWORK_ENV,NEXT_PUBLIC_VALIDATOR_ADDRESS&envDescription=QuickNode%20Endpoint%20and%20Validator%20Address&envLink=https%3A%2F%2Fdashboard.quicknode.com%2F%3Fprompt%3Dsignup&project-name=quicknode-stake-ui&repository-name=quicknode-stake-ui&demo-title=QuickNode%20Stake%20%20Solana%20UI&demo-description=A%20landing%20page%20for%20staking%20Solana)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fsample-dapps%2Fsolana-staking-ui&env=DEVNET_RPC_ENDPOINT,MAINNET_RPC_ENDPOINT,NEXT_PUBLIC_NETWORK_ENV,NEXT_PUBLIC_VALIDATOR_ADDRESS&envDescription=Quicknode%20Endpoint%20and%20Validator%20Address&envLink=https%3A%2F%2Fdashboard.quicknode.com%2F%3Fprompt%3Dsignup&project-name=quicknode-stake-ui&repository-name=quicknode-stake-ui&demo-title=Quicknode%20Stake%20%20Solana%20UI&demo-description=A%20landing%20page%20for%20staking%20Solana)

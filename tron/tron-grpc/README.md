@@ -76,9 +76,9 @@ func (tokenAuth) RequireTransportSecurity() bool {
 
 func main() {
 
-    // Configuring QuickNode gRPC endpoint and authentication token:
+    // Configuring Quicknode gRPC endpoint and authentication token:
     //
-    // Your QuickNode's Tron endpoint will be structured as follows:
+    // Your Quicknode's Tron endpoint will be structured as follows:
     //   https://<your-endpoint-name>.tron-mainnet.quiknode.pro/<your-api-token/jsonrpc>
     //
     // To correctly set up the gRPC connection:
@@ -88,7 +88,7 @@ func main() {
     // For gRPC, you don't need to use the /jsonrpc, which is appended to all Tron endpoints by default.
 
     // Example:
-    //   Given QuickNode URL: https://docs-demo.tron-mainnet.quiknode.pro/abcd1234xyz/jsonrpc
+    //   Given Quicknode URL: https://docs-demo.tron-mainnet.quiknode.pro/abcd1234xyz/jsonrpc
     //   Set `target`        : "docs-demo.tron-mainnet.quiknode.pro:50051"
     //   Set `token`         : "abcd1234xyz"
     //

@@ -2,9 +2,9 @@
 
 ## Introduction
 
-This script is designed to fetch and analyze Bitcoin transactions associated with a specific address, utilizing the power of QuickNode's *paid* [Blockbook add-on](https://marketplace.quicknode.com/add-on/blockbook-rpc-add-on). It generates detailed reports within a specified date range, providing insights into transaction history, balances after each transaction, and the USD value of Bitcoin movements. Aimed at developers, financial analysts, and enthusiasts, this tool ensures clarity and compliance in managing Bitcoin transaction data.
+This script is designed to fetch and analyze Bitcoin transactions associated with a specific address, utilizing the power of Quicknode's *paid* [Blockbook add-on](https://marketplace.quicknode.com/add-on/blockbook-rpc-add-on). It generates detailed reports within a specified date range, providing insights into transaction history, balances after each transaction, and the USD value of Bitcoin movements. Aimed at developers, financial analysts, and enthusiasts, this tool ensures clarity and compliance in managing Bitcoin transaction data.
 
-For an in-depth guide on how to use and develop this tool, refer to [our comprehensive guide on QuickNode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-generate-bitcoin-transaction-reports-with-blockbook).
+For an in-depth guide on how to use and develop this tool, refer to [our comprehensive guide on Quicknode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-generate-bitcoin-transaction-reports-with-blockbook).
 
 ## Language Support
 
@@ -41,7 +41,7 @@ The script generates a CSV file in the current directory with a name of the form
 
 ## Conclusion
 
-[QuickNode's Blockbook add-on](https://marketplace.quicknode.com/add-on/blockbook-rpc-add-on) makes it easier for developers and businesses to create detailed Bitcoin transaction reports. This script introduces the basics, but there's more you can do. Whether it's for audits, helping with regulatory tasks, or market analysis, the Blockbook add-on simplifies the blockchain data extraction process.
+[Quicknode's Blockbook add-on](https://marketplace.quicknode.com/add-on/blockbook-rpc-add-on) makes it easier for developers and businesses to create detailed Bitcoin transaction reports. This script introduces the basics, but there's more you can do. Whether it's for audits, helping with regulatory tasks, or market analysis, the Blockbook add-on simplifies the blockchain data extraction process.
 
-To learn more about how QuickNode is helping auditing firms to pull this type of data from blockchains, please feel free to [reach out to us](https://www.quicknode.com/contact-us); we would love to talk to you!
+To learn more about how Quicknode is helping auditing firms to pull this type of data from blockchains, please feel free to [reach out to us](https://www.quicknode.com/contact-us); we would love to talk to you!
 

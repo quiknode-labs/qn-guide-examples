@@ -9,8 +9,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | QuickNode Ethereum Wallet Explorer',
-    default: 'QuickNode Ethereum Wallet Explorer',
+    template: '%s | Quicknode Ethereum Wallet Explorer',
+    default: 'Quicknode Ethereum Wallet Explorer',
   },
   description: 'This is an example Ethereum Wallet Explorer.',
   metadataBase: new URL('https://some-example-site.sh'),

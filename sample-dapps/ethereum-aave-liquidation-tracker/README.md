@@ -1,6 +1,6 @@
 # Aave V3 Liquidation Tracker
 
-Monitor and analyze liquidation events on the Aave V3 protocol in real-time. This project demonstrates the power of serverless blockchain data streaming using QuickNode's [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps&utm_content=aave-v3-liquidation-tracker).
+Monitor and analyze liquidation events on the Aave V3 protocol in real-time. This project demonstrates the power of serverless blockchain data streaming using Quicknode's [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps&utm_content=aave-v3-liquidation-tracker).
 
 | Dashboard Overview | Liquidations Table |
 | --- | --- |
@@ -71,26 +71,26 @@ This application uses a completely serverless architecture to track and analyze 
   - Recharts for data visualization
 
 - **Backend**
-  - QuickNode [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps) for historical and real-time blockchain data
+  - Quicknode [Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps) for historical and real-time blockchain data
   - [Supabase](https://supabase.com/) (PostgreSQL) for data storage
 
 ## Architecture
 
 [Architecture Diagram](./images/architecture-chart.png)
 
-The architecture demonstrates how the system leverages QuickNode's infrastructure to process blockchain data efficiently:
+The architecture demonstrates how the system leverages Quicknode's infrastructure to process blockchain data efficiently:
 
-1. QuickNode Stream monitors Aave V3 contract events
+1. Quicknode Stream monitors Aave V3 contract events
 2. Events are sent to a webhook server for processing
 3. Data is enriched with token and price information
 4. Processed data is stored in Supabase
 5. Frontend fetches and displays real-time data
 
-## QuickNode Integration
+## Quicknode Integration
 
 ### Streams
 
-QuickNode Streams provide real-time blockchain data without running a node:
+Quicknode Streams provide real-time blockchain data without running a node:
 
 - Monitors Aave V3 contracts for liquidation events
 - Filters and delivers only relevant events
@@ -117,7 +117,7 @@ We are using a webhook server to:
 
 - Node.js 18+
 - npm or yarn
-- Free trial [QuickNode](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=aave-v3-liquidation-tracker) account
+- Free trial [Quicknode](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=aave-v3-liquidation-tracker) account
 - Free [Supabase](https://supabase.com/) account
 
 ### Installation
@@ -179,9 +179,9 @@ npm run dev
 1. Start your webhook server by running `ngrok http YOUR_PORT_NUMBER`. For this project, the default value is set to 3005 but feel free to change this in `.env`. 
 2. Once the server is established, you will use your generated ngrok link (e.g., `https://abcd.ngrok-free.app`) and append `/webhook` endpoint which is where we listen to incoming data from Quicknode streams. 
 
-### Setting up QuickNode Streams
+### Setting up Quicknode Streams
 
-1. Create a QuickNode account at [quicknode.com](https://quicknode.com)
+1. Create a Quicknode account at [quicknode.com](https://quicknode.com)
 2. Set up a new Stream:
    - Select the chain and network (e.g., Ethereum Mainnet)
    - Select the dataset as `Blocks with Receipts`
@@ -224,7 +224,7 @@ function main(stream) {
     // Handle both payload and stream parameter styles
     const data = stream?.data ? stream.data : stream;
 
-    // Early validation - return null to skip (per QuickNode docs)
+    // Early validation - return null to skip (per Quicknode docs)
     if (!data?.[0]?.block?.timestamp || !data?.[0]?.receipts?.length) {
       return null;
     }
@@ -249,12 +249,12 @@ function main(stream) {
         normalizedAddresses.includes(log.address.toLowerCase())
       );
 
-    // Return data if found, null otherwise (per QuickNode docs)
+    // Return data if found, null otherwise (per Quicknode docs)
     return filteredLogs?.length > 0
       ? { timestamp, filteredLogs }
       : null;
   } catch (e) {
-    // Return null to skip on error (per QuickNode docs)
+    // Return null to skip on error (per Quicknode docs)
     return null;
   }
 }
@@ -264,8 +264,8 @@ function main(stream) {
 
 <br />
 
-#### QuickNode Setup
-1. Log in to your [QuickNode dashboard](https://dashboard.quicknode.com).
+#### Quicknode Setup
+1. Log in to your [Quicknode dashboard](https://dashboard.quicknode.com).
 2. Create a new Endpoint for your chain and network (e.g., Ethereum Mainnet).
 3. Copy the RPC URL and paste it into the `QUICKNODE_RPC_URL` variable in the `.env` file. 
 

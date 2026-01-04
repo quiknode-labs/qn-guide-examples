@@ -1,11 +1,11 @@
-import { QuickNodeSolana } from './src';
+import { QuicknodeSolana } from './src';
 import { getAddMemoInstruction } from "@solana-program/memo";
 import { createKeyPairSignerFromBytes, lamports } from "@solana/kit";
 import { getTransferSolInstruction } from "@solana-program/system";
 import secret from "./secret.json";
 
-// Initialize QuickNode client
-const quickNode = new QuickNodeSolana({
+// Initialize Quicknode client
+const quickNode = new QuicknodeSolana({
     endpoint: 'https://example.solana-mainnet.quiknode.pro/123/', 
 });
 

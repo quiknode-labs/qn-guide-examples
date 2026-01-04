@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Quick Token Generator",
-  description: "Sample dApp for creating Tokens on Solana. by QuickNode",
+  description: "Sample dApp for creating Tokens on Solana. by Quicknode",
 };
 
 export default function RootLayout({

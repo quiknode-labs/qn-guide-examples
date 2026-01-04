@@ -1,4 +1,4 @@
-// Source code for Guide: How to Use QuickNode Add-ons using Solana Web3.js 2.0 (Part 2)
+// Source code for Guide: How to Use Quicknode Add-ons using Solana Web3.js 2.0 (Part 2)
 // https://www.quicknode.com/guides/solana-development/tooling/web3-2/qn-add-ons-2
 
 import {
@@ -31,9 +31,9 @@ type IpfsApi = {
     ipfs_upload(params: IpfsUploadRequest): Promise<IpfsUploadResponse>;
 }
 
-type QuickNodeAddons = PriorityFeeApi & MetisApi & IpfsApi;
+type QuicknodeAddons = PriorityFeeApi & MetisApi & IpfsApi;
 
-function createQuickNodeTransport({ endpoint, metisEndpoint, ipfsApiKey }: CreateAddonsApiParams): RpcTransport {
+function createQuicknodeTransport({ endpoint, metisEndpoint, ipfsApiKey }: CreateAddonsApiParams): RpcTransport {
     const jsonRpcTransport = createDefaultRpcTransport({ url: endpoint });
 
     return async <TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> => {
@@ -116,7 +116,7 @@ interface CreateAddonsApiParams {
 }
 
 /**
- * Creates an RPC instance with QuickNode Addons API
+ * Creates an RPC instance with Quicknode Addons API
  * 
  * @param {CreateAddonsApiParams} params - Configuration parameters for creating the API
  * @param {string} params.endpoint - Solana HTTP Endpoint. Establish connection to Solana cluster.
@@ -129,17 +129,17 @@ interface CreateAddonsApiParams {
  * @param {string} [params.ipfsApiKey] - Optional. API key for IPFS services if required.
  *        More information at:
  *        hthttps://quicknode.com/ipfs?utm_source=internal&utm_campaign=sample-apps&utm_content=solana-web3.js-2.0-add-ons
- * @returns {Rpc<QuickNodeAddons>} RPC instance with QuickNode Addons API
+ * @returns {Rpc<QuicknodeAddons>} RPC instance with Quicknode Addons API
  */
 
 
-export function createAddonsApi(params: CreateAddonsApiParams): Rpc<QuickNodeAddons> {
-    const api = createJsonRpcApi<QuickNodeAddons>({
+export function createAddonsApi(params: CreateAddonsApiParams): Rpc<QuicknodeAddons> {
+    const api = createJsonRpcApi<QuicknodeAddons>({
         requestTransformer: (request: RpcRequest<any>) => request.params[0],
         responseTransformer: (response: any) => response.result,
     });
 
-    const transport = createQuickNodeTransport(params);
+    const transport = createQuicknodeTransport(params);
 
     return createRpc({ api, transport });
 }

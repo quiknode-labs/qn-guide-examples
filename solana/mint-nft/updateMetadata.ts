@@ -21,7 +21,7 @@ const NEW_METADATA = {
     attributes: [
         {trait_type: 'Speed', value: 'Quicker'},
         {trait_type: 'Type', value: 'Pixelated'},
-        {trait_type: 'Background', value: 'QuickNode Blue 2'}
+        {trait_type: 'Background', value: 'Quicknode Blue 2'}
     ]
 };
     

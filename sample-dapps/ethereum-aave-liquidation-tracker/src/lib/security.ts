@@ -10,7 +10,7 @@ const SECRET_KEY = process.env.WEBHOOK_SECRET_KEY?.trim();
 
 /**
  * Verify webhook signature using HMAC-SHA256
- * QuickNode concatenates: nonce + timestamp + payload
+ * Quicknode concatenates: nonce + timestamp + payload
  * @param payload - The raw request body as string
  * @param nonce - The nonce from x-qn-nonce header
  * @param timestamp - The timestamp from x-qn-timestamp header
@@ -34,7 +34,7 @@ export function verifyWebhookSignature(
   }
 
   try {
-    // Concatenate nonce + timestamp + payload as per QuickNode spec
+    // Concatenate nonce + timestamp + payload as per Quicknode spec
     const signatureData = nonce + timestamp + payload;
     const signatureBytes = Buffer.from(signatureData);
 
@@ -62,7 +62,7 @@ export function verifyWebhookSignature(
 }
 
 /**
- * Middleware to verify webhook signatures from QuickNode
+ * Middleware to verify webhook signatures from Quicknode
  * Checks for WEBHOOK_SECRET_KEY and validates if configured
  */
 export function webhookSignatureMiddleware(
@@ -75,7 +75,7 @@ export function webhookSignatureMiddleware(
     return next();
   }
 
-  // Extract QuickNode headers
+  // Extract Quicknode headers
   const signature = req.headers['x-qn-signature'] as string;
   const nonce = req.headers['x-qn-nonce'] as string;
   const timestamp = req.headers['x-qn-timestamp'] as string;

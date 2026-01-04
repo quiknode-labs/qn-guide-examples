@@ -1,6 +1,6 @@
 # Base DEX Aggregator App
 
-A modern, user-friendly web application for performing token swaps on the Base blockchain. This web app uses QuickNode’s [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) to deliver **real-time gas estimation** and **optimized swap routing** — all in one modern interface.
+A modern, user-friendly web application for performing token swaps on the Base blockchain. This web app uses Quicknode’s [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) to deliver **real-time gas estimation** and **optimized swap routing** — all in one modern interface.
 
 ![Base DEX Aggregator App Screenshot](./public/screenshot.png)
  
@@ -15,7 +15,7 @@ A modern, user-friendly web application for performing token swaps on the Base b
 | Layer     | Technology                |
 | --------- | ------------------------- |
 | Frontend  | React + TypeScript        |
-| Web3      | Viem, Wagmi, QuickNode    |
+| Web3      | Viem, Wagmi, Quicknode    |
 | Wallets   | connectkit, WalletConnect |
 | Styling   | Tailwind CSS              |
 | API Calls | Axios                     |
@@ -27,7 +27,7 @@ Before running the app, ensure you have:
 
 - [Node.js](https://nodejs.org/) v20.x or later
 - npm, yarn, or pnpm
-- A [QuickNode](https://quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) Base endpoint with the **Base DeFi Power Bundle** enabled
+- A [Quicknode](https://quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) Base endpoint with the **Base DeFi Power Bundle** enabled
 - A [WalletConnect Project ID](https://cloud.walletconnect.com)
  
 ## ⚙️ Getting Started
@@ -122,7 +122,7 @@ npm install -g vercel
 vercel
 ```
  
-## 🔌 API Integrations via QuickNode
+## 🔌 API Integrations via Quicknode
 
 This app connects to the following APIs via the Base DeFi Power Bundle:
 
@@ -254,7 +254,7 @@ export async function executeSwap({
 - Quote generation
 - Swap execution
 
-All routed through the QuickNode Base endpoint.
+All routed through the Quicknode Base endpoint.
  
 
 ## 🧭 Next Steps
@@ -262,7 +262,7 @@ All routed through the QuickNode Base endpoint.
 Want to expand this project?
 
 - Integrate price charts using TradingView or CoinGecko API
-- Add alerts using [QuickNode Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator)
+- Add alerts using [Quicknode Streams](https://www.quicknode.com/streams?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator)
 - Optimize UI with responsive mobile support
 
 ## 🙋 Need Help?
@@ -270,5 +270,5 @@ Want to expand this project?
 Join the community or reach out:
 
 - [Discord](https://discord.gg/quicknode)
-- [Twitter](https://twitter.com/QuickNode)
+- [Twitter](https://twitter.com/Quicknode)
 - [Telegram](https://t.me/quicknodehq)

@@ -1,7 +1,7 @@
 {
     "name": "solana-jupiter-bot",
     "version": "1.0.0",
-    "description": "Example trading bot for Solana using QuickNode and Metis API",
+    "description": "Example trading bot for Solana using Quicknode and Metis API",
     "scripts": {
       "start": "ts-node index.ts"
     },

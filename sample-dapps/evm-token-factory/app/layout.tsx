@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar />
           {children}
           <footer className="w-full text-center border-t border-gray-300 py-4">
-            <span>Powered by <a href="https://www.quicknode.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">QuickNode</a> ❤️</span>
+            <span>Powered by <a href="https://www.quicknode.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">Quicknode</a> ❤️</span>
           </footer>
         </body>
       </html>

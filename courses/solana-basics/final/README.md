@@ -1,6 +1,6 @@
 ## Quick Tac Toe
 
-This is the final example of the [QuickNode Solana Basics Course](https://www.quicknode.com/courses/solana/solana-basics/overview). In this example, we build a simple tic-tac-toe game on the Solana blockchain. The game is played between two players, and the game state is stored on the Solana blockchain. 
+This is the final example of the [Quicknode Solana Basics Course](https://www.quicknode.com/courses/solana/solana-basics/overview). In this example, we build a simple tic-tac-toe game on the Solana blockchain. The game is played between two players, and the game state is stored on the Solana blockchain. 
 
 ## Getting Started
 

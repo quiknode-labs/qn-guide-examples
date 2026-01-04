@@ -15,12 +15,12 @@ A decentralized application demonstrating Base Flashblocks capabilities with sid
 
 You will need the following:
 
-- A [QuickNode](http://dashboard.quicknode.com/) account with Base Sepolia endpoint (optional)
+- A [Quicknode](http://dashboard.quicknode.com/) account with Base Sepolia endpoint (optional)
 - Project ID from [Reown, formerly WalletConnect](https://cloud.reown.com/) - required for wallet connection
 
-#### Setting Up QuickNode
+#### Setting Up Quicknode
 
-1. **Create Endpoints**: Log in to your [QuickNode account](http://dashboard.quicknode.com/) and create a new endpoint for Base Sepolia testnet.
+1. **Create Endpoints**: Log in to your [Quicknode account](http://dashboard.quicknode.com/) and create a new endpoint for Base Sepolia testnet.
 
 2. **Get Endpoint Key**: After creating the endpoint, go to the endpoint dashboard and copy the HTTPS endpoint URL. You will need this key to configure your application.
 
@@ -60,7 +60,7 @@ cp .env.example .env.local
 Then, fill in the following variables:
 
 ```bash
-`NEXT_PUBLIC_QUICKNODE_ENDPOINT`: Your QuickNode endpoint
+`NEXT_PUBLIC_QUICKNODE_ENDPOINT`: Your Quicknode endpoint
 `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`: Your WalletConnect project ID
 ```
 
@@ -90,7 +90,7 @@ Navigate to `http://localhost:3000`
 
 - **ComparisonPanel** (`components/comparison-panel.tsx`): Main orchestrator for side-by-side comparison view
 - **MetricsDisplay** (`components/metrics-display.tsx`): Individual metrics display for each chain type
-- **CTASection** (`components/cta-section.tsx`): QuickNode marketing integration and signup links
+- **CTASection** (`components/cta-section.tsx`): Quicknode marketing integration and signup links
 - **Header** (`components/header.tsx`): Application header with branding
 - **Providers** (`components/providers.tsx`): Context providers for theme and Web3
 

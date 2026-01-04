@@ -1,7 +1,7 @@
 /**
  * This script will generate a new .json secret key to guideSecret.json and log your wallet addres and airdrop tx Id.
  * 
- * First Update endpoint with your QuickNode HTTP Url from quicknode.com/endpoints.
+ * First Update endpoint with your Quicknode HTTP Url from quicknode.com/endpoints.
  * Run ts-node wallet.ts
  * This script will perform 4 tasks: 
  * 1. Connect to the Solana Network (Make sure you replace `endpoint` with your Quicknode Endpoint URL).

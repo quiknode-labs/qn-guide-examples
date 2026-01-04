@@ -1,5 +1,5 @@
 /**
- * This code is a supplment to QuickNode Guide How to Build a Solana Explorer Clone (1 of 3): Transaction History
+ * This code is a supplment to Quicknode Guide How to Build a Solana Explorer Clone (1 of 3): Transaction History
  * This file is intended for use as  ./src/components/TransactionsLog.tsx 
  */
 

@@ -18,12 +18,12 @@ const CONFIG = {
     uploadPath: 'uploads/',
     imgFileName: 'image.png',
     imgType: 'image/png',
-    imgName: 'QuickNode Pixel',
+    imgName: 'Quicknode Pixel',
     description: 'Pixel infrastructure for everyone!',
     attributes: [
         {trait_type: 'Speed', value: 'Quick'},
         {trait_type: 'Type', value: 'Pixelated'},
-        {trait_type: 'Background', value: 'QuickNode Blue'}
+        {trait_type: 'Background', value: 'Quicknode Blue'}
     ],
     sellerFeeBasisPoints: 500,//500 bp = 5%
     symbol: 'QNPIX',
