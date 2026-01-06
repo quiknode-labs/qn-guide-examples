@@ -18,7 +18,7 @@ Completing the steps above should result in your app is listening on port 3000
 
 # Streams
 
-Login to your [QuickNode account](https://quicknode.com/login), and navigate to the **Streams** tab via the dashboard.
+Login to your [Quicknode account](https://quicknode.com/login), and navigate to the **Streams** tab via the dashboard.
 
 Click **Create Stream** on the top-right of the Streams page follow the next steps:
 

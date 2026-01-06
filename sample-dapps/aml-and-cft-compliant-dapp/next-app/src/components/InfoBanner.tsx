@@ -24,7 +24,7 @@ export function InfoBanner() {
         >
           Risk Assessment API
         </Anchor>{" "}
-        add-on on the QuickNode marketplace to secure both frontend interactions
+        add-on on the Quicknode marketplace to secure both frontend interactions
         and smart contract operations, ensuring the highest level of security.
         Communication between the API and smart contract is done through
         Chainlink Functions.
@@ -52,7 +52,7 @@ export function InfoBanner() {
           <Text size="xs" c="dimmed">
             Powered by{" "}
             <Anchor href="https://www.quicknode.com" target="_blank">
-              QuickNode
+              Quicknode
             </Anchor>
           </Text>
         </Group>

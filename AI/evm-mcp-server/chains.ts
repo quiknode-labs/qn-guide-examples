@@ -1,4 +1,4 @@
-// Chain configuration with QuickNode RPC endpoints
+// Chain configuration with Quicknode RPC endpoints
 export type ChainConfig = {
   network: string;
   rpc: string;
@@ -24,7 +24,7 @@ const validateEnvVar = (name: string): string => {
 const QN_ENDPOINT_NAME = validateEnvVar("QN_ENDPOINT_NAME");
 const QN_TOKEN_ID = validateEnvVar("QN_TOKEN_ID");
 
-// Function to build QuickNode RPC URL based on network name
+// Function to build Quicknode RPC URL based on network name
 const buildRpcUrl = (networkName: string): string => {
   // Special case for Ethereum mainnet
   if (networkName === "mainnet") {

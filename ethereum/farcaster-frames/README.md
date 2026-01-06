@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is based on this QuickNode guide: https://www.quicknode.com/guides/social/how-to-build-a-farcaster-frame
+This project is based on this Quicknode guide: https://www.quicknode.com/guides/social/how-to-build-a-farcaster-frame
 
 ## Prerequisites
 

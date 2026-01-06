@@ -5,7 +5,7 @@ An AI-powered DeFi yield farming optimizer that helps users build personalized p
 ## 🚀 Features
 
 ### Core Functionality
-- **Real-time Pool Data**: Fetches live pool data from QuickNode's Aerodrome API
+- **Real-time Pool Data**: Fetches live pool data from Quicknode's Aerodrome API
 - **AI-Powered Optimization**: Uses Claude AI for intelligent portfolio recommendations
 - **Risk Assessment**: Comprehensive 5-step quiz to determine user risk profile
 - **Smart Allocation**: Automated portfolio diversification with percentage allocations
@@ -30,7 +30,7 @@ An AI-powered DeFi yield farming optimizer that helps users build personalized p
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   User Input    │    │   AI Processing  │    │  Pool Data API  │
 │                 │    │                  │    │                 │
-│ • Risk Quiz     │───▶│  Claude AI API   │◀───│ QuickNode API   │
+│ • Risk Quiz     │───▶│  Claude AI API   │◀───│ Quicknode API   │
 │ • Preferences   │    │  • Analysis      │    │ • Live Pools    │
 │ • Investment $  │    │  • Optimization  │    │ • Token Data    │
 └─────────────────┘    │  • Reasoning     │    │ • Verification  │
@@ -89,7 +89,7 @@ An AI-powered DeFi yield farming optimizer that helps users build personalized p
    - Sign up at [console.anthropic.com](https://console.anthropic.com/)
    - Get API key
 
-2. **QuickNode Account**:
+2. **Quicknode Account**:
    - Sign up at [quicknode.com](https://www.quicknode.com/)
    - Subscribe to Aerodrome API add-on
    - Get endpoint URL
@@ -146,7 +146,7 @@ pnpm start
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `ANTHROPIC_API_KEY` | Yes | Claude AI API key for optimization |
-| `NEXT_PUBLIC_QUICKNODE_ENDPOINT` | Yes | QuickNode Aerodrome API endpoint |
+| `NEXT_PUBLIC_QUICKNODE_ENDPOINT` | Yes | Quicknode Aerodrome API endpoint |
 
 ### API Endpoints
 
@@ -201,5 +201,5 @@ View your personalized recommendations:
 ### Getting Help
 - **Documentation**: This README and inline code comments
 - **API Documentation**: 
-  - [QuickNode Aerodrome API](https://marketplace.quicknode.com/add-on/aerodrome-swap-api)
+  - [Quicknode Aerodrome API](https://marketplace.quicknode.com/add-on/aerodrome-swap-api)
   - [Anthropic Claude API](https://docs.anthropic.com/claude/reference/getting-started-with-the-api)

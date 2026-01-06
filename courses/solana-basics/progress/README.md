@@ -1,6 +1,6 @@
 ## Quick Tac Toe
 
-This is the progress example of the [QuickNode Solana Basics Course](https://www.quicknode.com/courses/solana/solana-basics/overview). 
+This is the progress example of the [Quicknode Solana Basics Course](https://www.quicknode.com/courses/solana/solana-basics/overview). 
 Use this course at the start of [Lesson 3](https://www.quicknode.com/courses/solana/solana-basics/spl-tokens/spl-web) or [Lesson 6](https://www.quicknode.com/courses/solana/solana-basics/ui/setup).
 
 ## Getting Started

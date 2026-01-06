@@ -10,7 +10,7 @@ export default function Home() {
           Welcome to the Sample Ethereum Wallet Explorer
         </CardHeader>
         <CardContent>
-          Use your QuickNode endpoint to explore a wallet's tokens, transactions, and NFTs!
+          Use your Quicknode endpoint to explore a wallet's tokens, transactions, and NFTs!
         </CardContent>
         <CardContent>
           Enter your wallet address or ENS name in the search bar above to get started.
@@ -21,10 +21,10 @@ export default function Home() {
           Local Development
         </CardHeader>
         <CardContent>
-          Create a QuickNode Endpoint <Link href="https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=Ethereum-Explorer" target="_blank" style={{ color: 'teal' }}>here</Link>.
+          Create a Quicknode Endpoint <Link href="https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=Ethereum-Explorer" target="_blank" style={{ color: 'teal' }}>here</Link>.
           <br />
           <br />
-          Update `.env.local` with your QuickNode Ethereum Node Endpoint:
+          Update `.env.local` with your Quicknode Ethereum Node Endpoint:
           <br />
           <br />
           ETHEREUM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/

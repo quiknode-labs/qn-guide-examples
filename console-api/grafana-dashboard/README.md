@@ -1,12 +1,12 @@
-# QuickNode Grafana Dashboard Example
+# Quicknode Grafana Dashboard Example
 
-This folder contains all the necessary configuration files to set up a Grafana dashboard for monitoring your QuickNode RPC infrastructure using Prometheus. This example is part of the [How to Build a Grafana Dashboard to Monitor Your RPC Infrastructure](https://www.quicknode.com/guides/quicknode-products/console-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure) guide, which walks you through setting up a real-time monitoring system.
+This folder contains all the necessary configuration files to set up a Grafana dashboard for monitoring your Quicknode RPC infrastructure using Prometheus. This example is part of the [How to Build a Grafana Dashboard to Monitor Your RPC Infrastructure](https://www.quicknode.com/guides/quicknode-products/console-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure) guide, which walks you through setting up a real-time monitoring system.
 
 ## Prerequisites
 
 - **Docker Desktop**: Ensure you have **[Docker Desktop](https://www.docker.com/products/docker-desktop/)** installed and running. This setup uses Docker to launch Prometheus and Grafana easily.
 
-- **QuickNode Account and API Key**: Make sure you have an [API key](https://dashboard.quicknode.com/api-keys) with appropriate permissions (`CONSOLE_REST`).
+- **Quicknode Account and API Key**: Make sure you have an [API key](https://dashboard.quicknode.com/api-keys) with appropriate permissions (`CONSOLE_REST`).
 
 ## Getting Started
 
@@ -22,7 +22,7 @@ git clone https://github.com/quiknode-labs/qn-guide-examples.git
 cd qn-guide-examples/console-api/grafana-dashboard
 ```
 
-3. Update the `prometheus.yaml` file in the `prometheus` folder with your QuickNode API key.
+3. Update the `prometheus.yaml` file in the `prometheus` folder with your Quicknode API key.
 
 4. Launch Prometheus and Grafana using Docker Compose:
 

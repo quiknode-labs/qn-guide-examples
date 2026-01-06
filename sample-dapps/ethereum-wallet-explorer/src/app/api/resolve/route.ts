@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
     try {
         let address;
-        if (walletAddress.startsWith("0x")) {
+        if (ethers.isAddress(walletAddress)) {
             address = ethers.getAddress(walletAddress);
         } else {
             const provider = new ethers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL);

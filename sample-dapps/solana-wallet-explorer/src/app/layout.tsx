@@ -8,8 +8,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | QuickNode Solana Wallet Explorer',
-    default: 'QuickNode Solana Wallet Explorer',
+    template: '%s | Quicknode Solana Wallet Explorer',
+    default: 'Quicknode Solana Wallet Explorer',
   },
   description: 'This is an example Solana Wallet Explorer.',
   metadataBase: new URL('https://some-example-site.sh'),

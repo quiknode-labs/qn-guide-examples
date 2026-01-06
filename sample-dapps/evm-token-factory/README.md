@@ -1,5 +1,5 @@
 
-# QuickNode EVM Token Factory Demo
+# Quicknode EVM Token Factory Demo
 
 ## Overview
 
@@ -21,7 +21,7 @@ cd sample-dapps/evm-token-factory
 
 ### Set Environment Variables
 
-1. Rename `.env.example` to `.env.local `and update it with RPC URLs for each blockchain. Also, include your [WalletConnect](https://cloud.walletconnect.com/). project ID (optionally, you can leave this blank but some features will not be supported). To create RPC URLs for each chain, you can run your own node locally or use a service like [QuickNode](https://quicknode.com) to quickly spin up a node endpoint.
+1. Rename `.env.example` to `.env.local `and update it with RPC URLs for each blockchain. Also, include your [WalletConnect](https://cloud.walletconnect.com/). project ID (optionally, you can leave this blank but some features will not be supported). To create RPC URLs for each chain, you can run your own node locally or use a service like [Quicknode](https://quicknode.com) to quickly spin up a node endpoint.
 
 ### Configure Smart Contract Addresses
 
@@ -70,7 +70,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 1. Connect your wallet
     - Make sure you have enough ETH (or other native EVM gas token) in your wallet to cover the create token transaction
-    - If you are using Testnet, you can get free ETH from the [QuickNode Faucet](https://faucet.quicknode.com/)
+    - If you are using Testnet, you can get free ETH from the [Quicknode Faucet](https://faucet.quicknode.com/)
 2. Click "Create Token" and confirm the transaction to create the ERC-20 token!
 
 ### Architecture
@@ -164,7 +164,7 @@ forge create --rpc-url QUICKNODE_HTTP_URL \
 src/Factory.sol:TokenFactory
 ```
 
-5. Edit the `src/context/web3modal.tsx` file and add a new chain object with its chain ID (find a list [here](https://chainlist.org/)), name, native gas token currency, explorer URL, and RPC URL (e.g., QuickNode):
+5. Edit the `src/context/web3modal.tsx` file and add a new chain object with its chain ID (find a list [here](https://chainlist.org/)), name, native gas token currency, explorer URL, and RPC URL (e.g., Quicknode):
 
 ```javascript
 export const mainnet = {

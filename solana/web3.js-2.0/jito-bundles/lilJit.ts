@@ -201,7 +201,7 @@ async function main() {
         solana: createSolanaRpc(ENDPOINT),
         lilJit: createJitoBundlesRpc({ endpoint: ENDPOINT }),
     }
-    console.log(`✅ - Established connection to QuickNode.`);
+    console.log(`✅ - Established connection to Quicknode.`);
 
     // Step 2 - Get a Jitotip account
     const jitoTipAddress = await getTipAccount(quickNode.lilJit);

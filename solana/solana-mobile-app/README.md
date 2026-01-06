@@ -2,7 +2,7 @@
 
 This project demonstrates how to build a React Native Android appl that integrates with Solana wallets using the Mobile Wallet Adapter.
 
-This sample project is the companion code for the QuickNode guide [Build a Solana Mobile App on Android with React Native](https://www.quicknode.com/guides/solana-development/dapps/build-a-solana-mobile-app-on-android-with-react-native)
+This sample project is the companion code for the Quicknode guide [Build a Solana Mobile App on Android with React Native](https://www.quicknode.com/guides/solana-development/dapps/build-a-solana-mobile-app-on-android-with-react-native)
 
 The app shows how to:
 
@@ -31,7 +31,7 @@ cd qn-guide-examples/solana/solana-mobile-app
 
 3. **Configure Solana RPC**
 
-   Edit `app/constants/index.ts` and set `SOLANA_RPC_URL` to your QuickNode (or devnet) endpoint. You can get a free endpoint [here](https://www.quicknode.com/signup).
+   Edit `app/constants/index.ts` and set `SOLANA_RPC_URL` to your Quicknode (or devnet) endpoint. You can get a free endpoint [here](https://www.quicknode.com/signup).
 
 4. **Run the app on Android**
 

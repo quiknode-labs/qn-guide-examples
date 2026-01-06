@@ -620,7 +620,7 @@ async function initializeIndexer() {
 // Initialize with clean state
 initializeIndexer();
 
-// Indexing interval - adjust to optimize QuickNode API costs
+// Indexing interval - adjust to optimize Quicknode API costs
 // Examples: 500ms (0.5 seconds), 1000ms (1 second), 2000ms (2 seconds)
 const startIndexer = () => {
   setInterval(async () => {

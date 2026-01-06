@@ -4,7 +4,7 @@
 
 The Crypto Portfolio Tracker is a web application that allows users to input their cryptocurrency holdings and track their portfolio value over time. The app fetches current and historical exchange rates to display the total portfolio value and a chart of historical portfolio values in various currencies. It is built using TypeScript, Vite, and Tailwind CSS.
 
-> For a detailed guide on how to build this application and utilize the [Crypto Market Data API](https://marketplace.quicknode.com/add-on/crypto-market-data-api), please visit our [comprehensive guide on QuickNode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-build-a-crypto-portfolio-tracker-with-the-crypto-market-data-api).
+> For a detailed guide on how to build this application and utilize the [Crypto Market Data API](https://marketplace.quicknode.com/add-on/crypto-market-data-api), please visit our [comprehensive guide on Quicknode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-build-a-crypto-portfolio-tracker-with-the-crypto-market-data-api).
 
 ![Crypto Portfolio Tracker Overview](public/overview.png)
 
@@ -24,7 +24,7 @@ The Crypto Portfolio Tracker is a web application that allows users to input the
 
 Before you begin, ensure you have the following:
 - [Node.js](https://nodejs.org/en/) installed on your system.
-- A QuickNode account with the [Crypto Market Data API](https://marketplace.quicknode.com/add-on/crypto-market-data-api) enabled.
+- A Quicknode account with the [Crypto Market Data API](https://marketplace.quicknode.com/add-on/crypto-market-data-api) enabled.
 > Crypto Market Data API is a paid add-on. Please check the details [here](https://marketplace.quicknode.com/add-on/crypto-market-data-api) based on your needs.
 - [Typescript](https://www.typescriptlang.org/) and [ts-node](https://typestrong.org/ts-node/)
 
@@ -53,7 +53,7 @@ npm install
 
 ### Setting Environment Variables
 
-Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_ENDPOINT` placeholder with your QuickNode endpoint that the **Crypto Market Data API** is enabled.
+Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_ENDPOINT` placeholder with your Quicknode endpoint that the **Crypto Market Data API** is enabled.
 
 ```sh
 VITE_QUICKNODE_ENDPOINT="YOUR_QUICKNODE_ENDPOINT"
@@ -96,7 +96,7 @@ Open [http://localhost:5173/](http://localhost:5173/) with your browser to see t
 ## API Integration
 
 The application integrates with the following APIs:
-- **QuickNode Crypto Market Data API**: For fetching current and historical exchange rates.
+- **Quicknode Crypto Market Data API**: For fetching current and historical exchange rates.
   - `v1/getAssets`: Fetch all available assets.
   - `v1/getCurrentExchangeRates`: Fetch current exchange rates.
   - `v1/getHistoricalExchangeRates`: Fetch historical exchange rates.
@@ -107,7 +107,7 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ## Acknowledgements
 
-- [QuickNode](https://www.quicknode.com/) for providing the Crypto Market Data API.
+- [Quicknode](https://www.quicknode.com/) for providing the Crypto Market Data API.
 - [CoinAPI](https://www.coinapi.io/) for the market data.
 
 ## Contact

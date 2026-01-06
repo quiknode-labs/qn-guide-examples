@@ -7,7 +7,7 @@ import { QUICKNODE_LINKS } from "@/lib/constants"
 export const CTASection: React.FC = () => {
   const links = [
     {
-      title: "QuickNode Guide",
+      title: "Quicknode Guide",
       description: "Complete guide to implementing Flashblocks",
       url: QUICKNODE_LINKS.GUIDE,
       icon: BookOpen,
@@ -25,7 +25,7 @@ export const CTASection: React.FC = () => {
       icon: Play,
     },
     {
-      title: "Try with QuickNode",
+      title: "Try with Quicknode",
       description: "Get started with your own endpoint",
       url: QUICKNODE_LINKS.SIGNUP,
       icon: Rocket,

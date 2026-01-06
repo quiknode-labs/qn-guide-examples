@@ -1,4 +1,4 @@
-# QuickNode NFT Collection Explorer
+# Quicknode NFT Collection Explorer
 
 ## Web Local Development
 
@@ -17,7 +17,7 @@ Add environment variable.
 cp .env.example .env
 ```
 
-Open the `.env` file in a code editor and replace **YOUR_URL_HERE** with your [QuickNode Ethereum HTTPS URL](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=nft-collection-explorer&utm_content=sign-up&utm_medium=generic).
+Open the `.env` file in a code editor and replace **YOUR_URL_HERE** with your [Quicknode Ethereum HTTPS URL](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=nft-collection-explorer&utm_content=sign-up&utm_medium=generic).
 
 ### Step 3️⃣:
 Start your local server.
@@ -41,7 +41,7 @@ npm start
 
 - Ethereum
 
-## QuickNode APIs
+## Quicknode APIs
 
 - [Token API](https://www.quicknode.com/token-api?utm_source=qn-github&utm_campaign=nft-collection-explorer&utm_content=sign-up&utm_medium=generic)
 - [NFT API](https://www.quicknode.com/nft-api?utm_source=qn-github&utm_campaign=nft-collection-explorer&utm_content=sign-up&utm_medium=generic)

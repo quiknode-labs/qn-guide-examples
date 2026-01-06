@@ -89,14 +89,14 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({
                       <div className={`w-1.5 h-1.5 rounded-full mr-1 animate-pulse ${
                         isDataStale ? 'bg-yellow-400' : 'bg-emerald-400'
                       }`} />
-                      {isDataStale ? 'Stale' : 'Live • QuickNode'}
+                      {isDataStale ? 'Stale' : 'Live • Quicknode'}
                       <Info className="w-3 h-3 ml-1 opacity-60" />
                     </Badge>
                   </TooltipTrigger>
                   <TooltipContent className="bg-slate-800 border-slate-600 p-3 shadow-xl max-w-xs rounded-lg">
                     <div className="text-xs text-white">
                       <div className="font-semibold mb-1 text-emerald-400">Data Source</div>
-                      <p className="mb-2">Powered by QuickNode's Hyperliquid Info Endpoints</p>
+                      <p className="mb-2">Powered by Quicknode's Hyperliquid Info Endpoints</p>
                       <a
                         href="https://www.quicknode.com/docs/hyperliquid/info-endpoints"
                         target="_blank"

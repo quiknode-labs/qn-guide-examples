@@ -3,7 +3,7 @@ import { baseSepolia, baseSepoliaPreconf } from 'viem/chains'
 
 if (process.env.NEXT_PUBLIC_QUICKNODE_ENDPOINT) {
   console.log(
-    "Using QuickNode endpoint",
+    "Using Quicknode endpoint",
   );
 } else {
   console.log("Using default public Sepolia endpoint");

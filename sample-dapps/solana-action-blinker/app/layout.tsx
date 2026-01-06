@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Quick Actions & Blinks",
-  description: "Sample dApp for creating Actions and Blink on Solana. by QuickNode",
+  description: "Sample dApp for creating Actions and Blink on Solana. by Quicknode",
 };
 
 export default function RootLayout({

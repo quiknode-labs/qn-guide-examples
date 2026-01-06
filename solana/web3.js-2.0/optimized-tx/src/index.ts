@@ -1,3 +1,3 @@
-export { QuickNodeSolana } from './QuickNodeSolana';
+export { QuicknodeSolana } from './QuicknodeSolana';
 export * from './types';
 export * from './constants';

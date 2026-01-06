@@ -1,17 +1,17 @@
-# BNB Chain Copytrading Bot with QuickNode Webhooks
+# BNB Chain Copytrading Bot with Quicknode Webhooks
 
-An automated copytrading bot that monitors successful traders on the four.meme platform (BNB Chain's memecoin launchpad) and executes proportional trades in real-time using QuickNode Webhooks.
+An automated copytrading bot that monitors successful traders on the four.meme platform (BNB Chain's memecoin launchpad) and executes proportional trades in real-time using Quicknode Webhooks.
 
 ## Overview
 
 This bot demonstrates how to build a copytrading system by:
 
 - Monitoring specific wallet addresses for token purchases on BNB Chain
-- Receiving instant notifications via QuickNode Webhooks
+- Receiving instant notifications via Quicknode Webhooks
 - Automatically executing proportional copy trades with configurable parameters
 - Implementing safety features like slippage protection and balance reserves
 
-> Read the complete guide: [Building a Copytrading Bot on BNB Chain with QuickNode Webhooks](https://www.quicknode.com/guides/quicknode-products/webhooks/copytrading-bot-with-webhooks)
+> Read the complete guide: [Building a Copytrading Bot on BNB Chain with Quicknode Webhooks](https://www.quicknode.com/guides/quicknode-products/webhooks/copytrading-bot-with-webhooks)
 
 ## Features
 
@@ -36,10 +36,10 @@ node --version  # Should show v20.x or higher
 npm --version
 ```
 
-### 2. QuickNode Account and BNB Chain Endpoint
+### 2. Quicknode Account and BNB Chain Endpoint
 
-1. **Sign up for QuickNode**
-   - Visit [QuickNode](https://www.quicknode.com/signup) and create a free account
+1. **Sign up for Quicknode**
+   - Visit [Quicknode](https://www.quicknode.com/signup) and create a free account
 
 2. **Create a BNB Chain Endpoint**
    - Click **"Create Endpoint"** from your dashboard
@@ -70,7 +70,7 @@ You need a wallet with BNB for:
 
 ### 4. Public URL for Webhook (Development)
 
-QuickNode needs to send webhooks to a public URL. During development, use **[ngrok](https://ngrok.com/download)** or any similar tunneling service.
+Quicknode needs to send webhooks to a public URL. During development, use **[ngrok](https://ngrok.com/download)** or any similar tunneling service.
 
 You'll use ngrok to expose your local server after starting the bot (see Usage section).
 
@@ -97,7 +97,7 @@ cp .env.example .env
 Edit `.env` with your values:
 
 ```bash
-# QuickNode Configuration
+# Quicknode Configuration
 QUICKNODE_SECURITY_TOKEN=your_security_token_from_webhook_dashboard # 👈 UPDATE HERE
 BNB_RPC_URL=https://your-quicknode-bnb-endpoint.quiknode.pro/abc123/ # 👈 UPDATE HERE
 
@@ -161,9 +161,9 @@ Copy the **HTTPS URL** from ngrok output:
 Forwarding    https://abc123.ngrok.io -> http://localhost:3000
 ```
 
-### 3. Create Your QuickNode Webhook
+### 3. Create Your Quicknode Webhook
 
-Go back to your [QuickNode Webhook Dashboard](https://dashboard.quicknode.com/webhooks):
+Go back to your [Quicknode Webhook Dashboard](https://dashboard.quicknode.com/webhooks):
 1. Fill in the **Destination URL** field with your ngrok URL + `/webhook`
 2. Test the webhook by sending a test payload
 3. If bot is running, you should see that bot acts accordingly since it receives the webhook
@@ -210,7 +210,7 @@ copytrading-bot/
 │   ├── webhookServer.ts    # Express server for receiving webhooks
 │   ├── tradingBot.ts       # Viem-based trading logic
 │   └── index.ts            # Entry point
-├── filter.js               # QuickNode webhook filter (for reference)
+├── filter.js               # Quicknode webhook filter (for reference)
 ├── .env                    # Your environment variables (DO NOT COMMIT)
 ├── .env.example            # Template for environment variables
 ├── package.json            # Node.js project file
@@ -227,11 +227,11 @@ copytrading-bot/
 ngrok http 3000
 ```
 
-**Verify QuickNode webhook URL**:
+**Verify Quicknode webhook URL**:
 - Should be: `https://your-ngrok-url.ngrok.io/webhook` (note the `/webhook` path)
 
 **Check Webhook status**:
-- Visit [QuickNode Webhooks Dashboard](https://dashboard.quicknode.com/webhooks)
+- Visit [Quicknode Webhooks Dashboard](https://dashboard.quicknode.com/webhooks)
 - Ensure webhook is **Active** and has recent deliveries
 
 ### "Insufficient balance" errors
@@ -278,7 +278,7 @@ QUICKNODE_SECURITY_TOKEN=your_token_here
 ```
 
 **Get correct token**:
-1. Go to QuickNode Webhooks Dashboard
+1. Go to Quicknode Webhooks Dashboard
 2. Click on your webhook
 3. Copy the "Security Token" shown
 4. Update your `.env` file
@@ -293,12 +293,12 @@ QUICKNODE_SECURITY_TOKEN=your_token_here
 **Test filter with recent block**:
 1. Find recent block on [BscScan](https://bscscan.com/)
 2. Look for transactions to 4.meme contract
-3. Use "Run Test" feature in QuickNode dashboard with that block number
+3. Use "Run Test" feature in Quicknode dashboard with that block number
 
 ## Resources
 
-- **[QuickNode Documentation](https://www.quicknode.com/docs)**
-- **[QuickNode Webhooks Guide](https://www.quicknode.com/docs/webhooks)**
+- **[Quicknode Documentation](https://www.quicknode.com/docs)**
+- **[Quicknode Webhooks Guide](https://www.quicknode.com/docs/webhooks)**
 - **[Viem Documentation](https://viem.sh/)**
 - **[BNB Chain Docs](https://docs.bnbchain.org/)**
 - **[four.meme Platform](https://four.meme/)**
@@ -306,4 +306,4 @@ QUICKNODE_SECURITY_TOKEN=your_token_here
 
 ## Disclaimer
 
-**⚠️ Important**: This bot is for educational purposes only. Cryptocurrency trading carries significant risk. Past performance of traders does not guarantee future results. You may lose all funds. Only trade with money you can afford to lose. The authors and QuickNode are not responsible for any trading losses. Always do your own research (DYOR) before trading.
+**⚠️ Important**: This bot is for educational purposes only. Cryptocurrency trading carries significant risk. Past performance of traders does not guarantee future results. You may lose all funds. Only trade with money you can afford to lose. The authors and Quicknode are not responsible for any trading losses. Always do your own research (DYOR) before trading.

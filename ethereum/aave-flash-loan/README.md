@@ -4,7 +4,7 @@ This project is based on the guide, [How to Make a Flash Loan using Aave](https:
 
 #### Prerequisites
 - [MetaMask](https://metamask.io/) installed.
-- [QuickNode Polygon Mumbai Testnet endpoint](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=aave_flash_loan&utm_content=sign-up&utm_medium=generic) added to MetaMask.
+- [Quicknode Polygon Mumbai Testnet endpoint](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=aave_flash_loan&utm_content=sign-up&utm_medium=generic) added to MetaMask.
 - [REMIX IDE](https://remix.ethereum.org/)
 
 ---

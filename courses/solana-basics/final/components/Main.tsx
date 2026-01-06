@@ -9,7 +9,7 @@ const Main = () => {
             {connected ?
                 <div>
                     <Balance />
-                    <SendMemoButton message='Hello from QuickNode!' />
+                    <SendMemoButton message='Hello from Quicknode!' />
                 </div>
                 :
                 <div>Wallet Not Connected</div>}

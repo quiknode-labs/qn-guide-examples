@@ -96,7 +96,7 @@
           "useBackend": false
         }
       ],
-      "title": "QuickNode RPC Requests",
+      "title": "Quicknode RPC Requests",
       "type": "gauge"
     },
     {
@@ -166,7 +166,7 @@
           "useBackend": false
         }
       ],
-      "title": "QuickNode RPC Credits",
+      "title": "Quicknode RPC Credits",
       "type": "gauge"
     },
     {
@@ -265,7 +265,7 @@
           "useBackend": false
         }
       ],
-      "title": "QuickNode RPC Requests Total Last 30 days",
+      "title": "Quicknode RPC Requests Total Last 30 days",
       "type": "timeseries"
     },
     {
@@ -364,7 +364,7 @@
           "useBackend": false
         }
       ],
-      "title": "QuickNode RPC Credits Total Last 30 days",
+      "title": "Quicknode RPC Credits Total Last 30 days",
       "type": "timeseries"
     },
     {
@@ -463,7 +463,7 @@
           "useBackend": false
         }
       ],
-      "title": "QuickNode Endpoint Response Status",
+      "title": "Quicknode Endpoint Response Status",
       "type": "timeseries"
     },
     {
@@ -562,7 +562,7 @@
           "useBackend": false
         }
       ],
-      "title": "QuickNode Endpoint Response Time Max",
+      "title": "Quicknode Endpoint Response Time Max",
       "type": "timeseries"
     }
   ],
@@ -577,7 +577,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "QuickNode Console API",
+  "title": "Quicknode Console API",
   "uid": "edysjf1q674e8b",
   "version": 1,
   "weekStart": ""
