@@ -14,26 +14,31 @@ A single-page Solana swap UI demonstrating token swaps using Jupiter Ultra API, 
 ## Setup
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Create `.env.local` file (copy from `.env.example`):
+
 ```bash
 cp .env.example .env.local
 ```
 
 Then edit `.env.local` and add your API keys:
+
 ```bash
 QUICKNODE_RPC_URL=your_quicknode_rpc_endpoint_here
 JUPITER_API_KEY=your_jupiter_api_key_here
 ```
 
-**Note:** 
-- **QUICKNODE_RPC_URL** (required): Get your QuickNode RPC endpoint from [QuickNode](https://www.quicknode.com/) or use the deafult public URL `https://api.mainnet-beta.solana.com`
-- **JUPITER_API_KEY** (required for full functionality): Get your Jupiter API key from [Jupiter API Portal](https://portal.jup.ag/). 
+**Note:**
+
+- **QUICKNODE_RPC_URL** (required): Get your QuickNode RPC endpoint from [QuickNode](https://www.quicknode.com/) or use the default public URL `https://api.mainnet-beta.solana.com`
+- **JUPITER_API_KEY** (required for full functionality): Get your Jupiter API key from [Jupiter API Portal](https://portal.jup.ag/).
 
 3. Run the development server:
+
 ```bash
 npm run dev
 ```
@@ -42,7 +47,7 @@ npm run dev
 
 ## Project Structure
 
-```
+``` text
 ├── app/
 │   ├── api/                # Next.js API routes (server-side)
 │   │   ├── tokens/         # Token list endpoint
