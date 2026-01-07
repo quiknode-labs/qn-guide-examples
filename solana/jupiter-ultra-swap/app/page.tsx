@@ -91,7 +91,9 @@ export default function Home() {
   // Refresh balances after successful swap
   useEffect(() => {
     if (status === "success") {
-      setTimeout(() => refreshBalances(), 2000);
+      const timeoutId = setTimeout(() => refreshBalances(), 2000);
+      // Cleanup: cancel timeout if component unmounts or status changes
+      return () => clearTimeout(timeoutId);
     }
   }, [status, refreshBalances]);
 
@@ -213,8 +215,29 @@ export default function Home() {
             type="button"
             onClick={() => {
               if (status === "idle") {
-                setFromToken(toToken);
-                setToToken(fromToken);
+                // Swap tokens
+                const newFromToken = toToken;
+                const newToToken = fromToken;
+                
+                // Check if the new fromToken has a balance
+                // If not, find a valid token from fromTokens list
+                let validFromToken = newFromToken;
+                if (newFromToken) {
+                  const balance = getBalance(newFromToken.address);
+                  if (balance <= 0 && fromTokens.length > 0) {
+                    // New fromToken has no balance, use first token from fromTokens
+                    validFromToken = fromTokens[0];
+                  } else if (balance <= 0 && fromTokens.length === 0) {
+                    // No tokens with balance available
+                    validFromToken = null;
+                  }
+                } else if (fromTokens.length > 0) {
+                  // fromToken was null, use first token from fromTokens
+                  validFromToken = fromTokens[0];
+                }
+                
+                setFromToken(validFromToken);
+                setToToken(newToToken);
                 setAmount("");
               }
             }}

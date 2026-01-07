@@ -1,7 +1,18 @@
 import { NextResponse } from "next/server";
+import { assertIsAddress } from "@solana/kit";
 
 const JUPITER_ULTRA_BASE = "https://api.jup.ag/ultra";
 const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
+
+// Validate Solana wallet address using @solana/kit to prevent SSRF attacks
+function isValidWalletAddress(address: string): boolean {
+  try {
+    assertIsAddress(address);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 // Helper function to create request headers with API key
 function getHeaders(): HeadersInit {
@@ -25,6 +36,14 @@ export async function GET(request: Request) {
     if (!walletAddress) {
       return NextResponse.json(
         { error: "walletAddress parameter is required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate wallet address to prevent SSRF attacks
+    if (!isValidWalletAddress(walletAddress)) {
+      return NextResponse.json(
+        { error: "Invalid walletAddress parameter" },
         { status: 400 }
       );
     }

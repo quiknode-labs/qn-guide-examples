@@ -101,13 +101,15 @@ export async function fetchTokenBalances(walletAddress: string): Promise<TokenBa
  * @param amount - Amount in smallest units (e.g., lamports for SOL)
  * @param slippageBps - Slippage tolerance in basis points (50 = 0.5%)
  * @param taker - Optional wallet address (required for Ultra API to generate transaction)
+ * @param signal - Optional AbortSignal to cancel the request
  */
 export async function getSwapQuote(
   inputMint: string,
   outputMint: string,
   amount: number,
   slippageBps: number = 50,
-  taker?: string
+  taker?: string,
+  signal?: AbortSignal
 ): Promise<JupiterQuoteResponse> {
   // Build query parameters
   const params = new URLSearchParams({
@@ -121,7 +123,9 @@ export async function getSwapQuote(
     params.append("taker", taker);
   }
 
-  const response = await fetch(`/api/quote?${params.toString()}`);
+  const response = await fetch(`/api/quote?${params.toString()}`, {
+    signal,
+  });
 
   if (!response.ok) {
     const errorData = await response.json();

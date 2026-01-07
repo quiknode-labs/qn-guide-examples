@@ -73,22 +73,37 @@ export function useQuote(
     // Set loading state
     setQuoteInfo(createEmptyQuoteInfo(true));
 
+    // Create AbortController to cancel in-flight requests
+    const abortController = new AbortController();
+    let isCancelled = false;
+
     // Debounce: wait 500ms before fetching to avoid too many API calls
     const timeoutId = setTimeout(async () => {
+      // Check if already cancelled before starting fetch
+      if (isCancelled) {
+        return;
+      }
+
       try {
         // Convert amount to smallest unit (e.g., lamports for SOL)
         const amountInSmallestUnit = Math.floor(
           amountNum * Math.pow(10, fromToken.decimals)
         );
 
-        // Fetch quote from Jupiter Ultra API
+        // Fetch quote from Jupiter Ultra API with abort signal
         const quote = await getSwapQuote(
           fromToken.address,
           toToken.address,
           amountInSmallestUnit,
           50, // 0.5% slippage tolerance
-          publicKey.toBase58()
+          publicKey.toBase58(),
+          abortController.signal
         );
+
+        // Check if request was cancelled before updating state
+        if (isCancelled) {
+          return;
+        }
 
         // Convert output amount back to readable format
         const outAmountNative = (
@@ -116,6 +131,16 @@ export function useQuote(
           error: null,
         });
       } catch (err) {
+        // Don't update state if request was aborted
+        if (isCancelled || (err instanceof Error && err.name === "AbortError")) {
+          return;
+        }
+
+        // Check again if cancelled before setting error
+        if (isCancelled) {
+          return;
+        }
+
         setQuoteInfo({
           ...createEmptyQuoteInfo(),
           error: err instanceof Error ? err.message : "Failed to fetch quote",
@@ -123,8 +148,12 @@ export function useQuote(
       }
     }, 500);
 
-    // Cleanup: cancel timeout if component unmounts or dependencies change
-    return () => clearTimeout(timeoutId);
+    // Cleanup: cancel timeout and abort in-flight requests
+    return () => {
+      isCancelled = true;
+      clearTimeout(timeoutId);
+      abortController.abort();
+    };
   }, [fromToken, toToken, amount, publicKey]);
 
   return quoteInfo;

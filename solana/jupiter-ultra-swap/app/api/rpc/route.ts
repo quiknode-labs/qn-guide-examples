@@ -1,46 +1,41 @@
-import { NextResponse } from "next/server";
+export const runtime = "nodejs";
 
-const QUICKNODE_RPC_URL = process.env.QUICKNODE_RPC_URL || "https://api.mainnet-beta.solana.com";
+const QUICKNODE_RPC_URL = process.env.QUICKNODE_RPC_URL;
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
+  if (!QUICKNODE_RPC_URL) {
+    return new Response("Missing QUICKNODE_RPC_URL", { status: 500 });
+  }
+
   try {
-    const body = await request.json();
-    const { method, params, id } = body;
+    // Read raw body to pass through JSON-RPC request as-is
+    const body = await req.text();
 
-    if (!method) {
-      return NextResponse.json(
-        { error: "method is required" },
-        { status: 400 }
-      );
-    }
-
-    const response = await fetch(QUICKNODE_RPC_URL, {
+    // Forward request to upstream RPC provider
+    const res = await fetch(QUICKNODE_RPC_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        id: id || 1,
-        method,
-        params: params || [],
-      }),
+      body,
     });
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: `RPC request failed: ${response.statusText}` },
-        { status: response.status }
-      );
-    }
-
-    const result = await response.json();
-    return NextResponse.json(result);
+    // Pass through upstream response
+    const text = await res.text();
+    return new Response(text, {
+      status: res.status,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("Error proxying RPC request:", error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to proxy RPC request" },
-      { status: 500 }
+    return new Response(
+      JSON.stringify({
+        error: error instanceof Error ? error.message : "Failed to proxy RPC request",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 }
