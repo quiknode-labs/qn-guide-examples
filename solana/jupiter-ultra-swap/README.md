@@ -30,9 +30,8 @@ JUPITER_API_KEY=your_jupiter_api_key_here
 ```
 
 **Note:** 
-- Get your QuickNode RPC endpoint from [QuickNode](https://www.quicknode.com/)
-- Get your Jupiter API key from [Jupiter API Portal](https://portal.jup.ag/). The API key is optional but recommended for better rate limits and reliability.
-- These API keys are stored server-side and never exposed to the client. They are used in Next.js API routes only.
+- **QUICKNODE_RPC_URL** (required): Get your QuickNode RPC endpoint from [QuickNode](https://www.quicknode.com/) or use the deafult public URL `https://api.mainnet-beta.solana.com`
+- **JUPITER_API_KEY** (required for full functionality): Get your Jupiter API key from [Jupiter API Portal](https://portal.jup.ag/). 
 
 3. Run the development server:
 ```bash
@@ -40,15 +39,6 @@ npm run dev
 ```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Tech Stack
-
-- **Framework:** Next.js 14 (App Router)
-- **UI:** React + Tailwind CSS
-- **Wallets:** Solana Wallet Adapter for React
-- **Blockchain:** Solana mainnet via QuickNode RPC
-- **Swap API:** Jupiter Ultra API
-- **Solana SDK:** @solana/kit v5
 
 ## Project Structure
 
@@ -60,7 +50,6 @@ npm run dev
 │   │   ├── quote/          # Swap quote endpoint
 │   │   ├── execute/        # Swap execution endpoint
 │   │   ├── rpc/            # RPC proxy endpoint
-│   │   └── rpc-endpoint/   # RPC URL endpoint
 │   ├── layout.tsx          # Root layout with WalletProvider
 │   ├── page.tsx            # Main swap page
 │   ├── globals.css         # Global styles
@@ -76,6 +65,7 @@ npm run dev
 ├── hooks/
 │   ├── useTokenBalances.ts # Token balance management
 │   ├── useTokenList.ts     # Token list fetching
+│   ├── useQuote.ts         # Swap quote fetching
 │   └── useSwap.ts          # Swap execution logic
 └── lib/
     ├── jupiter.ts          # Jupiter API client (calls API routes)
@@ -91,17 +81,3 @@ npm run dev
 4. Enter the amount you want to swap
 5. Click "Swap" and approve the transaction in your wallet
 6. Wait for confirmation and view the transaction link
-
-## Notes
-
-- This app uses Solana mainnet only
-- All RPC calls go through QuickNode endpoint (proxied via API routes)
-- Swaps are executed via Jupiter Ultra API (proxied via API routes)
-- API keys are stored server-side and never exposed to the client
-- Transaction signing uses Solana Wallet Adapter
-- Solana Kit is used for RPC operations
-
-## License
-
-ISC
-

@@ -3,6 +3,7 @@ import { assertIsAddress } from "@solana/kit";
 
 const JUPITER_ULTRA_BASE = "https://api.jup.ag/ultra";
 const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
+const QUICKNODE_RPC_URL = process.env.QUICKNODE_RPC_URL;
 
 // Validate Solana wallet address using @solana/kit to prevent SSRF attacks
 function isValidWalletAddress(address: string): boolean {
@@ -28,6 +29,41 @@ function getHeaders(): HeadersInit {
   return headers;
 }
 
+// Fetch SOL balance via RPC when Jupiter API key is not available
+async function fetchSOLBalanceViaRPC(walletAddress: string): Promise<number> {
+  if (!QUICKNODE_RPC_URL) {
+    // If no RPC URL, return 0 (fallback to public RPC would require different approach)
+    return 0;
+  }
+
+  try {
+    const rpcRequest = {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "getBalance",
+      params: [walletAddress],
+    };
+
+    const response = await fetch(QUICKNODE_RPC_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rpcRequest),
+    });
+
+    if (!response.ok) {
+      return 0;
+    }
+
+    const data = await response.json();
+    return data.result?.value || 0;
+  } catch (error) {
+    console.error("Error fetching SOL balance via RPC:", error);
+    return 0;
+  }
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -48,8 +84,24 @@ export async function GET(request: Request) {
       );
     }
 
+    // If Jupiter API key is missing, fetch SOL balance via RPC as fallback
+    // This allows users to swap SOL even without the API key
     if (!JUPITER_API_KEY) {
-      return NextResponse.json([], { status: 200 });
+      const balances: any[] = [];
+      
+      // Fetch SOL balance via RPC
+      const solBalanceLamports = await fetchSOLBalanceViaRPC(walletAddress);
+      
+      if (solBalanceLamports > 0) {
+        balances.push({
+          mint: "So11111111111111111111111111111111111111112", // SOL mint address
+          balance: solBalanceLamports,
+          decimals: 9,
+        });
+      }
+      
+      // Note: SPL token balances require Jupiter API key, so we only return SOL balance
+      return NextResponse.json(balances, { status: 200 });
     }
 
     const response = await fetch(`${JUPITER_ULTRA_BASE}/v1/holdings/${walletAddress}`, {

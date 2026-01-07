@@ -56,6 +56,7 @@ export async function GET(request: Request) {
       inputMint,
       outputMint,
       amount: Math.floor(parseFloat(amount)).toString(),
+      slippageBps,
     });
 
     if (taker) {
