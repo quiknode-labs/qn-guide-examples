@@ -21,10 +21,10 @@ const DEFAULT_FROM_TOKEN: Token = {
 };
 
 const DEFAULT_TO_TOKEN: Token = {
-  address: "So11111111111111111111111111111111111111112",
-  symbol: "SOL",
-  name: "Solana",
-  decimals: 9,
+  address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+  symbol: "USDC",
+  name: "USD Coin",
+  decimals: 6,
 };
 
 export default function Home() {
@@ -97,7 +97,7 @@ export default function Home() {
     }
   }, [status, refreshBalances]);
 
-  // Set default "from" token when balances load
+  // Set default "from" token when balances load (only if no token is selected or selected token has no balance)
   useEffect(() => {
     if (!publicKey) {
       setFromToken(null);
@@ -113,15 +113,28 @@ export default function Home() {
       return;
     }
 
-    // Set to first available token if current token has no balance
+    // Only set default if no token is selected, or if selected token has no balance
     setFromToken((currentToken) => {
-      if (currentToken) {
-        const balance = getBalance(currentToken.address);
-        if (balance > 0) {
-          return currentToken; // Keep current token if it has balance
-        }
+      // If no token selected, set default
+      if (!currentToken) {
+        // Prefer SOL if available in fromTokens
+        const solToken = fromTokens.find(
+          (token) => token.address === DEFAULT_FROM_TOKEN.address
+        );
+        return solToken || fromTokens[0];
       }
-      return fromTokens[0]; // Otherwise use first token with balance
+      
+      // If token is selected, check if it has balance
+      const balance = getBalance(currentToken.address);
+      if (balance > 0) {
+        return currentToken; // Keep current token if it has balance
+      }
+      
+      // Selected token has no balance, set to default (prefer SOL)
+      const solToken = fromTokens.find(
+        (token) => token.address === DEFAULT_FROM_TOKEN.address
+      );
+      return solToken || fromTokens[0];
     });
   }, [publicKey, balancesLoading, fromTokens, getBalance]);
 
@@ -215,36 +228,17 @@ export default function Home() {
             type="button"
             onClick={() => {
               if (status === "idle") {
-                // Swap tokens
+                // Swap tokens: use toToken as new fromToken, fromToken as new toToken
                 const newFromToken = toToken;
                 const newToToken = fromToken;
                 
-                // Check if the new fromToken has a balance
-                // If not, find a valid token from fromTokens list that's different from newToToken
-                let validFromToken = newFromToken;
-                if (newFromToken) {
-                  const balance = getBalance(newFromToken.address);
-                  if (balance <= 0 && fromTokens.length > 0) {
-                    // New fromToken has no balance, find first token from fromTokens
-                    // that's different from newToToken to avoid both tokens being the same
-                    const differentToken = fromTokens.find(
-                      (token) => !newToToken || token.address !== newToToken.address
-                    );
-                    validFromToken = differentToken || fromTokens[0];
-                  } else if (balance <= 0 && fromTokens.length === 0) {
-                    // No tokens with balance available
-                    validFromToken = null;
-                  }
-                } else if (fromTokens.length > 0) {
-                  // fromToken was null, find first token from fromTokens
-                  // that's different from newToToken to avoid both tokens being the same
-                  const differentToken = fromTokens.find(
-                    (token) => !newToToken || token.address !== newToToken.address
-                  );
-                  validFromToken = differentToken || fromTokens[0];
+                // Only prevent swap if both tokens would be the same
+                if (newFromToken && newToToken && newFromToken.address === newToToken.address) {
+                  return; // Don't swap if tokens are the same
                 }
                 
-                setFromToken(validFromToken);
+                // Swap tokens directly - use the selected toToken as the new fromToken
+                setFromToken(newFromToken);
                 setToToken(newToToken);
                 setAmount("");
               }
