@@ -71,8 +71,13 @@ export async function fetchTokenList(): Promise<Token[]> {
 /**
  * Fetch token balances using Jupiter Ultra API via API route
  * Returns both SOL and SPL token balances for a wallet
+ * @param walletAddress - Wallet address to fetch balances for
+ * @param signal - Optional AbortSignal to cancel the request
  */
-export async function fetchTokenBalances(walletAddress: string): Promise<TokenBalance[]> {
+export async function fetchTokenBalances(
+  walletAddress: string,
+  signal?: AbortSignal
+): Promise<TokenBalance[]> {
   if (!walletAddress) {
     return [];
   }
@@ -80,6 +85,7 @@ export async function fetchTokenBalances(walletAddress: string): Promise<TokenBa
   try {
     const response = await fetch(`/api/balances?walletAddress=${encodeURIComponent(walletAddress)}`, {
       cache: "no-store",
+      signal,
     });
 
     if (!response.ok) {
@@ -89,6 +95,10 @@ export async function fetchTokenBalances(walletAddress: string): Promise<TokenBa
     const balances: TokenBalance[] = await response.json();
     return balances;
   } catch (error) {
+    // Don't throw if request was aborted
+    if (error instanceof Error && error.name === "AbortError") {
+      throw error;
+    }
     console.error("Error fetching token balances:", error);
     return [];
   }

@@ -58,7 +58,7 @@ export async function GET() {
                 address: token.id || token.address,
                 symbol: token.symbol || "",
                 name: token.name || "",
-                decimals: token.decimals || 9,
+                decimals: token.decimals ?? 9,
                 logoURI: token.icon || token.logoURI,
               }));
             

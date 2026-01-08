@@ -136,7 +136,7 @@ export async function GET(request: Request) {
           for (const account of tokenAccounts as any[]) {
             if (account.amount) {
               totalAmount += parseInt(account.amount);
-              decimals = account.decimals || 0;
+              decimals = account.decimals ?? 0;
             }
           }
 

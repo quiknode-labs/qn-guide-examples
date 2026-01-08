@@ -1,6 +1,6 @@
 # Jupiter Ultra Swap Demo
 
-A single-page Solana swap UI demonstrating token swaps using Jupiter Ultra API, QuickNode RPC, Solana Wallet Adapter, and Solana Kit.
+A single-page Solana swap UI demonstrating token swaps using Jupiter Ultra API, Quicknode RPC, Solana Wallet Adapter, and Solana Kit.
 
 ## Features
 
@@ -34,7 +34,7 @@ JUPITER_API_KEY=your_jupiter_api_key_here
 
 **Note:**
 
-- **QUICKNODE_RPC_URL** (required): Get your QuickNode RPC endpoint from [QuickNode](https://www.quicknode.com/) or use the default public URL `https://api.mainnet-beta.solana.com`
+- **QUICKNODE_RPC_URL** (required): Get your Quicknode RPC endpoint from [Quicknode](https://www.quicknode.com/) or use the default public URL `https://api.mainnet-beta.solana.com`
 - **JUPITER_API_KEY** (required for full functionality): Get your Jupiter API key from [Jupiter API Portal](https://portal.jup.ag/).
 
 3. Run the development server:

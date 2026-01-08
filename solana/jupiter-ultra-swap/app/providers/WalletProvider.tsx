@@ -13,7 +13,7 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 const network = WalletAdapterNetwork.Mainnet;
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
-  // Use server-side RPC proxy endpoint (forwards to QuickNode)
+  // Use server-side RPC proxy endpoint (forwards to Quicknode)
   // ConnectionProvider requires a full URL, so we construct it from the current origin
   const endpoint = useMemo(() => {
     if (typeof window !== "undefined") {

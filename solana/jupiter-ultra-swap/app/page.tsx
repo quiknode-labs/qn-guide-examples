@@ -21,10 +21,10 @@ const DEFAULT_FROM_TOKEN: Token = {
 };
 
 const DEFAULT_TO_TOKEN: Token = {
-  address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-  symbol: "USDC",
-  name: "USD Coin",
-  decimals: 6,
+  address: "So11111111111111111111111111111111111111112",
+  symbol: "SOL",
+  name: "Solana",
+  decimals: 9,
 };
 
 export default function Home() {
@@ -170,7 +170,7 @@ export default function Home() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Swap with Jupiter Ultra
           </h1>
-          <p className="text-sm text-gray-500">Powered by QuickNode</p>
+          <p className="text-sm text-gray-500">Powered by Quicknode</p>
         </div>
         
         {/* Warning about mainnet-beta and real funds */}
@@ -220,20 +220,28 @@ export default function Home() {
                 const newToToken = fromToken;
                 
                 // Check if the new fromToken has a balance
-                // If not, find a valid token from fromTokens list
+                // If not, find a valid token from fromTokens list that's different from newToToken
                 let validFromToken = newFromToken;
                 if (newFromToken) {
                   const balance = getBalance(newFromToken.address);
                   if (balance <= 0 && fromTokens.length > 0) {
-                    // New fromToken has no balance, use first token from fromTokens
-                    validFromToken = fromTokens[0];
+                    // New fromToken has no balance, find first token from fromTokens
+                    // that's different from newToToken to avoid both tokens being the same
+                    const differentToken = fromTokens.find(
+                      (token) => !newToToken || token.address !== newToToken.address
+                    );
+                    validFromToken = differentToken || fromTokens[0];
                   } else if (balance <= 0 && fromTokens.length === 0) {
                     // No tokens with balance available
                     validFromToken = null;
                   }
                 } else if (fromTokens.length > 0) {
-                  // fromToken was null, use first token from fromTokens
-                  validFromToken = fromTokens[0];
+                  // fromToken was null, find first token from fromTokens
+                  // that's different from newToToken to avoid both tokens being the same
+                  const differentToken = fromTokens.find(
+                    (token) => !newToToken || token.address !== newToToken.address
+                  );
+                  validFromToken = differentToken || fromTokens[0];
                 }
                 
                 setFromToken(validFromToken);
