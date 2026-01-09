@@ -10,7 +10,7 @@ The demo uses
 
 - [Solana Kit](https://github.com/anza-xyz/kit)
 - [Wallet Standard](https://www.npmjs.com/package/@wallet-standard/core)
-- [Next.js 15](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+- [Next.js 16](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 - [Radix UI](https://www.radix-ui.com/)
 
 ## Getting Started
