@@ -164,8 +164,7 @@ export async function POST(request: Request) {
       await getComputeUnitEstimateForTransactionMessageFactory({ rpc })(
         sampleMessage
       );
-    console.log("computeUnitEstimate", computeUnitEstimate);
-
+    
     const { value: latestBlockhash } = await rpc
       .getLatestBlockhash({ commitment: "confirmed" })
       .send();
