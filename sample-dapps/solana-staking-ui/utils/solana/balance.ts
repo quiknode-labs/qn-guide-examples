@@ -1,12 +1,9 @@
 import {
   Lamports,
   Rpc,
-  stringifiedBigInt,
-  StringifiedBigInt
+  SolanaRpcApi,
+  Address
 } from "@solana/kit";
-import { SolanaRpcApi } from "@solana/kit";
-import { Address } from "@solana/kit";
-
 interface GetBalanceProps {
   rpc: Rpc<SolanaRpcApi>;
   address: Address;

@@ -2,7 +2,6 @@ import { STAKE_PROGRAM_ADDRESS } from "@solana-program/stake";
 import { address, Blockhash } from "@solana/kit";
 
 export const LAMPORTS_PER_SOL = 1_000_000_000;
-// export const QUICKNODE_VALIDATOR_VOTE_ADDRESS = address('5s3vajJvaAbabQvxFdiMfg14y23b2jvK6K2Mw4PYcYK');
 export const PRIORITY_FEE_BUFFER = 0.001;
 
 export const PUBLICKEY_DEFAULT = address("11111111111111111111111111111111");
