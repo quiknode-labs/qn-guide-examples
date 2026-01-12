@@ -6,7 +6,7 @@ const FEATURES = [
   "100% Uptime",
   "Help secure the Solana Network",
   "Maintain full custody of your assets",
-  "Compliance: SOC 1 Type 2, Soc 2 Type 2 Compliance"
+  "Compliance: SOC 1 Type 2, SOC 2 Type 2 Compliance"
 ] as const;
 
 export function FeaturesList() {
