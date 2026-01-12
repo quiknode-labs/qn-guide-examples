@@ -28,7 +28,7 @@ This is a simple Weather API that requires USDC payments to access weather data.
 bundle install
 ```
 
-The app uses the `x402-rails` gem (version 0.2.1) which will be installed automatically from [RubyGems.org](https://rubygems.org/gems/x402-rails).
+The app uses the `x402-rails` gem (version 1.0.0) which will be installed automatically from [RubyGems.org](https://rubygems.org/gems/x402-rails).
 
 ### 2. Configure x402
 
@@ -38,7 +38,7 @@ The app is pre-configured in `config/initializers/x402.rb`:
 X402.configure do |config|
   config.wallet_address = ENV.fetch("X402_WALLET_ADDRESS", "YourWalletAddressHere")
   config.facilitator = ENV.fetch("X402_FACILITATOR_URL", "https://www.x402.org/facilitator")
-  config.chain = ENV.fetch("X402_CHAIN", "base-sepolia")
+  config.chain = ENV.fetch("X402_CHAIN", "eip155:84532")
   config.currency = ENV.fetch("X402_CURRENCY", "USDC")
   config.optimistic = ENV.fetch("X402_OPTIMISTIC", "true") == "true"
 end
@@ -78,14 +78,15 @@ curl -i http://localhost:3000/api/weather/paywalled_info
 ```
 HTTP/1.1 402 Payment Required
 Content-Type: application/json
+PAYMENT-REQUIRED: eyJ4NDAyVmVyc2lvbiI6...
 
 {
-  "x402Version": 1,
+  "x402Version": 2,
   "error": "Payment required to access this resource",
   "accepts": [{
     "scheme": "exact",
-    "network": "base-sepolia",
-    "maxAmountRequired": "1000",
+    "network": "eip155:84532",
+    "amount": "1000",
     "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
     "payTo": "YourWalletAddressHere",
     "resource": "http://localhost:3000/api/weather/paywalled_info",
@@ -148,7 +149,7 @@ python generate_payment.py
 
 All scripts output:
 - Your payer address
-- Base64-encoded X-PAYMENT header
+- Base64-encoded PAYMENT-SIGNATURE header
 - Ready-to-use curl command
 - Decoded payment header (for debugging)
 
@@ -157,14 +158,14 @@ All scripts output:
 Copy and run the curl command from the generator output:
 
 ```bash
-curl -i -H "X-PAYMENT: eyJ4NDAyVmVyc2lvbiI6..." http://localhost:3000/api/weather/paywalled_info
+curl -i -H "PAYMENT-SIGNATURE: eyJ4NDAyVmVyc2lvbiI6..." http://localhost:3000/api/weather/paywalled_info
 ```
 
 **Expected Response:**
 ```
 HTTP/1.1 200 OK
 Content-Type: application/json
-X-PAYMENT-RESPONSE: eyJzdWNjZXNzIjp0cnVlLCJ0cmFuc2FjdGlvbiI6IjB4Li4uIn0=
+PAYMENT-RESPONSE: eyJzdWNjZXNzIjp0cnVlLCJ0cmFuc2FjdGlvbiI6IjB4Li4uIn0=
 
 {
   "temperature": 72,
@@ -172,7 +173,7 @@ X-PAYMENT-RESPONSE: eyJzdWNjZXNzIjp0cnVlLCJ0cmFuc2FjdGlvbiI6IjB4Li4uIn0=
   "humidity": 65,
   "paid_by": "0x63eb313AD58184F4c25F68d456e8276b77Fdce0f",
   "payment_amount": "1000",
-  "network": "base-sepolia"
+  "network": "base-sepolia",
 }
 ```
 
@@ -247,16 +248,16 @@ X402_TEST_PRIVATE_KEY=0x... PORT=3001 python generate_payment.py
 ### How it Works
 
 1. Uses your private key to sign an EIP-712 payment authorization
-2. Constructs the X-PAYMENT header with authorization and requirements
+2. Constructs the PAYMENT-SIGNATURE header with authorization and requirements
 3. Encodes the payment as base64 JSON
-4. Outputs the X-PAYMENT header value
+4. Outputs the PAYMENT-SIGNATURE header value
 5. Generates a ready-to-use curl command
 
 **Note**: The private key is for testing only. Get testnet USDC from the [Circle's faucet](https://faucet.circle.com/)
 
 ### Decoding Payment Headers
 
-To inspect what's inside an X-PAYMENT header:
+To inspect what's inside a PAYMENT-SIGNATURE header:
 
 #### TypeScript
 ```bash
@@ -305,7 +306,7 @@ X402_WALLET_ADDRESS=0xYourAddress
 
 # Optional (with defaults)
 X402_FACILITATOR_URL=https://www.x402.org/facilitator
-X402_CHAIN=base-sepolia
+X402_CHAIN=eip155:84532
 X402_CURRENCY=USDC
 X402_OPTIMISTIC=true
 ```
@@ -314,7 +315,7 @@ X402_OPTIMISTIC=true
 
 After successful payment, view the transaction on Base Sepolia:
 
-1. Decode the `X-PAYMENT-RESPONSE` header (base64)
+1. Decode the `PAYMENT-RESPONSE` header (base64)
 2. Extract the `transaction` field
 3. View on BaseScan: https://sepolia.basescan.org/tx/TRANSACTION_HASH
 
@@ -336,8 +337,8 @@ x402 settlement successful: 0x...
 - `generate_payment.rb` - Ruby payment signature generator (x402-payments gem) **[Recommended]**
 - `generate_payment.ts` - TypeScript payment signature generator (Viem)
 - `generate_payment.py` - Python payment signature generator
-- `decode_payment.ts` - TypeScript X-PAYMENT header decoder
-- `decode_payment.py` - Python X-PAYMENT header decoder
+- `decode_payment.ts` - TypeScript PAYMENT-SIGNATURE header decoder
+- `decode_payment.py` - Python PAYMENT-SIGNATURE header decoder
 
 ### Documentation
 - `README.md` - This file
@@ -379,6 +380,16 @@ bin/rails server -p 3000
 
 **Solution**: Check logs and retry. The facilitator URL is `https://www.x402.org/facilitator`
 
+### "Could not open library 'sodium' / 'libsodium'"
+
+**Issue**: The `x402-payments` gem loads Solana dependencies that require `libsodium`.
+
+**Solution (macOS)**:
+```bash
+brew install libsodium
+brew link --force libsodium
+```
+
 ### Settlement fails but got 200 response
 
 **Issue**: Optimistic mode settlement failure (rare)
@@ -391,7 +402,7 @@ This test app uses the x402-rails gem from RubyGems:
 
 ```ruby
 # Gemfile
-gem "x402-rails", "~> 0.2.1"
+gem "x402-rails", "~> 1.0.0"
 ```
 
 To test the app:

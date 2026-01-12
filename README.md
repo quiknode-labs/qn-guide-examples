@@ -169,6 +169,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [fungible-SPL-token](./solana/fungible-SPL-token)
 - [Jupiter Trading Bot Example](./solana/jupiter-bot) - *Example trading bot for Solana using Quicknode and Metis API*
 - [Jito Jupiter Swap](./solana/jupiter-jito)
+- [jupiter-ultra-swap](./solana/jupiter-ultra-swap)
 - [mint-nft](./solana/mint-nft)
 - [new-wallet-airdrop](./solana/new-wallet-airdrop)
 - [priority-fees-addon](./solana/priority-fees-addon)

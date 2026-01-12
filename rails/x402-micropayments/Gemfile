@@ -3,11 +3,11 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.0"
 
-# x402 payment protocol for Rails
-gem "x402-rails", "~> 0.2.1"
+# x402 payment protocol for Rails (v2 default as of 1.0.0)
+gem "x402-rails", "~> 1.0.0"
 
-# x402 payment header generation (Quicknode open-source gem)
-gem "x402-payments"
+# x402 payment header generation (v2 default as of 1.0.0)
+gem "x402-payments", "~> 1.0.0"
 
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", ">= 2.1"

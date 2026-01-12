@@ -8,7 +8,7 @@ info:
 
     1. **Request without payment** - Returns 402 Payment Required with payment instructions
     2. **Generate payment signature** - Use the payment requirements to create an EIP-712 signature
-    3. **Request with payment** - Include X-PAYMENT header with signed payment
+    3. **Request with payment** - Include PAYMENT-SIGNATURE header with signed payment
     4. **Receive response** - Get your data plus settlement confirmation
 
     ## Payment Flow
@@ -18,8 +18,8 @@ info:
            ← 402 Payment Required + payment requirements
 
     Client → Sign payment with wallet
-           → GET /api/weather/paywalled_info + X-PAYMENT header
-           ← 200 OK + data + X-PAYMENT-RESPONSE header with blockchain tx
+           → GET /api/weather/paywalled_info + PAYMENT-SIGNATURE header
+           ← 200 OK + data + PAYMENT-RESPONSE header with blockchain tx
     ```
 
   version: 1.0.0
@@ -45,14 +45,14 @@ paths:
         - Response includes payment requirements (amount, wallet, chain, etc.)
 
         **Second request (with payment):**
-        - Include X-PAYMENT header with signed payment
+        - Include PAYMENT-SIGNATURE header with signed payment
         - Returns 200 OK with weather data
-        - Response includes X-PAYMENT-RESPONSE header with blockchain transaction
+        - Response includes PAYMENT-RESPONSE header with blockchain transaction
 
       tags:
         - Weather
       parameters:
-        - name: X-PAYMENT
+        - name: PAYMENT-SIGNATURE
           in: header
           required: false
           description: |
@@ -71,7 +71,7 @@ paths:
         '200':
           description: Successful response with weather data (payment accepted)
           headers:
-            X-PAYMENT-RESPONSE:
+            PAYMENT-RESPONSE:
               description: Base64-encoded settlement response with blockchain transaction
               schema:
                 type: string
@@ -103,7 +103,7 @@ paths:
                     description: Payment amount in atomic units (1000 = 0.001 USDC)
                   network:
                     type: string
-                    example: base-sepolia
+                    example: eip155:84532
                     description: Blockchain network used
               example:
                 temperature: 72
@@ -111,10 +111,15 @@ paths:
                 humidity: 65
                 paid_by: "0x63eb313AD58184F4c25F68d456e8276b77Fdce0f"
                 payment_amount: "1000"
-                network: base-sepolia
+                network: eip155:84532
 
         '402':
           description: Payment Required (no payment or invalid payment)
+          headers:
+            PAYMENT-REQUIRED:
+              description: Base64-encoded payment requirements for v2
+              schema:
+                type: string
           content:
             application/json:
               schema:
@@ -122,7 +127,7 @@ paths:
                 properties:
                   x402Version:
                     type: integer
-                    example: 1
+                    example: 2
                   error:
                     type: string
                     example: Payment required to access this resource
@@ -136,8 +141,8 @@ paths:
                           example: exact
                         network:
                           type: string
-                          example: base-sepolia
-                        maxAmountRequired:
+                          example: eip155:84532
+                        amount:
                           type: string
                           example: "1000"
                           description: Amount in atomic units (1000 = 0.001 USDC)
@@ -172,12 +177,12 @@ paths:
                               type: string
                               example: "2"
               example:
-                x402Version: 1
+                x402Version: 2
                 error: Payment required to access this resource
                 accepts:
                   - scheme: exact
-                    network: base-sepolia
-                    maxAmountRequired: "1000"
+                    network: eip155:84532
+                    amount: "1000"
                     asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
                     payTo: "0xd086Ef8F2c0F9d642120cCf0898BD101b1d18Db6"
                     resource: http://localhost:3000/api/weather/paywalled_info
@@ -211,8 +216,8 @@ components:
           enum: [exact]
         network:
           type: string
-          example: base-sepolia
-        maxAmountRequired:
+          example: eip155:84532
+        amount:
           type: string
         asset:
           type: string

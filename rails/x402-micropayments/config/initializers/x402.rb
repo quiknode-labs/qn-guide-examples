@@ -13,9 +13,24 @@ X402.configure do |config|
   # The facilitator handles payment verification and settlement
   config.facilitator = ENV.fetch("X402_FACILITATOR_URL", "https://www.x402.org/facilitator")
 
-  # Blockchain network to use
-  # Options: "base-sepolia" (testnet), "base" (mainnet), "avalanche-fuji" (testnet), "avalanche" (mainnet)
-  config.chain = ENV.fetch("X402_NETWORK", "base-sepolia")
+  # Register Base Sepolia for CAIP-2 usage (eip155:84532) with USDC
+  config.register_chain(
+    name: "eip155:84532",
+    chain_id: 84_532,
+    standard: "eip155"
+  )
+  config.register_token(
+    chain: "eip155:84532",
+    symbol: "USDC",
+    address: ENV.fetch("X402_ASSET", "0x036CbD53842c5426634e7929541eC2318f3dCF7e"),
+    decimals: 6,
+    name: "USDC",
+    version: "2"
+  )
+
+  # Blockchain network to use (v2 uses CAIP-2 identifiers, e.g. "eip155:84532")
+  # Examples: "eip155:84532" (Base Sepolia), "eip155:8453" (Base Mainnet)
+  config.chain = ENV.fetch("X402_CHAIN", ENV.fetch("X402_NETWORK", "eip155:84532"))
 
   # Currency symbol (currently only USDC is supported)
   config.currency = ENV.fetch("X402_CURRENCY", "USDC")
