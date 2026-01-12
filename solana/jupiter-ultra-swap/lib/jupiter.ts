@@ -56,7 +56,17 @@ export async function fetchTokenList(): Promise<Token[]> {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch tokens: ${response.statusText}`);
+      // Try to parse error message from response
+      let errorMessage = `Failed to fetch tokens: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.error) {
+          errorMessage = errorData.error;
+        }
+      } catch {
+        // If response is not JSON, use default message
+      }
+      throw new Error(errorMessage);
     }
 
     const tokens: Token[] = await response.json();
@@ -64,7 +74,8 @@ export async function fetchTokenList(): Promise<Token[]> {
     return tokens;
   } catch (error) {
     console.error("Error fetching token list:", error);
-    return [];
+    // Re-throw the error so it can be handled by the hook
+    throw error;
   }
 }
 

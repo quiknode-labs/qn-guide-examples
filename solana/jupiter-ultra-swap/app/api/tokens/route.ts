@@ -65,6 +65,14 @@ export async function GET() {
             return NextResponse.json(tokens);
           }
         } else {
+          // Check for 401 Unauthorized - invalid API key
+          // Only show API key error if we're using the Pro API (not lite API)
+          if (response.status === 401 && JUPITER_API_KEY && endpoint.includes(JUPITER_API_BASE)) {
+            return NextResponse.json(
+              { error: "Jupiter API key is not valid. Please check your JUPITER_API_KEY environment variable." },
+              { status: 401 }
+            );
+          }
           console.warn(`Failed to fetch from ${endpoint}: ${response.status} ${response.statusText}`);
         }
       } catch (error: any) {
@@ -80,8 +88,13 @@ export async function GET() {
       }
     }
 
+    // If we got here, all endpoints failed
+    // Check if any endpoint returned a 401 (this would have been returned already)
     console.error("Failed to fetch token list from all endpoints");
-    return NextResponse.json([], { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch token list from all endpoints" },
+      { status: 500 }
+    );
   } catch (error) {
     console.error("Error fetching token list:", error);
     return NextResponse.json(
