@@ -58,6 +58,10 @@ export function useSwap() {
       const swapResponse = await getSwapTransaction(quote, publicKey.toBase58());
 
       // Step 4: Deserialize and sign the transaction
+      // NOTE: This is the ONLY place using @solana/web3.js v1. Required because:
+      // - @solana/wallet-adapter-react expects v1 VersionedTransaction for signTransaction()
+      // - Jupiter Ultra API returns transactions in v1 format
+      // - @solana/kit (v2) uses a different transaction model incompatible with wallet adapters
       const { VersionedTransaction } = await import("@solana/web3.js");
       const transaction = VersionedTransaction.deserialize(
         Buffer.from(swapResponse.swapTransaction, "base64")
