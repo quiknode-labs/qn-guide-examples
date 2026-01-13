@@ -7,37 +7,45 @@ X402.configure do |config|
   # Your wallet address (where payments will be received)
   # For testing, you can use a test wallet address
   config.wallet_address = ENV.fetch("X402_WALLET_ADDRESS", "YourTestWalletAddressHere")
-  # config.wallet_address = ENV.fetch("X402_WALLET_ADDRESS", "EYNQARNg9gZTtj1xMMrHK7dRFAkVjAAMubxaH7Do8d9Y")
 
   # Facilitator URL (default: https://x402.org/facilitator)
   # The facilitator handles payment verification and settlement
   config.facilitator = ENV.fetch("X402_FACILITATOR_URL", "https://www.x402.org/facilitator")
 
-  # Register Base Sepolia for CAIP-2 usage (eip155:84532) with USDC
+  # Blockchain network to use
+  config.chain = ENV.fetch("X402_CHAIN", "base-sepolia")
+  
+  # Currency symbol
+  config.currency = ENV.fetch("X402_CURRENCY", "USDC")
+
+  # Custom Chain and Token Registration
+
   config.register_chain(
-    name: "eip155:84532",
-    chain_id: 84_532,
+    name: "polygon-amoy",
+    chain_id: 80002,
     standard: "eip155"
   )
+
   config.register_token(
-    chain: "eip155:84532",
+    chain: "polygon-amoy",
     symbol: "USDC",
-    address: ENV.fetch("X402_ASSET", "0x036CbD53842c5426634e7929541eC2318f3dCF7e"),
+    address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
     decimals: 6,
     name: "USDC",
     version: "2"
   )
 
-  # Blockchain network to use (v2 uses CAIP-2 identifiers, e.g. "eip155:84532")
-  # Examples: "eip155:84532" (Base Sepolia), "eip155:8453" (Base Mainnet)
-  config.chain = ENV.fetch("X402_CHAIN", ENV.fetch("X402_NETWORK", "eip155:84532"))
+  # ==========================================
+  # Accept Multiple Payment Options
+  # ==========================================
+  # Use config.accept() to specify which chains/currencies to accept.
+  # The 402 response will include all accepted options, allowing clients
+  # to pay on any of the supported chains.
+  #
+  # If no config. accept() calls are made, the default chain/currency is used.
 
-  # Currency symbol (currently only USDC is supported)
-  config.currency = ENV.fetch("X402_CURRENCY", "USDC")
-
-  # config.solana_fee_payer = ENV.fetch("X402_SOLANA_FEE_PAYER", "CKPKJWNdJEqa81x7CkZ14BVPiY6y16Sxs7owznqtWYp5")
-  # config.solana_fee_payer = ENV.fetch("X402_SOLANA_FEE_PAYER", "FuzoZt4zXaYLvXRguKw2T6xvKvzZqv6PkmaFjNrEG7jm")
-
+  config.accept(chain: "base-sepolia", currency: "USDC")
+  config.accept(chain: "polygon-amoy", currency: "USDC")
 
   # Optimistic mode (default: true)
   # - true: Fast response, settle after (better UX, optimistic)

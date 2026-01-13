@@ -12,7 +12,7 @@ PORT = os.environ.get("PORT", "3000")
 PAY_TO = os.environ.get(
     "X402_WALLET_ADDRESS", "0xd086Ef8F2c0F9d642120cCf0898BD101b1d18Db6"
 )
-CHAIN = os.environ.get("X402_CHAIN", os.environ.get("X402_NETWORK", "eip155:84532"))
+CHAIN = os.environ.get("X402_CHAIN", "base-sepolia")
 
 # Create account from private key
 account = Account.from_key(PRIVATE_KEY)

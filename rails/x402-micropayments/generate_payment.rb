@@ -28,7 +28,7 @@ Dotenv.load
 PRIVATE_KEY = ENV.fetch('X402_TEST_PRIVATE_KEY', '0xYourPrivateKeyHere')
 PORT = ENV.fetch('PORT', '3000')
 PAY_TO = ENV.fetch('X402_WALLET_ADDRESS', 'YourWalletAddressHere')
-CHAIN = ENV.fetch('X402_CHAIN', ENV.fetch('X402_NETWORK', 'eip155:84532'))
+CHAIN = ENV.fetch('X402_CHAIN', 'base-sepolia')
 
 # Configure x402-payments gem
 X402::Payments.configure do |config|
@@ -38,18 +38,20 @@ X402::Payments.configure do |config|
   config.max_timeout_seconds = 600
 
   config.register_chain(
-    name: "eip155:84532",
-    chain_id: 84_532,
+    name: "polygon-amoy",
+    chain_id: 80002,
     standard: "eip155"
   )
   config.register_token(
-    chain: "eip155:84532",
+    chain: "polygon-amoy",
     symbol: "USDC",
-    address: ENV.fetch("X402_ASSET", "0x036CbD53842c5426634e7929541eC2318f3dCF7e"),
+    address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582", # USDC on Polygon Amoy Testnet
     decimals: 6,
     name: "USDC",
     version: "2"
   )
+
+  config.rpc_urls["polygon-amoy"] = "YourQuicknodePolygonAmoyRPCURLHere" # Register the RPC URL for the custom chain
 end
 
 # Display configuration

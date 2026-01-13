@@ -21,8 +21,7 @@ const PRIVATE_KEY = (process.env.X402_TEST_PRIVATE_KEY ||
 const PORT = process.env.PORT || "3000";
 const PAY_TO = (process.env.X402_WALLET_ADDRESS ||
   "0xd086Ef8F2c0F9d642120cCf0898BD101b1d18Db6") as Address;
-const CHAIN =
-  process.env.X402_CHAIN || process.env.X402_NETWORK || "eip155:84532";
+const CHAIN = process.env.X402_CHAIN || "base-sepolia";
 
 // Create account from private key
 const account = privateKeyToAccount(PRIVATE_KEY);
