@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
   getSwapQuote,
@@ -19,6 +19,10 @@ export function useSwap() {
   const [error, setError] = useState<string | null>(null);
   const [txSignature, setTxSignature] = useState<string | null>(null);
   const [estimatedOutput, setEstimatedOutput] = useState<string | null>(null);
+  
+  // Synchronous guard to prevent concurrent swap executions
+  // This ref is updated immediately (synchronously), unlike state which is batched
+  const isExecutingRef = useRef(false);
 
   const executeSwap = async (
     fromToken: Token,
@@ -28,6 +32,15 @@ export function useSwap() {
     if (!publicKey || !signTransaction) {
       throw new Error("Wallet not connected");
     }
+
+    // Synchronous guard: prevent concurrent executions
+    // This check happens immediately, before any async operations or state updates
+    if (isExecutingRef.current) {
+      throw new Error("Swap already in progress");
+    }
+    
+    // Set guard synchronously to prevent race conditions
+    isExecutingRef.current = true;
 
     setStatus("quoting");
     setError(null);
@@ -49,8 +62,15 @@ export function useSwap() {
       );
 
       // Store estimated output for display
+      // Use BigInt to preserve precision when parsing large amounts (e.g., tokens with 18 decimals)
+      const outAmountBigInt = BigInt(quote.outAmount);
+      const decimalsBigInt = BigInt(10 ** toToken.decimals);
+      // For display, multiply by 10^6 to preserve 6 decimal places, then divide
+      // This preserves precision better than converting both to Number first
+      const displayPrecision = BigInt(1000000); // 10^6 for 6 decimal places
+      const scaledAmount = (outAmountBigInt * displayPrecision) / decimalsBigInt;
       setEstimatedOutput(
-        (parseInt(quote.outAmount) / Math.pow(10, toToken.decimals)).toFixed(6)
+        (Number(scaledAmount) / Number(displayPrecision)).toFixed(6)
       );
 
       // Step 3: Get transaction from quote (Ultra API includes it in quote)
@@ -84,6 +104,9 @@ export function useSwap() {
       setStatus("error");
       setError(err instanceof Error ? err.message : "Swap failed");
       throw err;
+    } finally {
+      // Always reset the guard, even if an error occurred
+      isExecutingRef.current = false;
     }
   };
 
@@ -92,6 +115,8 @@ export function useSwap() {
     setError(null);
     setTxSignature(null);
     setEstimatedOutput(null);
+    // Reset the execution guard when manually resetting
+    isExecutingRef.current = false;
   };
 
   return {

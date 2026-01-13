@@ -67,8 +67,8 @@ export async function GET() {
         } else {
           // Check for 401 Unauthorized - invalid API key
           // Only show API key error if we're using the Pro API (not lite API)
-          if (response.status === 401 && JUPITER_API_KEY && endpoint.includes(JUPITER_API_BASE)) {
-            return NextResponse.json(
+          if (response.status === 401 && JUPITER_API_KEY && new URL(endpoint).host === "api.jup.ag") {
+              return NextResponse.json(
               { error: "Jupiter API key is not valid. Please check your JUPITER_API_KEY environment variable." },
               { status: 401 }
             );

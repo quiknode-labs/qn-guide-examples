@@ -106,9 +106,14 @@ export function useQuote(
         }
 
         // Convert output amount back to readable format
-        const outAmountNative = (
-          parseInt(quote.outAmount) / Math.pow(10, toToken.decimals)
-        ).toFixed(6);
+        // Use BigInt to preserve precision when parsing large amounts (e.g., tokens with 18 decimals)
+        const outAmountBigInt = BigInt(quote.outAmount);
+        const decimalsBigInt = BigInt(10 ** toToken.decimals);
+        // For display, multiply by 10^6 to preserve 6 decimal places, then divide
+        // This preserves precision better than converting both to Number first
+        const displayPrecision = BigInt(1000000); // 10^6 for 6 decimal places
+        const scaledAmount = (outAmountBigInt * displayPrecision) / decimalsBigInt;
+        const outAmountNative = (Number(scaledAmount) / Number(displayPrecision)).toFixed(6);
 
         // Calculate exchange rate
         const exchangeRate =

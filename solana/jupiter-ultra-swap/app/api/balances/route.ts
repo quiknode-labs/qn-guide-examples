@@ -117,33 +117,44 @@ export async function GET(request: Request) {
     const balances: any[] = [];
 
     // Add SOL balance (native Solana)
-    if (data.amount && parseInt(data.amount) > 0) {
-      balances.push({
-        mint: "So11111111111111111111111111111111111111112", // SOL mint address
-        balance: parseInt(data.amount),
-        decimals: 9,
-      });
+    // Use BigInt to preserve precision for large amounts
+    if (data.amount) {
+      const solAmount = BigInt(data.amount);
+      if (solAmount > BigInt(0)) {
+        // Convert to number for API response (may lose precision for very large values)
+        // but preserves precision during parsing and comparison
+        const balanceNumber = Number(solAmount);
+        balances.push({
+          mint: "So11111111111111111111111111111111111111112", // SOL mint address
+          balance: balanceNumber,
+          decimals: 9,
+        });
+      }
     }
 
     // Add SPL token balances
     if (data.tokens && typeof data.tokens === "object") {
       for (const [mint, tokenAccounts] of Object.entries(data.tokens)) {
         if (Array.isArray(tokenAccounts) && tokenAccounts.length > 0) {
-          // Sum up all token accounts for this mint
-          let totalAmount = 0;
+          // Sum up all token accounts for this mint using BigInt to preserve precision
+          let totalAmount = BigInt(0);
           let decimals = 0;
 
           for (const account of tokenAccounts as any[]) {
             if (account.amount) {
-              totalAmount += parseInt(account.amount);
+              // Parse as BigInt to preserve precision, especially for tokens with 18 decimals
+              totalAmount += BigInt(account.amount);
               decimals = account.decimals ?? 0;
             }
           }
 
-          if (totalAmount > 0) {
+          if (totalAmount > BigInt(0)) {
+            // Convert to number for API response (may lose precision for very large values)
+            // but preserves precision during arithmetic operations
+            const balanceNumber = Number(totalAmount);
             balances.push({
               mint,
-              balance: totalAmount,
+              balance: balanceNumber,
               decimals,
             });
           }
