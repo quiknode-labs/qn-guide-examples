@@ -1,0 +1,166 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { getSwapQuote } from "@/lib/jupiter";
+import type { Token } from "@/lib/types";
+
+export interface QuoteInfo {
+  outAmount: string;
+  priceImpactPct: string;
+  slippageBps: number;
+  exchangeRate: string;
+  routeCount: number;
+  routeLabels: string[];
+  loading: boolean;
+  error: string | null;
+}
+
+// Helper function to extract route labels and remove duplicates
+function extractRouteLabels(routePlan: any[]): string[] {
+  const labels = routePlan
+    ?.map((route: any) => route.swapInfo?.label)
+    .filter(Boolean) || [];
+  
+  // Remove consecutive duplicates
+  return labels.filter((label: string, index: number, arr: string[]) => {
+    return index === 0 || label !== arr[index - 1];
+  });
+}
+
+// Helper function to reset quote info
+function createEmptyQuoteInfo(loading: boolean = false): QuoteInfo {
+  return {
+    outAmount: "",
+    priceImpactPct: "",
+    slippageBps: 0,
+    exchangeRate: "",
+    routeCount: 0,
+    routeLabels: [],
+    loading,
+    error: null,
+  };
+}
+
+export function useQuote(
+  fromToken: Token | null,
+  toToken: Token | null,
+  amount: string
+) {
+  const { publicKey } = useWallet();
+  const [quoteInfo, setQuoteInfo] = useState<QuoteInfo>(createEmptyQuoteInfo());
+
+  useEffect(() => {
+    // Reset quote info when dependencies change
+    setQuoteInfo(createEmptyQuoteInfo());
+
+    // Don't fetch if required values are missing
+    if (
+      !fromToken ||
+      !toToken ||
+      !amount ||
+      !publicKey ||
+      fromToken.address === toToken.address
+    ) {
+      return;
+    }
+
+    const amountNum = parseFloat(amount);
+    if (amountNum <= 0 || isNaN(amountNum)) {
+      return;
+    }
+
+    // Set loading state
+    setQuoteInfo(createEmptyQuoteInfo(true));
+
+    // Create AbortController to cancel in-flight requests
+    const abortController = new AbortController();
+    let isCancelled = false;
+
+    // Debounce: wait 500ms before fetching to avoid too many API calls
+    const timeoutId = setTimeout(async () => {
+      // Check if already cancelled before starting fetch
+      if (isCancelled) {
+        return;
+      }
+
+      try {
+        // Convert amount to smallest unit (e.g., lamports for SOL)
+        const amountInSmallestUnit = Math.floor(
+          amountNum * Math.pow(10, fromToken.decimals)
+        );
+
+        // Fetch quote from Jupiter Ultra API with abort signal
+        const quote = await getSwapQuote(
+          fromToken.address,
+          toToken.address,
+          amountInSmallestUnit,
+          50, // 0.5% slippage tolerance
+          publicKey.toBase58(),
+          abortController.signal
+        );
+
+        // Check if request was cancelled before updating state
+        if (isCancelled) {
+          return;
+        }
+
+        // Convert output amount back to readable format
+        // Use BigInt to preserve precision when parsing large amounts (e.g., tokens with 18 decimals)
+        const outAmountBigInt = BigInt(quote.outAmount);
+        const decimalsBigInt = BigInt(10 ** toToken.decimals);
+        // For display, multiply by 10^6 to preserve 6 decimal places, then divide
+        // This preserves precision better than converting both to Number first
+        const displayPrecision = BigInt(1000000); // 10^6 for 6 decimal places
+        const scaledAmount = (outAmountBigInt * displayPrecision) / decimalsBigInt;
+        const outAmountNative = (Number(scaledAmount) / Number(displayPrecision)).toFixed(6);
+
+        // Calculate exchange rate
+        const exchangeRate =
+          amountNum > 0
+            ? (parseFloat(outAmountNative) / amountNum).toFixed(6)
+            : "0";
+
+        // Extract route labels
+        const routeLabels = extractRouteLabels(quote.routePlan || []);
+
+        // Update quote info with results
+        setQuoteInfo({
+          outAmount: outAmountNative,
+          priceImpactPct: quote.priceImpactPct || "0",
+          slippageBps: quote.slippageBps || 50,
+          exchangeRate,
+          routeCount: routeLabels.length,
+          routeLabels,
+          loading: false,
+          error: null,
+        });
+      } catch (err) {
+        // Don't update state if request was aborted
+        if (isCancelled || (err instanceof Error && err.name === "AbortError")) {
+          return;
+        }
+
+        // Check again if cancelled before setting error
+        if (isCancelled) {
+          return;
+        }
+
+        setQuoteInfo({
+          ...createEmptyQuoteInfo(),
+          error: err instanceof Error ? err.message : "Failed to fetch quote",
+        });
+      }
+    }, 500);
+
+    // Cleanup: cancel timeout and abort in-flight requests
+    return () => {
+      isCancelled = true;
+      clearTimeout(timeoutId);
+      abortController.abort();
+    };
+  }, [fromToken, toToken, amount, publicKey]);
+
+  return quoteInfo;
+}
+
