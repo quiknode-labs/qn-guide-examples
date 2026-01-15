@@ -29,6 +29,10 @@ PRIVATE_KEY = ENV.fetch('X402_TEST_PRIVATE_KEY', '0xYourPrivateKeyHere')
 PORT = ENV.fetch('PORT', '3000')
 PAY_TO = ENV.fetch('X402_WALLET_ADDRESS', 'YourWalletAddressHere')
 CHAIN = ENV.fetch('X402_CHAIN', 'base-sepolia')
+IS_SOLANA = CHAIN.start_with?("solana")
+SOL_PRIVATE_KEY = ENV['X402_SOL_PRIVATE_KEY']
+SOL_PAY_TO = ENV['X402_SOL_PAY_TO']
+SOLANA_FEE_PAYER = ENV['X402_SOLANA_FEE_PAYER']
 
 # Configure x402-payments gem
 X402::Payments.configure do |config|
@@ -52,27 +56,34 @@ X402::Payments.configure do |config|
   )
 
   config.rpc_urls["polygon-amoy"] = "YourQuicknodePolygonAmoyRPCURLHere" # Register the RPC URL for the custom chain
+
+  if IS_SOLANA
+    config.private_key = SOL_PRIVATE_KEY if SOL_PRIVATE_KEY
+    config.default_pay_to = SOL_PAY_TO if SOL_PAY_TO
+  end
 end
 
 # Display configuration
-puts "Pay to: #{PAY_TO}"
+effective_pay_to = IS_SOLANA ? (SOL_PAY_TO || PAY_TO) : PAY_TO
+puts "Pay to: #{effective_pay_to}"
 puts "Port: #{PORT}"
 puts
 
 # Generate payment header
 # The gem handles all the EIP-712 signing internally
 begin
+  resource_path = IS_SOLANA ? "/api/weather/paywalled_info_sol" : "/api/weather/paywalled_info"
   payment_header = X402::Payments.generate_header(
     amount: 0.001,  # $0.001 in USD
-    resource: "http://localhost:#{PORT}/api/weather/paywalled_info",
-    description: "Payment required for /api/weather/paywalled_info"
+    resource: "http://localhost:#{PORT}#{resource_path}",
+    description: "Payment required for #{resource_path}"
   )
 
   puts "\nPayment Header (PAYMENT-SIGNATURE):"
   puts payment_header
 
   puts "\n\nCurl command:"
-  puts "curl -i -H \"PAYMENT-SIGNATURE: #{payment_header}\" http://localhost:#{PORT}/api/weather/paywalled_info"
+  puts "curl -i -H \"PAYMENT-SIGNATURE: #{payment_header}\" http://localhost:#{PORT}#{resource_path}"
 
   # Optionally decode and display for debugging
   require 'base64'

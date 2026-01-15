@@ -194,6 +194,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 ### Streams
 - [Streams Discord AI Bot (Block Metrics Q&A)](./Streams/ai-bot-discord)
 - [Quicknode Streams React Dashboard](./Streams/qs-react-app)
+- [userstream](./Streams/userstream)
 - [Wallet Allowance Checker (Streams + Postgres + Quicknode)](./Streams/wallet-allowance-checker-app)
 
 ### Tron
