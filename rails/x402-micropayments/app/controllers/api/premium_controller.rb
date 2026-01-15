@@ -36,7 +36,7 @@ module Api
     private
 
     def require_payment
-      x402_paywall(amount: 0.005, chain: "base-sepolia")
+      x402_paywall(amount: 0.005, chain: "eip155:84532")
     end
   end
 end

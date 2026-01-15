@@ -4,21 +4,37 @@ Demo Rails application showcasing the [x402-rails](https://rubygems.org/gems/x40
 
 ## Overview
 
-This is a simple Weather API that requires USDC payments to access weather data. It demonstrates the x402 payment protocol with:
+This is a simple Weather API that requires USDC payments to access some endpoints. It demonstrates the x402 payment protocol with:
 
-- 💰 Micropayments ($0.001 USDC per request)
-- ⚡ Fast response times (~1 second with optimistic mode)
-- 🔒 Cryptographic payment verification (EIP-712 signatures)
-- 🌐 Blockchain settlement on Base Sepolia testnet
+- Micropayments ($0.001 USDC per request)
+- HTTP 402 Payment Required flows
+- Cryptographic payment verification (EIP-712 on EVM chains)
+- Optional optimistic or confirmed settlement
+- Multi-chain support (Base Sepolia, Polygon Amoy, and Solana Devnet examples)
 
-## Features
+## How the x402 Flow Works
 
-- Multiple API endpoints with free and paywalled access
-- Returns mock weather data after payment verification
-- HTTP 402 Payment Required for unpaid requests
-- Payment settlement on Base Sepolia blockchain
-- Configurable optimistic/non-optimistic settlement modes
-- Multi-chain support (Base Sepolia and Solana Devnet)
+1. **Request without payment** - Server returns `402 Payment Required` and payment requirements.
+2. **Generate payment signature** - Client signs the requirements using x402-compatible tooling.
+3. **Request with payment** - Client sends `PAYMENT-SIGNATURE` header with the signed payload.
+4. **Receive response** - Server returns data plus `PAYMENT-RESPONSE` header with settlement info.
+
+## What’s Included
+
+- Paywalled endpoints with `x402_paywall` (`app/controllers/api/weather_controller.rb`)
+- Paywalled endpoints with a `before_action` (`app/controllers/api/premium_controller.rb`)
+- x402 configuration (`config/initializers/x402.rb`)
+- Payment header generators (Ruby/TypeScript/Python)
+- Header decoders (TypeScript/Python)
+- OpenAPI spec and Postman collection
+
+## Prerequisites
+
+- Ruby 3.2+ and Bundler
+- SQLite3
+- Optional for scripts:
+  - Node.js 18+ (TypeScript generator/decoder)
+  - Python 3.9+ (Python generator/decoder)
 
 ## Quick Start
 
@@ -28,33 +44,16 @@ This is a simple Weather API that requires USDC payments to access weather data.
 bundle install
 ```
 
-The app uses the `x402-rails` gem (version 0.2.1) which will be installed automatically from [RubyGems.org](https://rubygems.org/gems/x402-rails).
-
-### 2. Configure x402
-
-The app is pre-configured in `config/initializers/x402.rb`:
-
-```ruby
-X402.configure do |config|
-  config.wallet_address = ENV.fetch("X402_WALLET_ADDRESS", "YourWalletAddressHere")
-  config.facilitator = ENV.fetch("X402_FACILITATOR_URL", "https://www.x402.org/facilitator")
-  config.chain = ENV.fetch("X402_CHAIN", "base-sepolia")
-  config.currency = ENV.fetch("X402_CURRENCY", "USDC")
-  config.optimistic = ENV.fetch("X402_OPTIMISTIC", "true") == "true"
-end
-```
-
-**Optional**: Create a `.env` file for your custom configuration:
+### 2. Configure Environment
 
 ```bash
-# Copy the example file
 cp .env.example .env
-
-# Edit with your values
-# X402_WALLET_ADDRESS=0xYourAddress
-# X402_FACILITATOR_URL=https://www.x402.org/facilitator
-# etc.
 ```
+
+At minimum set:
+
+- `X402_WALLET_ADDRESS` (recipient)
+- `X402_TEST_PRIVATE_KEY` (test payer key for generators)
 
 ### 3. Start the Server
 
@@ -62,263 +61,201 @@ cp .env.example .env
 bin/rails server -p 3000
 ```
 
-The API will be available at `http://localhost:3000`
+API base URL: `http://localhost:3000`
 
-## Testing the API
+## Endpoints
 
-### Option 1: Using curl
+Free:
+- `GET /api/weather/public`
+- `GET /api/premium/free`
 
-#### Step 1: Request without payment (get 402)
+Paywalled (EVM defaults):
+- `GET /api/weather/paywalled_info` ($0.001)
+- `GET /api/premium` ($0.005)
+- `GET /api/premium/:id` ($0.005)
+
+Paywalled (Solana example):
+- `GET /api/weather/paywalled_info_sol` ($0.001, Solana Devnet)
+
+## Test the Payment Flow (EVM or Solana)
+
+### 1. Make a request without payment
 
 ```bash
 curl -i http://localhost:3000/api/weather/paywalled_info
 ```
 
-**Expected Response:**
-```
-HTTP/1.1 402 Payment Required
-Content-Type: application/json
+You should see `402 Payment Required` with a `PAYMENT-REQUIRED` header and an `accepts` array in the response body.
 
-{
-  "x402Version": 1,
-  "error": "Payment required to access this resource",
-  "accepts": [{
-    "scheme": "exact",
-    "network": "base-sepolia",
-    "maxAmountRequired": "1000",
-    "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
-    "payTo": "YourWalletAddressHere",
-    "resource": "http://localhost:3000/api/weather/paywalled_info",
-    "description": "Payment required for /api/weather/paywalled_info",
-    "maxTimeoutSeconds": 600,
-    "mimeType": "application/json",
-    "extra": {
-      "name": "USDC",
-      "version": "2"
-    }
-  }]
-}
-```
+### 2. Generate a payment signature
 
-#### Step 2: Generate payment signature
+Use one of the provided generators:
 
-You can use **Ruby**, **TypeScript**, or **Python** to generate payment signatures:
-
-##### Option A: Ruby (Recommended)
-
-Uses Quicknode's open-source `x402-payments` gem:
+**Ruby (recommended, supports EVM + Solana):**
 
 ```bash
-# Set your test private key
-# Or set it in .env
-# export X402_TEST_PRIVATE_KEY=0xYourPrivateKeyHere
-
-# Generate payment (gem auto-installs on first run)
 ruby generate_payment.rb
 ```
 
-##### Option B: TypeScript
+**TypeScript:**
 
 ```bash
-# Install dependencies (first time only)
 npm install viem
-
-# Set your test private key
-export X402_TEST_PRIVATE_KEY=0xYourPrivateKeyHere
-
-# Generate payment
 npx tsx generate_payment.ts
 ```
 
-##### Option C: Python
+**Python:**
 
 ```bash
-# Setup Python environment (first time only)
 python3 -m venv venv
 source venv/bin/activate
 pip install eth-account
 pip install git+https://github.com/coinbase/x402.git#subdirectory=python/x402
-
-# Set your test private key
-export X402_TEST_PRIVATE_KEY=0xYourPrivateKeyHere
-
-# Generate payment
 python generate_payment.py
 ```
 
-All scripts output:
-- Your payer address
-- Base64-encoded X-PAYMENT header
-- Ready-to-use curl command
-- Decoded payment header (for debugging)
+Each script prints:
+- the payer address
+- a `PAYMENT-SIGNATURE` header value
+- a ready-to-use curl command
 
-#### Step 3: Make request with payment
+### 3. Make a paid request
 
-Copy and run the curl command from the generator output:
-
-```bash
-curl -i -H "X-PAYMENT: eyJ4NDAyVmVyc2lvbiI6..." http://localhost:3000/api/weather/paywalled_info
-```
-
-**Expected Response:**
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-X-PAYMENT-RESPONSE: eyJzdWNjZXNzIjp0cnVlLCJ0cmFuc2FjdGlvbiI6IjB4Li4uIn0=
-
-{
-  "temperature": 72,
-  "condition": "sunny",
-  "humidity": 65,
-  "paid_by": "0x63eb313AD58184F4c25F68d456e8276b77Fdce0f",
-  "payment_amount": "1000",
-  "network": "base-sepolia"
-}
-```
-
-### Option 2: Using Postman/Paw
-
-Import the provided collection:
+Copy the curl command from the script output, or:
 
 ```bash
-# Choose one:
-postman_collection.json    # Import into Postman
-openapi.yaml              # Import into any OpenAPI tool
+curl -i -H "PAYMENT-SIGNATURE: <BASE64_HEADER>" \
+  http://localhost:3000/api/weather/paywalled_info
 ```
 
-See `API_TEST_COMMANDS.md` for detailed instructions.
+You should see `200 OK` and a `PAYMENT-RESPONSE` header.
 
-## Payment Generation
+## Multi-Chain Usage
 
-Three scripts are available for generating valid EIP-712 payment signatures for testing:
-- `generate_payment.rb` (Ruby) - **Recommended** - Uses Quicknode's `x402-payments` gem
-- `generate_payment.ts` (TypeScript) - Uses Viem library
-- `generate_payment.py` (Python) - Uses eth-account library
+### Base Sepolia (default)
 
-### Usage
+This app defaults to Base Sepolia:
 
-#### Ruby (Recommended)
+- `X402_CHAIN=base-sepolia`
+- USDC: `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
+
+The initializer also calls `config.accept` for Base Sepolia and Polygon Amoy, so the `402` response can include multiple payment options. Remove or adjust those `config.accept` calls if you want a single option.
+
+### Polygon Amoy (custom EVM chain)
+
+This app registers a custom chain and USDC token in:
+
+- `config/initializers/x402.rb`
+- `generate_payment.rb`
+
+To use Polygon Amoy end-to-end:
+
+1. Set the chain in `.env`:
+   ```bash
+   X402_CHAIN=polygon-amoy
+   ```
+2. Update the RPC URL used by the Ruby generator in `generate_payment.rb`.
+3. Re-run the generator and call the paywalled endpoint.
+
+If you want the generator to be configurable without edits, use an env var and wire it into `generate_payment.rb`.
+
+The TypeScript and Python generators are Base Sepolia-focused. To use them on Polygon Amoy (or any other EVM chain), update the chain, asset address, and EIP-712 domain values in those scripts.
+
+### Solana Devnet
+
+The Solana example endpoint is:
+
+- `GET /api/weather/paywalled_info_sol`
+
+Key details:
+
+- `x402_paywall` is called with `chain: "solana-devnet"` and `currency: "USDC"`.
+- The controller reads `X402_SOLANA_FEE_PAYER` (optional) and `X402_SOL_PAY_TO` (see `.env.example`).
+- Solana configuration values can be set in `.env` (see `.env.example`).
+
+To generate a Solana payment header with the Ruby script, set these env vars before running:
 
 ```bash
-# Default (port 3000)
+X402_CHAIN=solana-devnet \
+ruby generate_payment.rb
+```
+
+To test end-to-end:
+
+```bash
+# 1) Get 402 requirements
+curl -i http://localhost:3000/api/weather/paywalled_info_sol
+
+# 2) Generate a Solana payment header (uses the Solana resource path)
+X402_CHAIN=solana-devnet \
+X402_SOL_PRIVATE_KEY=<BASE58_OR_JSON_PRIVATE_KEY> \
+X402_SOL_PAY_TO=<SOLANA_RECIPIENT_ADDRESS> \
 ruby generate_payment.rb
 
-# Custom port
-PORT=3001 ruby generate_payment.rb
-
-# Custom wallet and port
-X402_TEST_PRIVATE_KEY=0x... PORT=3001 ruby generate_payment.rb
+# 3) Call the paid endpoint with the header from the script output
+curl -i -H "PAYMENT-SIGNATURE: <BASE64_HEADER>" \
+  http://localhost:3000/api/weather/paywalled_info_sol
 ```
 
-**Why Ruby?** The `x402-payments` gem is Quicknode's open-source library. It uses `bundler/inline` so the gem auto-installs on first run - no separate setup needed!
+Solana notes:
+- Sender and recipient must have USDC Associated Token Accounts (ATAs).
+- The sender must have USDC on the selected network.
+- Transactions are partially signed by the sender; the facilitator adds the fee payer signature.
 
-#### TypeScript
+Note: The TypeScript and Python generators are EVM-focused. For Solana, use the Ruby generator.
+
+## Configuration Reference
+
+Core settings (used by `config/initializers/x402.rb`):
+
+- `X402_WALLET_ADDRESS` - Recipient address
+- `X402_FACILITATOR_URL` - Settlement facilitator URL (default `https://www.x402.org/facilitator`)
+- `X402_CHAIN` - Default chain (e.g. `base-sepolia`)
+- `X402_CURRENCY` - Currency symbol (e.g. `USDC`)
+- `X402_OPTIMISTIC` - `true` to respond before settlement, `false` to wait
+
+Testing settings:
+
+- `X402_TEST_PRIVATE_KEY` - Test payer private key for generators
+- `PORT` - Server port (default `3000`)
+
+Solana settings:
+
+- `X402_SOL_PRIVATE_KEY`
+- `X402_SOL_PAY_TO`
+
+## Decoding Payment Headers
+
+Use the decoders to inspect a `PAYMENT-SIGNATURE` header:
 
 ```bash
-# Default (port 3000)
-npx tsx generate_payment.ts
-
-# Custom port
-PORT=3001 npx tsx generate_payment.ts
-
-# Custom wallet and port
-X402_TEST_PRIVATE_KEY=0x... PORT=3001 npx tsx generate_payment.ts
+npx tsx decode_payment.ts "<BASE64_HEADER>"
+# or
+python decode_payment.py "<BASE64_HEADER>"
 ```
 
-#### Python
+## Settlement Mode
 
-```bash
-# Default (port 3000)
-python generate_payment.py
+This app sets `X402_OPTIMISTIC=false` by default in `config/initializers/x402.rb` to ensure settlement happens before the response is sent.
 
-# Custom port
-PORT=3001 python generate_payment.py
+- Optimistic mode (`true`): faster responses, settlement happens after response
+- Non-optimistic (`false`): slower, but settlement is confirmed before response
 
-# Custom wallet and port
-X402_TEST_PRIVATE_KEY=0x... PORT=3001 python generate_payment.py
-```
+## Viewing Transactions
 
-### Environment Variables
+After a successful payment:
 
-- `PORT` - Server port (default: 3000)
-- `X402_TEST_PRIVATE_KEY` - Your test wallet private key
-- `X402_WALLET_ADDRESS` - Payment recipient address
-
-### How it Works
-
-1. Uses your private key to sign an EIP-712 payment authorization
-2. Constructs the X-PAYMENT header with authorization and requirements
-3. Encodes the payment as base64 JSON
-4. Outputs the X-PAYMENT header value
-5. Generates a ready-to-use curl command
-
-**Note**: The private key is for testing only. Get testnet USDC from the [Circle's faucet](https://faucet.circle.com/)
-
-### Decoding Payment Headers
-
-To inspect what's inside an X-PAYMENT header:
-
-#### TypeScript
-```bash
-npx tsx decode_payment.ts "eyJ4NDAyVmVyc2lvbiI..."
-```
-
-#### Python
-```bash
-python decode_payment.py "eyJ4NDAyVmVyc2lvbiI..."
-```
-
-## Configuration
-
-### Settlement Modes
-
-#### Optimistic Mode (Default)
-
-Fast responses with async settlement:
-
-```bash
-# In .env or terminal
-X402_OPTIMISTIC=true bin/rails server -p 3000
-```
-
-- Response time: ~1 second
-- Settlement happens after response is sent
-- Best for: Most use cases
-
-#### Non-Optimistic Mode
-
-Guaranteed settlement before response:
-
-```bash
-X402_OPTIMISTIC=false bin/rails server -p 3000
-```
-
-- Response time: ~2 seconds
-- Settlement confirmed before response
-- Best for: High-value transactions
-
-### Other Configuration
-
-```bash
-# Required
-X402_WALLET_ADDRESS=0xYourAddress
-
-# Optional (with defaults)
-X402_FACILITATOR_URL=https://www.x402.org/facilitator
-X402_CHAIN=base-sepolia
-X402_CURRENCY=USDC
-X402_OPTIMISTIC=true
-```
-
-## Viewing Blockchain Transactions
-
-After successful payment, view the transaction on Base Sepolia:
-
-1. Decode the `X-PAYMENT-RESPONSE` header (base64)
+1. Decode the `PAYMENT-RESPONSE` header (base64)
 2. Extract the `transaction` field
-3. View on BaseScan: https://sepolia.basescan.org/tx/TRANSACTION_HASH
+3. View the transaction on a block explorer
 
-Or check the Rails logs for the transaction hash:
+Example (Base Sepolia):
+
+```
+https://sepolia.basescan.org/tx/<TRANSACTION_HASH>
+```
+
+You can also check Rails logs for settlement output:
 
 ```
 x402 settlement successful: 0x...
@@ -326,90 +263,74 @@ x402 settlement successful: 0x...
 
 ## Files
 
-### Application Files
-- `app/controllers/api/weather_controller.rb` - Weather API endpoint with `x402_paywall`
-- `app/controllers/api/premium_controller.rb` - Premium content endpoints
-- `config/initializers/x402.rb` - x402 gem configuration
-- `config/routes.rb` - API routes
+Application:
+- `app/controllers/api/weather_controller.rb`
+- `app/controllers/api/premium_controller.rb`
+- `config/initializers/x402.rb`
+- `config/routes.rb`
 
-### Testing Tools
-- `generate_payment.rb` - Ruby payment signature generator (x402-payments gem) **[Recommended]**
-- `generate_payment.ts` - TypeScript payment signature generator (Viem)
-- `generate_payment.py` - Python payment signature generator
-- `decode_payment.ts` - TypeScript X-PAYMENT header decoder
-- `decode_payment.py` - Python X-PAYMENT header decoder
+Tools:
+- `generate_payment.rb` (Ruby, recommended)
+- `generate_payment.ts` (TypeScript)
+- `generate_payment.py` (Python)
+- `decode_payment.ts`
+- `decode_payment.py`
 
-### Documentation
-- `README.md` - This file
-- `API_TEST_COMMANDS.md` - Detailed testing guide
-- `openapi.yaml` - OpenAPI 3.0 specification
-- `postman_collection.json` - Postman collection
-- `.env.example` - Environment variables template
+Docs and API specs:
+- `README.md`
+- `openapi.yaml`
+- `postman_collection.json`
+- `.env.example`
 
 ## Troubleshooting
 
-### "Payment required" error with payment header
+### "Payment required" even with a header
 
-**Issue**: Port mismatch between signature and server
+Cause: The `resource` in the signature includes the full URL. If the port or host changes, the signature is invalid.
 
-**Solution**: Ensure you're using the same port:
+Fix:
 ```bash
-# Generate for specific port (Ruby - recommended)
 PORT=3000 ruby generate_payment.rb
-
-# Or TypeScript
-PORT=3000 npx tsx generate_payment.ts
-
-# Or Python
-PORT=3000 python generate_payment.py
-
-# Start server on same port
 bin/rails server -p 3000
 ```
 
 ### "Invalid payment" error
 
-**Issue**: Expired signature (600 second timeout)
+Cause: Signature expired (default 600 seconds).
 
-**Solution**: Generate a fresh payment signature
+Fix: Regenerate the signature and retry.
 
 ### "Facilitator error"
 
-**Issue**: Network or facilitator connectivity
+Cause: Network issues or invalid facilitator URL.
 
-**Solution**: Check logs and retry. The facilitator URL is `https://www.x402.org/facilitator`
+Fix: Verify `X402_FACILITATOR_URL` and check logs.
 
-### Settlement fails but got 200 response
+### "Could not open library 'sodium' / 'libsodium'"
 
-**Issue**: Optimistic mode settlement failure (rare)
+The `x402-payments` gem may load Solana dependencies that require `libsodium`.
 
-**Solution**: Check Rails logs for settlement errors. In optimistic mode, the response is sent before settlement completes.
+macOS fix:
+```bash
+brew install libsodium
+brew link --force libsodium
+```
+
+### Settlement fails but response is 200
+
+Cause: Optimistic settlement failure.
+
+Fix: Check Rails logs for settlement errors.
 
 ## Development
 
-This test app uses the x402-rails gem from RubyGems:
+This app uses the x402-rails gem from RubyGems:
 
 ```ruby
-# Gemfile
-gem "x402-rails", "~> 0.2.1"
+gem "x402-rails", "~> 1.0.0"
 ```
 
-To test the app:
-1. Make sure you have Ruby 3.3.5+ installed
-2. Run `bundle install`
-3. Start the server with `bin/rails server`
-4. Generate test payments with `generate_payment.rb` (recommended), `generate_payment.ts`, or `generate_payment.py`
-5. Test the API endpoints as described above
+## Security Notes
 
-## Resources
-
-- [x402-rails Gem on RubyGems](https://rubygems.org/gems/x402-rails)
-- [x402-payments Gem on RubyGems](https://rubygems.org/gems/x402-payments)
-- [x402 Protocol Docs](https://docs.cdp.coinbase.com/x402)
-- [x402 GitHub](https://github.com/coinbase/x402)
-- [Base Sepolia Explorer](https://sepolia.basescan.org)
-- [Viem Documentation](https://viem.sh) - TypeScript library used in `generate_payment.ts`
-
-## License
-
-MIT
+- Never commit real private keys.
+- Use testnet USDC for demo flows (Circle faucet: https://faucet.circle.com/).
