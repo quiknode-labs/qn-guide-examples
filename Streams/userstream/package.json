@@ -1,6 +1,7 @@
 {
   "name": "userstream-boilerplate",
   "version": "0.1.0",
+  "description": "Blockchain address tracking app using Quicknode Streams and Key-Value Store.",
   "private": true,
   "scripts": {
     "dev": "next dev",
