@@ -1,338 +1,398 @@
-# UserStream Boilerplate
+# UserStream
 
-A production-ready Next.js boilerplate that connects [Quicknode Streams](https://www.quicknode.com/streams) with a live activity feed. It uses [Quicknode](https://www.quicknode.com/) Streams + [KV Store](https://www.quicknode.com/docs/key-value-store) to track monitored addresses, receives webhook events, stores activity in SQLite via Prisma, and pushes updates to the UI over SSE.
+UserStream is a production-ready Next.js app that tracks **EVM and Solana** wallet activity in real time using **[Quicknode Streams](https://www.quicknode.com/streams)** with **intelligent, real-time filtering powered by [Quicknode KV Store](https://www.quicknode.com/docs/key-value-store)**.
 
-## Demo
+## Features
 
-<p align="center">
-  <video src="public/live-feed-video.mov" controls muted playsinline width="900"></video>
-</p>
-<p align="center">
-  <img src="public/userstream-live-feed.png" alt="UserStream live activity feed UI" width="1000" />
-</p>
+### **1. Real-Time Address Filtering**
+Add or remove wallet addresses through the UI (single or bulk import), and the **[Quicknode Streams](https://www.quicknode.com/streams)** filter updates **instantly** via **[KV Store](https://www.quicknode.com/docs/key-value-store)** lists. No stream restart required - start monitoring an address and see their transactions immediately.
 
-## Contents
+### **2. Multi-Chain Support**
+Track both **EVM** (Ethereum, Base, Arbitrum, etc.) and **Solana** wallets with dedicated filters for each chain. Native transfers, ERC-20 tokens, and SPL tokens are all supported.
 
-- Demo
-- Overview
-- Architecture
-- Features
-- Tech Stack
-- Prerequisites
-- Project Structure
-- Environment Variables
-- Getting Started
-- Database
-- Quicknode Streams Setup
-- Webhook Security and Payload
-- API Endpoints
-- Scripts
-- Testing
-- Troubleshooting
+### **3. Blockchain-Native Filtering**
+Filtering EVM and Solana blocks happens **at the stream level** using **[Quicknode Streams Filter](https://www.quicknode.com/docs/streams/filters)** and **[Quicknode KV](https://www.quicknode.com/docs/key-value-store)** lists, not in your application code. This means you only process the exact data you need - no wasted bandwidth or compute on irrelevant transactions.
 
-## Overview
+### **4. Real-Time UI Updates**
+Live activity feed with transaction details powered by Server-Sent Events (SSE) - see new transactions appear instantly without polling.
 
-This project is a reference implementation for:
-- Creating [Quicknode KV lists](https://www.quicknode.com/docs/key-value-store) for monitored users.
-- Filtering EVM blocks and receipts in a Quicknode [Streams filter](https://www.quicknode.com/docs/streams/filters).
-- Handling signed webhooks and emitting live UI updates.
-- Maintaining a small local database of users and activity.
+### **5. Complete Setup Automation**
+Pre-built scripts for **[Quicknode Streams](https://www.quicknode.com/streams)** setup and activation, plus Prisma migrations - get up and running in minutes.
 
-The project is intentionally minimal and focuses on the Streams workflow and webhook processing.
+![UserStream Live Activity Feed](./public/userstream-live-feed.png)
 
 ## Architecture
 
 ```
-Blockchain (EVM)
+Blockchain (EVM/Solana)
   -> Quicknode Streams + KV
     -> POST /api/webhook/streams (signature verified)
       -> DB insert + SSE emit
-        -> UI live feed
+        -> Live UI activity feed
 ```
-
-## Features
-
-- Quicknode Streams setup scripts (create + activate)
-- EVM filter for native transfers and ERC-20 Transfer logs
-- Solana filter for native transfers and SPL token transfers
-- Quicknode KV list backed user monitoring, enabling dynamic user monitoring without redeploying the stream
-- Labeling monitored addresses
-- Bulk add monitored addresses
-- Webhook signature verification and timestamp checks
-- SSE live updates
-- ENS resolution for EVM addresses
-- Prisma + SQLite local storage
-
-## Tech Stack
-
-- Next.js App Router (Node runtime)
-- TypeScript
-- Prisma (SQLite)
-- [Quicknode Streams](https://www.quicknode.com/streams) + KV Store
-- Vitest
-- Tailwind CSS
 
 ## Prerequisites
 
-- Node.js 20+ and pnpm.
-- [Quicknode account](https://www.quicknode.com/signup) and API key: Create an account, and get your [Console API key](https://www.quicknode.com/docs/console-api) for `QN_API_KEY`.
-- EVM endpoint for ENS/ERC-20 metadata: Create an Ethereum endpoint and copy the HTTPS URL for `QN_EVM_ENDPOINT`.
-- Solana RPC endpoint for SPL token metadata: Create a Solana endpoint and copy the HTTPS URL for `QN_SOLANA_ENDPOINT`.
-- Public webhook URL: use a tunnel like https://ngrok.com/ or deploy the app so `APP_URL` is reachable by Quicknode.
-- Quicknode Streams + KV Store: Predefined scripts are provided to create the necessary resources, no need to create them manually.
+- **Node.js 20+** and a package manager (pnpm/npm/yarn)
+- **[Quicknode account](https://www.quicknode.com/signup)** with API key that has **Streams + KV access**
+- **Public webhook URL** for local development (use [ngrok](https://ngrok.com) or similar tunneling service)
+- **Git** for cloning the repository
 
-## Project Structure
-
-```
-filters/
-  evm-filter.js           # Quicknode Streams filter (EVM)
-  solana-filter.js        # Quicknode Streams filter (Solana)
-scripts/
-  setup-streams.ts        # Creates KV lists + stream (paused)
-  activate-streams.ts     # Activates stream by id
-src/
-  app/api/                # API routes (webhooks, users, SSE)
-  lib/                    # Quicknode, webhook, SSE helpers
-  types/                  # Stream payload types
-prisma/
-  schema.prisma           # SQLite schema
-```
+**Optional but highly recommended** (for enhanced metadata):
+- Ethereum mainnet RPC URL from [Quicknode](https://www.quicknode.com/signup) (for ENS resolution and ERC-20 metadata)
+- Solana RPC URL from [Quicknode](https://www.quicknode.com/signup) (for SPL token metadata)
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and fill in:
+| Variable | Required | Description | Where to Get |
+|----------|----------|-------------|--------------|
+| `QN_API_KEY` | **Yes** | Quicknode API key with Streams + KV access | [Quicknode Dashboard](https://dashboard.quicknode.com/api-keys) |
+| `APP_URL` | **Yes** | Public webhook URL (must be reachable by Quicknode) | Use ngrok for local dev (see setup below) |
+| `QN_STREAM_SECURITY_TOKEN_EVM` | For EVM | EVM stream security token | Generated by `pnpm run setup:streams` |
+| `QN_STREAM_SECURITY_TOKEN_SOL` | For Solana | Solana stream security token | Generated by `pnpm run setup:streams chain=solana-mainnet` |
+| `DATABASE_URL` | **Yes** | SQLite database path | `file:./dev.db` (default) |
+| `QN_EVM_ENDPOINT` | No | Ethereum RPC for ENS/ERC-20 metadata | [Quicknode Endpoints](https://www.quicknode.com/signup) |
+| `QN_SOLANA_ENDPOINT` | No | Solana RPC for SPL token metadata | [Quicknode Endpoints](https://www.quicknode.com/signup) |
 
-```
-QN_API_KEY=""                  # Quicknode API key
-QN_STREAM_SECURITY_TOKEN_EVM="" # EVM stream security token (from setup)
-QN_STREAM_SECURITY_TOKEN_SOL="" # Solana stream security token (from setup)
-QN_EVM_ENDPOINT=""             # Quicknode EVM endpoint URL
-QN_SOLANA_ENDPOINT=""          # Solana RPC endpoint URL
-DATABASE_URL="file:./dev.db"   # SQLite DB
-APP_URL="http://localhost:3000" # Public app URL (ngrok for local webhooks)
-```
+**Important Notes:**
+- **Never commit `.env` to git** - it contains sensitive credentials
+- `QN_API_KEY` must have both Streams and KV permissions enabled
+- `APP_URL` must be set **before** running `setup:streams` (it becomes the webhook destination)
 
-Notes:
-- `QN_STREAM_SECURITY_TOKEN_EVM` and `QN_STREAM_SECURITY_TOKEN_SOL` are returned by `setup:streams` per chain.
-- `APP_URL` must be reachable by Quicknode (use ngrok or a deployed URL).
+## Quickstart
 
-## Getting Started
-
-### 1. Install dependencies
+### Step 1: Clone the Repo
 
 ```bash
-npm install
-# pnpm install
-# yarn install
+git clone https://github.com/quiknode-labs/qn-guide-examples.git
+cd qn-guide-examples/Streams/userstream
 ```
 
-### 2. Create your env file
+### Step 2: Install Dependencies
+
+```bash
+# Using pnpm
+pnpm install
+
+# OR using npm
+npm install
+
+# OR using yarn
+yarn install
+```
+
+### Step 3: Set Up Environment Variables
 
 ```bash
 cp .env.example .env
 ```
 
-### 3. Add required variables
+**IMPORTANT:** Edit `.env` file **NOW** before proceeding. You must configure:
 
-Fill in `.env` (see [Prerequisites](#prerequisites)).
-For local webhooks, expose your app with ngrok and copy the HTTPS URL into `APP_URL`:
+1. **`QN_API_KEY`**: Get from [Quicknode Dashboard](https://dashboard.quicknode.com/api-keys)
+   - Ensure your API key has **Streams** and **KV** permissions enabled
+
+2. **`APP_URL`**: Your public webhook URL (required for stream setup)
+   - This URL must be publicly accessible by Quicknode
+   - For local development, set up ngrok:
+
+3. **`QN_EVM_ENDPOINT`** (optional but recommended): Ethereum RPC endpoint for ENS resolution and ERC-20 token metadata
+
+4. **`QN_SOLANA_ENDPOINT`** (optional but recommended): Solana RPC endpoint for SPL token metadata
+
+For local development, set up ngrok:
 
 ```bash
+# Install ngrok (macOS)
+brew install ngrok
+
+# OR download from https://ngrok.com/download
+
+# Start ngrok tunnel pointing to port 3000
 ngrok http 3000
 ```
 
-### 4. Create Quicknode Streams + KV lists
+Copy the **https://** URL from ngrok output (e.g., `https://abc123.ngrok-free.app`) and add it to your `.env` file:
 
 ```bash
-npm run setup:streams
-# pnpm run setup:streams
-# yarn setup:streams
+APP_URL="https://abc123.ngrok-free.app"
 ```
 
-Copy the printed security token into `.env` (`QN_STREAM_SECURITY_TOKEN_EVM` or `QN_STREAM_SECURITY_TOKEN_SOL`).
-If you want Solana, run the command again with `chain=solana-mainnet` (see [Quicknode Streams Setup](#quicknode-streams-setup) for options).
+> **Tip:** Keep ngrok running in a separate terminal. The URL remains valid as long as ngrok is running.
 
-### 5. Set up the database and start the app
+### Step 4: Initialize Database
 
 ```bash
-npx prisma migrate dev --name init
-# pnpm prisma migrate dev --name init
-# yarn prisma migrate dev --name init
-```
-
-```bash
-npm run dev
-# pnpm dev
-# yarn dev
-```
-
-### 6. Activate the stream
-
-```bash
-npm run activate:streams
-# pnpm run activate:streams
-# yarn activate:streams
-```
-
-Open `http://localhost:3000`, add wallet addresses, and you should see live events as streams deliver webhooks.
-
-
-## Database
-
-SQLite is used by default. Prisma schema is in `prisma/schema.prisma`.
-
-Common commands:
-
-```
+# Using pnpm
 pnpm prisma migrate dev --name init
-pnpm prisma studio
+
+# OR using npm
+npx prisma migrate dev --name init
+
+# OR using yarn
+yarn prisma migrate dev --name init
 ```
+
+### Step 5: Create Quicknode Stream
+
+#### EVM Stream
+
+```bash
+# Using pnpm
+pnpm run setup:streams
+
+# OR using npm
+npm run setup:streams
+
+# OR using yarn
+yarn run setup:streams
+```
+
+This script will:
+1. Create KV list for address filtering (`userstream_monitored_users_evm`)
+2. Test the filter on a known block
+3. Create a paused stream with your `APP_URL` as the destination
+4. Print a `QN_STREAM_SECURITY_TOKEN_EVM`
+
+**Copy the security token** from the output and add it to your `.env` file:
+
+```bash
+QN_STREAM_SECURITY_TOKEN_EVM="qnsec_..."
+```
+
+#### Solana Stream
+
+If you want Solana, run the command again with mainnet or devnet selected:
+
+```bash
+pnpm run setup:streams chain=solana-mainnet
+```
+
+This script will:
+1. Create KV list for address filtering (`userstream_monitored_users_sol`)
+2. Test the filter on a known block
+3. Create a paused stream with your `APP_URL` as the destination
+4. Print a `QN_STREAM_SECURITY_TOKEN_SOL`
+
+**Copy the security token** from the output and add it to your `.env` file:
+
+```bash
+QN_STREAM_SECURITY_TOKEN_SOL="qnsec_..."
+```
+
+### Step 6: Start the Application
+
+Start the Next.js development server in a new terminal: (At this point, ngrok should still be running)
+
+```bash
+# Using pnpm
+pnpm dev
+
+# OR using npm
+npm run dev
+
+# OR using yarn
+yarn dev
+```
+
+### Step 7: Activate the Stream
+
+```bash
+# Activate the most recently created stream
+pnpm run activate:streams
+
+# OR using npm
+npm run activate:streams
+
+# OR using yarn
+yarn run activate:streams
+```
+
+To activate a specific chain's stream:
+
+```bash
+pnpm run activate:streams chain=ethereum-mainnet
+pnpm run activate:streams chain=solana-mainnet
+```
+
+### Step 8: Add Addresses and Watch Activity
+
+1. Open [http://localhost:3000](http://localhost:3000)
+2. Add wallet addresses using the "Add Monitored Address" form, **or** use bulk import
+3. Activity from monitored addresses will start flowing to your webhook in real-time
+
+![UserStream Live Activity Feed](./public/userstream-live-feed.png)
+
+**When you add an address:**
+- The address is immediately added to the **[KV Store](https://www.quicknode.com/docs/key-value-store)** list
+- The **[Quicknode Stream](https://www.quicknode.com/streams)** filter picks it up instantly - no restart needed
+- Transactions from this address will start flowing to your webhook in real-time
+
+**Sample Ethereum addresses to try:**
+
+```
+0xE592427A0AEce92De3Edee1F18E0157C05861564, Uniswap V3 Router
+```
+
+**Sample Solana addresses to try:**
+
+```
+3CgvbiM3op4vjrrjH2zcrQUwsqh5veNVRjFCB9N6sRoD, Jupiter Aggregator Authority 4
+```
+
+Once configured, transactions matching your filters will stream in real-time!
+
+> **Note:** The default setup uses Ethereum mainnet. The same EVM filter works for other EVM chains (Base, Arbitrum, Polygon, etc.) - just specify the chain and an appropriate test block number when running `setup:streams` and set up your `QN_EVM_ENDPOINT` accordingly.
 
 ## Quicknode Streams Setup
 
-### 1. Check the filter
+Learn more about **[Quicknode Streams](https://www.quicknode.com/streams)** and **[KV Store](https://www.quicknode.com/docs/key-value-store)** in the official documentation.
 
-The EVM filter lives in `filters/evm-filter.js`. It emits:
-- `nativeTransfer` events (ETH transfers with non-zero value)
-- `erc20Transfer` events (ERC-20 Transfer logs)
+The filters are provided in the `filters/` directory:
+- `filters/evm-filter.js` - EVM filter for native ETH and ERC-20 transfers
+- `filters/solana-filter.js` - Solana filter for native SOL and SPL token transfers
 
-The filter checks addresses against the `userstream_monitored_users_evm` KV list.
+When you run `pnpm run setup:streams`, it will:
+- Create **[KV list](https://www.quicknode.com/docs/key-value-store)**: `userstream_monitored_users_evm` or `userstream_monitored_users_sol`
+- Test the filter on a known block
+- Create a stream (paused) and print the security token
 
-The Solana filter lives in `filters/solana-filter.js`. It emits:
-- `solTransfer` events (native SOL transfers)
-- `splTransfer` events (SPL token transfers)
+You can override options with `key=value` arguments:
 
-The filter checks addresses against the `userstream_monitored_users_sol` KV list.
-
-Adding addresses through UI will update the KV list automatically. However, if you need to manage KV lists manually, you can do so through the Quicknode REST API.
-Check the [Key-Value Store](https://www.quicknode.com/docs/key-value-store) documentation page to learn more.
-
-### 2. Create stream + KV lists
-
-```
-pnpm run setup:streams
-```
-
-This will:
-- Create the KV list for the selected chain (`userstream_monitored_users_evm` or `userstream_monitored_users_sol`)
-- Base64 encode the filter for the chosen chain
-- Test the filter using the Quicknode test_filter API
-- Create a stream with:
-  - `status=paused`
-  - `dataset=block_with_receipts` (EVM) or `dataset=block` (Solana)
-  - required webhook attributes (compression, retries, timeouts)
-- Save the stream id to `.quicknode/streams.json`
-- Print the `security_token` for `.env` (`QN_STREAM_SECURITY_TOKEN_EVM` or `QN_STREAM_SECURITY_TOKEN_SOL`)
-- Creates a single stream per run (run again with `chain=solana-mainnet` or `chain=ethereum-mainnet` to create both).
-
-You can override options using `key=value` args, for example:
-
-```
+```bash
 pnpm run setup:streams chain=ethereum-mainnet name="UserStream EVM Monitor" test_block_number=24223192
 pnpm run setup:streams chain=solana-mainnet name="UserStream Solana Monitor" test_block_number=393612994
 ```
 
-Common options:
-- `chain=ethereum-mainnet` (alias: `network=ethereum-mainnet`)
-- `dataset=block_with_receipts`
-- `dataset_batch_size=1`
-- `include_stream_metadata=body`
-- `status=paused`
-- `elastic_batch_enabled=true`
-- `filter_path=filters/evm-filter.js`
-- `test_block_number=24223192`
-- `destination_compression=none`
-- `destination_headers='{"Content-Type":"application/json"}'`
-- `destination_max_retry=3`
-- `destination_retry_interval_sec=1`
-- `destination_post_timeout_sec=10`
+Activate the most recently created stream:
 
-Default settings when you run `pnpm run setup:streams` without options:
-- `chain=ethereum-mainnet`
-- `name="UserStream EVM Monitor"`
-- `dataset=block_with_receipts` (EVM) or `block` (Solana)
-- `dataset_batch_size=1`
-- `include_stream_metadata=body`
-- `status=paused`
-- `elastic_batch_enabled=true`
-- `filter_path=filters/evm-filter.js` (EVM) or `filters/solana-filter.js` (Solana)
-- `test_block_number=24223192` (EVM) or `393612994` (Solana)
-- `destination_compression=none`
-- `destination_headers={}`
-- `destination_max_retry=3`
-- `destination_retry_interval_sec=1`
-- `destination_post_timeout_sec=10`
-
-### 3. Add security token
-
-Add the printed token to `.env`:
-
-```
-QN_STREAM_SECURITY_TOKEN_EVM="..." # When you create an EVM stream
-QN_STREAM_SECURITY_TOKEN_SOL="..." # When you create a Solana stream
-```
-
-### 4. Activate the stream
-
-```
+```bash
 pnpm run activate:streams
 ```
 
-This reads the stored id from `.quicknode/streams.json`. You can override it:
+For more details, see the **[Quicknode Streams Documentation](https://www.quicknode.com/docs/streams)**.
 
-```
-pnpm run activate:streams stream_id=YOUR_STREAM_ID
-pnpm run activate:streams chain=solana-mainnet
+## Database
+
+SQLite is used by default. Prisma schema lives in `prisma/schema.prisma`.
+
+Common commands:
+
+```bash
+pnpm prisma migrate dev --name init
+pnpm prisma studio
+pnpm db:reset
 ```
 
 ## Webhook Security and Payload
 
-- Endpoint: `POST /api/webhook/streams`
-- Headers required: `x-qn-nonce`, `x-qn-timestamp`, `x-qn-signature`
-- Payload can be gzip compressed; the handler auto-detects `content-encoding: gzip`
-- Signature verification uses `QN_STREAM_SECURITY_TOKEN_EVM` or `QN_STREAM_SECURITY_TOKEN_SOL`
+Webhook endpoint: `POST /api/webhook/streams`
 
-Payload contract details are documented in `docs/FILTER_CONTRACT.md`.
+Required headers:
+- `x-qn-nonce`
+- `x-qn-timestamp`
+- `x-qn-signature`
+
+The request can be gzip-compressed. The handler auto-detects `content-encoding: gzip`.
+
+Signature verification uses `QN_STREAM_SECURITY_TOKEN_EVM` or `QN_STREAM_SECURITY_TOKEN_SOL` depending on the chain.
 
 ## API Endpoints
 
 - `GET /api/health` - health check
-- `GET /api/users` - list monitored users
-- `POST /api/users` - add a single user (`walletAddress`, optional `name`)
-- `PATCH /api/users?id=...` - update user name/displayName
-- `DELETE /api/users?id=...` - delete a user
-- `POST /api/users/bulk` - bulk add users (newline separated)
+- `GET /api/users` - list monitored addresses
+- `POST /api/users` - add address (`walletAddress`, optional `name`)
+- `PATCH /api/users?id=...` - update address name/displayName
+- `DELETE /api/users?id=...` - remove address
+- `POST /api/users/bulk` - bulk add (newline-separated, supports "address, label")
 - `POST /api/webhook/streams` - Quicknode Streams webhook
 - `POST /api/webhook/test` - local-only webhook test
-- `GET /api/sse` - SSE stream of activity events
+- `GET /api/sse` - Server-Sent Events stream of activity events
+
+## Project Structure
+
+```
+filters/
+  evm-filter.js              # EVM Streams filter
+  solana-filter.js           # Solana Streams filter
+scripts/
+  setup-streams.ts           # Creates KV lists + stream
+  activate-streams.ts        # Activates stream by id
+  reset-kv.ts                # Deletes KV lists
+prisma/
+  schema.prisma              # SQLite schema
+src/
+  app/                       # App Router routes + pages
+  components/                # UI components
+  lib/                       # Quicknode, webhook, SSE helpers
+  types/                     # Shared types
+```
 
 ## Scripts
 
-```
-pnpm dev
-pnpm build
-pnpm start
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm run setup:streams
-pnpm run activate:streams
+```bash
+pnpm dev                    # Start development server
+pnpm build                  # Build for production
+pnpm start                  # Start production server
+pnpm lint                   # Run ESLint
+pnpm typecheck              # Run TypeScript type checking
+pnpm test                   # Run tests
+pnpm run setup:streams      # Create Quicknode Stream + KV lists
+pnpm run activate:streams   # Activate the stream
+pnpm db:reset               # Reset database
+pnpm reset:kv               # Delete KV lists
 ```
 
 ## Testing
 
-- Unit tests use Vitest.
-- Webhook and SSE routes have dedicated tests under `src/app/api/__tests__`.
+Unit tests use Vitest. Webhook and SSE routes have dedicated tests under `src/app/api/__tests__`.
 
-```
+```bash
 pnpm test
 ```
 
 ## Troubleshooting
 
-- Missing webhook events: ensure `APP_URL` is publicly reachable and the stream is active.
-- 401 from webhook: verify `QN_STREAM_SECURITY_TOKEN_EVM`/`QN_STREAM_SECURITY_TOKEN_SOL` and headers.
-- KV list errors: confirm `QN_API_KEY` has Streams + KV access.
-- ENS resolution errors: verify `QN_EVM_ENDPOINT` is set to an Ethereum mainnet endpoint.
-- SPL metadata missing: set `QN_SOLANA_ENDPOINT` to a Solana RPC endpoint.
+### Common Issues
 
+**Missing webhook events:**
+- Ensure `APP_URL` is publicly reachable and the stream is active
+- Check that ngrok is still running (URLs expire when ngrok stops)
+- Verify stream status in [Quicknode Dashboard](https://dashboard.quicknode.com)
+- Check logs: `pnpm run activate:streams` should show stream as "running"
+
+**401 Unauthorized from webhook:**
+- Verify `QN_STREAM_SECURITY_TOKEN_EVM` or `QN_STREAM_SECURITY_TOKEN_SOL` matches the token from setup output
+- Check Quicknode signature headers are present (`x-qn-signature`, `x-qn-timestamp`, `x-qn-nonce`)
+- Ensure you haven't modified the webhook URL after stream creation
+
+**KV list errors:**
+- Confirm `QN_API_KEY` has **both** Streams and KV access enabled
+- Check your [Quicknode Dashboard API Keys](https://dashboard.quicknode.com/api-keys) for permissions
+- Verify KV lists exist: `userstream_monitored_users_evm` or `userstream_monitored_users_sol`
+
+**ENS resolution issues:**
+- Confirm `QN_EVM_ENDPOINT` points to Ethereum mainnet
+- Get an Ethereum endpoint from [Quicknode](https://www.quicknode.com)
+- ENS resolution is optional - addresses will work without it
+
+**SPL token metadata missing:**
+- Confirm `QN_SOLANA_ENDPOINT` points to a Solana RPC endpoint
+- Get a Solana endpoint from [Quicknode](https://www.quicknode.com)
+- SPL metadata is optional - transfers will still be tracked
+
+**Address not being tracked:**
+- For EVM: addresses are normalized to lowercase - this is handled automatically
+- For Solana: addresses are case-sensitive (Base58 format) - ensure exact match
+- Verify the address was added to the KV list via the UI
+
+### Getting Help
+
+- **[Quicknode Streams Guides](https://www.quicknode.com/guides/tags/streams)**
+- **[Quicknode KV Store Docs](https://www.quicknode.com/docs/key-value-store)**
+- **[Quicknode Support](http://support.quicknode.com/)**
+- **GitHub Issues** for this repository
+
+## License
+
+MIT
