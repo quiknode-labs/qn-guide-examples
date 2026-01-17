@@ -24,8 +24,14 @@ module Api
         amount: 0.001,
         chain: "solana-devnet",
         currency: "USDC",
-        solana_fee_payer: "FuzoZt4zXaYLvXRguKw2T6xvKvzZqv6PkmaFjNrEG7jm",
-        wallet_address: "EYNQARNg9gZTtj1xMMrHK7dRFAkVjAAMubxaH7Do8d9Y"
+        solana_fee_payer: ENV.fetch(
+          "X402_SOLANA_FEE_PAYER",
+          "FuzoZt4zXaYLvXRguKw2T6xvKvzZqv6PkmaFjNrEG7jm"
+        ),
+        wallet_address: ENV.fetch(
+          "X402_SOL_PAY_TO",
+          "EYNQARNg9gZTtj1xMMrHK7dRFAkVjAAMubxaH7Do8d9Y"
+        )
       )
       return if performed?  # Stop if paywall already rendered 402
 

@@ -7,22 +7,45 @@ X402.configure do |config|
   # Your wallet address (where payments will be received)
   # For testing, you can use a test wallet address
   config.wallet_address = ENV.fetch("X402_WALLET_ADDRESS", "YourTestWalletAddressHere")
-  # config.wallet_address = ENV.fetch("X402_WALLET_ADDRESS", "EYNQARNg9gZTtj1xMMrHK7dRFAkVjAAMubxaH7Do8d9Y")
 
   # Facilitator URL (default: https://x402.org/facilitator)
   # The facilitator handles payment verification and settlement
   config.facilitator = ENV.fetch("X402_FACILITATOR_URL", "https://www.x402.org/facilitator")
 
   # Blockchain network to use
-  # Options: "base-sepolia" (testnet), "base" (mainnet), "avalanche-fuji" (testnet), "avalanche" (mainnet)
-  config.chain = ENV.fetch("X402_NETWORK", "base-sepolia")
-
-  # Currency symbol (currently only USDC is supported)
+  config.chain = ENV.fetch("X402_CHAIN", "base-sepolia")
+  
+  # Currency symbol
   config.currency = ENV.fetch("X402_CURRENCY", "USDC")
 
-  # config.solana_fee_payer = ENV.fetch("X402_SOLANA_FEE_PAYER", "CKPKJWNdJEqa81x7CkZ14BVPiY6y16Sxs7owznqtWYp5")
-  # config.solana_fee_payer = ENV.fetch("X402_SOLANA_FEE_PAYER", "FuzoZt4zXaYLvXRguKw2T6xvKvzZqv6PkmaFjNrEG7jm")
+  # Custom Chain and Token Registration
 
+  config.register_chain(
+    name: "polygon-amoy",
+    chain_id: 80002,
+    standard: "eip155"
+  )
+
+  config.register_token(
+    chain: "polygon-amoy",
+    symbol: "USDC",
+    address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
+    decimals: 6,
+    name: "USDC",
+    version: "2"
+  )
+
+  # ==========================================
+  # Accept Multiple Payment Options
+  # ==========================================
+  # Use config.accept() to specify which chains/currencies to accept.
+  # The 402 response will include all accepted options, allowing clients
+  # to pay on any of the supported chains.
+  #
+  # If no config. accept() calls are made, the default chain/currency is used.
+
+  config.accept(chain: "base-sepolia", currency: "USDC")
+  config.accept(chain: "polygon-amoy", currency: "USDC")
 
   # Optimistic mode (default: true)
   # - true: Fast response, settle after (better UX, optimistic)
