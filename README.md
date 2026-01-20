@@ -169,7 +169,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [fungible-SPL-token](./solana/fungible-SPL-token)
 - [Jupiter Trading Bot Example](./solana/jupiter-bot) - *Example trading bot for Solana using Quicknode and Metis API*
 - [Jito Jupiter Swap](./solana/jupiter-jito)
-- [jupiter-ultra-swap](./solana/jupiter-ultra-swap)
+- [Jupiter Ultra Swap Demo](./solana/jupiter-ultra-swap)
 - [mint-nft](./solana/mint-nft)
 - [new-wallet-airdrop](./solana/new-wallet-airdrop)
 - [priority-fees-addon](./solana/priority-fees-addon)
@@ -194,7 +194,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 ### Streams
 - [Streams Discord AI Bot (Block Metrics Q&A)](./Streams/ai-bot-discord)
 - [Quicknode Streams React Dashboard](./Streams/qs-react-app)
-- [userstream](./Streams/userstream)
+- [UserStream](./Streams/userstream) - *Blockchain address tracking app using Quicknode Streams and Key-Value Store.*
 - [Wallet Allowance Checker (Streams + Postgres + Quicknode)](./Streams/wallet-allowance-checker-app)
 
 ### Tron

@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String        @id @default(uuid())
+  name          String
+  walletAddress String        @unique
+  chainType     String        // "EVM" or "SOL"
+  displayName   String?       // ENS name, SNS name, or custom admin tag
+  createdAt     DateTime      @default(now())
+  activities    ActivityLog[]
+}
+
+model ActivityLog {
+  id           Int      @id @default(autoincrement())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  txHash       String
+  activityType String
+  details      String   // JSON string
+  chain        String
+  direction    String   // "in" or "out"
+  timestamp    DateTime @default(now())
+
+  @@index([userId])
+  @@index([timestamp])
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  address   String   @unique  // Contract address (EVM lowercase, Solana mint as-is)
+  name      String
+  symbol    String
+  decimals  Int
+  chain     String            // "ethereum-mainnet", etc.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([address])
+}
