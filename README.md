@@ -201,7 +201,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Tron gRPC Project Setup Guide](./tron/tron-grpc)
 
 ### Webhooks
-- [BNB Chain Copytrading Bot with Quicknode Webhooks](./webhooks/copytrading-bot-bnb) - *A copytrading bot for memecoins launched on four.meme platform on BNB Chain using Quicknode Webhooks.*
+- [BNB Chain Copytrading Bot with Quicknode Streams](./webhooks/copytrading-bot-bnb) - *A copytrading bot for memecoins launched on four.meme platform on BNB Chain using Quicknode Streams.*
 
 <!-- PROJECT-DIRECTORY:END -->
 
