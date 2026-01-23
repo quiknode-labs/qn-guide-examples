@@ -1,17 +1,17 @@
-# BNB Chain Copytrading Bot with Quicknode Webhooks
+# BNB Chain Copytrading Bot with Quicknode Streams
 
-An automated copytrading bot that monitors successful traders on the four.meme platform (BNB Chain's memecoin launchpad) and executes proportional trades in real-time using Quicknode Webhooks.
+An automated copytrading bot that monitors successful traders on the four.meme platform (BNB Chain's memecoin launchpad) and executes proportional trades in real-time using Quicknode Streams.
 
 ## Overview
 
 This bot demonstrates how to build a copytrading system by:
 
 - Monitoring specific wallet addresses for token purchases on BNB Chain
-- Receiving instant notifications via Quicknode Webhooks
+- Receiving instant notifications via Quicknode Streams
 - Automatically executing proportional copy trades with configurable parameters
 - Implementing safety features like slippage protection and balance reserves
 
-> Read the complete guide: [Building a Copytrading Bot on BNB Chain with Quicknode Webhooks](https://www.quicknode.com/guides/quicknode-products/webhooks/copytrading-bot-with-webhooks)
+> Read the complete guide: [Building a Copytrading Bot on BNB Chain with Quicknode Streams](https://www.quicknode.com/guides/quicknode-products/streams/copytrading-bot)
 
 ## Features
 
@@ -46,17 +46,19 @@ npm --version
    - Select **"BNB Smart Chain"** → **"Mainnet"**
    - Choose your desired plan
    - Click **"Create Endpoint"**
-   - Copy your **HTTP Provider URL** (e.g., `https://example.bnb.quiknode.pro/abc123/`)
+   - Copy your **HTTP Provider URL** (e.g., `https://example.bsc.quiknode.pro/abc123/`)
 
-3. **Set Up Webhook**
-   - Navigate to [Webhooks Dashboard](https://dashboard.quicknode.com/webhooks)
-   - Click **"Create Webhook"**
+3. **Set Up Stream**
+   - Navigate to [Streams Dashboard](https://dashboard.quicknode.com/streams)
+   - Click **"New Stream"**
    - Select **"BNB Smart Chain"** → **"Mainnet"**
-   - Choose **"Write a custom filter"**
+   - Select **Block with Receipts** as the dataset
+   - Click **Customize your payload** to apply a filter and choose the **Write your own filter** option
    - Copy the filter code from `filter.js` in this repository
    - Update `TARGET_WALLET` in the filter to the address you want to monitor (e.g., `0x4262F7B70b81538258EB2C5ECAD3947Ba4e0C8b0`)
    - Test the filter with a block number you want to monitor (e.g., `65392331`)
-   - Save the **Security Token** shown in the webhook settings
+   - Select **Webhook** as the destination type
+   - Save the **Security Token** shown in the settings
 
    **Note:** Setting destination URL will be done after setting up your public URL in step 4. So, leave it here for now. We will come back to it later.
    
@@ -98,7 +100,7 @@ Edit `.env` with your values:
 
 ```bash
 # Quicknode Configuration
-QUICKNODE_SECURITY_TOKEN=your_security_token_from_webhook_dashboard # 👈 UPDATE HERE
+QUICKNODE_SECURITY_TOKEN=your_security_token_from_streams_dashboard # 👈 UPDATE HERE
 BNB_RPC_URL=https://your-quicknode-bnb-endpoint.quiknode.pro/abc123/ # 👈 UPDATE HERE
 
 # Wallet Configuration (⚠️ KEEP THIS SECURE)
@@ -161,13 +163,13 @@ Copy the **HTTPS URL** from ngrok output:
 Forwarding    https://abc123.ngrok.io -> http://localhost:3000
 ```
 
-### 3. Create Your Quicknode Webhook
+### 3. Create Your Quicknode Stream
 
-Go back to your [Quicknode Webhook Dashboard](https://dashboard.quicknode.com/webhooks):
+Go back to your [Quicknode Streams Dashboard](https://dashboard.quicknode.com/streams):
 1. Fill in the **Destination URL** field with your ngrok URL + `/webhook`
-2. Test the webhook by sending a test payload
+2. Test the webhook destination by sending a test payload
 3. If bot is running, you should see that bot acts accordingly since it receives the webhook
-4. Save the webhook
+4. Save the Stream
 
 ### 4. Monitor Bot Activity
 
@@ -210,7 +212,7 @@ copytrading-bot/
 │   ├── webhookServer.ts    # Express server for receiving webhooks
 │   ├── tradingBot.ts       # Viem-based trading logic
 │   └── index.ts            # Entry point
-├── filter.js               # Quicknode webhook filter (for reference)
+├── filter.js               # Quicknode Stream filter (for reference)
 ├── .env                    # Your environment variables (DO NOT COMMIT)
 ├── .env.example            # Template for environment variables
 ├── package.json            # Node.js project file
@@ -227,12 +229,12 @@ copytrading-bot/
 ngrok http 3000
 ```
 
-**Verify Quicknode webhook URL**:
+**Verify Quicknode Streams Destination URL**:
 - Should be: `https://your-ngrok-url.ngrok.io/webhook` (note the `/webhook` path)
 
-**Check Webhook status**:
-- Visit [Quicknode Webhooks Dashboard](https://dashboard.quicknode.com/webhooks)
-- Ensure webhook is **Active** and has recent deliveries
+**Check Streams status**:
+- Visit [Quicknode Streams Dashboard](https://dashboard.quicknode.com/streams)
+- Ensure Streams is **Active** and has recent deliveries
 
 ### "Insufficient balance" errors
 
@@ -278,8 +280,8 @@ QUICKNODE_SECURITY_TOKEN=your_token_here
 ```
 
 **Get correct token**:
-1. Go to Quicknode Webhooks Dashboard
-2. Click on your webhook
+1. Go to Quicknode Streams Dashboard
+2. Click on your Stream
 3. Copy the "Security Token" shown
 4. Update your `.env` file
 5. Restart the bot
@@ -298,7 +300,7 @@ QUICKNODE_SECURITY_TOKEN=your_token_here
 ## Resources
 
 - **[Quicknode Documentation](https://www.quicknode.com/docs)**
-- **[Quicknode Webhooks Guide](https://www.quicknode.com/docs/webhooks)**
+- **[Quicknode Streams Documentation](https://www.quicknode.com/docs/streams)**
 - **[Viem Documentation](https://viem.sh/)**
 - **[BNB Chain Docs](https://docs.bnbchain.org/)**
 - **[four.meme Platform](https://four.meme/)**
