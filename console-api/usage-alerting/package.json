@@ -1,0 +1,27 @@
+{
+  "name": "quicknode-usage-alerting",
+  "version": "1.0.0",
+  "description": "Monitor Quicknode RPC usage and send alerts when approaching limits",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "npx ts-node src/index.ts",
+    "check": "npx ts-node src/index.ts --check",
+    "history": "npx ts-node src/index.ts --month",
+    "by-endpoint": "npx ts-node src/index.ts --by-endpoint",
+    "by-chain": "npx ts-node src/index.ts --by-chain",
+    "by-method": "npx ts-node src/index.ts --by-method",
+    "detailed": "npx ts-node src/index.ts --detailed",
+    "exporter": "npx ts-node src/prometheus-exporter.ts",
+    "exporter:start": "node dist/prometheus-exporter.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
