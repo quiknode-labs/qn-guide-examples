@@ -99,6 +99,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 
 ### Console API
 - [Quicknode Grafana Dashboard Example](./console-api/grafana-dashboard)
+- [Quicknode RPC Usage Alerting](./console-api/usage-alerting) - *Monitor Quicknode RPC usage and send alerts when approaching limits*
 
 ### Courses
 - [solana-basics](./courses/solana-basics)
