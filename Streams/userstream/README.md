@@ -100,6 +100,39 @@ cp .env.example .env
 
 4. **`QN_SOLANA_ENDPOINT`** (optional but recommended): Solana RPC endpoint for SPL token metadata
 
+<br />
+
+<details>
+  <summary><strong>Plan considerations and minimal setup (Free trial plan)</strong></summary>
+
+Some QuickNode plans limit the number of available Endpoints and active Streams (for example, the Free trial plan typically allows a single endpoint and a single active stream).
+
+The setup instructions describe the full EVM + Solana workflow. If you encounter plan-limit errors during setup, use the minimal EVM-only path to run the app end-to-end without upgrading.
+
+### Minimal EVM-only path (overview)
+
+This path uses:
+- One EVM endpoint (Ethereum Mainnet)
+- One active EVM stream
+- No Solana activation
+
+Follow the same setup steps below, with these adjustments:
+- Configure EVM only
+- Skip Solana endpoint and stream setup
+- Activate a single EVM stream
+- Ensure `APP_URL` is publicly reachable (e.g. via ngrok for local dev)
+
+The UI will remain empty until at least one wallet is added for monitoring.
+
+### When you need to upgrade
+
+Running **EVM + Solana simultaneously** (multiple endpoints and/or active streams) requires a plan that supports higher limits (e.g. the Build plan).  
+See [available plans](https://www.quicknode.com/pricing) for details.
+
+</details>
+
+<br />
+
 For local development, set up ngrok:
 
 ```bash

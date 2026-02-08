@@ -134,7 +134,7 @@ export function UserList() {
                       </span>
                       <button
                         onClick={() => handleCopy(user.walletAddress)}
-                        className="text-muted-foreground hover:text-foreground transition-colors"
+                        className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                         title="Copy Address"
                       >
                         <Copy className="h-3 w-3" />
@@ -148,7 +148,7 @@ export function UserList() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 shrink-0"
+                          className="h-8 w-8 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 shrink-0 cursor-pointer"
                           onClick={() => saveEdit(user.id)}
                         >
                           <Check className="h-4 w-4" />
@@ -156,7 +156,7 @@ export function UserList() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
+                          className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent shrink-0 cursor-pointer"
                           onClick={cancelEdit}
                         >
                           <X className="h-4 w-4" />
@@ -167,7 +167,7 @@ export function UserList() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-muted-foreground hover:text-sky-400 hover:bg-sky-500/10 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="h-8 w-8 text-muted-foreground hover:text-sky-400 hover:bg-sky-500/10 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                           onClick={() => startEdit(user)}
                         >
                           <Pencil className="h-4 w-4" />
@@ -175,7 +175,7 @@ export function UserList() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 shrink-0"
+                          className="h-8 w-8 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 shrink-0 cursor-pointer"
                           onClick={() => handleDelete(user.id)}
                           disabled={deletingId === user.id}
                         >
