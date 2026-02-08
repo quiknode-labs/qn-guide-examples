@@ -1,73 +1,96 @@
-'use client';
+"use client";
 
-import { useAppStore } from '@/lib/store';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
-import { ArrowRightLeft, ArrowDownLeft, ArrowUpRight, Box } from 'lucide-react';
+import { useAppStore } from "@/lib/store";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ArrowRightLeft, ArrowDownLeft, ArrowUpRight, Box } from "lucide-react";
 import {
   formatTimestamp,
   getExplorerBlockUrl,
   getExplorerTxUrl,
   truncateAddress,
-  cn
-} from '@/lib/utils';
-import Link from 'next/link';
+  cn,
+} from "@/lib/utils";
+import Link from "next/link";
 
 function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
   }).format(date);
 }
 
 function ActivityItem({ activity }: { activity: any }) {
-  const details = typeof activity.details === 'string'
-    ? JSON.parse(activity.details)
-    : activity.details;
+  const details =
+    typeof activity.details === "string"
+      ? JSON.parse(activity.details)
+      : activity.details;
 
-  const isIn = activity.direction === 'in';
+  const isIn = activity.direction === "in";
   const amountFormatted =
-    typeof details.amountFormatted === 'string' ? details.amountFormatted : '';
+    typeof details.amountFormatted === "string" ? details.amountFormatted : "";
 
   // Format amount based on event type
-  let amountDisplay = '';
-  if (activity.activityType === 'ERC20TRANSFER' && details.token) {
+  let amountDisplay = "";
+  if (activity.activityType === "ERC20TRANSFER" && details.token) {
     amountDisplay = `${amountFormatted} ${details.token.symbol}`;
-  } else if (activity.activityType === 'NATIVETRANSFER') {
+  } else if (activity.activityType === "NATIVETRANSFER") {
     amountDisplay = `${amountFormatted} ETH`; // Assuming ETH/Native
-  } else if (activity.activityType === 'SOLTRANSFER') {
+  } else if (activity.activityType === "SOLTRANSFER") {
     amountDisplay = `${amountFormatted} SOL`;
-  } else if (activity.activityType === 'SPLTRANSFER') {
-    const tokenSymbol = details.token?.symbol
-      || (typeof details.mint === 'string' ? truncateAddress(details.mint) : 'SPL');
+  } else if (activity.activityType === "SPLTRANSFER") {
+    const tokenSymbol =
+      details.token?.symbol ||
+      (typeof details.mint === "string"
+        ? truncateAddress(details.mint)
+        : "SPL");
     amountDisplay = `${amountFormatted} ${tokenSymbol}`;
   }
 
   // Chain badge color
   const getChainColor = (chain: string) => {
-    if (chain.includes('ethereum')) return 'bg-sky-500/15 text-sky-600 dark:text-sky-300 border-sky-500/30';
-    if (chain.includes('polygon')) return 'bg-purple-500/15 text-purple-600 dark:text-purple-300 border-purple-500/30';
-    if (chain.includes('base')) return 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 border-indigo-500/40';
-    if (chain.includes('solana')) return 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30';
-    return 'bg-muted text-muted-foreground border-border/60';
+    if (chain.includes("ethereum"))
+      return "bg-sky-500/15 text-sky-600 dark:text-sky-300 border-sky-500/30";
+    if (chain.includes("polygon"))
+      return "bg-purple-500/15 text-purple-600 dark:text-purple-300 border-purple-500/30";
+    if (chain.includes("base"))
+      return "bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 border-indigo-500/40";
+    if (chain.includes("solana"))
+      return "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30";
+    return "bg-muted text-muted-foreground border-border/60";
   };
 
-  const fromAddress = typeof details.from === 'string' ? details.from : null;
-  const toAddress = typeof details.to === 'string' ? details.to : null;
+  const fromAddress = typeof details.from === "string" ? details.from : null;
+  const toAddress = typeof details.to === "string" ? details.to : null;
   const counterparty = isIn ? fromAddress : toAddress;
   const blockRef = details.blockNumber ?? details.slot;
   const hasBlockRef = blockRef !== undefined && blockRef !== null;
-  const blockLabel = details.slot ? `Slot ${details.slot}` : `Block ${details.blockNumber}`;
+  const blockLabel = details.slot
+    ? `Slot ${details.slot}`
+    : `Block ${details.blockNumber}`;
 
   return (
     <div className="flex gap-4 p-4 rounded-lg border border-border/60 bg-card/80 hover:border-border hover:shadow-sm transition-all group">
       {/* Icon Column */}
-      <div className={cn(
-        "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center",
-        isIn ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300" : "bg-orange-500/15 text-orange-500 dark:text-orange-300"
-      )}>
-        {isIn ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
+      <div
+        className={cn(
+          "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center",
+          isIn
+            ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300"
+            : "bg-orange-500/15 text-orange-500 dark:text-orange-300",
+        )}
+      >
+        {isIn ? (
+          <ArrowDownLeft className="w-5 h-5" />
+        ) : (
+          <ArrowUpRight className="w-5 h-5" />
+        )}
       </div>
 
       {/* Main Content */}
@@ -75,10 +98,16 @@ function ActivityItem({ activity }: { activity: any }) {
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2">
             <span className="font-medium text-sm text-foreground">
-              {isIn ? 'Received' : 'Sent'} {amountDisplay}
+              {isIn ? "Received" : "Sent"} {amountDisplay}
             </span>
-            <Badge variant="outline" className={cn("text-[10px] uppercase", getChainColor(activity.chain))}>
-              {activity.chain.split('-')[0]}
+            <Badge
+              variant="outline"
+              className={cn(
+                "text-[10px] uppercase",
+                getChainColor(activity.chain),
+              )}
+            >
+              {activity.chain.split("-")[0]}
             </Badge>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -92,16 +121,16 @@ function ActivityItem({ activity }: { activity: any }) {
           <div className="flex items-center gap-1">
             <span className="text-xs">User:</span>
             <span className="font-medium text-foreground">
-              {activity.user?.name || 'Unknown'}
+              {activity.user?.name || "Unknown"}
             </span>
           </div>
 
           <span className="text-muted-foreground/50">•</span>
 
           <div className="flex items-center gap-1">
-            <span className="text-xs">{isIn ? 'From:' : 'To:'}</span>
+            <span className="text-xs">{isIn ? "From:" : "To:"}</span>
             <span className="font-mono text-xs bg-muted px-1 py-0.5 rounded">
-              {counterparty ? truncateAddress(counterparty) : 'Unknown'}
+              {counterparty ? truncateAddress(counterparty) : "Unknown"}
             </span>
           </div>
 
@@ -109,8 +138,7 @@ function ActivityItem({ activity }: { activity: any }) {
             href={getExplorerTxUrl(activity.chain, activity.txHash)}
             target="_blank"
             className="ml-auto text-muted-foreground hover:text-foreground transition-colors"
-          >
-          </Link>
+          ></Link>
 
           {hasBlockRef && (
             <div className="flex items-center gap-1 ml-2">
@@ -132,6 +160,7 @@ function ActivityItem({ activity }: { activity: any }) {
 
 export function ActivityFeed() {
   const { activities } = useAppStore();
+  const hasActivity = activities.length > 0;
 
   return (
     <Card className="shadow-sm h-full min-h-[500px] flex flex-col bg-card/70 backdrop-blur-sm">
@@ -142,12 +171,85 @@ export function ActivityFeed() {
             Live Activity Feed
           </CardTitle>
           <div className="flex items-center gap-2">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "cursor-pointer hover:bg-accent font-normal",
+                    !hasActivity &&
+                      "ring-2 ring-emerald-500/40 ring-offset-2 ring-offset-background animate-pulse",
+                  )}
+                >
+                  {hasActivity ? "Setup Help" : "Getting Started"}
+                </Badge>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-[360px] p-4">
+                <div className="space-y-3">
+                  <div>
+                    <h4 className="text-sm font-semibold">
+                      First-run checklist
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      If the feed is empty, it usually just means no wallet is
+                      being monitored yet.
+                    </p>
+                  </div>
+
+                  <ol className="list-decimal pl-5 space-y-2 text-sm">
+                    <li>
+                      <span className="font-medium">Add a wallet</span>
+                      <span className="text-muted-foreground">
+                        {" "}
+                        (left panel → Monitor User)
+                      </span>
+                    </li>
+                    <li>
+                      <span className="font-medium">Trigger a transaction</span>
+                      <span className="text-muted-foreground">
+                        {" "}
+                        (send/receive on the wallet)
+                      </span>
+                    </li>
+                    <li>
+                      <span className="font-medium">Watch activity appear</span>
+                      <span className="text-muted-foreground">
+                        {" "}
+                        (events stream in via webhook)
+                      </span>
+                    </li>
+                  </ol>
+
+                  <div className="rounded-md border border-border/60 bg-muted/40 p-3 text-xs text-muted-foreground">
+                    <div className="font-medium text-foreground mb-1">
+                      Free plan note
+                    </div>
+                    The free plan typically allows{" "}
+                    <span className="font-medium text-foreground">
+                      1 endpoint
+                    </span>{" "}
+                    +{" "}
+                    <span className="font-medium text-foreground">
+                      1 active stream
+                    </span>
+                    . The minimal EVM path reuses a single stream and relies on
+                    dynamic address registration from the UI.
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
             <Link href="/activity">
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent font-normal">
+              <Badge
+                variant="outline"
+                className="cursor-pointer hover:bg-accent font-normal"
+              >
                 View All
               </Badge>
             </Link>
-            <Badge variant="secondary" className="bg-muted text-muted-foreground hover:bg-muted/80">
+            <Badge
+              variant="secondary"
+              className="bg-muted text-muted-foreground hover:bg-muted/80"
+            >
               {activities.length} Events
             </Badge>
           </div>
@@ -168,7 +270,10 @@ export function ActivityFeed() {
               </div>
             ) : (
               activities.map((activity) => (
-                <ActivityItem key={`${activity.id}-${activity.txHash}`} activity={activity} />
+                <ActivityItem
+                  key={`${activity.id}-${activity.txHash}`}
+                  activity={activity}
+                />
               ))
             )}
           </div>
