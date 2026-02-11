@@ -79,7 +79,7 @@ export function WalletPanel({
       <Card.Content className="p-4 gap-3 lg:p-5">
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-(--foreground-light) uppercase">
+            <span className="text-sm font-medium text-(--foreground-light) uppercase">
               Wallet
             </span>
             {isAuthenticated ? (
@@ -92,13 +92,13 @@ export function WalletPanel({
           <div className="grid gap-2 sm:grid-cols-2">
             <div className="flex items-center gap-2 rounded-md border border-(--border) px-3 py-2">
               <Wallet className="h-3.5 w-3.5 shrink-0 text-(--foreground-light)" />
-              <span className="font-mono text-sm text-(--foreground)">
+              <span className="font-mono text-base text-(--foreground)">
                 {address ? truncateAddress(address) : "—"}
               </span>
             </div>
             <div className="flex items-center gap-2 rounded-md border border-(--border) px-3 py-2">
               <Droplets className="h-3.5 w-3.5 shrink-0 text-(--foreground-light)" />
-              <span className="font-mono text-sm text-(--foreground)">
+              <span className="font-mono text-base text-(--foreground)">
                 {formattedBalance} USDC
               </span>
             </div>
@@ -108,7 +108,7 @@ export function WalletPanel({
             <div className="flex flex-col gap-3">
               <div className="flex items-start gap-2 rounded-md bg-(--border) px-3 py-2">
                 <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-(--foreground-medium)" />
-                <p className="text-xs text-(--foreground-medium) leading-relaxed">
+                <p className="text-sm text-(--foreground-medium) leading-relaxed">
                   Signing authenticates you via{" "}
                   <a
                     href="https://login.xyz"
@@ -147,7 +147,7 @@ export function WalletPanel({
                 </span>
               </Button>
               {accountId && (
-                <span className="text-xs text-(--foreground-light)">
+                <span className="text-sm text-(--foreground-light)">
                   {accountId}
                 </span>
               )}
@@ -166,7 +166,7 @@ export function WalletPanel({
             <p className="text-sm text-red-600">
               {dripError}
               {dripError.includes("already") && (
-                <span className="block mt-1 text-xs text-(--foreground-light)">
+                <span className="block mt-1 text-sm text-(--foreground-light)">
                   Try{" "}
                   <a
                     href="https://faucet.circle.com/"
@@ -183,7 +183,7 @@ export function WalletPanel({
           )}
 
           {dripTxHash && (
-            <p className="text-xs text-(--foreground-light)">
+            <p className="text-sm text-(--foreground-light)">
               Faucet tx:{" "}
               <a
                 href={`https://sepolia.basescan.org/tx/${dripTxHash}`}
@@ -197,7 +197,7 @@ export function WalletPanel({
           )}
 
           {isAuthenticated && expiresAt && (
-            <p className="text-xs text-(--foreground-light)">
+            <p className="text-sm text-(--foreground-light)">
               Session expires: {expiresAt.toLocaleTimeString()}
             </p>
           )}

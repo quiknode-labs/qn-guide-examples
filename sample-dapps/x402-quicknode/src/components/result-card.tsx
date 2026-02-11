@@ -25,14 +25,14 @@ export function ResultCard({ result }: ResultCardProps) {
         ) : (
           <XCircle className="h-4 w-4 shrink-0 text-red-500" />
         )}
-        <span className="font-mono text-sm font-semibold text-(--foreground)">
+        <span className="font-mono text-base font-semibold text-(--foreground)">
           {result.methodName}
         </span>
         <Badge>{result.protocol}</Badge>
-        <span className="text-xs text-(--foreground-light)">
+        <span className="text-sm text-(--foreground-light)">
           {result.networkDisplay}
         </span>
-        <span className="ml-auto text-xs text-(--foreground-light)">
+        <span className="ml-auto text-sm text-(--foreground-light)">
           {time}
         </span>
       </div>
@@ -47,11 +47,11 @@ export function ResultCard({ result }: ResultCardProps) {
       </pre>
 
       {result.error && (
-        <p className="text-xs text-red-600">{result.error}</p>
+        <p className="text-sm text-red-600">{result.error}</p>
       )}
 
       {result.paymentResponse != null && (
-        <details className="text-xs text-(--foreground-light)">
+        <details className="text-sm text-(--foreground-light)">
           <summary className="cursor-pointer hover:text-(--foreground)">
             Payment details
           </summary>
@@ -61,7 +61,7 @@ export function ResultCard({ result }: ResultCardProps) {
         </details>
       )}
 
-      <div className="flex items-center gap-2 text-xs text-(--foreground-light)">
+      <div className="flex items-center gap-2 text-sm text-(--foreground-light)">
         <span>HTTP {result.status}</span>
       </div>
     </div>

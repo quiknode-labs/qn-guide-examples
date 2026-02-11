@@ -19,31 +19,33 @@ export function CreditsPanel({
   onRefresh,
 }: CreditsPanelProps) {
   const prevCredits = useRef(credits);
-  const [flash, setFlash] = useState(false);
+  const [delta, setDelta] = useState<number | null>(null);
+  const flashTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (prevCredits.current !== credits && prevCredits.current !== 0) {
-      setFlash(true);
-      const timeout = setTimeout(() => setFlash(false), 1500);
-      return () => clearTimeout(timeout);
-    }
+    const diff = credits - prevCredits.current;
     prevCredits.current = credits;
+
+    if (diff === 0) return;
+
+    setDelta(diff);
+
+    if (flashTimeout.current) clearTimeout(flashTimeout.current);
+    flashTimeout.current = setTimeout(() => setDelta(null), 1500);
+
+    return () => {
+      if (flashTimeout.current) clearTimeout(flashTimeout.current);
+    };
   }, [credits]);
 
-  useEffect(() => {
-    if (!flash) {
-      prevCredits.current = credits;
-    }
-  }, [flash, credits]);
-
-  const delta = credits - prevCredits.current;
+  const flash = delta !== null;
 
   return (
     <Card variant="white">
       <Card.Content>
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-(--foreground-light) uppercase">
+            <span className="text-sm font-medium text-(--foreground-light) uppercase">
               Credits
             </span>
             <button
@@ -71,10 +73,10 @@ export function CreditsPanel({
             >
               {credits.toLocaleString()}
             </span>
-            {flash && delta !== 0 && (
+            {flash && (
               <span
                 className={cn(
-                  "text-xs font-semibold animate-pulse",
+                  "text-sm font-semibold animate-pulse",
                   delta > 0 ? "text-green-600" : "text-amber-600",
                 )}
               >
@@ -82,13 +84,13 @@ export function CreditsPanel({
               </span>
             )}
             {!flash && (
-              <span className="text-xs text-(--foreground-light)">
+              <span className="text-sm text-(--foreground-light)">
                 available
               </span>
             )}
           </div>
 
-          {error && <p className="text-xs text-red-600">{error}</p>}
+          {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
       </Card.Content>
     </Card>

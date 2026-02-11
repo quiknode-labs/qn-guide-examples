@@ -102,7 +102,7 @@ export default function Home() {
         )}
       </main>
 
-      <footer className="border-t border-(--border) bg-(--background) px-4 py-4 text-center text-xs text-(--foreground-light) md:px-8">
+      <footer className="border-t border-(--border) bg-(--background) px-4 py-4 text-center text-sm text-(--foreground-light) md:px-8">
         Built with{" "}
         <a
           href="https://x402.org"

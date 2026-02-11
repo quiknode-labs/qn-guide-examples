@@ -22,7 +22,7 @@ export function Button({
         variant === "secondary" &&
           "bg-transparent border border-(--border) text-(--foreground) rounded-full hover:bg-(--border)",
         size === "default" && variant === "primary" && "px-4 py-2 text-sm",
-        size === "default" && variant === "secondary" && "px-3 py-1.5 text-xs",
+        size === "default" && variant === "secondary" && "px-3 py-1.5 text-sm",
         size === "lg" && "px-6 py-3 text-base",
         disabled && "pointer-events-none opacity-50",
         className,

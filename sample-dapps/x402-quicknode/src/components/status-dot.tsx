@@ -21,7 +21,7 @@ export function StatusDot({ variant, label, className }: StatusDotProps) {
       />
       <span
         className={cn(
-          "text-xs font-medium",
+          "text-sm font-medium",
           variant === "active" && "text-(--foreground)",
           variant === "inactive" && "text-(--foreground-light)",
           variant === "error" && "text-red-600",

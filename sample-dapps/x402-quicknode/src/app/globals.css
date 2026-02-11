@@ -11,6 +11,11 @@
   --color-grid: #E5E7EB;
 }
 
+:focus-visible {
+  outline: 2px solid var(--color-foreground);
+  outline-offset: 2px;
+}
+
 .dot-grid {
   background-image: radial-gradient(var(--grid) 1px, transparent 1px);
   background-size: 20px 20px;

@@ -19,7 +19,7 @@ export function Header() {
         <Badge>Pay-per-request blockchain APIs by Quicknode</Badge>
       </div>
       <div className="flex shrink-0 items-center gap-4">
-        <nav className="hidden items-center gap-3 text-sm text-(--foreground-light) md:flex">
+        <nav className="hidden items-center gap-3 text-base text-(--foreground-light) md:flex">
           <a
             href="https://www.quicknode.com/guides/x402/access-quicknode-endpoints-with-x402-payments"
             target="_blank"

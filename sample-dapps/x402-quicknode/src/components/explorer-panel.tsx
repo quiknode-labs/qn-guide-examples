@@ -33,7 +33,7 @@ export function ExplorerPanel({
     <Card variant="white">
       <Card.Content>
         <div className="flex flex-col gap-3">
-          <span className="text-xs font-medium text-(--foreground-light) uppercase">
+          <span className="text-sm font-medium text-(--foreground-light) uppercase">
             Explorer
           </span>
 
@@ -86,13 +86,13 @@ function MethodGroup({
               disabled={isExecuting}
               className={cn(
                 "group flex cursor-pointer flex-col gap-1.5 rounded-lg border border-(--border) p-3 text-left transition-colors",
-                "hover:border-(--foreground) hover:bg-(--background)",
+                "hover:border-(--foreground) hover:bg-(--background) focus-visible:border-(--foreground) focus-visible:outline-none",
                 executing && "border-(--accent)",
                 isExecuting && !executing && "opacity-50",
               )}
             >
               <div className="flex items-center justify-between">
-                <span className="font-mono text-sm font-semibold text-(--foreground)">
+                <span className="font-mono text-base font-semibold text-(--foreground)">
                   {method.name}
                 </span>
                 {executing ? (
@@ -101,7 +101,7 @@ function MethodGroup({
                   <Play className="h-3.5 w-3.5 text-(--foreground-light) opacity-0 transition-opacity group-hover:opacity-100" />
                 )}
               </div>
-              <p className="text-xs text-(--foreground-light)">
+              <p className="text-sm text-(--foreground-light)">
                 {method.description}
               </p>
               <span
