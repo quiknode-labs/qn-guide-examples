@@ -1,0 +1,37 @@
+{
+  "name": "x402-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.20",
+    "clsx": "^2.1.1",
+    "@x402/evm": "^2.3.0",
+    "@x402/fetch": "^2.3.0",
+    "connectkit": "^1.9.1",
+    "lucide-react": "^0.563.0",
+    "next": "16.1.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "siwe": "^3.0.0",
+    "tailwind-merge": "^2.6.0",
+    "viem": "2",
+    "wagmi": "^2.19.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.12",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

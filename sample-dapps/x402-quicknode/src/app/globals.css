@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-mono: "Geist Mono", monospace;
+  --color-background: #FFFFFF;
+  --color-foreground: #10151B;
+  --color-foreground-medium: #6B7280;
+  --color-foreground-light: #9CA3AF;
+  --color-border: #E5E7EB;
+  --color-accent: #00FF00;
+  --color-grid: #E5E7EB;
+}
+
+.dot-grid {
+  background-image: radial-gradient(var(--grid) 1px, transparent 1px);
+  background-size: 20px 20px;
+}

@@ -150,12 +150,14 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Quicknode EVM Token Factory Demo](./sample-dapps/evm-token-factory)
 - [Flashblocks Base App](./sample-dapps/flashblocks-base)
 - [Quicknode Hyperliquid Portfolio Tracker](./sample-dapps/hyperliquid-portfolio-tracker)
+- [Hyperliquid Trading Dashboard](./sample-dapps/hyperliquid-trading-dashboard)
 - [RWA Tokenizer v2](./sample-dapps/rwa-tokenizer)
 - [Quicknode Solana Action Blinker](./sample-dapps/solana-action-blinker)
 - [Quicknode Solana Staking UI](./sample-dapps/solana-staking-ui)
 - [Quicknode Solana Token-Minter Demo](./sample-dapps/solana-token-maker)
 - [Quicknode Solana Explorer Demo](./sample-dapps/solana-wallet-explorer)
 - [Token Sweeper 🧹](./sample-dapps/token-sweeper-eip-7702)
+- [x402 Explorer — Quicknode Sample App](./sample-dapps/x402-quicknode)
 
 ### Solana
 - [account-deserialization](./solana/account-deserialization)
