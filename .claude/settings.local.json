@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr list:*)",
+      "Bash(gh api:*)",
+      "Bash(git rm:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(npx next lint:*)"
+    ]
+  }
+}

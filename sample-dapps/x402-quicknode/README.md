@@ -79,7 +79,7 @@ src/
 ├── app/                  # Next.js App Router (pages & layouts)
 ├── components/
 │   ├── providers.tsx     # Wagmi + React Query + ConnectKit providers
-│   └── wallet-connection-shell.tsx
+│   └── ...                # UI components (header, panels, cards, etc.)
 ├── hooks/
 │   ├── use-x402-auth.ts  # SIWE authentication state
 │   ├── use-credits.ts    # Credit balance fetching
@@ -103,7 +103,7 @@ src/
 
 ## Tech Stack
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
 - **Wallet**: [wagmi](https://wagmi.sh/) + [ConnectKit](https://docs.family.co/connectkit)
 - **Auth**: [SIWE](https://login.xyz/) (Sign-In with Ethereum)

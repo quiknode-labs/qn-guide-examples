@@ -17,6 +17,6 @@
 }
 
 .dot-grid {
-  background-image: radial-gradient(var(--grid) 1px, transparent 1px);
+  background-image: radial-gradient(var(--color-grid) 1px, transparent 1px);
   background-size: 20px 20px;
 }

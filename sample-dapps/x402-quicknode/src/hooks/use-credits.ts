@@ -31,6 +31,8 @@ export function useCredits({
     if (!jwt || !isAuthenticated) {
       setCredits(0);
       setAccountId(null);
+      setError(null);
+      setIsLoading(false);
       return;
     }
 
@@ -52,6 +54,8 @@ export function useCredits({
     if (!jwt || !isAuthenticated) {
       setCredits(0);
       setAccountId(null);
+      setError(null);
+      setIsLoading(false);
       return;
     }
 
