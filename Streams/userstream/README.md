@@ -105,7 +105,7 @@ cp .env.example .env
 <details>
   <summary><strong>Plan considerations and minimal setup (Free trial plan)</strong></summary>
 
-Some QuickNode plans limit the number of available Endpoints and active Streams (for example, the Free trial plan typically allows a single endpoint and a single active stream).
+Some Quicknode plans limit the number of available Endpoints and active Streams (for example, the Free trial plan typically allows a single endpoint and a single active stream).
 
 The setup instructions describe the full EVM + Solana workflow. If you encounter plan-limit errors during setup, use the minimal EVM-only path to run the app end-to-end without upgrading.
 
