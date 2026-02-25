@@ -12,7 +12,7 @@ export default function NumberCard({ result }: NumberCardProps) {
   if (!rows.length || !columns.length) return null;
 
   const value = rows[0][0];
-  const formatted = formatBigNumber(value);
+  const formatted = formatBigNumber(value, columns[0]);
 
   // If there's a second numeric column, show trend / % change
   const hasTrend = columns.length >= 2 && !isNaN(Number(rows[0][1]));

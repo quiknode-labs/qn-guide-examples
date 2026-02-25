@@ -39,9 +39,15 @@ export function formatAxisLabel(value: unknown): string {
   return str;
 }
 
-export function formatBigNumber(value: unknown): string {
+export function formatBigNumber(value: unknown, columnName?: string): string {
   const num = Number(value);
   if (isNaN(num)) return String(value);
+
+  // Don't abbreviate block numbers, heights, IDs, etc. — show full integer with commas
+  if (columnName && /^(block|height|id|number|nonce|index|slot|epoch)/i.test(columnName.replace(/_/g, ""))) {
+    return Number.isInteger(num) ? num.toLocaleString() : num.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  }
+
   if (Math.abs(num) >= 1_000_000_000) return `${(num / 1_000_000_000).toFixed(2)}B`;
   if (Math.abs(num) >= 1_000_000) return `${(num / 1_000_000).toFixed(2)}M`;
   if (Math.abs(num) >= 10_000) return `${(num / 1_000).toFixed(1)}K`;
