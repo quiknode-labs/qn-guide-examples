@@ -1,0 +1,509 @@
+@import "tailwindcss";
+
+/* ── Theme Variables (Quicknode Design System) ───────────── */
+
+/* Light mode (default) — colors from quicknode.com monorepo */
+:root {
+  --background: #ffffff;
+  --foreground: #11181c;
+  --foreground-medium: #687076;
+  --foreground-light: #889096;
+  --accent: #2BA836;
+  --accent-foreground: #ffffff;
+  --border: #dfe3e6;
+  --grid: #eceef0;
+  --grid-sparse: #d7dbdf;
+
+  --green: #2BA836;
+  --red: #e01f42;
+  --yellow: #ffd000;
+  --purple: #8B4FD0;
+  --blue: #2E8BC0;
+
+  /* Chart palette — brand primaries + supporting spectrum */
+  --chart-1: #3EE148;
+  --chart-2: #A160F1;
+  --chart-3: #F2A93B;
+  --chart-4: #36B5E6;
+  --chart-5: #F06292;
+  --chart-6: #6CFF75;
+  --chart-7: #FF7043;
+  --chart-8: #26C6DA;
+  --chart-9: #B77EFF;
+  --chart-10: #FFCA28;
+  --chart-11: #5C6BC0;
+  --chart-12: #EF5350;
+}
+
+/* Dark mode — grays from quicknode.com dark theme */
+[data-theme="dark"] {
+  --background: #151718;
+  --foreground: #ecedee;
+  --foreground-medium: #9ba1a6;
+  --foreground-light: #697177;
+  --accent: #3EE148;
+  --accent-foreground: #151718;
+  --green: #3EE148;
+  --purple: #B77EFF;
+  --blue: #36B5E6;
+  --border: #26292b;
+  --grid: #1a1d1e;
+  --grid-sparse: #3a3f42;
+}
+
+/* ── Tailwind Theme Tokens ───────────────────────────────── */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-foreground-medium: var(--foreground-medium);
+  --color-foreground-light: var(--foreground-light);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-grid: var(--grid);
+
+  --color-qn-green: var(--green);
+  --color-qn-red: #e01f42;
+  --color-qn-yellow: #ffd000;
+  --color-qn-purple: var(--purple);
+  --color-qn-blue: var(--blue);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}
+
+/* ── Base ────────────────────────────────────────────────── */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ── Utility Classes ─────────────────────────────────────── */
+
+.label-mono {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--foreground-light);
+}
+
+.tracking-display {
+  letter-spacing: -0.04em;
+}
+
+.card {
+  background: var(--background);
+  border-radius: 1rem;
+  box-shadow: inset 0 0 0 1px var(--border);
+  transition: background-color 0.3s ease;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--foreground-light);
+  box-shadow: inset 0 0 0 1px var(--border);
+  border-radius: 9999px;
+}
+
+.badge-green {
+  color: var(--green);
+  box-shadow: inset 0 0 0 1px rgba(43, 168, 54, 0.3);
+}
+
+[data-theme="dark"] .badge-green {
+  box-shadow: inset 0 0 0 1px rgba(62, 225, 72, 0.3);
+}
+
+.badge-red {
+  color: #e01f42;
+  box-shadow: inset 0 0 0 1px rgba(224, 31, 66, 0.3);
+}
+
+.badge-yellow {
+  color: #b8860b;
+  box-shadow: inset 0 0 0 1px rgba(255, 208, 0, 0.4);
+}
+
+[data-theme="dark"] .badge-yellow {
+  color: #ffd000;
+}
+
+.badge-purple {
+  color: var(--purple);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--purple) 30%, transparent);
+}
+
+.badge-blue {
+  color: var(--blue);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--blue) 30%, transparent);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  border-radius: 9999px;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  background: var(--foreground);
+  color: var(--background);
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: transparent;
+  color: var(--foreground);
+  box-shadow: inset 0 0 0 1px var(--border);
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background: var(--grid);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.th-mono {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--foreground-light);
+  padding: 0.75rem 1rem;
+}
+
+.input-ring {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  background: var(--background);
+  color: var(--foreground);
+  border: none;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px var(--border);
+  outline: none;
+  transition: box-shadow 0.2s, background-color 0.3s ease;
+}
+
+.input-ring:focus {
+  box-shadow: inset 0 0 0 1px var(--accent), 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+/* ── Hyperbase-specific ──────────────────────────────────── */
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  border-right: 1px solid var(--border);
+  height: 100vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.sidebar[data-collapsed="true"] {
+  width: 60px;
+  min-width: 60px;
+  overflow: hidden;
+}
+
+.step-card {
+  box-shadow: inset 0 0 0 1px var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.editor-container {
+  box-shadow: inset 0 0 0 1px var(--border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.grid-card {
+  box-shadow: inset 0 0 0 1px var(--border);
+  border-radius: 0.75rem;
+  background: var(--background);
+  transition: background-color 0.3s ease;
+}
+
+.nav-active {
+  background: var(--grid);
+  color: var(--foreground);
+  font-weight: 500;
+  box-shadow: inset 3px 0 0 0 var(--accent);
+}
+
+/* ── Theme Toggle Animation ──────────────────────────────── */
+
+.theme-toggle {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  border-radius: 9999px;
+  background: var(--grid);
+  box-shadow: inset 0 0 0 1px var(--border);
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: var(--foreground);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme="dark"] .theme-toggle-thumb {
+  transform: translateX(24px);
+}
+
+.theme-toggle-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--background);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+
+[data-theme="dark"] .theme-toggle-icon {
+  transform: rotate(-90deg);
+}
+
+/* ── Markdown Prose ──────────────────────────────────────── */
+
+.prose-card {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--foreground-medium);
+}
+
+.prose-card h1,
+.prose-card h2,
+.prose-card h3 {
+  color: var(--foreground);
+  font-weight: 600;
+  margin-top: 0.5em;
+  margin-bottom: 0.25em;
+}
+
+.prose-card h1 { font-size: 1.5rem; }
+.prose-card h2 { font-size: 1.25rem; }
+.prose-card h3 { font-size: 1.1rem; }
+
+.prose-card p {
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+.prose-card strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.prose-card em {
+  font-style: italic;
+}
+
+.prose-card code {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 0.8em;
+  background: var(--grid);
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+}
+
+.prose-card ul,
+.prose-card ol {
+  padding-left: 1.25em;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+.prose-card li {
+  margin-top: 0.15em;
+}
+
+.prose-card a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.prose-card blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 0.75em;
+  color: var(--foreground-light);
+  font-style: italic;
+  margin: 0.5em 0;
+}
+
+/* ── Dashboard Placeholder Pulse ─────────────────────────── */
+
+@keyframes placeholder-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.4); opacity: 1; }
+}
+
+.placeholder-card {
+  box-shadow: inset 0 0 0 1px var(--border);
+  border-radius: 0.75rem;
+  background: var(--grid);
+  animation: placeholder-pulse 2.5s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.placeholder-card:hover {
+  background: var(--grid-sparse);
+  animation: none;
+  opacity: 1;
+}
+
+.placeholder-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+
+.placeholder-card:hover .placeholder-dot {
+  animation: none;
+  transform: scale(1.4);
+  opacity: 1;
+}
+
+/* ── Border Pulse (from quicknode.com) ───────────────────── */
+
+@keyframes border-glow {
+  0% { box-shadow: inset 0 0 0 1px rgba(29, 187, 205, 0.6); }
+  25% { box-shadow: inset 0 0 0 1px rgba(146, 79, 231, 0.6); }
+  50% { box-shadow: inset 0 0 0 1px rgba(0, 159, 209, 0.6); }
+  75% { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent); }
+  100% { box-shadow: inset 0 0 0 1px rgba(29, 187, 205, 0.6); }
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* ── CodeMirror overrides ────────────────────────────────── */
+
+.cm-editor {
+  font-family: 'Geist Mono', ui-monospace, monospace !important;
+  font-size: 0.875rem;
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.cm-editor .cm-gutters {
+  background: var(--grid) !important;
+  border-right: 1px solid var(--border) !important;
+  color: var(--foreground-light) !important;
+}
+
+.cm-editor .cm-activeLine {
+  background: var(--grid) !important;
+}
+
+.cm-editor .cm-selectionBackground {
+  background: color-mix(in srgb, var(--accent) 15%, transparent) !important;
+}
+
+.cm-editor .cm-cursor {
+  border-left-color: var(--accent) !important;
+}
+
+.cm-editor .cm-tooltip-autocomplete {
+  background: var(--background) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 0.5rem;
+}
+
+/* ── react-grid-layout ───────────────────────────────────── */
+
+.react-grid-item.react-grid-placeholder {
+  background: var(--accent) !important;
+  opacity: 0.15;
+  border-radius: 0.75rem;
+}
