@@ -1,7 +1,6 @@
 "use client";
 
 import type { QueryResult } from "@/lib/types";
-import { formatTooltipValue } from "./chart-utils";
 
 interface ResultsTableProps {
   result: QueryResult;
@@ -34,7 +33,7 @@ export default function ResultsTable({ result }: ResultsTableProps) {
                   {cell === null ? (
                     <span className="text-foreground-light/50 text-xs">null</span>
                   ) : typeof cell === "number" ? (
-                    <span style={{ color: "var(--accent)" }}>{formatTooltipValue(cell)}</span>
+                    <span style={{ color: "var(--accent)" }}>{typeof cell === "number" && Number.isInteger(cell) ? cell.toLocaleString() : cell.toLocaleString(undefined, { maximumFractionDigits: 4 })}</span>
                   ) : (
                     <span className="text-foreground-medium">{String(cell)}</span>
                   )}
