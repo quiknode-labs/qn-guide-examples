@@ -1,6 +1,6 @@
 # Quicknode RPC Usage Alerting
 
-Monitor your Quicknode RPC credit usage and receive proactive alerts before hitting your limits. This tool uses the [Console API Usage endpoint](https://www.quicknode.com/docs/console-api/usage/v0-usage-rpc) to check your current billing period usage, predict end-of-month consumption, and send notifications through your preferred alerting channels.
+Monitor your Quicknode RPC credit usage and receive proactive alerts before hitting your limits. This tool uses the [Admin API Usage endpoint](https://www.quicknode.com/docs/admin-api/usage/v0-usage-rpc) to check your current billing period usage, predict end-of-month consumption, and send notifications through your preferred alerting channels.
 
 ## Features
 
@@ -35,7 +35,7 @@ Monitor your Quicknode RPC credit usage and receive proactive alerts before hitt
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/quiknode-labs/qn-guide-examples.git
-   cd qn-guide-examples/console-api/usage-alerting
+   cd qn-guide-examples/admin-api/usage-alerting
    ```
 
 2. **Install dependencies**:
@@ -310,17 +310,17 @@ For teams using Prometheus/Grafana, this package includes a custom exporter. See
 
 ## API Endpoints Used
 
-This tool uses the following Console API endpoints:
+This tool uses the following Admin API endpoints:
 
 | Endpoint | Description |
 |----------|-------------|
-| [/v0/usage/rpc](https://www.quicknode.com/docs/console-api/usage/v0-usage-rpc) | Overall RPC usage and limits |
-| [/v0/usage/rpc/by-endpoint](https://www.quicknode.com/docs/console-api/usage/v0-usage-rpc-by-endpoint) | Usage breakdown by endpoint |
-| [/v0/usage/rpc/by-chain](https://www.quicknode.com/docs/console-api/usage/v0-usage-rpc-by-chain) | Usage breakdown by blockchain |
-| [/v0/usage/rpc/by-method](https://www.quicknode.com/docs/console-api/usage/v0-usage-rpc-by-method) | Usage breakdown by RPC method |
+| [/v0/usage/rpc](https://www.quicknode.com/docs/admin-api/usage/v0-usage-rpc) | Overall RPC usage and limits |
+| [/v0/usage/rpc/by-endpoint](https://www.quicknode.com/docs/admin-api/usage/v0-usage-rpc-by-endpoint) | Usage breakdown by endpoint |
+| [/v0/usage/rpc/by-chain](https://www.quicknode.com/docs/admin-api/usage/v0-usage-rpc-by-chain) | Usage breakdown by blockchain |
+| [/v0/usage/rpc/by-method](https://www.quicknode.com/docs/admin-api/usage/v0-usage-rpc-by-method) | Usage breakdown by RPC method |
 
 ## Related Resources
 
-- [Console API Documentation](https://www.quicknode.com/docs/console-api)
-- [How to Build a Grafana Dashboard](https://www.quicknode.com/guides/quicknode-products/console-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure)
-- [Monitor RPC Usage and Set Up Alerts with Console API](https://www.quicknode.com/guides/quicknode-products/console-api/monitor-rpc-usage-and-set-up-alerts)
+- [Admin API Documentation](https://www.quicknode.com/docs/admin-api)
+- [How to Build a Grafana Dashboard](https://www.quicknode.com/guides/quicknode-products/admin-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure)
+- [Monitor RPC Usage and Set Up Alerts with Admin API](https://www.quicknode.com/guides/quicknode-products/admin-api/monitor-rpc-usage-and-set-up-alerts)

@@ -83,6 +83,10 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 
 <!-- PROJECT-DIRECTORY:START -->
 
+### Admin API
+- [Quicknode Grafana Dashboard Example](./admin-api/grafana-dashboard)
+- [Quicknode RPC Usage Alerting](./admin-api/usage-alerting) - *Monitor Quicknode RPC usage and send alerts when approaching limits*
+
 ### AI
 - [Base AI Agent](./AI/coinbase-ai-agent)
 - [EVM MCP Server](./AI/evm-mcp-server) - *A console-based MCP-compliant server for EVM blockchain data access*
@@ -96,10 +100,6 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 
 ### Bitcoin
 - [Bitcoin Transaction Report Generator](./bitcoin/transaction-report-generator)
-
-### Console API
-- [Quicknode Grafana Dashboard Example](./console-api/grafana-dashboard)
-- [Quicknode RPC Usage Alerting](./console-api/usage-alerting) - *Monitor Quicknode RPC usage and send alerts when approaching limits*
 
 ### Courses
 - [solana-basics](./courses/solana-basics)

@@ -47,7 +47,7 @@ const CATEGORY_OVERRIDES = {
   defi: "DeFi",
   nft: "NFT",
   "sample-dapps": "Sample dApps",
-  "console-api": "Console API",
+  "admin-api": "Admin API",
   "enhanced-apis": "Enhanced APIs",
 };
 

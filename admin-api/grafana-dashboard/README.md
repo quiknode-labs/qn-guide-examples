@@ -1,6 +1,6 @@
 # Quicknode Grafana Dashboard Example
 
-This folder contains all the necessary configuration files to set up a Grafana dashboard for monitoring your Quicknode RPC infrastructure using Prometheus. This example is part of the [How to Build a Grafana Dashboard to Monitor Your RPC Infrastructure](https://www.quicknode.com/guides/quicknode-products/console-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure) guide, which walks you through setting up a real-time monitoring system.
+This folder contains all the necessary configuration files to set up a Grafana dashboard for monitoring your Quicknode RPC infrastructure using Prometheus. This example is part of the [How to Build a Grafana Dashboard to Monitor Your RPC Infrastructure](https://www.quicknode.com/guides/quicknode-products/admin-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure) guide, which walks you through setting up a real-time monitoring system.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ git clone https://github.com/quiknode-labs/qn-guide-examples.git
 2. Navigate to the `grafana-dashboard` folder:
 
 ```sh
-cd qn-guide-examples/console-api/grafana-dashboard
+cd qn-guide-examples/admin-api/grafana-dashboard
 ```
 
 3. Update the `prometheus.yaml` file in the `prometheus` folder with your Quicknode API key.
@@ -32,4 +32,4 @@ docker-compose up
 
 5. Access Grafana by navigating to http://localhost:3000 in your web browser.
 
-For more detailed instructions, please refer to the guide: [How to Build a Grafana Dashboard to Monitor Your RPC Infrastructure](https://www.quicknode.com/guides/quicknode-products/console-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure).
+For more detailed instructions, please refer to the guide: [How to Build a Grafana Dashboard to Monitor Your RPC Infrastructure](https://www.quicknode.com/guides/quicknode-products/admin-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure).
