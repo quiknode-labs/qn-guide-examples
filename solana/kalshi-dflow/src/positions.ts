@@ -55,6 +55,7 @@ async function getPositions(walletAddress: string) {
     console.log(`Market:     ${pos.market.ticker}`);
     console.log(`Title:      ${pos.market.title}`);
     console.log(`Side:       ${pos.side}`);
+    console.log(`Mint:       ${pos.mint}`);
     console.log(`Balance:    ${(Number(pos.balance) / 1_000_000).toFixed(6)} tokens`);
     console.log(`Status:     ${pos.market.status}${pos.market.result ? ` (result: ${pos.market.result})` : ''}`);
     const isOpen = acct?.redemptionStatus === 'open';
