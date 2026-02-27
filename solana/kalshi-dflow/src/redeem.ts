@@ -27,12 +27,14 @@ async function redeemOutcomeTokens(outcomeMint: string) {
 
   // Step 1: Verify the token is redeemable
   const market = await fetchJson<Market>(`${METADATA_API}/api/v1/market/by-mint/${outcomeMint}`);
-  const acct = Object.values(market.accounts)[0];
+  const allAccts = Object.values(market.accounts);
+  const acct = allAccts.find(a => a.yesMint === outcomeMint || a.noMint === outcomeMint)
+            ?? allAccts[0];
   if (!acct) throw new Error('No account info found for this market.');
 
   const isWinningMint =
-    (market.result === 'yes' && acct.yesMint === outcomeMint) ||
-    (market.result === 'no' && acct.noMint === outcomeMint);
+    (market.result === 'yes' && allAccts.some(a => a.yesMint === outcomeMint)) ||
+    (market.result === 'no'  && allAccts.some(a => a.noMint  === outcomeMint));
   const isScalar = !market.result && acct.scalarOutcomePercent !== null;
 
   if (!isWinningMint && !isScalar) {
