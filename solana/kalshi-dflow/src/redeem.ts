@@ -1,4 +1,4 @@
-import { createSolanaRpc } from '@solana/kit';
+import { createSolanaRpc, Signature } from '@solana/kit';
 import type { Market, OrderResponse } from './types';
 import { loadWallet, fetchJson, signAndSend, waitForOrder, parseMintAndBalance, getWalletTokenAccounts, requireEnv } from './utils';
 
@@ -74,12 +74,29 @@ async function redeemOutcomeTokens(outcomeMint: string) {
   console.log(`\nTransaction submitted: ${signature}`);
   console.log(`  Explorer: https://explorer.solana.com/tx/${signature}`);
 
-  // Step 4: Monitor until closed
-  const result = await waitForOrder(signature, order.lastValidBlockHeight, TRADE_API);
-  if (result.status === 'closed') {
-    console.log(`\n✅ Redemption complete! Received ${result.outAmount / 1_000_000} USDC`);
+  // Step 4: Monitor until settled
+  if (order.executionMode === 'async') {
+    const result = await waitForOrder(signature, order.lastValidBlockHeight, TRADE_API);
+    if (result.status === 'closed') {
+      console.log(`\n✅ Redemption complete! Received ${result.outAmount / 1_000_000} USDC`);
+    } else {
+      console.log(`\n⚠️ Redemption ended with status: ${result.status}`);
+    }
   } else {
-    console.log(`\n⚠️ Redemption ended with status: ${result.status}`);
+    // Sync: poll signature statuses until confirmed
+    for (let i = 0; i < 30; i++) {
+      await new Promise((r) => setTimeout(r, 1_000));
+      const { value: statuses } = await rpc.getSignatureStatuses([signature as Signature]).send();
+      const s = statuses[0];
+      if (s?.confirmationStatus === 'confirmed' || s?.confirmationStatus === 'finalized') {
+        if (s.err) {
+          console.error(`\n❌ Transaction failed on-chain:`, s.err);
+        } else {
+          console.log(`\n✅ Redemption confirmed!`);
+        }
+        break;
+      }
+    }
   }
 }
 

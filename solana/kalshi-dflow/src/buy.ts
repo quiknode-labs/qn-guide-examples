@@ -22,7 +22,7 @@ async function buyOutcomeToken(
 
   // USDC has 6 decimal places: $1.00 = 1_000_000 base units.
   // The DFlow /order `amount` param is the INPUT quantity (USDC to spend).
-  const amountBaseUnits = usdcAmount * 1_000_000;
+  const amountBaseUnits = Math.round(usdcAmount * 1_000_000);
 
   console.log(`\nSpending ${usdcAmount} USDC on outcome tokens`);
   console.log(`  Input (USDC):  ${USDC_MINT}`);
