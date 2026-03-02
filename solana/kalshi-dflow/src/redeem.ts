@@ -24,6 +24,7 @@ async function redeemOutcomeTokens(outcomeMint: string) {
     process.exit(1);
   }
   const tokenAmount = Number(rawBalance);
+  const displayAmount = tokenAmount / 1_000_000;
 
   // Step 1: Verify the token is redeemable
   const market = await fetchJson<Market>(`${METADATA_API}/api/v1/market/by-mint/${outcomeMint}`);
@@ -50,7 +51,7 @@ async function redeemOutcomeTokens(outcomeMint: string) {
     return;
   }
 
-  console.log(`\nRedeeming ${tokenAmount} tokens from market: ${market.ticker}`);
+  console.log(`\nRedeeming ${displayAmount} tokens from market: ${market.ticker}`);
 
   if (isScalar && acct.scalarOutcomePercent !== null) {
     const yesPct = (acct.scalarOutcomePercent / 100).toFixed(2);
