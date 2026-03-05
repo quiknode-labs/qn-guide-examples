@@ -15,7 +15,7 @@ This custom exporter fills that gap by exposing usage data from the `v0/usage/rp
 
 ## Prerequisites
 
-- Completed the [Grafana Dashboard guide](https://www.quicknode.com/guides/quicknode-products/console-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure) (recommended)
+- Completed the [Grafana Dashboard guide](https://www.quicknode.com/guides/quicknode-products/admin-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure) (recommended)
 - Prometheus server running
 - Node.js 20+
 
@@ -85,7 +85,7 @@ services:
 
 ## Grafana Dashboard
 
-A pre-built Grafana dashboard is included in `console-api/usage-alerting/dashboards/quicknode-usage-alerting-grafana.json`. Import it directly into your Grafana instance.
+A pre-built Grafana dashboard is included in `admin-api/usage-alerting/dashboards/quicknode-usage-alerting-grafana.json`. Import it directly into your Grafana instance.
 
 ### Dashboard Features
 
@@ -110,7 +110,7 @@ The dashboard includes:
 ### Import Instructions
 
 1. In Grafana, go to **Dashboards** > **Import**
-2. Upload `console-api/usage-alerting/dashboards/quicknode-usage-alerting-grafana.json`
+2. Upload `admin-api/usage-alerting/dashboards/quicknode-usage-alerting-grafana.json`
 3. Select your Prometheus data source
 4. Click **Import**
 
@@ -188,6 +188,6 @@ groups:
 
 ## Related Resources
 
-- [How to Build a Grafana Dashboard](https://www.quicknode.com/guides/quicknode-products/console-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure)
-- [Console API Usage Endpoint](https://www.quicknode.com/docs/console-api/usage/v0-usage-rpc)
+- [How to Build a Grafana Dashboard](https://www.quicknode.com/guides/quicknode-products/admin-api/how-to-build-a-grafana-dashboard-to-monitor-your-rpc-infrastructure)
+- [Admin API Usage Endpoint](https://www.quicknode.com/docs/admin-api/usage/v0-usage-rpc)
 - [Prometheus Documentation](https://prometheus.io/docs/introduction/overview/)
