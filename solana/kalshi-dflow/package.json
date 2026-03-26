@@ -1,0 +1,24 @@
+{
+  "name": "kalshi--dflow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "events": "tsx --env-file=.env src/events.ts",
+    "buy": "tsx --env-file=.env src/buy.ts",
+    "positions": "tsx --env-file=.env src/positions.ts",
+    "redeem": "tsx --env-file=.env src/redeem.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@solana/kit": "^6.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
