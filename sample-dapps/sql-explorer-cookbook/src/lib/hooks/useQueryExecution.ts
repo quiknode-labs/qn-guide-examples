@@ -11,24 +11,30 @@ interface UseQueryExecutionReturn {
   run: (sql: string) => Promise<void>;
 }
 
-export function useQueryExecution(): UseQueryExecutionReturn {
+export function useQueryExecution(
+  onData?: (data: SQLExplorerResponse) => void,
+): UseQueryExecutionReturn {
   const [data, setData] = useState<SQLExplorerResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const run = useCallback(async (sql: string) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const result = await executeQuery(sql);
-      setData(result);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Query failed");
-      setData(null);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const run = useCallback(
+    async (sql: string) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const result = await executeQuery(sql);
+        setData(result);
+        onData?.(result);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Query failed");
+        setData(null);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [onData],
+  );
 
   return { data, error, isLoading, run };
 }

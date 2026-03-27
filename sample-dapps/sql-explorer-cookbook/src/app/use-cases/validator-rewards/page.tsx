@@ -1,12 +1,56 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { QUERIES } from "@/data/queries";
+import type { SQLExplorerResponse } from "@/types";
 import QueryRunner from "@/components/query/QueryRunner";
+import InsightsBanner from "@/components/use-cases/InsightsBanner";
+import StatHighlights, {
+  type StatConfig,
+} from "@/components/use-cases/StatHighlights";
+import { formatNumber, formatUsd } from "@/lib/format";
 
 const query = QUERIES.find((q) => q.useCaseSlug === "validator-rewards")!;
 
+const insights = [
+  "See how pending rewards are distributed across the validators you delegate to",
+  "Compare commission rates between validators to optimize your staking strategy",
+  "Identify which validators yield the highest returns for your delegation",
+];
+
+const stats: StatConfig[] = [
+  {
+    label: "Validators",
+    extract: (d) => formatNumber(d.data.length),
+  },
+  {
+    label: "Total Reward",
+    extract: (d) => {
+      const sum = d.data.reduce((acc, row) => acc + Number(row.reward ?? 0), 0);
+      return formatUsd(sum);
+    },
+  },
+  {
+    label: "Highest Reward",
+    extract: (d) => {
+      const max = Math.max(...d.data.map((row) => Number(row.reward ?? 0)));
+      return formatUsd(max);
+    },
+  },
+  {
+    label: "Avg Commission",
+    extract: (d) => {
+      const vals = d.data.map((row) => Number(row.commission_bps ?? 0));
+      const avg = vals.reduce((a, b) => a + b, 0) / (vals.length || 1);
+      return `${(avg / 100).toFixed(1)}%`;
+    },
+  },
+];
+
 export default function ValidatorRewardsPage() {
+  const [results, setResults] = useState<SQLExplorerResponse | null>(null);
+
   return (
     <div className="space-y-8">
       <div>
@@ -25,7 +69,11 @@ export default function ValidatorRewardsPage() {
         </p>
       </div>
 
-      <QueryRunner query={query} defaultOpen />
+      <InsightsBanner insights={insights} />
+
+      {results && <StatHighlights data={results} stats={stats} />}
+
+      <QueryRunner query={query} defaultOpen onData={setResults} />
 
       <div className="border-t border-[var(--color-border)] pt-6 text-center">
         <Link
