@@ -61,7 +61,7 @@ Add entries to `src/data/queries.ts`:
   title: "My Custom Query",
   description: "Description of what this query does",
   category: "Trading",
-  sql: `SELECT * FROM trades LIMIT 10`,
+  sql: `SELECT * FROM hyperliquid_trades LIMIT 10`,
   chartConfig: {           // optional
     type: "bar",
     xKey: "coin",
