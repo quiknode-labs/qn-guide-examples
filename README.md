@@ -105,6 +105,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [solana-basics](./courses/solana-basics)
 
 ### DeFi
+- [Polymarket Copy Trading Bot](./defi/polymarket-copy-bot)
 - [uniswap-v3-swaps](./defi/uniswap-v3-swaps)
 
 ### Enhanced APIs
@@ -149,6 +150,8 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Quicknode Ethereum Explorer Demo](./sample-dapps/ethereum-wallet-explorer)
 - [Quicknode EVM Token Factory Demo](./sample-dapps/evm-token-factory)
 - [Flashblocks Base App](./sample-dapps/flashblocks-base)
+- [Hyperbase](./sample-dapps/hyperbase-sample-app)
+- [Hyperbook](./sample-dapps/hyperbook-l2-l4-visualizer)
 - [Quicknode Hyperliquid Portfolio Tracker](./sample-dapps/hyperliquid-portfolio-tracker)
 - [Hyperliquid Trading Dashboard](./sample-dapps/hyperliquid-trading-dashboard)
 - [RWA Tokenizer v2](./sample-dapps/rwa-tokenizer)
@@ -156,6 +159,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Quicknode Solana Staking UI](./sample-dapps/solana-staking-ui)
 - [Quicknode Solana Token-Minter Demo](./sample-dapps/solana-token-maker)
 - [Quicknode Solana Explorer Demo](./sample-dapps/solana-wallet-explorer)
+- [SQL Explorer Cookbook](./sample-dapps/sql-explorer-cookbook)
 - [Token Sweeper 🧹](./sample-dapps/token-sweeper-eip-7702)
 - [x402 Explorer — Quicknode Sample App](./sample-dapps/x402-quicknode)
 
@@ -173,6 +177,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Jupiter Trading Bot Example](./solana/jupiter-bot) - *Example trading bot for Solana using Quicknode and Metis API*
 - [Jito Jupiter Swap](./solana/jupiter-jito)
 - [Jupiter Ultra Swap Demo](./solana/jupiter-ultra-swap)
+- [How to Trade Kalshi Prediction Markets on Solana Using DFlow](./solana/kalshi-dflow)
 - [mint-nft](./solana/mint-nft)
 - [new-wallet-airdrop](./solana/new-wallet-airdrop)
 - [priority-fees-addon](./solana/priority-fees-addon)
