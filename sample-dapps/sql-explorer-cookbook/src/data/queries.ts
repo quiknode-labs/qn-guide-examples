@@ -15,7 +15,7 @@ export const QUERIES: PrebuiltQuery[] = [
   side,
   price,
   size,
-  price * size AS notional_usd,
+  toFloat64(price) * toFloat64(size) AS notional_usd,
   buyer_address,
   seller_address,
   buyer_fee,
@@ -41,10 +41,10 @@ LIMIT 100`,
     sql: `SELECT
   coin,
   count() AS trade_count,
-  sum(price * size) AS volume_usd,
-  min(price) AS low,
-  max(price) AS high,
-  avg(price) AS avg_price
+  sum(toFloat64(price) * toFloat64(size)) AS volume_usd,
+  min(toFloat64(price)) AS low,
+  max(toFloat64(price)) AS high,
+  avg(toFloat64(price)) AS avg_price
 FROM hyperliquid_trades
 WHERE timestamp > now() - INTERVAL 24 HOUR
 GROUP BY coin
@@ -69,12 +69,12 @@ LIMIT 50`,
   side,
   price,
   size,
-  price * size AS notional_usd,
+  toFloat64(price) * toFloat64(size) AS notional_usd,
   buyer_address,
   seller_address
 FROM hyperliquid_trades
-WHERE timestamp > now() - INTERVAL 24 HOUR
-  AND price * size > 100000
+WHERE block_time > now() - INTERVAL 24 HOUR
+  AND toFloat64(price) * toFloat64(size) > 100000
 ORDER BY notional_usd DESC
 LIMIT 100`,
     chartConfig: {
@@ -124,7 +124,7 @@ LIMIT 100`,
     sql: `SELECT
   toStartOfHour(timestamp) AS hour,
   count() AS trades,
-  sum(price * size) AS volume_usd
+  sum(toFloat64(price) * toFloat64(size)) AS volume_usd
 FROM hyperliquid_trades
 WHERE timestamp > now() - INTERVAL 7 DAY
 GROUP BY hour
@@ -145,8 +145,8 @@ ORDER BY hour DESC`,
     sql: `SELECT
   toStartOfDay(timestamp) AS day,
   count() AS trades,
-  sum(price * size) AS volume_usd,
-  uniqExact(buyer_address) + uniqExact(seller_address) AS unique_traders
+  sum(toFloat64(price) * toFloat64(size)) AS volume_usd,
+  uniqExact(arrayJoin([buyer_address, seller_address])) AS unique_traders
 FROM hyperliquid_trades
 WHERE timestamp > now() - INTERVAL 30 DAY
 GROUP BY day
@@ -165,12 +165,17 @@ ORDER BY day DESC`,
     description: "Most active traders by volume over the last 7 days",
     category: "Activity",
     sql: `SELECT
-  buyer_address AS trader,
+  trader,
   count() AS trade_count,
-  sum(price * size) AS total_volume,
+  sum(volume) AS total_volume,
   uniqExact(coin) AS coins_traded
-FROM hyperliquid_trades
-WHERE timestamp > now() - INTERVAL 7 DAY
+FROM (
+  SELECT buyer_address AS trader, toFloat64(price) * toFloat64(size) AS volume, coin
+  FROM hyperliquid_trades WHERE timestamp > now() - INTERVAL 7 DAY
+  UNION ALL
+  SELECT seller_address AS trader, toFloat64(price) * toFloat64(size) AS volume, coin
+  FROM hyperliquid_trades WHERE timestamp > now() - INTERVAL 7 DAY
+)
 GROUP BY trader
 ORDER BY total_volume DESC
 LIMIT 50`,
@@ -184,7 +189,7 @@ LIMIT 50`,
   },
 
   // ============================================
-  // FILLS (2 queries)
+  // FILLS (3 queries)
   // ============================================
   {
     id: "recent-fills",
@@ -239,7 +244,7 @@ LIMIT 100`,
   side,
   price,
   size,
-  price * size AS notional,
+  toFloat64(price) * toFloat64(size) AS notional,
   fee,
   fee_token,
   closed_pnl,
@@ -270,7 +275,7 @@ LIMIT 100`,
   side,
   price,
   size,
-  price * size AS notional,
+  toFloat64(price) * toFloat64(size) AS notional,
   liquidated_user,
   liquidation_mark_price,
   liquidation_method,
@@ -356,8 +361,8 @@ ORDER BY order_count DESC`,
   coin,
   funding_rate,
   count() AS payments,
-  sum(funding_amount) AS total_funding,
-  avg(szi) AS avg_position_size
+  sum(toFloat64(funding_amount)) AS total_funding,
+  avg(toFloat64(szi)) AS avg_position_size
 FROM hyperliquid_funding
 WHERE time > now() - INTERVAL 8 HOUR
 GROUP BY coin, funding_rate
@@ -379,9 +384,9 @@ LIMIT 50`,
     sql: `SELECT
   toStartOfHour(time) AS hour,
   coin,
-  avg(funding_rate) AS avg_funding_rate,
+  avg(toFloat64(funding_rate)) AS avg_funding_rate,
   count() AS payment_count,
-  sum(funding_amount) AS total_funding
+  sum(toFloat64(funding_amount)) AS total_funding
 FROM hyperliquid_funding
 WHERE time > now() - INTERVAL 7 DAY
   AND coin IN ('BTC', 'ETH', 'SOL')
@@ -510,7 +515,7 @@ LIMIT 100`,
     sql: `SELECT
   transfer_type,
   count() AS transfer_count,
-  sum(usdc_amount) AS total_usdc,
+  sum(toFloat64(usdc_amount)) AS total_usdc,
   uniqExact(user) AS unique_users
 FROM hyperliquid_asset_transfers
 WHERE time > now() - INTERVAL 7 DAY
@@ -565,7 +570,7 @@ LIMIT 100`,
   snapshot_time
 FROM hyperliquid_bridge
 WHERE block_number = (SELECT max(block_number) FROM hyperliquid_bridge)
-ORDER BY amount_wei DESC
+ORDER BY toFloat64(amount_wei) DESC
 LIMIT 100`,
     chartConfig: {
       type: "bar",
@@ -643,7 +648,7 @@ LIMIT 500`,
   prev_day_px
 FROM hyperliquid_perpetual_market_contexts
 WHERE polled_at > now() - INTERVAL 5 MINUTE
-ORDER BY day_ntl_vlm DESC
+ORDER BY toFloat64(day_ntl_vlm) DESC
 LIMIT 100`,
     chartConfig: {
       type: "bar",
@@ -695,8 +700,8 @@ ORDER BY clearinghouse, asset_idx`,
   snapshot_time
 FROM hyperliquid_clearinghouse_states
 WHERE block_number = (SELECT max(block_number) FROM hyperliquid_clearinghouse_states)
-  AND size != 0
-ORDER BY abs(entry_notional) DESC
+  AND toFloat64(size) != 0
+ORDER BY abs(toFloat64(entry_notional)) DESC
 LIMIT 100`,
     chartConfig: {
       type: "bar",
@@ -719,7 +724,7 @@ LIMIT 100`,
         type: "string",
         default: "",
         placeholder: "Enter a wallet address or click Try sample",
-        sampleQuery: "SELECT DISTINCT user FROM hyperliquid_spot_clearinghouse_states WHERE block_number = (SELECT max(block_number) FROM hyperliquid_spot_clearinghouse_states) AND total != 0 LIMIT 1",
+        sampleQuery: "SELECT DISTINCT user FROM hyperliquid_spot_clearinghouse_states WHERE block_number = (SELECT max(block_number) FROM hyperliquid_spot_clearinghouse_states) AND toFloat64(total) != 0 LIMIT 1",
       },
     ],
     sql: `-- Replace address below
@@ -732,8 +737,8 @@ SELECT
 FROM hyperliquid_spot_clearinghouse_states
 WHERE user = lower('{{address}}')
   AND block_number = (SELECT max(block_number) FROM hyperliquid_spot_clearinghouse_states)
-  AND total != 0
-ORDER BY abs(total) DESC`,
+  AND toFloat64(total) != 0
+ORDER BY abs(toFloat64(total)) DESC`,
     chartConfig: {
       type: "bar",
       xKey: "token",
@@ -757,7 +762,7 @@ ORDER BY abs(total) DESC`,
   snapshot_time
 FROM hyperliquid_vault_equities
 WHERE block_number = (SELECT max(block_number) FROM hyperliquid_vault_equities)
-ORDER BY ownership_fraction DESC
+ORDER BY toFloat64(ownership_fraction) DESC
 LIMIT 100`,
     chartConfig: {
       type: "bar",
@@ -856,27 +861,28 @@ LIMIT 100`,
         type: "string",
         default: "",
         placeholder: "Enter a wallet address or click Try sample",
-        sampleQuery: "SELECT DISTINCT user FROM hyperliquid_clearinghouse_states WHERE block_number = (SELECT max(block_number) FROM hyperliquid_clearinghouse_states) AND size != 0 LIMIT 1",
+        sampleQuery: "SELECT DISTINCT user FROM hyperliquid_clearinghouse_states WHERE block_number = (SELECT max(block_number) FROM hyperliquid_clearinghouse_states) AND toFloat64(size) != 0 LIMIT 1",
       },
     ],
-    sql: `SELECT 'perps' AS type, coin AS asset, size AS amount, entry_notional AS extra
+    sql: `-- Replace address below for full portfolio snapshot
+SELECT 'perps' AS type, coin AS asset, toFloat64(size) AS amount, toFloat64(entry_notional) AS extra
 FROM hyperliquid_clearinghouse_states
 WHERE user = lower('{{address}}')
   AND block_number = (SELECT max(block_number) FROM hyperliquid_clearinghouse_states)
-  AND size != 0
+  AND toFloat64(size) != 0
 UNION ALL
-SELECT 'spot', token, total, escrowed
+SELECT 'spot', token, toFloat64(total), toFloat64(escrowed)
 FROM hyperliquid_spot_clearinghouse_states
 WHERE user = lower('{{address}}')
   AND block_number = (SELECT max(block_number) FROM hyperliquid_spot_clearinghouse_states)
-  AND total != 0
+  AND toFloat64(total) != 0
 UNION ALL
-SELECT 'vault', vault_name, toInt64(ownership_fraction * 1000000), net_deposits
+SELECT 'vault', vault_name, toFloat64(ownership_fraction) * 1000000, toFloat64(net_deposits)
 FROM hyperliquid_vault_equities
 WHERE depositor = lower('{{address}}')
   AND block_number = (SELECT max(block_number) FROM hyperliquid_vault_equities)
 UNION ALL
-SELECT 'delegation', validator, toInt64(reward), toInt64(commission_bps)
+SELECT 'delegation', validator, toFloat64(reward), toFloat64(commission_bps)
 FROM hyperliquid_delegator_rewards
 WHERE delegator = lower('{{address}}')
   AND block_number = (SELECT max(block_number) FROM hyperliquid_delegator_rewards)`,
@@ -921,7 +927,7 @@ SELECT
 FROM hyperliquid_delegator_rewards
 WHERE delegator = lower('{{address}}')
   AND block_number = (SELECT max(block_number) FROM hyperliquid_delegator_rewards)
-ORDER BY reward DESC`,
+ORDER BY toFloat64(reward) DESC`,
     chartConfig: {
       type: "bar",
       xKey: "validator",
@@ -978,7 +984,7 @@ LIMIT 50`,
   b.builder,
   l.builder_name,
   count() AS tx_count,
-  sum(b.builder_fee) AS total_fees,
+  sum(toFloat64(b.builder_fee)) AS total_fees,
   uniqExact(b.user) AS unique_users
 FROM hyperliquid_builder_transactions b
 LEFT JOIN hyperliquid_builder_labels l ON b.builder = l.builder_address
@@ -1002,8 +1008,8 @@ LIMIT 50`,
     sql: `SELECT
   builder_address,
   count() AS fills,
-  sum(price * size) AS volume_usd,
-  sum(builder_fee) AS total_builder_fees,
+  sum(toFloat64(price) * toFloat64(size)) AS volume_usd,
+  sum(toFloat64(builder_fee)) AS total_builder_fees,
   uniqExact(user) AS unique_users
 FROM hyperliquid_builder_fills
 WHERE block_time > now() - INTERVAL 24 HOUR
@@ -1035,7 +1041,7 @@ LIMIT 50`,
   unique_users
 FROM hyperliquid_funding_summary_hourly
 WHERE hour > now() - INTERVAL 24 HOUR
-ORDER BY hour DESC, abs(avg_funding_rate) DESC
+ORDER BY hour DESC, abs(toFloat64(avg_funding_rate)) DESC
 LIMIT 100`,
     chartConfig: {
       type: "line",
@@ -1046,24 +1052,24 @@ LIMIT 100`,
     },
   },
   {
-    id: "daily-liquidation-stats",
-    title: "Daily liquidation stats",
-    description: "Pre-aggregated daily liquidation counts and volume by coin",
+    id: "hourly-liquidation-stats",
+    title: "Hourly liquidation stats",
+    description: "Pre-aggregated hourly liquidation counts and volume by coin",
     category: "Analytics",
     sql: `SELECT
-  day,
+  hour,
   coin,
   liquidation_count,
   liquidated_volume,
   unique_liquidated_users
-FROM hyperliquid_liquidations_daily
-ORDER BY day DESC, liquidated_volume DESC
+FROM hyperliquid_liquidations_hourly
+ORDER BY hour DESC, toFloat64(liquidated_volume) DESC
 LIMIT 100`,
     chartConfig: {
       type: "bar",
-      xKey: "day",
+      xKey: "hour",
       yKeys: ["liquidated_volume", "liquidation_count"],
-      xLabel: "Date",
+      xLabel: "Hour",
       yLabel: "Liquidated Volume",
     },
   },
