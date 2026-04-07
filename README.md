@@ -128,6 +128,9 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [wave-portal-svelte](./ethereum/wave-portal-svelte)
 - [The Web3 Developer Stack](./ethereum/web3-stack)
 
+### Mpp
+- [Multichain Balance Checker (via MPP Sessions)](./mpp/multichain-balance-checker) - *Multichain balance checker using MPP sessions via Quicknode*
+
 ### Polygon
 - [How To Batch Mint NFTs Using the ERC-721A Implementation](./polygon/erc721a-implementation)
 - [Mint an NFT on Polygon with Ethers.js](./polygon/polygon-ethers) - *How to mint an NFT on Polygon with Ethers*
