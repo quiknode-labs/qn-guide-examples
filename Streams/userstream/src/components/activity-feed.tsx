@@ -4,6 +4,7 @@ import { useAppStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ArrowRightLeft, ArrowDownLeft, ArrowUpRight, Box } from 'lucide-react';
 import {
   formatTimestamp,
@@ -59,6 +60,7 @@ function ActivityItem({ activity }: { activity: any }) {
   const blockRef = details.blockNumber ?? details.slot;
   const hasBlockRef = blockRef !== undefined && blockRef !== null;
   const blockLabel = details.slot ? `Slot ${details.slot}` : `Block ${details.blockNumber}`;
+  
 
   return (
     <div className="flex gap-4 p-4 rounded-lg border border-border/60 bg-card/80 hover:border-border hover:shadow-sm transition-all group">
@@ -132,6 +134,7 @@ function ActivityItem({ activity }: { activity: any }) {
 
 export function ActivityFeed() {
   const { activities } = useAppStore();
+  const hasActivity = activities.length > 0;
 
   return (
     <Card className="shadow-sm h-full min-h-[500px] flex flex-col bg-card/70 backdrop-blur-sm">
@@ -142,6 +145,51 @@ export function ActivityFeed() {
             Live Activity Feed
           </CardTitle>
           <div className="flex items-center gap-2">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Badge
+                  variant="outline"
+                 className={cn(
+    "cursor-pointer hover:bg-accent font-normal",
+    !hasActivity && "ring-2 ring-emerald-500/40 ring-offset-2 ring-offset-background animate-pulse"
+  )}
+>
+  {hasActivity ? "Setup Help" : "Getting Started"}
+                </Badge>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-[360px] p-4">
+                <div className="space-y-3">
+                  <div>
+                    <h4 className="text-sm font-semibold">First-run checklist</h4>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      If the feed is empty, it usually just means no wallet is being monitored yet.
+                    </p>
+                  </div>
+
+                  <ol className="list-decimal pl-5 space-y-2 text-sm">
+                    <li>
+                      <span className="font-medium">Add a wallet</span>
+                      <span className="text-muted-foreground"> (left panel → Monitor User)</span>
+                    </li>
+                    <li>
+                      <span className="font-medium">Trigger a transaction</span>
+                      <span className="text-muted-foreground"> (send/receive on the wallet)</span>
+                    </li>
+                    <li>
+                      <span className="font-medium">Watch activity appear</span>
+                      <span className="text-muted-foreground"> (events stream in via webhook)</span>
+                    </li>
+                  </ol>
+
+                  <div className="rounded-md border border-border/60 bg-muted/40 p-3 text-xs text-muted-foreground">
+                    <div className="font-medium text-foreground mb-1">Free plan note</div>
+                    The free plan typically allows <span className="font-medium text-foreground">1 endpoint</span> +{' '}
+                    <span className="font-medium text-foreground">1 active stream</span>. The minimal EVM path reuses a
+                    single stream and relies on dynamic address registration from the UI.
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
             <Link href="/activity">
               <Badge variant="outline" className="cursor-pointer hover:bg-accent font-normal">
                 View All
