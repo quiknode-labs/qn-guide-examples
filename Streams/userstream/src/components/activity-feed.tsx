@@ -162,8 +162,8 @@ export function ActivityFeed() {
                   <ArrowRightLeft className="w-8 h-8 text-muted-foreground/70" />
                 </div>
                 <h3 className="font-medium mb-1">No activity yet</h3>
-                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                  Transactions will appear here in real-time as they happen on-chain.
+                <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                  Add a monitored wallet to start seeing on-chain transactions.
                 </p>
               </div>
             ) : (

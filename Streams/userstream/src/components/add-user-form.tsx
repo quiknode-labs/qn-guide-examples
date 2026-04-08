@@ -144,14 +144,14 @@ export function AddUserForm() {
           <div className="flex bg-muted/80 rounded-lg p-1 text-xs font-medium border border-border/60">
             <button
               onClick={() => setMode('single')}
-              className={`px-3 py-1 rounded-md transition-all ${mode === 'single' ? 'bg-card shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+              className={`px-3 py-1 rounded-md transition-all cursor-pointer ${mode === 'single' ? 'bg-card shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               Single
             </button>
             <button
               onClick={() => setMode('bulk')}
-              className={`px-3 py-1 rounded-md transition-all ${mode === 'bulk' ? 'bg-card shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+              className={`px-3 py-1 rounded-md transition-all cursor-pointer ${mode === 'bulk' ? 'bg-card shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               Bulk
@@ -190,7 +190,7 @@ export function AddUserForm() {
             </div>
             <Button
               type="submit"
-              className="w-full rounded-full"
+              className="w-full rounded-full cursor-pointer"
               disabled={loading || !isValidSingle || !address}
             >
               {loading ? 'Adding...' : 'Monitor User'}
