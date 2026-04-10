@@ -981,20 +981,18 @@ LIMIT 50`,
     description: "Builder (frontend) transaction volume and fees",
     category: "Builders",
     sql: `SELECT
-  b.builder,
-  l.builder_name,
+  builder,
   count() AS tx_count,
-  sum(toFloat64(b.builder_fee)) AS total_fees,
-  uniqExact(b.user) AS unique_users
-FROM hyperliquid_builder_transactions b
-LEFT JOIN hyperliquid_builder_labels l ON b.builder = l.builder_address
-WHERE b.block_time > now() - INTERVAL 24 HOUR
-GROUP BY b.builder, l.builder_name
+  sum(toFloat64(builder_fee)) AS total_fees,
+  uniqExact(user) AS unique_users
+FROM hyperliquid_builder_transactions
+WHERE block_time > now() - INTERVAL 24 HOUR
+GROUP BY builder
 ORDER BY total_fees DESC
 LIMIT 50`,
     chartConfig: {
       type: "bar",
-      xKey: "builder_name",
+      xKey: "builder",
       yKeys: ["total_fees", "unique_users"],
       xLabel: "Builder",
       yLabel: "Total Fees",
