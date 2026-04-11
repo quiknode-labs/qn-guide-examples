@@ -140,20 +140,20 @@ export function startCheckpointStream(
   // Build a Set for O(1) address lookup
   const trackedAddresses = new Set(config.addresses);
 
+  // Create the gRPC client once and reuse across reconnects
+  let client: grpc.Client;
+  try {
+    client = loadSubscriptionClient(config);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    onStatusChange('error', `Failed to load gRPC client: ${msg}`);
+    return () => {};
+  }
+
   function connect(): void {
     if (cancelled) return;
 
     onStatusChange(attempt === 0 ? 'connecting' : 'reconnecting');
-
-    let client: grpc.Client;
-    try {
-      client = loadSubscriptionClient(config);
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      onStatusChange('error', `Failed to load gRPC client: ${msg}`);
-      return;
-    }
-
     const metadata = buildMetadata(config.endpointToken);
 
     // Specify a read_mask so the server populates the checkpoint fields we need.
@@ -230,5 +230,6 @@ export function startCheckpointStream(
     cancelled = true;
     if (reconnectTimer) clearTimeout(reconnectTimer);
     if (currentStream) currentStream.destroy();
+    client.close();
   };
 }
