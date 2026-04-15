@@ -66,7 +66,7 @@ def format_digest(
 
         lines.append("*Liquidations (24h)*")
         lines.append(f"Total: {format_number(total_liq)}")
-        lines.append(f"Unique addresses: {total_users:,}")
+        lines.append(f"Addresses liquidated: {total_users:,}")
 
         # Top 3 coins by liquidation volume
         for row in liquidations[:3]:

@@ -79,7 +79,7 @@ export function formatDigest(
 
     lines.push("*Liquidations (24h)*");
     lines.push(`Total: ${formatNumber(totalLiq)}`);
-    lines.push(`Unique addresses: ${totalUsers.toLocaleString()}`);
+    lines.push(`Addresses liquidated: ${totalUsers.toLocaleString()}`);
 
     liquidations.slice(0, 3).forEach((row) => {
       const vol = formatNumber(Number(row.liq_volume_usd));
