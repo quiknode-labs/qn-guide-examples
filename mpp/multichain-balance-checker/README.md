@@ -115,7 +115,11 @@ Target:  0xd8dA...6045
  Session cost:      0.000150 PathUSD ($0.00015)
  Channel deposit:   1.000000 PathUSD
  Refunded:          0.999850 PathUSD
+ Channel ID:        0xdef456...abc123
+ Settlement tx:     0xabc123...def456
 ```
+
+![MPP Sessions - Refund](mpp-session-refund.png)
 
 ## How It Works
 
