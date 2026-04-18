@@ -27,12 +27,16 @@ from queries import (
 
 load_dotenv()
 
-TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
 
 def send_telegram(message: str) -> None:
     """Send a message to the configured Telegram chat."""
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        raise ValueError(
+            "TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be set to send messages."
+        )
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     resp = requests.post(
         url,
