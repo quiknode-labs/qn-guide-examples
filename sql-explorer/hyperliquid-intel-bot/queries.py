@@ -13,7 +13,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SQL_EXPLORER_URL = "https://api.quicknode.com/sql/rest/v1/query"
-QUICKNODE_API_KEY = os.environ["QUICKNODE_API_KEY"]
+QUICKNODE_API_KEY = os.environ.get("QUICKNODE_API_KEY")
+if not QUICKNODE_API_KEY:
+    raise ValueError("Set QUICKNODE_API_KEY in your .env file before running the bot.")
 CLUSTER_ID = "hyperliquid-core-mainnet"
 
 

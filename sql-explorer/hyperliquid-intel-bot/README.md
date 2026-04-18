@@ -22,7 +22,7 @@
 ```bash
 git clone https://github.com/quiknode-labs/qn-guide-examples.git
 cd qn-guide-examples/sql-explorer/hyperliquid-intel-bot
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate  # use "python" if python3 is not found on your system
 pip install -r requirements.txt
 cp .env.example .env
 ```
@@ -52,24 +52,22 @@ Open `.env` and fill in the three required values:
 2. Start a chat and send `/newbot`. Follow the prompts to set a name and username.
 3. BotFather will reply with a **Bot Token**. Save it for your `.env` file.
 
-#### Creating a Channel
+#### Getting the Chat ID
 
-1. In Telegram, create a new channel (public or private).
-2. For a **public** channel, give it a username (e.g., `@hyperliquid_digest`). Use this username as your `TELEGRAM_CHAT_ID`.
-3. For a **private** channel, forward a message from the channel to a bot like `@JsonDumpCUBot` and look for the `forward_from_chat.id` value. Use that numeric ID as your `TELEGRAM_CHAT_ID`.
+`TELEGRAM_CHAT_ID` must be a **numeric ID** (e.g. `-1001234567890`). Usernames do not work.
 
-#### Adding the Bot to the Channel
-
-1. Open your channel's settings.
-2. Add your bot as an administrator so it can post messages.
+1. Add your bot to the channel or group as an administrator, or send it a direct message.
+2. Send any message to the bot.
+3. Open `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates` in your browser.
+4. Find `"chat": {"id": ...}` in the response. That number is your `TELEGRAM_CHAT_ID`.
 
 ## Run
 
 ### Python
 
 ```bash
-python bot.py              # send digest to Telegram
-python bot.py --dry-run    # print digest to console only
+python3 bot.py              # send digest to Telegram
+python3 bot.py --dry-run    # print digest to console only
 ```
 
 ### TypeScript

@@ -6,7 +6,10 @@
  */
 
 const SQL_EXPLORER_URL = "https://api.quicknode.com/sql/rest/v1/query";
-const QUICKNODE_API_KEY = process.env.QUICKNODE_API_KEY!;
+const QUICKNODE_API_KEY = process.env.QUICKNODE_API_KEY;
+if (!QUICKNODE_API_KEY) {
+  throw new Error("Set QUICKNODE_API_KEY in your .env file before running the bot.");
+}
 const CLUSTER_ID = "hyperliquid-core-mainnet";
 
 interface QueryResult<T = Record<string, string>> {
