@@ -32,7 +32,7 @@ cp .env.example .env
 ```bash
 git clone https://github.com/quiknode-labs/qn-guide-examples.git
 cd qn-guide-examples/sql-explorer/hyperliquid-intel-bot/typescript
-npm install
+pnpm install
 cp .env.example .env
 ```
 
@@ -73,8 +73,8 @@ python3 bot.py --dry-run    # print digest to console only
 ### TypeScript
 
 ```bash
-npm start                  # send digest to Telegram
-npm run dry-run            # print digest to console only
+pnpm start                  # send digest to Telegram
+pnpm run dry-run            # print digest to console only
 ```
 
 ## Notes
