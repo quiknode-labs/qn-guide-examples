@@ -2,6 +2,8 @@
 
 A real-time terminal portfolio tracker for Sui, using Quicknode's GraphQL and gRPC APIs.
 
+> **Guide**: [How to Build a Real-Time Sui Portfolio Tracker](https://www.quicknode.com/guides/sui/how-to-build-a-real-time-sui-portfolio-tracker)
+
 - **GraphQL** — fetches initial coin balances and transaction history
 - **gRPC** — streams live checkpoints and detects activity on your tracked address(es)
 
@@ -102,6 +104,10 @@ QN_ENDPOINT_URL=https://your-endpoint.sui-mainnet.quiknode.pro
 QN_ENDPOINT_TOKEN=your-token-here
 SUI_ADDRESS=0x...
 ```
+
+Your Quicknode endpoint URL looks like `https://your-endpoint.sui-mainnet.quiknode.pro/abcdef1234567890/`. Split it into two parts:
+- `QN_ENDPOINT_URL` — everything up to (but not including) the trailing token path: `https://your-endpoint.sui-mainnet.quiknode.pro`
+- `QN_ENDPOINT_TOKEN` — the token segment at the end (without slashes): `abcdef1234567890`
 
 You can track multiple addresses by comma-separating them:
 
