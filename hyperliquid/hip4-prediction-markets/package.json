@@ -1,0 +1,31 @@
+{
+  "name": "hip4-hyperliquid-test",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "0:approve": "node --env-file=.env dist/0-approve.js",
+    "1:setup": "node --env-file=.env dist/1-setup.js",
+    "2:markets": "node --env-file=.env dist/2-list-markets.js",
+    "3:orderbook": "node --env-file=.env dist/3-orderbook-snapshot.js",
+    "4:stream": "node --env-file=.env dist/4-stream-orderbook.js",
+    "5:buy-usdh": "node --env-file=.env dist/5-buy-usdh.js",
+    "6:trade": "node --env-file=.env dist/6-trade.js",
+    "api:0:approve": "node --env-file=.env dist/api/0-approve.js",
+    "api:1:setup": "node --env-file=.env dist/api/1-setup.js",
+    "api:2:markets": "node --env-file=.env dist/api/2-list-markets.js",
+    "api:3:orderbook": "node --env-file=.env dist/api/3-orderbook-snapshot.js",
+    "api:4:stream": "node --env-file=.env dist/api/4-stream-orderbook.js",
+    "api:5:buy-usdh": "node --env-file=.env dist/api/5-buy-usdh.js",
+    "api:6:trade": "node --env-file=.env dist/api/6-trade.js",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@quicknode/hyperliquid-sdk": "latest",
+    "viem": "^2.48.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/ws": "^8.18.1",
+    "typescript": "^5.4.0"
+  }
+}
