@@ -94,7 +94,7 @@ ws.on("message", (raw: Buffer) => {
 
   // Log any other message type
   if (msg.channel) {
-    console.log(`[ws] ${msg.channel}:`, JSON.stringify(msg.data).slice(0, 120));
+    console.log("[ws] %s:", msg.channel, JSON.stringify(msg.data).slice(0, 120));
   }
 });
 
