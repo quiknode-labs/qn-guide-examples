@@ -9,8 +9,7 @@
  * Event structure (bookUpdates):
  *   type: "data"
  *   stream: "hl.book_updates"
- *   block.events[]: { user, oid, coin, side ("A"=ask/"B"=bid), px, raw_book_diff ("remove" | {new:{sz}} | {update:{ori
-    +gSz,newSz}}) }
+ *   block.events[]: { user, oid, coin, side ("A"=ask/"B"=bid), px, raw_book_diff ("remove" | {new:{sz}} | {update:{origSz,newSz}}) }
  *
  * Runs for 30 seconds then exits.
  */
@@ -21,7 +20,10 @@ const sdk = new HyperliquidSDK(process.env.QUICKNODE_ENDPOINT, {
 });
 
 const markets = await sdk.predictionMarkets();
-if (markets.length === 0) { console.log("No active markets."); process.exit(0); }
+if (markets.length === 0) {
+  console.log("No active markets.");
+  process.exit(0);
+}
 
 const market = markets[0];
 const symbol = market.yes.symbol; // e.g. "#20"
@@ -30,12 +32,14 @@ console.log("=".repeat(60));
 console.log("HIP-4 ORDERBOOK STREAM");
 console.log("=".repeat(60));
 console.log(`Market : ${market.title}`);
-console.log(`Symbol : ${symbol}  |  YES mid: ${market.yes.mid}  |  NO mid: ${market.no.mid}`);
+console.log(
+  `Symbol : ${symbol}  |  YES mid: ${market.yes.mid}  |  NO mid: ${market.no.mid}`,
+);
 console.log("Streaming for 30 seconds...\n");
 
-let midUpdates   = 0;
+let midUpdates = 0;
 let bookDeltaCount = 0;
-let snapshotCount  = 0;
+let snapshotCount = 0;
 const hip4Mids: Record<string, string> = {};
 
 // ── allMids ──────────────────────────────────────────────────
@@ -55,7 +59,10 @@ sdk.stream.allMids((data: Record<string, unknown>) => {
     }
   }
   if (midUpdates % 10 === 0) {
-    console.log(`[allMids] tick #${midUpdates} | HIP-4:`, JSON.stringify(hip4Mids));
+    console.log(
+      `[allMids] tick #${midUpdates} | HIP-4:`,
+      JSON.stringify(hip4Mids),
+    );
   }
 });
 
@@ -80,18 +87,28 @@ sdk.stream.bookUpdates([symbol], (data: Record<string, unknown>) => {
   };
 
   if (!block) {
-    console.log(`[bookUpdates #${bookDeltaCount}] unexpected shape:`, JSON.stringify(data));
+    console.log(
+      `[bookUpdates #${bookDeltaCount}] unexpected shape:`,
+      JSON.stringify(data),
+    );
     return;
   }
 
   for (const ev of block.events ?? []) {
     const sideLabel = ev.side === "A" ? "ASK" : "BID";
-    const action    = ev.raw_book_diff === "add" ? "+" : "-";
+    const action =
+      typeof ev.raw_book_diff === "object" &&
+      "new" in (ev.raw_book_diff as object)
+        ? "+"
+        : typeof ev.raw_book_diff === "object" &&
+            "update" in (ev.raw_book_diff as object)
+          ? "~"
+          : "-";
     console.log(
       `[bookUpdate #${bookDeltaCount}] block=${block.block_number}` +
-      `  ${action}${sideLabel.padEnd(3)} px=${ev.px.padEnd(10)} oid=${ev.oid}` +
-      `  user=${ev.user.slice(0, 10)}...` +
-      `  t=${block.block_time.slice(11, 23)}`
+        `  ${action}${sideLabel.padEnd(3)} px=${ev.px.padEnd(10)} oid=${ev.oid}` +
+        `  user=${ev.user.slice(0, 10)}...` +
+        `  t=${block.block_time.slice(11, 23)}`,
     );
   }
 });
@@ -99,7 +116,9 @@ sdk.stream.bookUpdates([symbol], (data: Record<string, unknown>) => {
 // ── l2Book (full snapshots) ───────────────────────────────────
 sdk.stream.l2Book(symbol, (data: Record<string, unknown>) => {
   snapshotCount++;
-  const levels = (data as any).levels as Array<Array<{ px: string; sz: string; n: number }>>;
+  const levels = (data as any).levels as Array<
+    Array<{ px: string; sz: string; n: number }>
+  >;
   if (!levels) {
     console.log(`[l2Book #${snapshotCount}] raw:`, JSON.stringify(data));
     return;
@@ -108,7 +127,9 @@ sdk.stream.l2Book(symbol, (data: Record<string, unknown>) => {
   const asks = levels[1]?.slice(0, 5) ?? [];
   const bestBid = bids[0]?.px ?? "N/A";
   const bestAsk = asks[0]?.px ?? "N/A";
-  console.log(`\n[l2Book #${snapshotCount}] snapshot — bestBid=${bestBid}  bestAsk=${bestAsk}`);
+  console.log(
+    `\n[l2Book #${snapshotCount}] snapshot — bestBid=${bestBid}  bestAsk=${bestAsk}`,
+  );
   console.log("  asks (top 5):", asks.map((a) => `${a.px}x${a.sz}`).join("  "));
   console.log("  bids (top 5):", bids.map((b) => `${b.px}x${b.sz}`).join("  "));
 });
