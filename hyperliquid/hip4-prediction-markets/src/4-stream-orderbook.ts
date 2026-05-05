@@ -9,7 +9,8 @@
  * Event structure (bookUpdates):
  *   type: "data"
  *   stream: "hl.book_updates"
- *   block.events[]: { user, oid, coin, side ("A"=ask/"B"=bid), px, raw_book_diff ("add"/"remove") }
+ *   block.events[]: { user, oid, coin, side ("A"=ask/"B"=bid), px, raw_book_diff ("remove" | {new:{sz}} | {update:{ori
+    +gSz,newSz}}) }
  *
  * Runs for 30 seconds then exits.
  */
@@ -69,9 +70,12 @@ sdk.stream.bookUpdates([symbol], (data: Record<string, unknown>) => {
       user: string;
       oid: number;
       coin: string;
-      side: string;        // "A" = ask, "B" = bid
+      side: string; // "A" = ask, "B" = bid
       px: string;
-      raw_book_diff: string; // "add" | "remove"
+      raw_book_diff:
+        | string
+        | { new: { sz: string } }
+        | { update: { origSz: string; newSz: string } };
     }>;
   };
 
