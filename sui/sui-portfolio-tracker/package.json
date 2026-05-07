@@ -1,0 +1,25 @@
+{
+  "name": "sui-portfolio-tracker",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Real-time Sui portfolio tracker using Quicknode GraphQL and gRPC",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "start:compiled": "node dist/index.js",
+    "dev": "tsx --watch src/index.ts"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.11.3",
+    "@grpc/proto-loader": "^0.7.13",
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.5",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
