@@ -1,14 +1,8 @@
-import { LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js";
 import { ArbBot, SwapToken } from './bot';
-import dotenv from "dotenv";
-
-dotenv.config({
-    path: ".env",
-});
 
 const defaultConfig = {
-    solanaEndpoint: clusterApiUrl("mainnet-beta"),
-    jupiter: "https://public.jupiterapi.com",
+    solanaEndpoint: 'https://api.mainnet-beta.solana.com',
+    jupiter: "https://quote-api.jup.ag/v6",
 };
 
 async function main() {
@@ -21,13 +15,14 @@ async function main() {
         solanaEndpoint: process.env.SOLANA_ENDPOINT ?? defaultConfig.solanaEndpoint,
         metisEndpoint: process.env.METIS_ENDPOINT ?? defaultConfig.jupiter,
         secretKey: decodedSecretKey,
-        firstTradePrice: 0.1 * LAMPORTS_PER_SOL,
-        targetGainPercentage: 0.15,
-        initialInputToken: SwapToken.USDC,
-        initialInputAmount: 10_000_000,
+        firstTradePrice: 900_000,       // min USDC out (6 decimals) — $0.90 for 0.01 SOL at ~$90/SOL
+        targetGainPercentage: 1.5,
+        initialInputToken: SwapToken.SOL,
+        initialInputAmount: 10_000_000, // 0.01 SOL in lamports
     });
 
-    await bot.init();
+    console.log("Metis", process.env.METIS_ENDPOINT ?? defaultConfig.jupiter)
+    //await bot.init();
 
 }
 
