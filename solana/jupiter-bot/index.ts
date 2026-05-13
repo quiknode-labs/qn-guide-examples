@@ -2,7 +2,7 @@ import { ArbBot, SwapToken } from './bot';
 
 const defaultConfig = {
     solanaEndpoint: 'https://api.mainnet-beta.solana.com',
-    jupiter: "https://quote-api.jup.ag/v6",
+    jupiter: "https://public.jupiterapi.com",
 };
 
 async function main() {
@@ -21,9 +21,7 @@ async function main() {
         initialInputAmount: 10_000_000, // 0.01 SOL in lamports
     });
 
-    console.log("Metis", process.env.METIS_ENDPOINT ?? defaultConfig.jupiter)
-    //await bot.init();
-
+    await bot.init();
 }
 
 main().catch(console.error);
