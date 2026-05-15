@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Runtime / local state
+trades.json
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Logs and debug
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+
+# IDE (optional local settings)
+.idea/
+.cursor/
+.claude/

@@ -1,17 +1,11 @@
-import { Keypair, Connection, PublicKey, VersionedTransaction, LAMPORTS_PER_SOL, TransactionInstruction, AddressLookupTableAccount, TransactionMessage } from "@solana/web3.js";
-import { createJupiterApiClient, DefaultApi, ResponseError, QuoteGetRequest, QuoteResponse, Instruction, AccountMeta } from '@jup-ag/api';
-import { getAssociatedTokenAddressSync } from "@solana/spl-token";
+import { createSolanaRpc, createSolanaRpcSubscriptions, address, Address, KeyPairSigner, createKeyPairSignerFromBytes, Instruction, AccountRole, pipe, createTransactionMessage, setTransactionMessageFeePayerSigner, setTransactionMessageLifetimeUsingBlockhash, appendTransactionMessageInstructions, compressTransactionMessageUsingAddressLookupTables, signTransactionMessageWithSigners, getSignatureFromTransaction, sendAndConfirmTransactionFactory, AddressesByLookupTableAddress } from "@solana/kit";
+import { createJupiterApiClient, SwapApi, ResponseError, QuoteGetRequest, QuoteResponse, Instruction as JupiterInstruction, AccountMeta } from '@jup-ag/api';
+import { findAssociatedTokenPda } from "@solana-program/token";
+import { fetchAddressLookupTable } from "@solana-program/address-lookup-table";
 import * as fs from 'fs';
 import * as path from 'path';
 
-interface LogSwapArgs {
-    inputToken: string;
-    inAmount: string;
-    outputToken: string;
-    outAmount: string;
-    txId: string;
-    timestamp: string;
-}
+const LAMPORTS_PER_SOL = 1_000_000_000n;
 
 interface ArbBotConfig {
     solanaEndpoint: string; // e.g., "https://ex-am-ple.solana-mainnet.quiknode.pro/123456/"
@@ -33,14 +27,26 @@ export enum SwapToken {
     USDC
 }
 
+interface LogSwapArgs {
+    inputToken: string;
+    inAmount: string;
+    outputToken: string;
+    outAmount: string;
+    txId: string;
+    timestamp: string;
+}
+
 export class ArbBot {
-    private solanaConnection: Connection;
-    private jupiterApi: DefaultApi;
-    private wallet: Keypair;
-    private usdcMint: PublicKey = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
-    private solMint: PublicKey = new PublicKey("So11111111111111111111111111111111111111112");
-    private usdcTokenAccount: PublicKey;
-    private solBalance: number = 0;
+    private rpc: ReturnType<typeof createSolanaRpc>;
+    private rpcSubscriptions: ReturnType<typeof createSolanaRpcSubscriptions>;
+    private sendAndConfirmTransaction!: ReturnType<typeof sendAndConfirmTransactionFactory>;
+    private jupiterApi: SwapApi;
+    private wallet!: KeyPairSigner;
+    private secretKey: Uint8Array;
+    private usdcMint: Address = address("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
+    private solMint: Address = address("So11111111111111111111111111111111111111112");
+    private usdcTokenAccount!: Address;
+    private solBalance: bigint = 0n;
     private usdcBalance: number = 0;
     private checkInterval: number = 1000 * 10; 
     private lastCheck: number = 0;
@@ -60,25 +66,64 @@ export class ArbBot {
             initialInputAmount,
             firstTradePrice
         } = config;
-        this.solanaConnection = new Connection(solanaEndpoint);
+        this.rpc = createSolanaRpc(solanaEndpoint);
+        this.rpcSubscriptions = createSolanaRpcSubscriptions(solanaEndpoint.replace('https://', 'wss://'));
         this.jupiterApi = createJupiterApiClient({ basePath: metisEndpoint });
-        this.wallet = Keypair.fromSecretKey(secretKey);
-        this.usdcTokenAccount = getAssociatedTokenAddressSync(this.usdcMint, this.wallet.publicKey);
+        this.secretKey = secretKey;
         if (targetGainPercentage) { this.targetGainPercentage = targetGainPercentage }
         if (checkInterval) { this.checkInterval = checkInterval }
         this.nextTrade = {
-            inputMint: initialInputToken === SwapToken.SOL ? this.solMint.toBase58() : this.usdcMint.toBase58(),
-            outputMint: initialInputToken === SwapToken.SOL ? this.usdcMint.toBase58() : this.solMint.toBase58(),
+            inputMint: initialInputToken === SwapToken.SOL ? this.solMint : this.usdcMint,
+            outputMint: initialInputToken === SwapToken.SOL ? this.usdcMint : this.solMint,
             amount: initialInputAmount,
+            slippageBps: 300,
             nextTradeThreshold: firstTradePrice,
         };
     }
 
     async init(): Promise<void> {
-        console.log(`🤖 Initiating arb bot for wallet: ${this.wallet.publicKey.toBase58()}.`)
+        this.wallet = await createKeyPairSignerFromBytes(this.secretKey);
+        this.sendAndConfirmTransaction = sendAndConfirmTransactionFactory({ rpc: this.rpc, rpcSubscriptions: this.rpcSubscriptions });
+        const [usdcTokenAccount] = await findAssociatedTokenPda({
+            mint: this.usdcMint,
+            owner: this.wallet.address,
+            tokenProgram: address('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
+        });
+        this.usdcTokenAccount = usdcTokenAccount;
+        console.log(`🤖 Initiating arb bot for wallet: ${this.wallet.address}.`)
         await this.refreshBalances();
-        console.log(`🏦 Current balances:\nSOL: ${this.solBalance / LAMPORTS_PER_SOL},\nUSDC: ${this.usdcBalance}`);
+        console.log(`🏦 Current balances:\nSOL: ${Number(this.solBalance) / Number(LAMPORTS_PER_SOL)},\nUSDC: ${this.usdcBalance}`);
         this.initiatePriceWatch();
+    }
+
+    private async refreshBalances(): Promise<void> {
+        try {
+            const results = await Promise.allSettled([
+                this.rpc.getBalance(this.wallet.address).send(),
+                this.rpc.getTokenAccountBalance(this.usdcTokenAccount).send()
+            ]);
+
+            const solBalanceResult = results[0];
+            const usdcBalanceResult = results[1];
+
+            if (solBalanceResult.status === 'fulfilled') {
+                this.solBalance = solBalanceResult.value.value;
+            } else {
+                console.error('Error fetching SOL balance:', solBalanceResult.reason);
+            }
+
+            if (usdcBalanceResult.status === 'fulfilled') {
+                this.usdcBalance = usdcBalanceResult.value.value.uiAmount ?? 0;
+            } else {
+                this.usdcBalance = 0;
+            }
+
+            if (this.solBalance < LAMPORTS_PER_SOL / 100n) {
+                this.terminateSession("Low SOL balance.");
+            }
+        } catch (error) {
+            console.error('Unexpected error during balance refresh:', error);
+        }
     }
 
     private initiatePriceWatch(): void {
@@ -143,44 +188,39 @@ export class ArbBot {
             } = await this.jupiterApi.swapInstructionsPost({
                 swapRequest: {
                     quoteResponse: route,
-                    userPublicKey: this.wallet.publicKey.toBase58(),
-                    prioritizationFeeLamports: 'auto'
+                    userPublicKey: this.wallet.address,
+                    prioritizationFeeLamports: {
+                        priorityLevelWithMaxLamports: {
+                            priorityLevel: 'high',
+                            maxLamports: 1_000_000,
+                        }
+                    }
                 },
             });
 
-            const instructions: TransactionInstruction[] = [
-                ...computeBudgetInstructions.map(this.instructionDataToTransactionInstruction),
-                ...setupInstructions.map(this.instructionDataToTransactionInstruction),
-                this.instructionDataToTransactionInstruction(swapInstruction),
-                this.instructionDataToTransactionInstruction(cleanupInstruction),
-            ].filter((ix) => ix !== null) as TransactionInstruction[];
+            const instructions: Instruction[] = [
+                ...computeBudgetInstructions.map(this.jupiterInstructionToKitInstruction.bind(this)),
+                ...setupInstructions.map(this.jupiterInstructionToKitInstruction.bind(this)),
+                this.jupiterInstructionToKitInstruction(swapInstruction),
+                this.jupiterInstructionToKitInstruction(cleanupInstruction),
+            ].filter((ix): ix is Instruction => ix !== null);
 
-            const addressLookupTableAccounts = await this.getAdressLookupTableAccounts(
-                addressLookupTableAddresses,
-                this.solanaConnection
+            const alts = await this.getAddressLookupTableAccounts(addressLookupTableAddresses);
+
+            const { value: latestBlockhash } = await this.rpc.getLatestBlockhash().send();
+
+            const message = pipe(
+                createTransactionMessage({ version: 0 }),
+                (m) => setTransactionMessageFeePayerSigner(this.wallet, m),
+                (m) => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, m),
+                (m) => appendTransactionMessageInstructions(instructions, m),
+                (m) => compressTransactionMessageUsingAddressLookupTables(m, alts),
             );
 
-            const { blockhash, lastValidBlockHeight } = await this.solanaConnection.getLatestBlockhash();
-
-            const messageV0 = new TransactionMessage({
-                payerKey: this.wallet.publicKey,
-                recentBlockhash: blockhash,
-                instructions,
-            }).compileToV0Message(addressLookupTableAccounts);
-
-            const transaction = new VersionedTransaction(messageV0);
-            transaction.sign([this.wallet]);
-
-            const rawTransaction = transaction.serialize();
-            const txid = await this.solanaConnection.sendRawTransaction(rawTransaction, {
-                skipPreflight: true,
-                maxRetries: 2
-            });
-            const confirmation = await this.solanaConnection.confirmTransaction({ signature: txid, blockhash, lastValidBlockHeight }, 'confirmed');
-            if (confirmation.value.err) {
-                throw new Error('Transaction failed');
-            }            
-            await this.postTransactionProcessing(route, txid);
+            const signedTx = await signTransactionMessageWithSigners(message);
+            const signature = getSignatureFromTransaction(signedTx);
+            await this.sendAndConfirmTransaction(signedTx, { commitment: 'confirmed', skipPreflight: true });
+            await this.postTransactionProcessing(route, signature);
         } catch (error) {
             if (error instanceof ResponseError) {
                 console.log(await error.response.json());
@@ -194,34 +234,15 @@ export class ArbBot {
         }
     }
 
-    private async refreshBalances(): Promise<void> {
-        try {
-            const results = await Promise.allSettled([
-                this.solanaConnection.getBalance(this.wallet.publicKey),
-                this.solanaConnection.getTokenAccountBalance(this.usdcTokenAccount)
-            ]);
-
-            const solBalanceResult = results[0];
-            const usdcBalanceResult = results[1];
-
-            if (solBalanceResult.status === 'fulfilled') {
-                this.solBalance = solBalanceResult.value;
-            } else {
-                console.error('Error fetching SOL balance:', solBalanceResult.reason);
-            }
-
-            if (usdcBalanceResult.status === 'fulfilled') {
-                this.usdcBalance = usdcBalanceResult.value.value.uiAmount ?? 0;
-            } else {
-                this.usdcBalance = 0;
-            }
-
-            if (this.solBalance < LAMPORTS_PER_SOL / 100) {
-                this.terminateSession("Low SOL balance.");
-            }
-        } catch (error) {
-            console.error('Unexpected error during balance refresh:', error);
-        }
+    private async updateNextTrade(lastTrade: QuoteResponse): Promise<void> {
+        const priceChange = this.targetGainPercentage / 100;
+        this.nextTrade = {
+            inputMint: this.nextTrade.outputMint,
+            outputMint: this.nextTrade.inputMint,
+            amount: parseInt(lastTrade.outAmount),
+            slippageBps: 300,
+            nextTradeThreshold: parseInt(lastTrade.inAmount) * (1 + priceChange),
+        };
     }
 
     private async logSwap(args: LogSwapArgs): Promise<void> {
@@ -252,19 +273,9 @@ export class ArbBot {
         }
     }
 
-    private async updateNextTrade(lastTrade: QuoteResponse): Promise<void> {
-        const priceChange = this.targetGainPercentage / 100;
-        this.nextTrade = {
-            inputMint: this.nextTrade.outputMint,
-            outputMint: this.nextTrade.inputMint,
-            amount: parseInt(lastTrade.outAmount),
-            nextTradeThreshold: parseInt(lastTrade.inAmount) * (1 + priceChange),
-        };
-    }
-
     private terminateSession(reason: string): void {
         console.warn(`❌ Terminating bot...${reason}`);
-        console.log(`Current balances:\nSOL: ${this.solBalance / LAMPORTS_PER_SOL},\nUSDC: ${this.usdcBalance}`);
+        console.log(`Current balances:\nSOL: ${Number(this.solBalance) / Number(LAMPORTS_PER_SOL)},\nUSDC: ${this.usdcBalance}`);
         if (this.priceWatchIntervalId) {
             clearInterval(this.priceWatchIntervalId);
             this.priceWatchIntervalId = undefined; // Clear the reference to the interval
@@ -275,41 +286,34 @@ export class ArbBot {
         }, 1000);
     }
 
-    private instructionDataToTransactionInstruction (
-        instruction: Instruction | undefined
-    ) {
+    private jupiterInstructionToKitInstruction(
+        instruction: JupiterInstruction | undefined
+    ): Instruction | null {
         if (instruction === null || instruction === undefined) return null;
-        return new TransactionInstruction({
-            programId: new PublicKey(instruction.programId),
-            keys: instruction.accounts.map((key: AccountMeta) => ({
-                pubkey: new PublicKey(key.pubkey),
-                isSigner: key.isSigner,
-                isWritable: key.isWritable,
+        return {
+            programAddress: address(instruction.programId),
+            accounts: instruction.accounts.map((key: AccountMeta) => ({
+                address: address(key.pubkey),
+                role: key.isWritable && key.isSigner ? AccountRole.WRITABLE_SIGNER
+                    : key.isSigner ? AccountRole.READONLY_SIGNER
+                    : key.isWritable ? AccountRole.WRITABLE
+                    : AccountRole.READONLY,
             })),
-            data: Buffer.from(instruction.data, "base64"),
-        });
+            data: new Uint8Array(Buffer.from(instruction.data, 'base64')),
+        };
     };
 
-    private async getAdressLookupTableAccounts (
-        keys: string[], connection: Connection
-    ): Promise<AddressLookupTableAccount[]> {
-        const addressLookupTableAccountInfos =
-            await connection.getMultipleAccountsInfo(
-                keys.map((key) => new PublicKey(key))
-            );
-    
-        return addressLookupTableAccountInfos.reduce((acc, accountInfo, index) => {
-            const addressLookupTableAddress = keys[index];
-            if (accountInfo) {
-                const addressLookupTableAccount = new AddressLookupTableAccount({
-                    key: new PublicKey(addressLookupTableAddress),
-                    state: AddressLookupTableAccount.deserialize(accountInfo.data),
-                });
-                acc.push(addressLookupTableAccount);
-            }
-    
-            return acc;
-        }, new Array<AddressLookupTableAccount>());
+    private async getAddressLookupTableAccounts(
+        keys: string[]
+    ): Promise<AddressesByLookupTableAddress> {
+        const result: AddressesByLookupTableAddress = {};
+        await Promise.all(
+            keys.map(async (key) => {
+                const altAccount = await fetchAddressLookupTable(this.rpc, address(key));
+                result[address(key)] = altAccount.data.addresses;
+            })
+        );
+        return result;
     };
 
     private async postTransactionProcessing(quote: QuoteResponse, txid: string): Promise<void> {
@@ -319,3 +323,5 @@ export class ArbBot {
         await this.logSwap({ inputToken: inputMint, inAmount, outputToken: outputMint, outAmount, txId: txid, timestamp: new Date().toISOString() });
     }
 }
+
+
