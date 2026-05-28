@@ -2,6 +2,7 @@
   "name": "phoenix-dashboard",
   "private": true,
   "version": "0.1.0",
+  "description": "A dashboard for visualizing Phoenix perps data on Solana.",
   "type": "module",
   "scripts": {
     "dev": "vite",

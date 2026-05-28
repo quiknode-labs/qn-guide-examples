@@ -1,4 +1,4 @@
-# Overview
+# Build a Real-Time SOL Perps Dashboard with the Phoenix API
 
 This project contains the example code for the Quicknode guide: [Build a Real-Time SOL Perps Dashboard with the Phoenix API](https://www.quicknode.com/guides/solana-development/3rd-party-integrations/build-a-real-time-perps-dashboard-with-phoenix-api)
 
