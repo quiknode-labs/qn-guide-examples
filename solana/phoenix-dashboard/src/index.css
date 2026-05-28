@@ -1,0 +1,49 @@
+@import "./styles/qn-tokens.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--border-strong);
+  }
+}
+
+@layer components {
+  .panel {
+    @apply bg-bg-panel border border-border flex flex-col;
+    border-radius: 0;
+  }
+  .panel-header {
+    @apply px-4 py-2.5 border-b border-border flex items-center justify-between;
+    background: transparent;
+  }
+  .stat-label {
+    @apply font-mono uppercase;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--foreground-dim);
+  }
+  .stat-value {
+    @apply font-mono tabular-nums text-fg;
+  }
+  .mono-num {
+    @apply font-mono tabular-nums;
+  }
+}
