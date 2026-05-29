@@ -1,0 +1,169 @@
+/* QuickNode design tokens — adapted from @quicknode/styles.
+   The dashboard renders in the `inverted` (dark) theme. */
+
+@font-face {
+  font-family: "Denim";
+  src: url("/fonts/Denim-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Denim";
+  src: url("/fonts/Denim-Bold.ttf") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "DenimINK";
+  src: url("/fonts/DenimINK-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "DenimINK";
+  src: url("/fonts/DenimINK-Bold.ttf") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-SemiBold.ttf") format("truetype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+
+:root {
+  /* Brand scales */
+  --color-green-100: oklch(95.8% 0.078 145.0);
+  --color-green-400: #6CFF75;
+  --color-green-500: oklch(73.8% 0.243 140.0);
+  --color-gray-900: oklch(28.9% 0 0);
+  --color-gray-950: oklch(18.7% 0 0);
+
+  /* Chart palette — used 1→12 in sequence. We pull two for OHLC up/down. */
+  --color-chart-9-green: oklch(73.23% 0.139 161.34);
+  --color-chart-11-red:  oklch(71.66% 0.155 13.91);
+
+  /* Typography */
+  --font-sans:    "Denim", "Onest", system-ui, -apple-system, sans-serif;
+  --font-display: "DenimINK", "Instrument Serif", "Onest", serif;
+  --font-mono:    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --tracking-display: -0.03em;
+
+  /* Layout */
+  --radius-card: 0px;
+  --radius-pill: 9999px;
+  --border-width: 1px;
+}
+
+[data-theme="inverted"] {
+  --background:          var(--color-gray-950);
+  --background-elevated: color-mix(in oklch, white 4%, transparent);
+  --background-inverted: #ffffff;
+
+  --foreground:          #ffffff;
+  --foreground-medium:   color-mix(in oklch, white 70%, transparent);
+  --foreground-light:    color-mix(in oklch, white 45%, transparent);
+  --foreground-dim:      color-mix(in oklch, white 25%, transparent);
+  --foreground-inverted: var(--color-gray-900);
+
+  --border:           color-mix(in oklch, white 12%, transparent);
+  --border-strong:    color-mix(in oklch, white 24%, transparent);
+  --accent:           var(--color-green-400);
+  --accent-foreground: var(--color-gray-900);
+  --grid:             color-mix(in oklch, white 8%, transparent);
+  --hover-inverted:   color-mix(in oklch, white 6%, transparent);
+
+  --bull: var(--color-chart-9-green);
+  --bear: var(--color-chart-11-red);
+}
+
+html, body {
+  background: var(--background);
+  color: var(--foreground-medium);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--foreground);
+  line-height: 1;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* The QN-style "// LABEL" badge with corner ticks (mono, uppercase). */
+.qn-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--foreground-light);
+  letter-spacing: 0.02em;
+  width: fit-content;
+}
+.qn-badge::before,
+.qn-badge::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 6px;
+  border: 1px solid var(--border);
+}
+.qn-badge::before { left: 0; border-right: 0; }
+.qn-badge::after  { right: 0; border-left: 0; }
+.qn-badge--accent { background: var(--accent); color: var(--accent-foreground); }
+.qn-badge--accent::before,
+.qn-badge--accent::after { display: none; }
+.qn-badge--bear { background: var(--bear); color: #ffffff; }
+.qn-badge--bear::before,
+.qn-badge--bear::after { display: none; }
+
+/* Eyebrow — mono uppercase prefix used inline as a section label.
+   Auto-prepends the "// " characters in the manner of @quicknode/components Badge. */
+.qn-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--foreground-light);
+}
+.qn-eyebrow::before { content: "// "; color: var(--foreground-dim); }
+
+/* Display heading with the accent highlight rectangle behind the glyphs.
+   Matches the flat fill used by `.qn-header__title--highlight` in
+   components/qn-header.html — no gradient calibration to break on tight
+   leading. Slight top/bottom padding makes the rectangle a hair taller than
+   the inline-box so the top edge isn't clipped against parent containers. */
+.qn-highlight {
+  display: inline;
+  color: var(--accent-foreground);
+  background-color: var(--accent);
+  padding: 0.05em 0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Dot-pattern texture (matches @quicknode/styles .qn-pattern-dots). */
+.qn-pattern-dots {
+  --pattern-color: var(--grid);
+  background-image: radial-gradient(var(--pattern-color) 1.1px, transparent 1.4px);
+  background-size: 14px 14px;
+  background-position: 0 0;
+}
+
+/* Soft inset hairline ruled like the QN section dividers. */
+.qn-hairline {
+  height: 1px;
+  background: var(--border);
+}
