@@ -40,7 +40,7 @@ for (const m of markets) {
   console.log(`\n  Title     : ${m.title}`);
   console.log(`  Expiry    : ${m.expiry ?? "N/A"}`);
   console.log(`  Collateral: ${m.collateral}`);
-  console.log(`  Min order : ${m.minOrderValue} USDH`);
+  console.log(`  Min order : ${m.minOrderValue} ${m.collateral}`);
   console.log(`  YES       : ${m.yes.symbol} (assetId: ${m.yes.assetId}) | mid: ${m.yes.mid}`);
   console.log(`  NO        : ${m.no.symbol}  (assetId: ${m.no.assetId}) | mid: ${m.no.mid}`);
 }

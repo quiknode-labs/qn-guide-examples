@@ -1,5 +1,5 @@
 /**
- * API Script 6: Place HIP-4 Trades
+ * API Script 5: Place HIP-4 Trades
  * Demonstrates all order types via hyperliquidapi.com build-sign-send:
  *   - Limit BUY  (GTC)
  *   - Limit SELL (GTC)
@@ -10,8 +10,7 @@
  * HIP-4 rules:
  *   - Asset: "#20" (# alias) or 100000020 (native index)
  *   - grouping: "na"  (no priorityFee support)
- *   - Minimum order value: 10 USDH (size * price >= 10)
- *   - Collateral: USDH (run 5-buy-usdh first)
+ *   - Minimum order value: 10 USDC (size * price >= 10)
  *
  * Set SKIP_MARKET_ORDERS=true to skip market order examples.
  */
@@ -46,16 +45,16 @@ console.log("YES symbol :", yesSymbol, "| mid:", midPrice);
 console.log("NO  symbol :", noSymbol,  "| mid:", allMids[noSymbol] ?? "N/A");
 
 // ── Size calculation ──────────────────────────────────────────
-// HIP-4 szDecimals=0 (integers only). size * price >= 10 USDH.
-const MIN_USDH   = 10;
+// HIP-4 szDecimals=0 (integers only). size * price >= 10 USDC.
+const MIN_USDC   = 10;
 const buyPrice   = parseFloat((midPrice * 0.97).toFixed(4));
 const sellPrice  = parseFloat((midPrice * 1.03).toFixed(4));
-const limitSize  = String(Math.ceil(MIN_USDH / buyPrice) + 5);
+const limitSize  = String(Math.ceil(MIN_USDC / buyPrice) + 5);
 
 console.log(`\nMid          : ${midPrice}`);
 console.log(`Limit buy px : ${buyPrice}  (3% below mid)`);
 console.log(`Limit sell px: ${sellPrice}  (3% above mid)`);
-console.log(`Size         : ${limitSize} units  (notional: ${(parseInt(limitSize) * buyPrice).toFixed(2)} USDH)`);
+console.log(`Size         : ${limitSize} units  (notional: ${(parseInt(limitSize) * buyPrice).toFixed(2)} USDC)`);
 
 // ── PREFLIGHT CHECK ───────────────────────────────────────────
 // Validate the order without signing — catches errors before committing
@@ -150,7 +149,7 @@ const skipMarket = process.env.SKIP_MARKET_ORDERS === "true";
 if (skipMarket) {
   console.log("\n── Market Orders (skipped — SKIP_MARKET_ORDERS=true) ────");
 } else {
-  const marketSize = String(Math.ceil(MIN_USDH / (midPrice * 1.03)) + 5);
+  const marketSize = String(Math.ceil(MIN_USDC / (midPrice * 1.03)) + 5);
 
   console.log("\n── Market BUY (IOC, auto-slippage) ──────────────────────");
   console.log(`Placing: marketBuy ${marketSize} ${yesSymbol} (no price — API computes slippage)`);

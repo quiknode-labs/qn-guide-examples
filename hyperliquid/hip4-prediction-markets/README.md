@@ -46,8 +46,7 @@ Run each step in order. Both the SDK (`npm run <step>`) and direct-API (`npm run
 | 2 | `2:markets` / `api:2:markets` | List active HIP-4 prediction markets (YES/NO tokens, expiry, mid prices) |
 | 3 | `3:orderbook` / `api:3:orderbook` | Snapshot the order book for a prediction market |
 | 4 | `4:stream` / `api:4:stream` | Stream live order book updates over WebSocket |
-| 5 | `5:buy-usdh` / `api:5:buy-usdh` | Buy USDH (the collateral token for HIP-4 markets) |
-| 6 | `6:trade` / `api:6:trade` | Place a limit order on a YES or NO outcome token |
+| 5 | `5:trade` / `api:5:trade` | Place limit and market orders on a YES or NO outcome token |
 
 ### Example
 
@@ -55,12 +54,12 @@ Run each step in order. Both the SDK (`npm run <step>`) and direct-API (`npm run
 # SDK path
 npm run 1:setup
 npm run 2:markets
-npm run 6:trade
+npm run 5:trade
 
 # Direct API path
 npm run api:1:setup
 npm run api:2:markets
-npm run api:6:trade
+npm run api:5:trade
 ```
 
 ---
@@ -74,8 +73,7 @@ src/
 ├── 2-list-markets.ts       # List HIP-4 markets (SDK)
 ├── 3-orderbook-snapshot.ts # Order book snapshot (SDK)
 ├── 4-stream-orderbook.ts   # Live order book stream (SDK)
-├── 5-buy-usdh.ts           # Buy USDH collateral (SDK)
-├── 6-trade.ts              # Place trade (SDK)
+├── 5-trade.ts              # Place trade (SDK)
 └── api/
     ├── client.ts           # Shared build-sign-send helpers
     ├── 0-approve.ts        # Builder fee approval (direct API)
@@ -83,8 +81,7 @@ src/
     ├── 2-list-markets.ts   # List HIP-4 markets (direct API)
     ├── 3-orderbook-snapshot.ts
     ├── 4-stream-orderbook.ts
-    ├── 5-buy-usdh.ts
-    └── 6-trade.ts          # Place trade (direct API)
+    └── 5-trade.ts          # Place trade (direct API)
 ```
 
 ---
