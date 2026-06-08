@@ -28,11 +28,11 @@ if (!hip4Symbols.length) {
   process.exit(0);
 }
 
-// Use the first YES-side symbol (even-numbered: #20, #30, ...)
+// Use the first YES-side symbol (even-numbered) with a real mid — skip 0.5 placeholders
 const yesSymbol = hip4Symbols.find(s => {
   const n = parseInt(s.replace("#", ""));
-  return n % 2 === 0;
-}) ?? hip4Symbols[0];
+  return n % 2 === 0 && parseFloat(allMids[s]) !== 0.5;
+}) ?? hip4Symbols.find(s => parseInt(s.replace("#", "")) % 2 === 0) ?? hip4Symbols[0];
 
 const noSymbol  = `#${parseInt(yesSymbol.replace("#", "")) + 1}`;
 const midPrice  = parseFloat(allMids[yesSymbol] ?? "0.5");
@@ -46,6 +46,7 @@ console.log("NO  symbol :", noSymbol,  "| mid:", allMids[noSymbol] ?? "N/A");
 
 // ── Size calculation ──────────────────────────────────────────
 // HIP-4 szDecimals=0 (integers only). size * price >= 10 USDC.
+// Protocol minimum (matches market.minOrderValue from SDK path). Update if Hyperliquid changes this.
 const MIN_USDC   = 10;
 const buyPrice   = parseFloat((midPrice * 0.97).toFixed(4));
 const sellPrice  = parseFloat((midPrice * 1.03).toFixed(4));
