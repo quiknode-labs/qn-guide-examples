@@ -43,7 +43,7 @@ const sdk = new HyperliquidSDK(process.env.QUICKNODE_ENDPOINT, {
 const markets = await sdk.predictionMarkets();
 if (markets.length === 0) { console.log("No active markets."); process.exit(0); }
 
-const market = markets[0];
+const market = markets.find(m => parseFloat(m.yes.mid as string) !== 0.5) ?? markets[0];
 
 console.log("=".repeat(60));
 console.log("HIP-4 ORDERBOOK SNAPSHOT");

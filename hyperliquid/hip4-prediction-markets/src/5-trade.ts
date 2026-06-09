@@ -1,5 +1,5 @@
 /**
- * Step 6: Place HIP-4 Trades
+ * Step 5: Place HIP-4 Trades
  * Demonstrates all order types:
  *   - Limit BUY  (GTC, passive maker)
  *   - Limit SELL (GTC, passive maker)
@@ -8,8 +8,7 @@
  *
  * Prerequisites:
  *   - Run 0:approve first (builder fee)
- *   - Run 5:buy-usdh first (USDH balance)
- *   - 10 USDH minimum order value (size * price >= 10)
+ *   - 10 USDC minimum order value (size * price >= 10)
  *
  * Set WALLET_ADDRESS in .env to see order status and open orders.
  * Set SKIP_MARKET_ORDERS=true in .env to skip the market order examples.
@@ -38,14 +37,15 @@ const sdk = new HyperliquidSDK(process.env.QUICKNODE_ENDPOINT, {
 const markets = await sdk.predictionMarkets();
 if (markets.length === 0) { console.log("No active HIP-4 markets found."); process.exit(0); }
 
-const market = markets[0];
+// Skip placeholder markets that have exactly 0.5 mid on both sides (no real liquidity)
+const market = markets.find(m => parseFloat(m.yes.mid as string) !== 0.5) ?? markets[0];
 const midPrice = await sdk.getMid(market.yes);
 
 console.log("=".repeat(60));
 console.log("HIP-4 TRADE EXAMPLES");
 console.log("=".repeat(60));
 console.log("Market     :", market.title);
-console.log("Collateral :", market.collateral, "(min order:", market.minOrderValue, "USDH)");
+console.log("Collateral :", market.collateral, "(min order:", market.minOrderValue, market.collateral + ")");
 console.log("YES        :", market.yes.symbol, "| Mid:", market.yes.mid);
 console.log("NO         :", market.no.symbol,  "| Mid:", market.no.mid);
 console.log("Live mid   :", midPrice);
@@ -58,14 +58,14 @@ console.log("Live mid   :", midPrice);
 const buyPrice  = parseFloat((midPrice * 0.97).toFixed(4)); // 3% below mid
 const sellPrice = parseFloat((midPrice * 1.03).toFixed(4)); // 3% above mid
 
-// HIP-4 szDecimals=0 (whole units only). Minimum order value is 10 USDH.
-// Calculate the smallest integer size that satisfies: size * price >= 10 USDH.
-const minOrderUSDH = 10;
-const limitSize = Math.ceil(minOrderUSDH / buyPrice) + 5; // +5 buffer above minimum
+// HIP-4 szDecimals=0 (whole units only). Minimum order value is 10 USDC.
+// Calculate the smallest integer size that satisfies: size * price >= 10 USDC.
+const minOrderUSDC = Number(market.minOrderValue);
+const limitSize = Math.ceil(minOrderUSDC / buyPrice) + 5; // +5 buffer above minimum
 
 console.log(`\n── Limit Orders (passive, GTC) ───────────────────────────`);
-console.log(`Min size at buyPrice ${buyPrice}: ${Math.ceil(minOrderUSDH / buyPrice)} units`);
-console.log(`Using size ${limitSize} → notional ${(limitSize * buyPrice).toFixed(2)} USDH`);
+console.log(`Min size at buyPrice ${buyPrice}: ${Math.ceil(minOrderUSDC / buyPrice)} units`);
+console.log(`Using size ${limitSize} → notional ${(limitSize * buyPrice).toFixed(2)} USDC`);
 console.log(`BUY  ${limitSize} @ ${buyPrice}  (${((1 - buyPrice / midPrice) * 100).toFixed(1)}% below mid)`);
 console.log(`SELL ${limitSize} @ ${sellPrice}  (${((sellPrice / midPrice - 1) * 100).toFixed(1)}% above mid)`);
 
@@ -86,7 +86,7 @@ printOrder("LIMIT SELL (YES)", limitSell);
 // ── MARKET ORDERS ──────────────────────────────────────────────
 // Market orders fill immediately at the best available price.
 // sdk.marketBuy / sdk.marketSell use IOC with a slippage tolerance (default 3%).
-// Size must still satisfy the 10 USDH minimum: size * bestAsk >= 10.
+// Size must still satisfy the 10 USDC minimum: size * bestAsk >= 10.
 // NOTE: market orders consume liquidity — use only when you need immediate fill.
 
 const skipMarket = process.env.SKIP_MARKET_ORDERS === "true";
@@ -97,10 +97,10 @@ if (skipMarket) {
   // For market orders, use the ask price (worst case for a buy) to size correctly.
   // With 3% slippage the effective price could be midPrice * 1.03, so size accordingly.
   const worstCasePx = midPrice * 1.03;
-  const marketSize  = Math.ceil(minOrderUSDH / worstCasePx) + 5;
+  const marketSize  = Math.ceil(minOrderUSDC / worstCasePx) + 5;
 
   console.log(`\n── Market Orders (immediate fill, IOC, 3% slippage) ─────`);
-  console.log(`Using size ${marketSize} → notional ~${(marketSize * midPrice).toFixed(2)} USDH`);
+  console.log(`Using size ${marketSize} → notional ~${(marketSize * midPrice).toFixed(2)} USDC`);
   console.log(`marketBuy  ${marketSize} units on YES side`);
   console.log(`marketSell ${marketSize} units on YES side`);
 

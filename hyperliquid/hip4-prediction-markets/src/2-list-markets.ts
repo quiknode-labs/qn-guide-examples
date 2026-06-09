@@ -14,12 +14,16 @@ console.log("=".repeat(60));
 console.log("HIP-4 PREDICTION MARKETS");
 console.log("=".repeat(60));
 
-const markets = await sdk.predictionMarkets();
+const allMarkets = await sdk.predictionMarkets();
 
-if (markets.length === 0) {
+if (allMarkets.length === 0) {
   console.log("No active HIP-4 markets found.");
   process.exit(0);
 }
+
+// Show only the first 3 markets to keep output manageable
+const markets = allMarkets.slice(0, 3);
+console.log(`Total markets: ${allMarkets.length} (showing first ${markets.length})\n`);
 
 for (const market of markets as PredictionMarket[]) {
   console.log(`\n${"─".repeat(60)}`);
@@ -31,7 +35,7 @@ for (const market of markets as PredictionMarket[]) {
   console.log(`Expiry     : ${market.expiry ?? "N/A"}`);
   console.log(`Period     : ${market.period ?? "N/A"}`);
   console.log(`Collateral : ${market.collateral}`);
-  console.log(`Min Order  : ${market.minOrderValue} USDH`);
+  console.log(`Min Order  : ${market.minOrderValue} ${market.collateral}`);
   console.log(`Aliases    : ${market.aliases.join(", ")}`);
 
   console.log("\n  Sides:");

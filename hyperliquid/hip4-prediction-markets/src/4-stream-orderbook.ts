@@ -25,7 +25,7 @@ if (markets.length === 0) {
   process.exit(0);
 }
 
-const market = markets[0];
+const market = markets.find(m => parseFloat(m.yes.mid as string) !== 0.5) ?? markets[0];
 const symbol = market.yes.symbol; // e.g. "#20"
 
 console.log("=".repeat(60));
