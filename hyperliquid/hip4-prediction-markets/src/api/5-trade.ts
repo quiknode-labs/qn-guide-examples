@@ -2,9 +2,9 @@
  * API Script 5: Place HIP-4 Trades
  * Demonstrates all order types via hyperliquidapi.com build-sign-send:
  *   - Limit BUY  (GTC)
- *   - Limit SELL (GTC)
+ *   - Limit SELL (GTC)  — requires existing spot balance; set SKIP_SELL_ORDERS=true to skip
  *   - Market BUY  (tif: "market", no price — API auto-computes mid + 3% slippage)
- *   - Market SELL (tif: "market", no price)
+ *   - Market SELL (tif: "market", no price) — same requirement as limit sell
  *   - Cancel resting orders
  *
  * HIP-4 rules:
@@ -12,7 +12,9 @@
  *   - grouping: "na"  (no priorityFee support)
  *   - Minimum order value: 10 USDC (size * price >= 10)
  *
- * Set SKIP_MARKET_ORDERS=true to skip market order examples.
+ * Env flags:
+ *   SKIP_MARKET_ORDERS=true  — skip market buy/sell examples
+ *   SKIP_SELL_ORDERS=true    — skip all sell examples (use if wallet has no token balance)
  */
 import { buildSignSend, hlInfo, apiGet, getAccount } from "./client.js";
 
@@ -98,27 +100,35 @@ const limitBuyOid: number | null =
 console.log("OID:", limitBuyOid);
 
 // ── LIMIT SELL (GTC) ──────────────────────────────────────────
-console.log("\n── Limit SELL (GTC) ─────────────────────────────────────");
-console.log(`Placing: SELL ${limitSize} ${yesSymbol} @ ${sellPrice}`);
+// Requires existing spot balance of the YES token. Set SKIP_SELL_ORDERS=true to skip.
+const skipSell = process.env.SKIP_SELL_ORDERS === "true";
+let limitSellOid: number | null = null;
 
-const limitSellResult = await buildSignSend({
-  type: "order",
-  orders: [{
-    asset: yesSymbol,
-    side: "sell",
-    price: String(sellPrice),
-    size: limitSize,
-    tif: "gtc",
-  }],
-}) as any;
+if (skipSell) {
+  console.log("\n── Limit SELL (skipped — SKIP_SELL_ORDERS=true) ─────────");
+} else {
+  console.log("\n── Limit SELL (GTC) ─────────────────────────────────────");
+  console.log(`Placing: SELL ${limitSize} ${yesSymbol} @ ${sellPrice}`);
 
-console.log(JSON.stringify(limitSellResult, null, 2));
+  const limitSellResult = await buildSignSend({
+    type: "order",
+    orders: [{
+      asset: yesSymbol,
+      side: "sell",
+      price: String(sellPrice),
+      size: limitSize,
+      tif: "gtc",
+    }],
+  }) as any;
 
-const limitSellOid: number | null =
-  limitSellResult?.exchangeResponse?.data?.statuses?.[0]?.resting?.oid ??
-  limitSellResult?.exchangeResponse?.data?.statuses?.[0]?.filled?.oid ??
-  null;
-console.log("OID:", limitSellOid);
+  console.log(JSON.stringify(limitSellResult, null, 2));
+
+  limitSellOid =
+    limitSellResult?.exchangeResponse?.data?.statuses?.[0]?.resting?.oid ??
+    limitSellResult?.exchangeResponse?.data?.statuses?.[0]?.filled?.oid ??
+    null;
+  console.log("OID:", limitSellOid);
+}
 
 // ── ORDER STATUS ──────────────────────────────────────────────
 if (limitBuyOid) {
@@ -132,14 +142,15 @@ if (limitBuyOid) {
 }
 
 // ── OPEN ORDERS ───────────────────────────────────────────────
-const openOrders = await fetch("https://send.hyperliquidapi.com/openOrders", {
+const openOrdersRaw = await fetch("https://send.hyperliquidapi.com/openOrders", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ user: walletAddress }),
-}).then(r => r.json()) as any[];
+}).then(r => r.json()) as any;
+const openOrders: any[] = Array.isArray(openOrdersRaw) ? openOrdersRaw : (openOrdersRaw?.orders ?? []);
 
-console.log(`\n── Open Orders (${openOrders?.length ?? 0}) ─────────────────────────────────`);
-for (const o of openOrders ?? []) {
+console.log(`\n── Open Orders (${openOrders.length}) ─────────────────────────────────`);
+for (const o of openOrders) {
   console.log(`  oid=${o.oid}  coin=${o.coin}  side=${o.side}  px=${o.limitPx}  sz=${o.sz}`);
 }
 
@@ -166,19 +177,23 @@ if (skipMarket) {
   }) as any;
   console.log(JSON.stringify(mktBuyResult, null, 2));
 
-  console.log("\n── Market SELL (IOC, auto-slippage) ─────────────────────");
-  console.log(`Placing: marketSell ${marketSize} ${yesSymbol}`);
+  if (skipSell) {
+    console.log("\n── Market SELL (skipped — SKIP_SELL_ORDERS=true) ────────");
+  } else {
+    console.log("\n── Market SELL (IOC, auto-slippage) ─────────────────────");
+    console.log(`Placing: marketSell ${marketSize} ${yesSymbol}`);
 
-  const mktSellResult = await buildSignSend({
-    type: "order",
-    orders: [{
-      asset: yesSymbol,
-      side: "sell",
-      size: marketSize,
-      tif: "market",
-    }],
-  }) as any;
-  console.log(JSON.stringify(mktSellResult, null, 2));
+    const mktSellResult = await buildSignSend({
+      type: "order",
+      orders: [{
+        asset: yesSymbol,
+        side: "sell",
+        size: marketSize,
+        tif: "market",
+      }],
+    }) as any;
+    console.log(JSON.stringify(mktSellResult, null, 2));
+  }
 }
 
 // ── CANCEL resting limit orders ───────────────────────────────
