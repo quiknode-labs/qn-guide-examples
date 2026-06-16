@@ -1,24 +1,25 @@
 // Importing necessary modules and libraries
-import { Core, viem } from "@quicknode/sdk"; // Importing Core and viem from the Quicknode SDK
+import { createPublicClient, http } from "viem"; // Importing Viem client utilities
+import * as viem from "viem"; // Importing Viem helpers
 import fs from "fs-extra"; // Importing the file system module for file operations
 import * as cli from "cli-progress"; // Importing the CLI progress bar module for visual progress feedback in the console
 
-// Creating a new instance of Core from the Quicknode SDK
-const core = new Core({
-  endpointUrl: "QUICKNODE_ENDPOINT", // The endpoint URL of your Quicknode. Replace "QUICKNODE_ENDPOINT" with your actual Quicknode endpoint URL.
+// Creating a Viem public client using your Quicknode endpoint
+const client = createPublicClient({
+  transport: http("QUICKNODE_ENDPOINT"), // The endpoint URL of your Quicknode. Replace "QUICKNODE_ENDPOINT" with your actual Quicknode endpoint URL.
 });
 
 // Function to get ERC20 token transfers for a specific address within a given block
 async function getERC20TokenTransfers(address, blockNum) {
   const transfers = []; // Array to store the transfers
 
-  // Convert the block number to hexadecimal format
-  const blockHex = viem.toHex(blockNum);
+  // Convert the block number to bigint format for Viem
+  const blockNumber = BigInt(blockNum);
 
   // Fetch logs of token transfers sent from the given address
-  const sentTransfers = await core.client.getLogs({
-    fromBlock: blockHex,
-    toBlock: blockHex,
+  const sentTransfers = await client.getLogs({
+    fromBlock: blockNumber,
+    toBlock: blockNumber,
     event: viem.parseAbiItem(
       "event Transfer(address indexed from, address indexed to, uint256 value)"
     ),
@@ -33,9 +34,9 @@ async function getERC20TokenTransfers(address, blockNum) {
   transfers.push(...parsedEvents);
 
   // Fetch logs of token transfers received by the given address
-  const receivedTransfers = await core.client.getLogs({
-    fromBlock: blockHex,
-    toBlock: blockHex,
+  const receivedTransfers = await client.getLogs({
+    fromBlock: blockNumber,
+    toBlock: blockNumber,
     event: viem.parseAbiItem(
       "event Transfer(address indexed from, address indexed to, uint256 value)"
     ),
@@ -55,13 +56,13 @@ async function getERC20TokenTransfers(address, blockNum) {
 async function getERC721TokenTransfers(address, blockNum) {
   const transfers = []; // Array to store the transfers
 
-  // Convert the block number to hexadecimal format
-  const blockHex = viem.toHex(blockNum);
+  // Convert the block number to bigint format for Viem
+  const blockNumber = BigInt(blockNum);
 
   // Fetch logs of ERC721 token transfers sent from the given address
-  const sentTransfers = await core.client.getLogs({
-    fromBlock: blockHex,
-    toBlock: blockHex,
+  const sentTransfers = await client.getLogs({
+    fromBlock: blockNumber,
+    toBlock: blockNumber,
     event: viem.parseAbiItem(
       "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
     ),
@@ -76,9 +77,9 @@ async function getERC721TokenTransfers(address, blockNum) {
   transfers.push(...parsedEvents);
 
   // Fetch logs of ERC721 token transfers received by the given address
-  const receivedTransfers = await core.client.getLogs({
-    fromBlock: blockHex,
-    toBlock: blockHex,
+  const receivedTransfers = await client.getLogs({
+    fromBlock: blockNumber,
+    toBlock: blockNumber,
     event: viem.parseAbiItem(
       "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
     ),
@@ -99,13 +100,13 @@ async function getERC721TokenTransfers(address, blockNum) {
 async function getERC1155TokenTransfers(address, blockNum) {
   const transfers = []; // Array to store the transfers
 
-  // Convert the block number to hexadecimal format
-  const blockHex = viem.toHex(blockNum);
+  // Convert the block number to bigint format for Viem
+  const blockNumber = BigInt(blockNum);
 
   // Fetch logs of ERC1155 token transfers sent from the given address (for single transfers)
-  let sentTransfers = await core.client.getLogs({
-    fromBlock: blockHex,
-    toBlock: blockHex,
+  let sentTransfers = await client.getLogs({
+    fromBlock: blockNumber,
+    toBlock: blockNumber,
     event: viem.parseAbiItem(
       "event TransferSingle(address indexed _operator, address indexed _from, address indexed _to, uint256 _id, uint256 _value)"
     ),
@@ -118,9 +119,9 @@ async function getERC1155TokenTransfers(address, blockNum) {
   transfers.push(...parsedEvents);
 
   // Fetch logs of ERC1155 token transfers sent from the given address (for batch transfers)
-  sentTransfers = await core.client.getLogs({
-    fromBlock: blockHex,
-    toBlock: blockHex,
+  sentTransfers = await client.getLogs({
+    fromBlock: blockNumber,
+    toBlock: blockNumber,
     event: viem.parseAbiItem(
       "event TransferBatch(address indexed _operator, address indexed _from, address indexed _to, uint256[] _ids, uint256[] _values)"
     ),
@@ -133,9 +134,9 @@ async function getERC1155TokenTransfers(address, blockNum) {
   transfers.push(...parsedEvents);
 
   // Fetch logs of ERC1155 token transfers received by the given address (for single transfers)
-  let receivedTransfers = await core.client.getLogs({
-    fromBlock: blockHex,
-    toBlock: blockHex,
+  let receivedTransfers = await client.getLogs({
+    fromBlock: blockNumber,
+    toBlock: blockNumber,
     event: viem.parseAbiItem(
       "event TransferSingle(address indexed _operator, address indexed _from, address indexed _to, uint256 _id, uint256 _value)"
     ),
@@ -148,9 +149,9 @@ async function getERC1155TokenTransfers(address, blockNum) {
   transfers.push(...parsedEvents);
 
   // Fetch logs of ERC1155 token transfers received by the given address (for batch transfers)
-  receivedTransfers = await core.client.getLogs({
-    fromBlock: blockHex,
-    toBlock: blockHex,
+  receivedTransfers = await client.getLogs({
+    fromBlock: blockNumber,
+    toBlock: blockNumber,
     event: viem.parseAbiItem(
       "event TransferBatch(address indexed _operator, address indexed _from, address indexed _to, uint256[] _ids, uint256[] _values)"
     ),
@@ -187,7 +188,7 @@ function parseTransferEvents(events) {
 async function getInternalTransactions(txHash) {
   try {
     // Requesting a trace of the transaction using the debug_traceTransaction method
-    const traceResponse = await core.client.request({
+    const traceResponse = await client.request({
       method: "debug_traceTransaction",
       params: [txHash, { tracer: "callTracer" }], // Using a call tracer for detailed transaction execution
     });
@@ -232,8 +233,8 @@ async function getTransactionsForAddresses(
     blockNum === toBlock ? bar1.stop() : bar1.increment();
 
     // Fetch the block and its transactions
-    const block = await core.client.getBlock({
-      blockNumber: blockNum,
+    const block = await client.getBlock({
+      blockNumber: BigInt(blockNum),
       includeTransactions: true,
     });
 
@@ -316,14 +317,16 @@ async function getTransactionsForAddresses(
         }
 
         // Fetch and add internal transactions if applicable
-        const bytecode = await core.client.getBytecode({
-          address: tx.to,
-        });
+        if (tx.to) {
+          const bytecode = await client.getBytecode({
+            address: tx.to,
+          });
 
-        if (tx.to && bytecode !== "0x") {
-          txDetails.internalTransactions.push(
-            ...(await getInternalTransactions(tx.hash))
-          );
+          if (bytecode && bytecode !== "0x") {
+            txDetails.internalTransactions.push(
+              ...(await getInternalTransactions(tx.hash))
+            );
+          }
         }
         // Add the detailed transaction to the transactions array
         transactions.push(txDetails);

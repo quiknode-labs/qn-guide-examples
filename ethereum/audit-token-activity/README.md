@@ -1,11 +1,11 @@
-# Audit ERC20, ERC721, and ERC1155 Token Activity using Quicknode SDK
+# Audit ERC20, ERC721, and ERC1155 Token Activity
 
-This project is based on the guide, [How to Audit ERC20, ERC721, and ERC1155 Token Activity using Quicknode SDK](https://www.quicknode.com/guides/ethereum-development/transactions/how-to-audit-token-activity-using-quicknode-sdk) by Sergen Uysal. Using JavaScript and the Quicknode SDK, this tool fetches and analyzes transactions across ERC20, ERC721, and ERC1155 token standards to conducting comprehensive audits on blockchain wallets, specifically tailored for EVM-compatible chains.
+This project is based on the guide, [How to Audit ERC20, ERC721, and ERC1155 Token Activity](https://www.quicknode.com/guides/ethereum-development/transactions/how-to-audit-token-activity) by Sergen Uysal. Using JavaScript and Viem, this tool fetches and analyzes transactions across ERC20, ERC721, and ERC1155 token standards to conduct comprehensive audits on blockchain wallets, specifically tailored for EVM-compatible chains.
 
 ### Prerequisites
 
 - A [Quicknode account](https://www.quicknode.com/?utm_source=qn-github&utm_campaign=explorer&utm_content=sign-up&utm_medium=generic).
-- [Node.JS](https://nodejs.org/en/) installed.
+- [Node.JS](https://nodejs.org/en/) v20 or higher installed.
 
 ## Clone Example Monorepo
 
@@ -23,11 +23,11 @@ npm install
 
 1. Obtain a Quicknode endpoint URL for the EVM chain that you want.
 2. Open the `index.js` file.
-3. Locate the `Core` object instantiation. It should look like this:
+3. Locate the `createPublicClient` call. It should look like this:
 
 ```javascript
-const core = new Core({
-  endpointUrl: "QUICKNODE_ENDPOINT",
+const client = createPublicClient({
+  transport: http("QUICKNODE_ENDPOINT"),
 });
 ```
 4. Replace `QUICKNODE_ENDPOINT` with your actual Quicknode endpoint URL.
@@ -43,10 +43,10 @@ At the end of the `index.js` file, you will find the `run` function call. This f
 
 ### Example Usage
 
-The file contains a pre-configured example that audits a specific address for both ERC20 and ERC721 token transfers:
+The file contains a pre-configured example that audits a specific address for ERC20, ERC721, and ERC1155 token transfers:
 
 ```javascript
-run(['0xe2233D97f30745fa5f15761B81B281BE5959dB5C'], 38063215, 38063220, ['ERC20', 'ERC721']);
+run(['0xe2233D97f30745fa5f15761B81B281BE5959dB5C'], 38063215, 38063220, ['ERC20', 'ERC721', 'ERC1155']);
 ```
 
 Feel free to modify this example with your desired parameters.
@@ -67,4 +67,4 @@ Upon successful execution, the script will generate a `wallet_audit_data.json` f
 
 ## Support
 
-For additional assistance or queries regarding the setup and usage, feel free to reach out to us by using the feedback form in the [Conclusion section of the guide](https://www.quicknode.com/guides/ethereum-development/transactions/how-to-audit-token-activity-using-quicknode-sdk#conclusion).
+For additional assistance or queries regarding the setup and usage, feel free to reach out to us by using the feedback form in the [Conclusion section of the guide](https://www.quicknode.com/guides/ethereum-development/transactions/how-to-audit-token-activity#conclusion).
