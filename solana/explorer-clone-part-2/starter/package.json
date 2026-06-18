@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
-    "@solana/spl-token": "^0.2.0",
+    "@solana/spl-token": "^0.4.14",
     "@solana/wallet-adapter-base": "^0.9.3",
     "@solana/wallet-adapter-react": "^0.15.3",
     "@solana/wallet-adapter-react-ui": "^0.9.5",
-    "@solana/wallet-adapter-wallets": "^0.15.3",
+    "@solana/wallet-adapter-wallets": "^0.19.37",
     "@solana/web3.js": "^1.31.0",
     "@tailwindcss/typography": "^0.5.0",
     "daisyui": "^1.24.3",
