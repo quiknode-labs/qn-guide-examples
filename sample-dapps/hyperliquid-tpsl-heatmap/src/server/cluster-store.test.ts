@@ -72,5 +72,17 @@ describe('ClusterStore', () => {
     const state = store.toClientState('demo', 'test');
     expect(state.buckets.BTC).toHaveLength(1);
     expect(state.buckets.BTC?.[0].price).toBe(65000);
+    expect(state.recentEvents.BTC).toHaveLength(1);
+    expect(state.recentEvents.BTC?.[0].oid).toBe('new');
+  });
+
+  it('clears TP/SL orders and recent events on reset', () => {
+    const store = new ClusterStore(['BTC'], 'BTC', 0.75);
+    store.addOrder(diff());
+    store.clearTpslState();
+
+    const state = store.toClientState('demo', 'test');
+    expect(state.buckets.BTC).toEqual([]);
+    expect(state.recentEvents.BTC).toEqual([]);
   });
 });

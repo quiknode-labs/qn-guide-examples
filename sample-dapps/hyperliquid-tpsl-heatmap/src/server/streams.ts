@@ -18,6 +18,8 @@ export function startLiveStreams(config: AppConfig, store: ClusterStore, broadca
     snapshot: false,
     issue: '',
   };
+  let bboAttempt = 0;
+  let tpslAttempt = 0;
 
   const publish = () => {
     if (streamState.issue) {
@@ -33,51 +35,57 @@ export function startLiveStreams(config: AppConfig, store: ClusterStore, broadca
     else broadcast('Connecting to Quicknode gRPC streams');
   };
 
-  const connectBbo = (attempt = 0) => {
+  const connectBbo = () => {
     const { client, metadata } = createGrpcClient(config.endpoint!, config.token!);
     const stream = client.StreamBboBook({ coins: config.coins }, metadata);
+    let reconnectScheduled = false;
 
     stream.on('data', (update: BboBookUpdate) => {
       store.applyBbo(update);
+      bboAttempt = 0;
       streamState.bbo = true;
       streamState.issue = '';
       publish();
     });
 
-    stream.on('error', (err: grpc.ServiceError) => {
+    const reconnect = (err?: grpc.ServiceError) => {
+      if (reconnectScheduled) return;
+      reconnectScheduled = true;
       streamState.bbo = false;
-      scheduleReconnect('BBO', err, () => connectBbo(attempt + 1), attempt, streamState, publish);
-    });
+      scheduleReconnect('BBO', err, connectBbo, bboAttempt, streamState, publish);
+      bboAttempt += 1;
+    };
 
-    stream.on('end', () => {
-      streamState.bbo = false;
-      scheduleReconnect('BBO', undefined, () => connectBbo(attempt + 1), attempt, streamState, publish);
-    });
+    stream.on('error', reconnect);
+    stream.on('end', () => reconnect());
   };
 
-  const connectTpsl = (attempt = 0) => {
+  const connectTpsl = () => {
     const { client, metadata } = createGrpcClient(config.endpoint!, config.token!);
     const stream = client.StreamTpslUpdates({ coins: config.coins }, metadata);
+    let reconnectScheduled = false;
 
     stream.on('data', (update: TpslUpdatesUpdate) => {
       store.applyTpslUpdate(update);
+      tpslAttempt = 0;
       streamState.tpsl = true;
       if (update.snapshot) streamState.snapshot = true;
       streamState.issue = '';
       publish();
     });
 
-    stream.on('error', (err: grpc.ServiceError) => {
+    const reconnect = (err?: grpc.ServiceError) => {
+      if (reconnectScheduled) return;
+      reconnectScheduled = true;
       streamState.tpsl = false;
       streamState.snapshot = false;
-      scheduleReconnect('TP/SL', err, () => connectTpsl(attempt + 1), attempt, streamState, publish);
-    });
+      store.clearTpslState();
+      scheduleReconnect('TP/SL', err, connectTpsl, tpslAttempt, streamState, publish);
+      tpslAttempt += 1;
+    };
 
-    stream.on('end', () => {
-      streamState.tpsl = false;
-      streamState.snapshot = false;
-      scheduleReconnect('TP/SL', undefined, () => connectTpsl(attempt + 1), attempt, streamState, publish);
-    });
+    stream.on('error', reconnect);
+    stream.on('end', () => reconnect());
   };
 
   connectBbo();

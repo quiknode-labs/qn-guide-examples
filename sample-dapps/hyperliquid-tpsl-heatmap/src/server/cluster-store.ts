@@ -81,6 +81,11 @@ export class ClusterStore {
     }
   }
 
+  clearTpslState(): void {
+    const knownCoins = new Set([...this.coins, ...this.orders.keys(), ...this.events.keys()]);
+    for (const coin of knownCoins) this.clearCoin(coin);
+  }
+
   addOrder(diff: TpslOrderDiff): void {
     const order = this.toStoredOrder(diff);
     if (!order) return;
@@ -131,6 +136,7 @@ export class ClusterStore {
 
   private clearCoin(coin: string): void {
     this.orders.set(coin, new Map());
+    this.events.set(coin, []);
   }
 
   private ensureOrders(coin: string): Map<string, StoredOrder> {
