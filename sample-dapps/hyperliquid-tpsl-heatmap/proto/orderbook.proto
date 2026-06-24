@@ -1,0 +1,59 @@
+syntax = "proto3";
+package hyperliquid;
+
+service OrderBookStreaming {
+  rpc StreamBboBook (BboBookRequest) returns (stream BboBookUpdate);
+  rpc StreamTpslUpdates (TpslUpdatesRequest) returns (stream TpslUpdatesUpdate);
+}
+
+message BboBookRequest {
+  repeated string coins = 1;
+}
+
+message BboBookUpdate {
+  string coin = 1;
+  uint64 time = 2;
+  uint64 block_number = 3;
+  L2Level bid = 4;
+  L2Level ask = 5;
+}
+
+message L2Level {
+  string px = 1;
+  string sz = 2;
+  uint32 n = 3;
+}
+
+message TpslUpdatesRequest {
+  repeated string coins = 1;
+}
+
+enum TpslDiffType {
+  TPSL_DIFF_TYPE_UNSPECIFIED = 0;
+  TPSL_DIFF_TYPE_ADD = 1;
+  TPSL_DIFF_TYPE_REMOVE = 2;
+}
+
+message TpslUpdatesUpdate {
+  uint64 time = 1;
+  uint64 height = 2;
+  repeated TpslOrderDiff diffs = 3;
+  bool snapshot = 4;
+}
+
+message TpslOrderDiff {
+  TpslDiffType diff_type = 1;
+  uint64 oid = 2;
+  string coin = 3;
+  string user = 4;
+  string side = 5;
+  string trigger_px = 6;
+  string limit_px = 7;
+  string sz = 8;
+  string trigger_condition = 9;
+  string order_type = 10;
+  bool is_position_tpsl = 11;
+  bool reduce_only = 12;
+  uint64 timestamp = 13;
+  string reason = 14;
+}
