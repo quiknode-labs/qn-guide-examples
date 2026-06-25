@@ -22,7 +22,10 @@ export function ProviderRace({
   latencyMs,
   loading,
 }: ProviderRaceProps) {
-  const best = quotes.length ? parseInt(quotes[0].outAmount) : 0;
+  // Baseline is the actual highest output across all quotes, not quotes[0]:
+  // the server pins the expected winner to index 0, which may not be the
+  // best output. Measuring against the true max keeps bars ≤100% and bps ≥0.
+  const best = quotes.reduce((m, q) => Math.max(m, parseInt(q.outAmount)), 0);
   const winnerId = expectedWinner ?? (quotes[0]?.provider || null);
 
   return (

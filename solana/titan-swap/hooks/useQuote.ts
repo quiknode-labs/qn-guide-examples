@@ -61,6 +61,12 @@ export function useQuote(
 
     setQuoteInfo(emptyQuote(true, mode));
 
+    // Guard against out-of-order responses: if the inputs change (or the
+    // component unmounts) while a request is in flight, the cleanup flips
+    // this flag so the stale response is discarded instead of overwriting
+    // state for the current amount/pair.
+    let cancelled = false;
+
     const timeoutId = setTimeout(async () => {
       const amountRaw = Math.floor(
         amountNum * Math.pow(10, fromToken.decimals)
@@ -78,6 +84,7 @@ export function useQuote(
             slippageBps,
             simulate,
           });
+          if (cancelled) return;
           const latencyMs = Math.round(performance.now() - started);
 
           const winner = res.quotes[0] ?? null;
@@ -108,6 +115,7 @@ export function useQuote(
             amountRaw,
             slippageBps
           );
+          if (cancelled) return;
           const latencyMs = Math.round(performance.now() - started);
           const out = parseInt(res.outputAmount) / Math.pow(10, toToken.decimals);
           setQuoteInfo({
@@ -120,6 +128,7 @@ export function useQuote(
           });
         }
       } catch (err) {
+        if (cancelled) return;
         const raw = err instanceof Error ? err.message : "Failed to fetch quote";
         const friendly = raw.includes("No routes found") || raw.includes("404")
           ? `No route available for this pair or amount. Try a different token or smaller size.`
@@ -134,7 +143,10 @@ export function useQuote(
       }
     }, 500);
 
-    return () => clearTimeout(timeoutId);
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+    };
   }, [fromToken, toToken, amount, slippageBps, simulate, publicKey]);
 
   return quoteInfo;

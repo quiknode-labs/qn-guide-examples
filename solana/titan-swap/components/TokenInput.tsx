@@ -1,7 +1,15 @@
 "use client";
 
 import { TokenSelector } from "./TokenSelector";
+import { SOL_MINT } from "@/lib/tokens";
 import type { Token } from "@/lib/types";
+
+/**
+ * Lamports to leave behind when MAX-ing native SOL, so the swap still has
+ * funds for transaction + priority fees and any ATA rent. Without this, a
+ * full-balance "max" swap passes the UI balance check but fails on-chain.
+ */
+const SOL_FEE_BUFFER = 0.01;
 
 interface TokenInputProps {
   label: string;
@@ -26,11 +34,20 @@ export function TokenInput({
   disabled = false,
   readOnly = false,
 }: TokenInputProps) {
+  const isNativeSol = token?.address === SOL_MINT;
+  // For native SOL, hold back a buffer for fees/rent; never go negative.
+  const maxAmount =
+    balance === undefined
+      ? 0
+      : isNativeSol
+      ? Math.max(balance - SOL_FEE_BUFFER, 0)
+      : balance;
+
   const handleMaxClick = () => {
-    if (balance !== undefined && balance > 0) onAmountChange(balance.toString());
+    if (maxAmount > 0) onAmountChange(maxAmount.toString());
   };
 
-  const canUseMax = !readOnly && balance !== undefined && balance > 0 && !disabled;
+  const canUseMax = !readOnly && maxAmount > 0 && !disabled;
 
   return (
     <div className="border border-border bg-bg-elev p-3 space-y-2">

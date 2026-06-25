@@ -6,10 +6,12 @@ import {
   WalletProvider as SolanaWalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
+// Import each adapter from its own package, NOT the @solana/wallet-adapter-wallets
+// barrel. The barrel re-exports ~40 adapters (Ledger, Torus, WalletConnect,
+// Coinbase, …), and bundlers/dev compilers walk that entire graph even when you
+// only use two — which balloons `next dev` compile time and memory.
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
