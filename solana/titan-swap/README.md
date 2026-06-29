@@ -28,12 +28,12 @@ self-custodial build → sign → send flow you own end to end.
 
 Both credentials stay on the server. Browser code talks to local Next.js route
 handlers: `/api/titan/*` calls the Gateway (decoding MessagePack and normalizing
-pubkeys), and `/api/rpc` proxies Solana JSON-RPC to the QuickNode endpoint.
+pubkeys), and `/api/rpc` proxies Solana JSON-RPC to the Quicknode endpoint.
 Neither the Gateway auth nor the RPC token ever reaches the client.
 
 ```
 Browser ──> /api/titan/* ──> Titan Gateway (MessagePack decode, server-only)
-        └─> /api/rpc     ──> QuickNode Solana RPC (token server-only)
+        └─> /api/rpc     ──> Quicknode Solana RPC (token server-only)
 ```
 
 Because the RPC proxy carries only HTTP JSON-RPC (no WebSocket), the app
@@ -67,17 +67,17 @@ signature subscription.
 
 - **Framework:** Next.js 16 (App Router, server route handlers)
 - **UI:** React 19 + Tailwind CSS v4 (Quicknode dark design tokens)
-- **Wallets:** Solana Wallet Adapter (Phantom, Solflare)
+- **Wallets:** Wallet Standard via `@solana/react` + `@wallet-standard/react`
 - **Chain:** Solana mainnet via Quicknode RPC
 - **Swap API:** Titan Gateway meta-aggregation (`@msgpack/msgpack` decode)
-- **Transactions:** `@solana/web3.js` v0 transaction assembly
+- **Transactions:** `@solana/kit` v0 transaction assembly + signing
 
 ## Project structure
 
 ```
 ├── app/
 │   ├── api/titan/            # Server proxy: info, providers, venues, price, swap
-│   ├── api/rpc/              # Server proxy: Solana JSON-RPC (hides QuickNode token)
+│   ├── api/rpc/              # Server proxy: Solana JSON-RPC (hides Quicknode token)
 │   ├── layout.tsx
 │   ├── page.tsx              # Main swap UI
 │   ├── globals.css           # Tailwind v4 + Quicknode dark design tokens
@@ -98,7 +98,8 @@ signature subscription.
 └── lib/
     ├── titan-server.ts       # server-only Gateway client (MessagePack)
     ├── titan.ts              # client fetchers for /api/titan/*
-    ├── build-swap-tx.ts      # instructions + ALTs -> VersionedTransaction
+    ├── rpc.ts                # @solana/kit RPC pointed at the /api/rpc proxy
+    ├── build-swap-tx.ts      # instructions + ALTs -> Kit transaction message
     ├── tokens.ts             # token metadata registry
     └── types.ts
 ```

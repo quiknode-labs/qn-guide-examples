@@ -63,7 +63,7 @@ export function StatusMessage({
   const labels: Partial<Record<SwapStatus, string>> = {
     quoting: "Fetching routes…",
     building: "Building transaction from Titan instructions…",
-    sending: "Submitting via QuickNode RPC…",
+    sending: "Submitting via Quicknode RPC…",
     confirming: "Confirming on-chain…",
   };
 

@@ -1,10 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useConnection } from "@solana/wallet-adapter-react";
-import type { Connection } from "@solana/web3.js";
+import {
+  type Rpc,
+  type Signature,
+  type SolanaRpcApi,
+  getBase64EncodedWireTransaction,
+  getSignatureFromTransaction,
+  signTransactionMessageWithSigners,
+} from "@solana/kit";
 import { buildSwapTransaction } from "@/lib/build-swap-tx";
+import { createRpc } from "@/lib/rpc";
+import { useTxSigner } from "@/app/providers/WalletProvider";
 import type { Token, SwapStatus, TitanSwapRoute } from "@/lib/types";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -12,12 +19,12 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 /** Poll getSignatureStatuses until confirmed, the tx errors, or the blockhash
  *  expires — an HTTP-only alternative to the WebSocket confirmTransaction. */
 async function confirmBySignature(
-  connection: Connection,
-  signature: string,
+  rpc: Rpc<SolanaRpcApi>,
+  signature: Signature,
   lastValidBlockHeight: number
 ) {
   while (true) {
-    const { value } = await connection.getSignatureStatuses([signature]);
+    const { value } = await rpc.getSignatureStatuses([signature]).send();
     const status = value[0];
     if (status?.err) {
       throw new Error(`Transaction failed: ${JSON.stringify(status.err)}`);
@@ -28,8 +35,8 @@ async function confirmBySignature(
     ) {
       return;
     }
-    const blockHeight = await connection.getBlockHeight("confirmed");
-    if (blockHeight > lastValidBlockHeight) {
+    const blockHeight = await rpc.getBlockHeight({ commitment: "confirmed" }).send();
+    if (blockHeight > BigInt(lastValidBlockHeight)) {
       throw new Error("Transaction expired before confirmation");
     }
     await sleep(1500);
@@ -41,18 +48,19 @@ async function confirmBySignature(
  *
  * Unlike an execute-for-you aggregator, Titan hands back instructions and we
  * own the transaction lifecycle. We build a v0 transaction from the winning
- * route, the wallet signs it, and we submit + confirm through QuickNode RPC.
+ * route with @solana/kit, sign it with the wallet's Kit signer
+ * (`signTransactionMessageWithSigners`), and submit + confirm through Quicknode
+ * RPC — entirely via Kit, no web3.js.
  */
 export function useSwap() {
-  const { connection } = useConnection();
-  const { publicKey, signTransaction } = useWallet();
+  const signer = useTxSigner();
   const [status, setStatus] = useState<SwapStatus>("idle");
   const [error, setError] = useState<string | null>(null);
   const [txSignature, setTxSignature] = useState<string | null>(null);
   const [estimatedOutput, setEstimatedOutput] = useState<string | null>(null);
 
   const executeSwap = async (route: TitanSwapRoute, toToken: Token) => {
-    if (!publicKey || !signTransaction) {
+    if (!signer) {
       throw new Error("Wallet not connected");
     }
 
@@ -62,27 +70,36 @@ export function useSwap() {
       (parseInt(route.outAmount) / Math.pow(10, toToken.decimals)).toFixed(6)
     );
 
+    const rpc = createRpc();
+
     try {
       // Build the transaction from Titan's instructions + lookup tables.
       setStatus("building");
-      const { transaction, blockhash, lastValidBlockHeight } =
-        await buildSwapTransaction(route, publicKey, connection);
+      const { message, lastValidBlockHeight } = await buildSwapTransaction(
+        route,
+        signer,
+        rpc
+      );
 
-      // Sign in the wallet.
+      // Sign in the wallet via the Kit signer attached to the message.
       setStatus("signing");
-      const signed = await signTransaction(transaction);
+      const signedTransaction = await signTransactionMessageWithSigners(message);
 
-      // Submit through QuickNode RPC.
+      // Submit through Quicknode RPC.
       setStatus("sending");
-      const signature = await connection.sendRawTransaction(signed.serialize(), {
-        skipPreflight: false,
-        maxRetries: 5,
-      });
+      const signature = getSignatureFromTransaction(signedTransaction);
+      await rpc
+        .sendTransaction(getBase64EncodedWireTransaction(signedTransaction), {
+          encoding: "base64",
+          skipPreflight: false,
+          preflightCommitment: "confirmed",
+        })
+        .send();
       setTxSignature(signature);
 
       // Confirm by polling over HTTP (the RPC proxy carries no WebSocket).
       setStatus("confirming");
-      await confirmBySignature(connection, signature, lastValidBlockHeight);
+      await confirmBySignature(rpc, signature, lastValidBlockHeight);
 
       setStatus("success");
     } catch (err) {

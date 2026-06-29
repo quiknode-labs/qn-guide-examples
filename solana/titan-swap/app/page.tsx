@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletAccount } from "@/app/providers/WalletProvider";
 import { SwapCard } from "@/components/SwapCard";
 import { WalletButton } from "@/components/WalletButton";
 import { TokenInput } from "@/components/TokenInput";
@@ -23,7 +23,7 @@ const DEFAULT_FROM_TOKEN = COMMON_TOKENS[0]; // SOL
 const DEFAULT_TO_TOKEN = COMMON_TOKENS[1]; // USDC
 
 export default function Home() {
-  const { publicKey } = useWallet();
+  const { address } = useWalletAccount();
   const { tokens } = useTokenList();
   const { balances, getBalance, refreshBalances, loading: balancesLoading } =
     useTokenBalances();
@@ -48,7 +48,7 @@ export default function Home() {
 
   // Tokens with a positive balance, richest first (for the "From" selector).
   const fromTokens = useMemo(() => {
-    if (!publicKey || balancesLoading) return [];
+    if (!address || balancesLoading) return [];
     const balanceMap = new Map<string, number>();
     balances.forEach((b) =>
       balanceMap.set(b.mint, b.balance / Math.pow(10, b.decimals))
@@ -58,7 +58,7 @@ export default function Home() {
       .map((t) => ({ token: t, balance: balanceMap.get(t.address) || 0 }))
       .sort((a, b) => b.balance - a.balance)
       .map((x) => x.token);
-  }, [tokens, balances, publicKey, balancesLoading]);
+  }, [tokens, balances, address, balancesLoading]);
 
   useEffect(() => {
     if (status === "success") {
@@ -69,7 +69,7 @@ export default function Home() {
 
   // Default the "From" token to the wallet's richest holding.
   useEffect(() => {
-    if (!publicKey) {
+    if (!address) {
       setFromToken(DEFAULT_FROM_TOKEN);
       return;
     }
@@ -78,7 +78,7 @@ export default function Home() {
       if (current && getBalance(current.address) > 0) return current;
       return fromTokens[0];
     });
-  }, [publicKey, balancesLoading, fromTokens, getBalance]);
+  }, [address, balancesLoading, fromTokens, getBalance]);
 
   const fromBalance = fromToken ? getBalance(fromToken.address) : 0;
   const toBalance = toToken ? getBalance(toToken.address) : 0;
@@ -90,7 +90,7 @@ export default function Home() {
     fromToken && toToken && fromToken.address !== toToken.address;
 
   const canSwap =
-    !!publicKey &&
+    !!address &&
     !!fromToken &&
     !!toToken &&
     !!tokensAreDifferent &&
@@ -163,7 +163,7 @@ export default function Home() {
             <span className="qn-highlight">Titan</span> DeFi Meta-Aggregation Swap
           </h1>
           <p className="mt-2 font-mono text-[11px] text-fg-dim uppercase tracking-wide flex items-center gap-2">
-            Solana · via QuickNode
+            Solana · via Quicknode
             {info && <span className="text-fg-ghost">{`protocol ${info.protocolVersion}`}</span>}
           </p>
         </div>
@@ -190,7 +190,7 @@ export default function Home() {
             tokens={fromTokens}
             onTokenSelect={handleFromTokenSelect}
             onAmountChange={setAmount}
-            disabled={inFlight || !publicKey}
+            disabled={inFlight || !address}
           />
 
           <div className="flex justify-center">
@@ -221,7 +221,7 @@ export default function Home() {
             tokens={tokens}
             onTokenSelect={setToToken}
             onAmountChange={() => {}}
-            disabled={inFlight || !publicKey}
+            disabled={inFlight || !address}
             readOnly
           />
 
@@ -285,7 +285,7 @@ export default function Home() {
         status={status}
         onClick={handleSwap}
         disabled={!canSwap}
-        walletConnected={!!publicKey}
+        walletConnected={!!address}
         hasAmount={hasAmount}
         hasInsufficientBalance={hasInsufficientBalance}
       />
@@ -312,7 +312,7 @@ export default function Home() {
 
         {/* Right column — meta-aggregation */}
         <div className="space-y-4">
-          {publicKey && hasAmount && tokensAreDifferent ? (
+          {address && hasAmount && tokensAreDifferent ? (
             <>
               <ProviderRace
                 quotes={quoteInfo.quotes}
@@ -329,7 +329,7 @@ export default function Home() {
                 <span className="qn-eyebrow">Provider Race</span>
               </div>
               <div className="p-4 font-mono text-xs text-fg-ghost leading-relaxed">
-                {publicKey
+                {address
                   ? "Enter an amount to watch Titan's providers compete and see the route split across venues."
                   : "Connect a wallet and enter an amount to watch Titan's providers compete for the best route."}
               </div>

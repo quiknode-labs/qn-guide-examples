@@ -1,47 +1,56 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
+import { address } from "@solana/kit";
+import { useWalletAccount } from "@/app/providers/WalletProvider";
+import { createRpc } from "@/lib/rpc";
 import { SOL_MINT } from "@/lib/tokens";
 import type { TokenBalance } from "@/lib/types";
 
-const TOKEN_PROGRAM_ID = new PublicKey(
-  "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-);
-const TOKEN_2022_PROGRAM_ID = new PublicKey(
+const TOKEN_PROGRAM_ID = address("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
+const TOKEN_2022_PROGRAM_ID = address(
   "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
 );
 
-/** Token balances read straight from QuickNode RPC (no aggregator needed). */
+/** Token balances read straight from Quicknode RPC via @solana/kit. */
 export function useTokenBalances() {
-  const { connection } = useConnection();
-  const { publicKey } = useWallet();
+  const { address: owner } = useWalletAccount();
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const refreshBalances = useCallback(async () => {
-    if (!publicKey) {
+    if (!owner) {
       setBalances([]);
       return;
     }
     setLoading(true);
     setError(null);
     try {
+      const rpc = createRpc();
+      const ownerAddress = address(owner);
       const [lamports, std, t22] = await Promise.all([
-        connection.getBalance(publicKey),
-        connection.getParsedTokenAccountsByOwner(publicKey, {
-          programId: TOKEN_PROGRAM_ID,
-        }),
-        connection.getParsedTokenAccountsByOwner(publicKey, {
-          programId: TOKEN_2022_PROGRAM_ID,
-        }),
+        rpc.getBalance(ownerAddress, { commitment: "confirmed" }).send(),
+        rpc
+          .getTokenAccountsByOwner(
+            ownerAddress,
+            { programId: TOKEN_PROGRAM_ID },
+            { encoding: "jsonParsed", commitment: "confirmed" }
+          )
+          .send(),
+        rpc
+          .getTokenAccountsByOwner(
+            ownerAddress,
+            { programId: TOKEN_2022_PROGRAM_ID },
+            { encoding: "jsonParsed", commitment: "confirmed" }
+          )
+          .send(),
       ]);
 
       const result: TokenBalance[] = [];
-      if (lamports > 0) {
-        result.push({ mint: SOL_MINT, balance: lamports, decimals: 9 });
+      const lamportsNum = Number(lamports.value);
+      if (lamportsNum > 0) {
+        result.push({ mint: SOL_MINT, balance: lamportsNum, decimals: 9 });
       }
 
       for (const { account } of [...std.value, ...t22.value]) {
@@ -63,7 +72,7 @@ export function useTokenBalances() {
     } finally {
       setLoading(false);
     }
-  }, [publicKey, connection]);
+  }, [owner]);
 
   useEffect(() => {
     refreshBalances();

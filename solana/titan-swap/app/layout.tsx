@@ -5,7 +5,7 @@ import { WalletProvider } from "./providers/WalletProvider";
 export const metadata: Metadata = {
   title: "Titan Swap — Meta-Aggregation on Solana",
   description:
-    "A single-page Solana swap UI built on the Titan Gateway meta-aggregation API, served through QuickNode. Watch competing providers race for the best route, then build and submit the winning transaction yourself.",
+    "A single-page Solana swap UI built on the Titan Gateway meta-aggregation API, served through Quicknode. Watch competing providers race for the best route, then build and submit the winning transaction yourself.",
 };
 
 export default function RootLayout({

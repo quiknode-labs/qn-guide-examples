@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletAccount } from "@/app/providers/WalletProvider";
 import { getTitanSwap, getTitanPrice } from "@/lib/titan";
 import type { Token, TitanSwapRoute } from "@/lib/types";
 
@@ -46,11 +46,11 @@ export function useQuote(
   slippageBps: number,
   simulate: boolean
 ) {
-  const { publicKey } = useWallet();
+  const { address } = useWalletAccount();
   const [quoteInfo, setQuoteInfo] = useState<QuoteInfo>(emptyQuote());
 
   useEffect(() => {
-    const mode: "swap" | "price" = publicKey ? "swap" : "price";
+    const mode: "swap" | "price" = address ? "swap" : "price";
     setQuoteInfo(emptyQuote(false, mode));
 
     if (!fromToken || !toToken || !amount || fromToken.address === toToken.address) {
@@ -74,13 +74,13 @@ export function useQuote(
       const started = performance.now();
 
       try {
-        if (publicKey) {
+        if (address) {
           // Full meta-aggregation: every provider competes, winner is executable.
           const res = await getTitanSwap({
             inputMint: fromToken.address,
             outputMint: toToken.address,
             amount: amountRaw,
-            userPublicKey: publicKey.toBase58(),
+            userPublicKey: address,
             slippageBps,
             simulate,
           });
@@ -147,7 +147,7 @@ export function useQuote(
       cancelled = true;
       clearTimeout(timeoutId);
     };
-  }, [fromToken, toToken, amount, slippageBps, simulate, publicKey]);
+  }, [fromToken, toToken, amount, slippageBps, simulate, address]);
 
   return quoteInfo;
 }

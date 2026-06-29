@@ -14,7 +14,7 @@ import type {
 /**
  * Server-only Titan Gateway client.
  *
- * The Gateway is reached through your QuickNode endpoint. Responses are
+ * The Gateway is reached through your Quicknode endpoint. Responses are
  * MessagePack-encoded binary, and pubkeys arrive as raw 32-byte buffers — we
  * decode here, on the server, so the browser only ever sees clean JSON and the
  * auth credential never leaves the server.

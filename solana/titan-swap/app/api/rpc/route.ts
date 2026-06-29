@@ -6,8 +6,8 @@ export const dynamic = "force-dynamic";
 /**
  * Server-side proxy for Solana JSON-RPC.
  *
- * The browser's wallet-adapter Connection points at this same-origin route, so
- * the QuickNode endpoint (which embeds an auth token) never reaches the client.
+ * The browser's @solana/kit RPC points at this same-origin route, so the
+ * Quicknode endpoint (which embeds an auth token) never reaches the client.
  * Only HTTP JSON-RPC is forwarded — the app confirms transactions by polling
  * getSignatureStatuses rather than via a WebSocket subscription.
  */
