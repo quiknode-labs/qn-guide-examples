@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Fonts — QuickNode brand (Denim / DenimINK / Geist Mono)            */
+/* ------------------------------------------------------------------ */
+@font-face {
+  font-family: "Denim";
+  src: url("/fonts/Denim-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Denim";
+  src: url("/fonts/Denim-Bold.ttf") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "DenimINK";
+  src: url("/fonts/DenimINK-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "DenimINK";
+  src: url("/fonts/DenimINK-Bold.ttf") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-SemiBold.ttf") format("truetype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+
+/* ------------------------------------------------------------------ */
+/* Design tokens — QuickNode "inverted" (dark) theme                  */
+/* ------------------------------------------------------------------ */
+:root {
+  --color-green-400: #6cff75;
+  --color-gray-900: oklch(28.9% 0 0);
+  --color-gray-950: oklch(18.7% 0 0);
+  --color-chart-9-green: oklch(73.23% 0.139 161.34);
+  --color-chart-11-red: oklch(71.66% 0.155 13.91);
+
+  --background: var(--color-gray-950);
+  --background-elevated: color-mix(in oklch, white 4%, transparent);
+  --foreground: #ffffff;
+  --foreground-medium: color-mix(in oklch, white 85%, transparent);
+  --foreground-light: color-mix(in oklch, white 65%, transparent);
+  --foreground-dim: color-mix(in oklch, white 48%, transparent);
+
+  --border: color-mix(in oklch, white 12%, transparent);
+  --border-strong: color-mix(in oklch, white 24%, transparent);
+  --accent: var(--color-green-400);
+  --accent-foreground: var(--color-gray-900);
+  --grid: color-mix(in oklch, white 8%, transparent);
+  --hover-inverted: color-mix(in oklch, white 6%, transparent);
+
+  --bull: var(--color-chart-9-green);
+  --bear: var(--color-chart-11-red);
+}
+
+/* Map tokens into Tailwind v4 utilities (bg-*, text-fg-*, border-*, font-*) */
+@theme {
+  --color-bg: var(--background);
+  --color-bg-panel: var(--background);
+  --color-bg-elev: var(--background-elevated);
+  --color-bg-hover: var(--hover-inverted);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-fg: var(--foreground);
+  --color-fg-muted: var(--foreground-medium);
+  --color-fg-dim: var(--foreground-light);
+  --color-fg-ghost: var(--foreground-dim);
+
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-foreground);
+  --color-bull: var(--bull);
+  --color-bear: var(--bear);
+
+  --font-sans: "Denim", "Onest", system-ui, -apple-system, sans-serif;
+  --font-display: "DenimINK", "Instrument Serif", "Onest", serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+html,
+body {
+  background: var(--background);
+  color: var(--foreground-medium);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  color: var(--foreground);
+  line-height: 1;
+  font-weight: 400;
+  margin: 0;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); }
+::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+/* ------------------------------------------------------------------ */
+/* Components                                                          */
+/* ------------------------------------------------------------------ */
+.panel {
+  background: var(--background);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+}
+.panel-header {
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--foreground-dim);
+}
+.stat-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+}
+.mono-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* "// LABEL" eyebrow */
+.qn-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--foreground-light);
+}
+.qn-eyebrow::before { content: "// "; color: var(--foreground-dim); }
+
+/* Corner-tick badge */
+.qn-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--foreground-light);
+  letter-spacing: 0.02em;
+  width: fit-content;
+}
+.qn-badge::before,
+.qn-badge::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 6px;
+  border: 1px solid var(--border);
+}
+.qn-badge::before { left: 0; border-right: 0; }
+.qn-badge::after { right: 0; border-left: 0; }
+.qn-badge--accent { background: var(--accent); color: var(--accent-foreground); }
+.qn-badge--accent::before, .qn-badge--accent::after { display: none; }
+.qn-badge--bear { background: var(--bear); color: #fff; }
+.qn-badge--bear::before, .qn-badge--bear::after { display: none; }
+
+/* Accent highlight rectangle behind glyphs */
+.qn-highlight {
+  display: inline;
+  color: var(--accent-foreground);
+  background-color: var(--accent);
+  padding: 0.05em 0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Dot-pattern texture */
+.qn-pattern-dots {
+  --pattern-color: var(--grid);
+  background-image: radial-gradient(var(--pattern-color) 1.1px, transparent 1.4px);
+  background-size: 14px 14px;
+  background-position: 0 0;
+}
+
+.qn-hairline { height: 1px; background: var(--border); }
