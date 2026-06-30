@@ -4,6 +4,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import {
@@ -86,13 +87,20 @@ function ActiveSigner({
   account: UiWalletAccount;
   onSigner: (signer: Signer) => void;
 }) {
-  const signer = useWalletAccountTransactionSigner(account, SOLANA_CHAIN);
+  const rawSigner = useWalletAccountTransactionSigner(account, SOLANA_CHAIN);
+  // MetaMask returns a new signer object each render even when the address is
+  // unchanged, which would loop the effect below. Stabilise by address so the
+  // effect only fires when the actual signer identity changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const signer = useMemo(() => rawSigner as unknown as TransactionSigner, [
+    (rawSigner as unknown as TransactionSigner)?.address,
+  ]);
   useEffect(() => {
     // @solana/react ships its own @solana/signers major (6.x) which is
     // structurally identical to the one bundled in @solana/kit (2.x) but a
     // distinct TS type. The runtime object is a valid Kit signer, so we bridge
     // the version skew with a single cast here.
-    onSigner(signer as unknown as TransactionSigner);
+    onSigner(signer);
     return () => onSigner(null);
   }, [signer, onSigner]);
   return null;
