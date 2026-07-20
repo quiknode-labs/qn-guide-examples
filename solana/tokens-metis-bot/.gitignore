@@ -1,0 +1,20 @@
+# runtime state and logs
+data/
+logs/
+
+# secrets
+env.local
+.env
+# dev wallet keypair files, if kept in-project
+dev-wallet.json
+*.keypair.json
+
+# deps and tooling
+node_modules/
+*.tsbuildinfo
+
+# AI
+.agents/
+.claude/
+CLAUDE.md
+NOTES.md
