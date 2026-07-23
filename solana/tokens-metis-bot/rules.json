@@ -1,0 +1,30 @@
+{
+  "universe": {
+    "limit": 50,
+    "categories": ["crypto", "rwa", "commodity", "equity", "etf"]
+  },
+  "screen": {
+    "minLiquidityTier": "tier2",
+    "maxRiskFlags": 0,
+    "minVolume24hUSD": 500000,
+    "momentum": { "window": "24h", "minChangePct": 5 }
+  },
+  "portfolio": {
+    "quoteMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "maxPositions": 50,
+    "targetPositionSizeUSD": 0.1,
+    "maxPositionSizeUSD": 0.15
+  },
+  "exit": {
+    "sellWhenScreenFails": true,
+    "takeProfitPct": 25,
+    "stopLossPct": 15,
+    "reentryCooldownMinutes": 60
+  },
+  "execution": {
+    "slippageBps": 100,
+    "onlyDirectRoutes": false,
+    "restrictIntermediateTokens": true,
+    "maxAccounts": 64
+  }
+}
