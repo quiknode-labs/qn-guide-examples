@@ -242,11 +242,14 @@ async function main(): Promise<void> {
           reasons: r.preScreenReasons,
         }));
 
-      // 3. Diff against held positions. Positions whose data fetch failed
-      // this cycle are withheld from the diff so a transient API error can
-      // never trigger a sell.
+      // 3. Diff against held positions. Sells for positions whose data fetch
+      // failed this cycle are suppressed after the diff so a transient API
+      // error can never trigger a sell. The positions themselves stay in the
+      // held list: they still count toward maxPositions capacity, and they
+      // still get price-exit checks, which run on Metis quotes and do not
+      // depend on Tokens API data.
       const failedAssetIds = new Set(resolutions.filter((r) => r.failed).map((r) => r.entry.assetId));
-      const held = store.getPositions().filter((p) => !failedAssetIds.has(p.assetId));
+      const held = store.getPositions();
 
       // Re-entry cooldowns: assets sold recently are blocked from re-buying
       // for the configured window. Prune expired (or disabled) entries.
@@ -264,14 +267,21 @@ async function main(): Promise<void> {
       const priceExits = await evaluatePriceExits(held, metis, rpc, rules);
       const priceExitIds = new Set(priceExits.map((d) => d.candidate.assetId));
 
-      // Screen-based decisions, minus any sell a price exit already covers.
+      // Screen-based decisions, minus any sell a price exit already covers,
+      // and minus any sell for an asset whose data fetch failed this cycle.
       const screenDecisions = diff(
         passing,
         held,
         rules,
         [...rejected, ...preScreenRejections],
         cooldownAssetIds,
-      ).filter((d) => !(d.action === "sell" && priceExitIds.has(d.candidate.assetId)));
+      ).filter(
+        (d) =>
+          !(
+            d.action === "sell" &&
+            (priceExitIds.has(d.candidate.assetId) || failedAssetIds.has(d.candidate.assetId))
+          ),
+      );
       const decisions = [...priceExits, ...screenDecisions];
 
       // Funnel breakdown, so it is clear where assets drop out of the screen.
@@ -289,6 +299,11 @@ async function main(): Promise<void> {
       }
       for (const r of preScreenRejections) {
         logger.info(`${r.candidate.symbol}: DROP - ${r.reasons.join("; ")}`);
+      }
+      for (const p of held) {
+        if (failedAssetIds.has(p.assetId)) {
+          logger.info(`${p.symbol}: HOLD - data fetch failed, screen sell withheld this cycle`);
+        }
       }
       const heldAssetIds = new Set(held.map((p) => p.assetId));
       for (const c of passing) {

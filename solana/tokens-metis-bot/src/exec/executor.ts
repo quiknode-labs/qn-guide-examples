@@ -60,6 +60,7 @@ export function createExecutor(deps: ExecutorDeps): Executor {
     let amountBaseUnits: string;
     let dexes: string[];
     let venueLabel: string;
+    let tradeMint: string; // the non-quote mint this trade actually touches
 
     if (action === "buy") {
       // Buys pin to the pool the Tokens API identified as deepest: get its
@@ -76,6 +77,7 @@ export function createExecutor(deps: ExecutorDeps): Executor {
 
       inputMint = rules.portfolio.quoteMint;
       outputMint = candidate.chosenMint;
+      tradeMint = candidate.chosenMint;
       const size = await sizeBuyInQuoteBaseUnits();
       if (size === null || size === "0") {
         logger.warn("No quote-mint balance available, skipping buy", { symbol: candidate.symbol });
@@ -89,13 +91,18 @@ export function createExecutor(deps: ExecutorDeps): Executor {
       dexes = [];
       venueLabel = "auto (free route)";
 
-      inputMint = candidate.chosenMint;
-      outputMint = rules.portfolio.quoteMint;
       const position = store.getPositions().find((p) => p.assetId === candidate.assetId);
       if (!position) {
         logger.warn("Sell decision for unknown position, skipping", { symbol: candidate.symbol });
         return;
       }
+      // Sell the mint we actually hold. The candidate's chosenMint reflects
+      // this cycle's best variant (or the trending mint on a pre-screen
+      // rejection), which can differ from the variant bought earlier when an
+      // asset has several mints. The position is the source of truth.
+      inputMint = position.mint;
+      tradeMint = position.mint;
+      outputMint = rules.portfolio.quoteMint;
       // Clamp to the actual wallet balance in case of external transfers.
       const balances = await rpc.getBalances(rpc.walletAddress);
       const walletAmount = BigInt(
@@ -104,10 +111,20 @@ export function createExecutor(deps: ExecutorDeps): Executor {
       const positionAmount = BigInt(position.amountBaseUnits);
       const sellAmount = walletAmount < positionAmount ? walletAmount : positionAmount;
       if (sellAmount <= 0n) {
-        logger.warn("Position has no wallet balance, removing from state", {
-          symbol: candidate.symbol,
-        });
-        store.removePosition(candidate.assetId);
+        // The tracked position is not backed by a wallet balance (token sold
+        // or moved externally). This is bookkeeping reconciliation, not a
+        // trade, but it is still a state mutation, so dry run must not do it:
+        // the dry-run contract is that state stays untouched.
+        if (dryRun) {
+          logger.warn("Position has no wallet balance, would remove from state (dry run)", {
+            symbol: candidate.symbol,
+          });
+        } else {
+          logger.warn("Position has no wallet balance, removing from state", {
+            symbol: candidate.symbol,
+          });
+          store.removePosition(candidate.assetId);
+        }
         return;
       }
       amountBaseUnits = sellAmount.toString();
@@ -115,7 +132,10 @@ export function createExecutor(deps: ExecutorDeps): Executor {
 
     // Quote, with the price-impact ceiling enforced before any swap.
     const quote = await metis.quote({ inputMint, outputMint, amountBaseUnits, dexes });
-    const priceImpact = Number(quote.priceImpactPct) * 100; // Metis reports a fraction
+    // priceImpactPct is a decimal fraction despite the name ("0.0001" means
+    // 0.01%), per the Jupiter Swap API reference that Metis wraps. Scale to
+    // percent before comparing against the percent ceiling. See NOTES.md.
+    const priceImpact = Number(quote.priceImpactPct) * 100;
     if (!Number.isFinite(priceImpact) || priceImpact > MAX_PRICE_IMPACT_PCT) {
       logger.warn("Quoted price impact exceeds ceiling, refusing swap", {
         symbol: candidate.symbol,
@@ -130,7 +150,7 @@ export function createExecutor(deps: ExecutorDeps): Executor {
       action,
       assetId: candidate.assetId,
       symbol: candidate.symbol,
-      mint: candidate.chosenMint,
+      mint: tradeMint,
       venue: venueLabel,
       dexes,
       quotedOutAmount: quote.outAmount,

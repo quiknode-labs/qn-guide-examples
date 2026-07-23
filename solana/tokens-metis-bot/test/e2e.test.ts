@@ -8,7 +8,7 @@ import { screenWithReasons } from "../src/engine/screen.ts";
 import { diff } from "../src/engine/diff.ts";
 import { createExecutor } from "../src/exec/executor.ts";
 import type { TokensClient } from "../src/clients/tokens.ts";
-import type { MetisClient } from "../src/clients/metis.ts";
+import type { MetisClient, QuoteRequest } from "../src/clients/metis.ts";
 import type { RpcClient } from "../src/clients/rpc.ts";
 import type { StateStore } from "../src/state/store.ts";
 import type { Logger, TradeLogEntry } from "../src/log/logger.ts";
@@ -41,6 +41,7 @@ interface Harness {
   warns: string[];
   positions: Map<string, Position>;
   cooldowns: Record<string, number>;
+  quoteRequests: QuoteRequest[];
   swapCalls: number;
   sendCalls: number;
 }
@@ -50,6 +51,9 @@ function makeHarness(opts: {
   quote?: MetisQuoteResponse;
   heldPositions?: Position[];
   quoteBalance?: string;
+  // Simulate the wallet no longer holding the tracked position tokens (sold
+  // or moved externally), so only the quote mint shows in getBalances.
+  walletMissingPositionTokens?: boolean;
 }): Harness {
   const trades: TradeLogEntry[] = [];
   const warns: string[] = [];
@@ -57,6 +61,7 @@ function makeHarness(opts: {
     (opts.heldPositions ?? []).map((p) => [p.assetId, p]),
   );
   const cooldowns: Record<string, number> = {};
+  const quoteRequests: QuoteRequest[] = [];
   const counters = { swapCalls: 0, sendCalls: 0 };
 
   const tokens: TokensClient = {
@@ -71,7 +76,10 @@ function makeHarness(opts: {
   };
 
   const metis: MetisClient = {
-    quote: mock.fn(async () => opts.quote ?? makeQuote()),
+    quote: mock.fn(async (req: QuoteRequest) => {
+      quoteRequests.push(req);
+      return opts.quote ?? makeQuote();
+    }),
     swap: mock.fn(async (): Promise<MetisSwapResponse> => {
       counters.swapCalls++;
       return { swapTransaction: "bW9jaw==", lastValidBlockHeight: 1 };
@@ -87,11 +95,13 @@ function makeHarness(opts: {
       solLamports: 1_000_000_000n,
       tokens: [
         { mint: USDC, amountBaseUnits: opts.quoteBalance ?? "500000000", decimals: 6 },
-        ...[...positions.values()].map((p) => ({
-          mint: p.mint,
-          amountBaseUnits: p.amountBaseUnits,
-          decimals: 6,
-        })),
+        ...(opts.walletMissingPositionTokens
+          ? []
+          : [...positions.values()].map((p) => ({
+              mint: p.mint,
+              amountBaseUnits: p.amountBaseUnits,
+              decimals: 6,
+            }))),
       ],
     })),
     signAndSend: mock.fn(async () => {
@@ -140,6 +150,7 @@ function makeHarness(opts: {
     warns,
     positions,
     cooldowns,
+    quoteRequests,
     get swapCalls() {
       return counters.swapCalls;
     },
@@ -214,6 +225,47 @@ describe("end-to-end dry run", () => {
     assert.equal(h.swapCalls, 0);
   });
 
+  it("dry-run sell with no wallet balance does not delete the tracked position", async () => {
+    // State holds a position the wallet no longer backs (sold or moved
+    // externally). A dry-run cycle must not reconcile it away: the dry-run
+    // contract is that state stays untouched.
+    const held = makePosition({ assetId: "held-fading", symbol: "FADE" });
+    const h = makeHarness({
+      dryRun: true,
+      heldPositions: [held],
+      walletMissingPositionTokens: true,
+    });
+    await h.executor.run({
+      action: "sell",
+      candidate: makeCandidate({ assetId: "held-fading", symbol: "FADE" }),
+      reason: "screen fail",
+    });
+
+    assert.equal(h.positions.size, 1); // position preserved in dry run
+    assert.equal(h.swapCalls, 0);
+    assert.ok(h.warns.some((w) => /would remove from state \(dry run\)/.test(w)));
+  });
+
+  it("live sell with no wallet balance reconciles the position out of state", async () => {
+    // In live mode the same stale position is removed, since the wallet
+    // truly no longer holds it.
+    const held = makePosition({ assetId: "held-fading", symbol: "FADE" });
+    const h = makeHarness({
+      dryRun: false,
+      heldPositions: [held],
+      walletMissingPositionTokens: true,
+    });
+    await h.executor.run({
+      action: "sell",
+      candidate: makeCandidate({ assetId: "held-fading", symbol: "FADE" }),
+      reason: "screen fail",
+    });
+
+    assert.equal(h.positions.size, 0); // reconciled away
+    assert.equal(h.swapCalls, 0); // no swap: nothing to sell
+    assert.equal(h.sendCalls, 0);
+  });
+
   it("refuses a swap whose price impact exceeds the ceiling", async () => {
     const h = makeHarness({
       dryRun: true,
@@ -262,6 +314,35 @@ describe("end-to-end dry run", () => {
     assert.equal(h.positions.size, 0);
     // A live sell starts the re-entry cooldown for that asset.
     assert.ok((h.cooldowns["held-fading"] ?? 0) > 0);
+  });
+
+  it("sell quotes the held mint, not the candidate's current variant", async () => {
+    // A screen rejection rebuilds the candidate from this cycle's best
+    // variant, which can differ from the variant bought earlier. The sell
+    // must trade the mint the position actually holds.
+    const heldMint = "HELDVARIANT111111111111111111111111111111";
+    const held = makePosition({
+      assetId: "held-fading",
+      symbol: "FADE",
+      mint: heldMint,
+      amountBaseUnits: "5000000",
+    });
+    const h = makeHarness({ dryRun: true, heldPositions: [held] });
+    await h.executor.run({
+      action: "sell",
+      candidate: makeCandidate({
+        assetId: "held-fading",
+        symbol: "FADE",
+        chosenMint: "OTHERVARIANT11111111111111111111111111111",
+      }),
+      reason: "screen fail",
+    });
+
+    assert.equal(h.quoteRequests.length, 1);
+    assert.equal(h.quoteRequests[0]!.inputMint, heldMint);
+    assert.equal(h.quoteRequests[0]!.amountBaseUnits, "5000000");
+    assert.equal(h.trades.length, 1);
+    assert.equal(h.trades[0]!.mint, heldMint); // audit log names the traded mint
   });
 
   it("live buy is skipped when the quote-mint balance is zero", async () => {
