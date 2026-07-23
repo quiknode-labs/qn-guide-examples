@@ -197,7 +197,11 @@ export function parseRules(raw: unknown): Rules {
   );
 
   const exit = asObject(root.exit, "exit");
-  assertKeys(exit, ["sellWhenScreenFails"], "exit");
+  assertKeys(
+    exit,
+    ["sellWhenScreenFails", "takeProfitPct", "stopLossPct", "reentryCooldownMinutes"],
+    "exit",
+  );
 
   const execution = asObject(root.execution, "execution");
   assertKeys(
@@ -228,6 +232,11 @@ export function parseRules(raw: unknown): Rules {
     },
     exit: {
       sellWhenScreenFails: asBoolean(exit.sellWhenScreenFails, "exit.sellWhenScreenFails"),
+      takeProfitPct: asNumber(exit.takeProfitPct, "exit.takeProfitPct", { min: 0 }),
+      stopLossPct: asNumber(exit.stopLossPct, "exit.stopLossPct", { min: 0 }),
+      reentryCooldownMinutes: asNumber(exit.reentryCooldownMinutes, "exit.reentryCooldownMinutes", {
+        min: 0,
+      }),
     },
     execution: {
       slippageBps: asNumber(execution.slippageBps, "execution.slippageBps", { min: 1, integer: true }),

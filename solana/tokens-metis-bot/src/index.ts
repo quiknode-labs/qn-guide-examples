@@ -7,14 +7,15 @@ import { existsSync } from "node:fs";
 import { loadEnv, loadRules } from "./config.ts";
 import { createTokensClient, countRiskFlags, momentumFromSnapshot } from "./clients/tokens.ts";
 import type { TrendingEntry } from "./clients/tokens.ts";
-import { createMetisClient } from "./clients/metis.ts";
-import { createRpcClient } from "./clients/rpc.ts";
+import { createMetisClient, type MetisClient } from "./clients/metis.ts";
+import { createRpcClient, type RpcClient } from "./clients/rpc.ts";
 import { screenWithReasons, type ScreenRejection } from "./engine/screen.ts";
 import { diff } from "./engine/diff.ts";
+import { evaluateExit } from "./engine/exits.ts";
 import { createExecutor } from "./exec/executor.ts";
 import { createJsonStateStore } from "./state/store.ts";
 import { createLogger } from "./log/logger.ts";
-import type { Candidate, Rules } from "./types.ts";
+import type { Candidate, Position, Rules, TradeDecision } from "./types.ts";
 
 const logger = createLogger();
 
@@ -107,6 +108,64 @@ async function resolveEntry(
   }
 }
 
+function candidateFromPosition(p: Position): Candidate {
+  return {
+    assetId: p.assetId,
+    symbol: p.symbol,
+    chosenMint: p.mint,
+    liquidityTier: p.entryLiquidityTier,
+    riskFlagCount: p.entryRiskFlagCount,
+    volume24hUSD: 0,
+    momentumPct: 0,
+    momentumBasis: "n/a",
+  };
+}
+
+// Price-based exits for held positions. For each position, quote selling the
+// whole thing to the quote mint, routed freely across any DEX for the best
+// exit price, and compare the executable value to the entry cost. Network
+// happens here; the take-profit / stop-loss decision itself is pure.
+async function evaluatePriceExits(
+  held: Position[],
+  metis: MetisClient,
+  rpc: RpcClient,
+  rules: Rules,
+): Promise<TradeDecision[]> {
+  const decisions: TradeDecision[] = [];
+  for (const position of held) {
+    try {
+      const quote = await metis.quote({
+        inputMint: position.mint,
+        outputMint: rules.portfolio.quoteMint,
+        amountBaseUnits: position.amountBaseUnits,
+        dexes: [], // free routing: best exit price
+      });
+      const currentExitUSD = await rpc.fromBaseUnits(quote.outAmount, rules.portfolio.quoteMint);
+      const tokensUi = await rpc.fromBaseUnits(position.amountBaseUnits, position.mint);
+      const entryCostUSD = tokensUi * position.entryPriceUSD;
+
+      const exit = evaluateExit(entryCostUSD, currentExitUSD, rules);
+      if (!exit) continue;
+
+      const pnl = exit.pnlPct >= 0 ? `+${exit.pnlPct.toFixed(2)}` : exit.pnlPct.toFixed(2);
+      decisions.push({
+        action: "sell",
+        candidate: candidateFromPosition(position),
+        reason:
+          `${exit.exit} ${pnl}% ` +
+          `(entry $${entryCostUSD.toFixed(4)} -> now $${currentExitUSD.toFixed(4)})`,
+      });
+    } catch (err) {
+      // A quote failure must never trigger a sell; skip this position.
+      logger.warn("Price-exit check failed, skipping", {
+        symbol: position.symbol,
+        error: (err as Error).message,
+      });
+    }
+  }
+  return decisions;
+}
+
 async function main(): Promise<void> {
   const env = loadEnv();
   const rules = loadRules();
@@ -188,7 +247,32 @@ async function main(): Promise<void> {
       // never trigger a sell.
       const failedAssetIds = new Set(resolutions.filter((r) => r.failed).map((r) => r.entry.assetId));
       const held = store.getPositions().filter((p) => !failedAssetIds.has(p.assetId));
-      const decisions = diff(passing, held, rules, [...rejected, ...preScreenRejections]);
+
+      // Re-entry cooldowns: assets sold recently are blocked from re-buying
+      // for the configured window. Prune expired (or disabled) entries.
+      const now = Date.now();
+      const cooldownMs = rules.exit.reentryCooldownMinutes * 60_000;
+      const cooldowns = store.getCooldowns();
+      const cooldownAssetIds = new Set<string>();
+      for (const [assetId, ts] of Object.entries(cooldowns)) {
+        if (cooldownMs > 0 && now - ts < cooldownMs) cooldownAssetIds.add(assetId);
+        else store.clearCooldown(assetId);
+      }
+
+      // Price-based exits (take-profit / stop-loss) take priority over the
+      // screen: a stop-loss must fire even if the asset still passes.
+      const priceExits = await evaluatePriceExits(held, metis, rpc, rules);
+      const priceExitIds = new Set(priceExits.map((d) => d.candidate.assetId));
+
+      // Screen-based decisions, minus any sell a price exit already covers.
+      const screenDecisions = diff(
+        passing,
+        held,
+        rules,
+        [...rejected, ...preScreenRejections],
+        cooldownAssetIds,
+      ).filter((d) => !(d.action === "sell" && priceExitIds.has(d.candidate.assetId)));
+      const decisions = [...priceExits, ...screenDecisions];
 
       // Funnel breakdown, so it is clear where assets drop out of the screen.
       logger.info(
@@ -197,12 +281,23 @@ async function main(): Promise<void> {
           `(${passing.length} passing, ${rejected.length} rejected); ` +
           `held ${held.length}; decisions: ${decisions.length}`,
       );
-      // Per-asset reasons, so it is clear WHY each candidate failed.
+      // Per-asset outcomes as TICKER: ACTION - reason. Buys and sells are
+      // logged by the executor via logger.trade; here we surface the no-trade
+      // outcomes so a quiet cycle is still explained.
       for (const r of rejected) {
-        logger.info(`  reject ${r.candidate.symbol}: ${r.reasons.join("; ")}`);
+        logger.info(`${r.candidate.symbol}: REJECT - ${r.reasons.join("; ")}`);
       }
       for (const r of preScreenRejections) {
-        logger.info(`  drop ${r.candidate.symbol}: ${r.reasons.join("; ")}`);
+        logger.info(`${r.candidate.symbol}: DROP - ${r.reasons.join("; ")}`);
+      }
+      const heldAssetIds = new Set(held.map((p) => p.assetId));
+      for (const c of passing) {
+        if (heldAssetIds.has(c.assetId) && !priceExitIds.has(c.assetId)) {
+          logger.info(`${c.symbol}: HOLD - already holding, still passes screen`);
+        } else if (cooldownAssetIds.has(c.assetId) && !heldAssetIds.has(c.assetId)) {
+          const remainingMin = Math.ceil((cooldownMs - (now - cooldowns[c.assetId]!)) / 60_000);
+          logger.info(`${c.symbol}: COOLDOWN - re-entry blocked, ${remainingMin}m left`);
+        }
       }
 
       // 4. Execute sequentially; one failed trade does not stop the rest.

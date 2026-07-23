@@ -46,7 +46,9 @@ describe("diff", () => {
   });
 
   it("does not sell when exit.sellWhenScreenFails is false", () => {
-    const rules = makeRules({ exit: { sellWhenScreenFails: false } });
+    const rules = makeRules({
+      exit: { sellWhenScreenFails: false, takeProfitPct: 25, stopLossPct: 15, reentryCooldownMinutes: 60 },
+    });
     const p = makePosition({ assetId: "gone-asset" });
     assert.deepEqual(diff([], [p], rules), []);
   });
@@ -65,6 +67,15 @@ describe("diff", () => {
     // One slot free: only the highest-momentum candidate buys.
     assert.equal(decisions.length, 1);
     assert.equal(decisions[0]!.candidate.assetId, "fast");
+  });
+
+  it("does not rebuy an asset that is in the re-entry cooldown", () => {
+    const rules = makeRules();
+    const c = makeCandidate({ assetId: "recently-sold" });
+    const cooldown = new Set(["recently-sold"]);
+    assert.deepEqual(diff([c], [], rules, [], cooldown), []);
+    // Without the cooldown it would buy.
+    assert.equal(diff([c], [], rules, [], new Set()).length, 1);
   });
 
   it("buys nothing at max positions, even with passing candidates", () => {

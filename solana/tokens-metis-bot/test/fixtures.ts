@@ -17,7 +17,7 @@ export function makeRules(overrides: Partial<Rules> = {}): Rules {
       targetPositionSizeUSD: 100,
       maxPositionSizeUSD: 150,
     },
-    exit: { sellWhenScreenFails: true },
+    exit: { sellWhenScreenFails: true, takeProfitPct: 25, stopLossPct: 15, reentryCooldownMinutes: 60 },
     execution: {
       slippageBps: 100,
       onlyDirectRoutes: false,

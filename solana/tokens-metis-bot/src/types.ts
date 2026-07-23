@@ -64,7 +64,12 @@ export interface Rules {
     targetPositionSizeUSD: number;
     maxPositionSizeUSD: number;
   };
-  exit: { sellWhenScreenFails: boolean };
+  exit: {
+    sellWhenScreenFails: boolean;
+    takeProfitPct: number; // sell when PnL >= this percent; 0 disables
+    stopLossPct: number; // sell when PnL <= -this percent; 0 disables
+    reentryCooldownMinutes: number; // block re-buying a sold asset for this long; 0 disables
+  };
   execution: {
     slippageBps: number;
     onlyDirectRoutes: boolean;

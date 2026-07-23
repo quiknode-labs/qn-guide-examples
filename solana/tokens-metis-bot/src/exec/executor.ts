@@ -55,24 +55,25 @@ export function createExecutor(deps: ExecutorDeps): Executor {
   async function run(decision: TradeDecision): Promise<void> {
     const { candidate, action } = decision;
 
-    // 1. Best market for the chosen variant.
-    const markets = await tokens.getMarkets(candidate.assetId, { mint: candidate.chosenMint });
-    const best = markets[0];
-    if (!best) {
-      logger.warn(`No market found, skipping ${action}`, { symbol: candidate.symbol });
-      return;
-    }
-
-    // 2. Venue -> Metis dexes allowlist. Throws on an unmapped venue.
-    const labelMap = await metis.programIdToLabel();
-    const dexes = toMetisDexes(best.venueLabel, labelMap);
-
-    // 3. Size the trade.
     let inputMint: string;
     let outputMint: string;
     let amountBaseUnits: string;
+    let dexes: string[];
+    let venueLabel: string;
 
     if (action === "buy") {
+      // Buys pin to the pool the Tokens API identified as deepest: get its
+      // venue and map it to a Metis dexes allowlist (throws if unmapped).
+      const markets = await tokens.getMarkets(candidate.assetId, { mint: candidate.chosenMint });
+      const best = markets[0];
+      if (!best) {
+        logger.warn(`No market found, skipping buy`, { symbol: candidate.symbol });
+        return;
+      }
+      const labelMap = await metis.programIdToLabel();
+      dexes = toMetisDexes(best.venueLabel, labelMap);
+      venueLabel = best.venueLabel;
+
       inputMint = rules.portfolio.quoteMint;
       outputMint = candidate.chosenMint;
       const size = await sizeBuyInQuoteBaseUnits();
@@ -82,6 +83,12 @@ export function createExecutor(deps: ExecutorDeps): Executor {
       }
       amountBaseUnits = size;
     } else {
+      // Sells route across any DEX for the best exit price: no venue pin,
+      // empty dexes list. We are exiting a position, not honoring a
+      // Tokens-API-suggested pool.
+      dexes = [];
+      venueLabel = "auto (free route)";
+
       inputMint = candidate.chosenMint;
       outputMint = rules.portfolio.quoteMint;
       const position = store.getPositions().find((p) => p.assetId === candidate.assetId);
@@ -106,7 +113,7 @@ export function createExecutor(deps: ExecutorDeps): Executor {
       amountBaseUnits = sellAmount.toString();
     }
 
-    // 4. Quote, with the price-impact ceiling enforced before any swap.
+    // Quote, with the price-impact ceiling enforced before any swap.
     const quote = await metis.quote({ inputMint, outputMint, amountBaseUnits, dexes });
     const priceImpact = Number(quote.priceImpactPct) * 100; // Metis reports a fraction
     if (!Number.isFinite(priceImpact) || priceImpact > MAX_PRICE_IMPACT_PCT) {
@@ -124,7 +131,7 @@ export function createExecutor(deps: ExecutorDeps): Executor {
       assetId: candidate.assetId,
       symbol: candidate.symbol,
       mint: candidate.chosenMint,
-      venue: best.venueLabel,
+      venue: venueLabel,
       dexes,
       quotedOutAmount: quote.outAmount,
       slippageBps: rules.execution.slippageBps,
@@ -137,7 +144,7 @@ export function createExecutor(deps: ExecutorDeps): Executor {
       reliableAmms: metis.reliableAmms(quote),
     };
 
-    // 5. Dry run: log the intended trade and stop. State stays untouched.
+    // Dry run: log the intended trade and stop. State stays untouched.
     if (dryRun) {
       logger.trade({ ...logBase, dryRun: true, actualOutAmount: null, signature: null });
       return;
@@ -156,12 +163,15 @@ export function createExecutor(deps: ExecutorDeps): Executor {
         amountBaseUnits: quote.outAmount,
         entryPriceUSD: outUi > 0 ? inUi / outUi : 0,
         entryTs: Date.now(),
-        entryVenue: best.venueLabel,
+        entryVenue: venueLabel,
         entryLiquidityTier: candidate.liquidityTier,
         entryRiskFlagCount: candidate.riskFlagCount,
       });
     } else {
       store.removePosition(candidate.assetId);
+      // Start the re-entry cooldown so the next cycle does not rebuy this
+      // asset immediately even if it still passes the screen.
+      store.setCooldown(candidate.assetId, Date.now());
     }
 
     logger.trade({ ...logBase, dryRun: false, actualOutAmount: quote.outAmount, signature: sig });

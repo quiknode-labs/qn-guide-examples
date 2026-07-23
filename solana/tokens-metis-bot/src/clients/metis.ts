@@ -4,7 +4,7 @@
 
 import type { Rules } from "../types.ts";
 import type { BotRpc } from "./rpc.ts";
-import type { MetisQuoteResponse, MetisSwapResponse } from "./metisTypes.ts";
+import type { MetisQuoteParams, MetisQuoteResponse, MetisSwapResponse } from "./metisTypes.ts";
 
 export interface QuoteRequest {
   inputMint: string;
@@ -27,21 +27,21 @@ export function createMetisClient(rpc: BotRpc, rules: Rules): MetisClient {
 
   return {
     // Returns the full parsed quote object unmodified: /swap needs the
-    // whole thing sent back.
+    // whole thing sent back. An empty dexes list omits the param entirely,
+    // which lets Metis route across any DEX (used for sells).
     async quote(req: QuoteRequest): Promise<MetisQuoteResponse> {
-      return rpc
-        .metis_quote({
-          inputMint: req.inputMint,
-          outputMint: req.outputMint,
-          amount: req.amountBaseUnits,
-          slippageBps: rules.execution.slippageBps,
-          swapMode: "ExactIn",
-          dexes: req.dexes.join(","),
-          onlyDirectRoutes: rules.execution.onlyDirectRoutes,
-          restrictIntermediateTokens: rules.execution.restrictIntermediateTokens,
-          maxAccounts: rules.execution.maxAccounts,
-        })
-        .send();
+      const params: MetisQuoteParams = {
+        inputMint: req.inputMint,
+        outputMint: req.outputMint,
+        amount: req.amountBaseUnits,
+        slippageBps: rules.execution.slippageBps,
+        swapMode: "ExactIn",
+        onlyDirectRoutes: rules.execution.onlyDirectRoutes,
+        restrictIntermediateTokens: rules.execution.restrictIntermediateTokens,
+        maxAccounts: rules.execution.maxAccounts,
+      };
+      if (req.dexes.length > 0) params.dexes = req.dexes.join(",");
+      return rpc.metis_quote(params).send();
     },
 
     async swap(quoteResponse: MetisQuoteResponse, userPublicKey: string): Promise<MetisSwapResponse> {

@@ -40,6 +40,7 @@ interface Harness {
   trades: TradeLogEntry[];
   warns: string[];
   positions: Map<string, Position>;
+  cooldowns: Record<string, number>;
   swapCalls: number;
   sendCalls: number;
 }
@@ -55,6 +56,7 @@ function makeHarness(opts: {
   const positions = new Map<string, Position>(
     (opts.heldPositions ?? []).map((p) => [p.assetId, p]),
   );
+  const cooldowns: Record<string, number> = {};
   const counters = { swapCalls: 0, sendCalls: 0 };
 
   const tokens: TokensClient = {
@@ -105,6 +107,13 @@ function makeHarness(opts: {
     getPositions: () => [...positions.values()],
     upsertPosition: (p) => positions.set(p.assetId, p),
     removePosition: (assetId) => positions.delete(assetId),
+    getCooldowns: () => ({ ...cooldowns }),
+    setCooldown: (assetId, ts) => {
+      cooldowns[assetId] = ts;
+    },
+    clearCooldown: (assetId) => {
+      delete cooldowns[assetId];
+    },
     save: async () => {},
   };
 
@@ -130,6 +139,7 @@ function makeHarness(opts: {
     trades,
     warns,
     positions,
+    cooldowns,
     get swapCalls() {
       return counters.swapCalls;
     },
@@ -250,6 +260,8 @@ describe("end-to-end dry run", () => {
 
     assert.equal(h.sendCalls, 1);
     assert.equal(h.positions.size, 0);
+    // A live sell starts the re-entry cooldown for that asset.
+    assert.ok((h.cooldowns["held-fading"] ?? 0) > 0);
   });
 
   it("live buy is skipped when the quote-mint balance is zero", async () => {

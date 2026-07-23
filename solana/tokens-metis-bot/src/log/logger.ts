@@ -33,32 +33,29 @@ export interface Logger {
   trade(entry: TradeLogEntry): void;
 }
 
-function line(level: string, message: string, fields?: Record<string, unknown>): string {
-  const base = `${new Date().toISOString()} ${level.toUpperCase()} ${message}`;
-  return fields && Object.keys(fields).length > 0 ? `${base} ${JSON.stringify(fields)}` : base;
+// Console lines carry no timestamp; the ndjson trade log keeps its `ts` for
+// the audit trail. Info lines are bare; warn and error keep a label.
+function line(message: string, fields?: Record<string, unknown>): string {
+  return fields && Object.keys(fields).length > 0 ? `${message} ${JSON.stringify(fields)}` : message;
 }
 
 export function createLogger(tradeLogPath = join("logs", "trades.ndjson")): Logger {
   return {
     info(message, fields) {
-      console.log(line("info", message, fields));
+      console.log(line(message, fields));
     },
     warn(message, fields) {
-      console.warn(line("warn", message, fields));
+      console.warn(line(`WARN: ${message}`, fields));
     },
     error(message, fields) {
-      console.error(line("error", message, fields));
+      console.error(line(`ERROR: ${message}`, fields));
     },
     trade(entry) {
       mkdirSync(dirname(tradeLogPath), { recursive: true });
       appendFileSync(tradeLogPath, JSON.stringify(entry) + "\n", "utf8");
-      console.log(
-        line("trade", `${entry.dryRun ? "[DRY RUN] " : ""}${entry.action} ${entry.symbol}`, {
-          venue: entry.venue,
-          out: entry.quotedOutAmount,
-          reason: entry.reason,
-        }),
-      );
+      // Console: TICKER: ACTION - reason. Full detail lives in the ndjson log.
+      const marker = entry.dryRun ? " (dry run)" : "";
+      console.log(`${entry.symbol}: ${entry.action.toUpperCase()}${marker} - ${entry.reason}`);
     },
   };
 }

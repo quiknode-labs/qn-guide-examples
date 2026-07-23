@@ -15,7 +15,12 @@
     "targetPositionSizeUSD": 0.1,
     "maxPositionSizeUSD": 0.15
   },
-  "exit": { "sellWhenScreenFails": true },
+  "exit": {
+    "sellWhenScreenFails": true,
+    "takeProfitPct": 25,
+    "stopLossPct": 15,
+    "reentryCooldownMinutes": 60
+  },
   "execution": {
     "slippageBps": 100,
     "onlyDirectRoutes": false,

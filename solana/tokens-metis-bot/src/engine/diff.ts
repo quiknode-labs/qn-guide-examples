@@ -11,6 +11,7 @@ export function diff(
   held: Position[],
   rules: Rules,
   rejections: ScreenRejection[] = [],
+  cooldownAssetIds: Set<string> = new Set(),
 ): TradeDecision[] {
   const decisions: TradeDecision[] = [];
   const heldByAsset = new Map(held.map((p) => [p.assetId, p]));
@@ -47,6 +48,8 @@ export function diff(
   const capacity = Math.max(0, rules.portfolio.maxPositions - held.length);
   const buyable = passing
     .filter((c) => !heldByAsset.has(c.assetId))
+    // Skip assets in the re-entry cooldown window after a recent sell.
+    .filter((c) => !cooldownAssetIds.has(c.assetId))
     .sort((a, b) => b.momentumPct - a.momentumPct);
 
   for (const candidate of buyable.slice(0, capacity)) {
