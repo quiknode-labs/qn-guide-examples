@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import {Test, console2} from "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {BatchCallAndSponsor} from "../src/BatchCallAndSponsor.sol";
+import {BatchCallAndSponsorScript} from "../script/BatchCallAndSponsor.s.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
@@ -182,5 +183,28 @@ contract BatchCallAndSponsorTest is Test {
         // Attempt a replay: reusing the same signature should revert because nonce has incremented.
         vm.expectRevert("Invalid signature");
         BatchCallAndSponsor(ALICE_ADDRESS).execute(calls, signature);
+    }
+
+    /// @dev Locks the script's direct-then-sponsored sequence, which no other test covers since
+    /// each runs on isolated state. Does not catch issue #442: in forge's in-memory EVM prank and
+    /// broadcast reach the same state, so only `forge script --broadcast` against a node shows it.
+    function testScriptRunEndState() public {
+        BatchCallAndSponsorScript script = new BatchCallAndSponsorScript();
+        script.run();
+
+        address payable alice = payable(ALICE_ADDRESS);
+
+        // Direct batch (nonce 0) then sponsored batch (nonce 1) both landed.
+        assertEq(BatchCallAndSponsor(alice).nonce(), 2, "both batches should have executed");
+
+        // Alice's EOA carries a 7702 delegation designator: 0xef0100 || implementation.
+        bytes memory aliceCode = alice.code;
+        assertEq(aliceCode.length, 23, "Alice should carry a 7702 delegation designator");
+        // forge-lint: disable-next-line(unsafe-typecast) -- reads the prefix off the 23 bytes above
+        assertEq(bytes3(aliceCode), bytes3(0xef0100), "delegation designator prefix");
+
+        assertEq(makeAddr("recipient").balance, 1 ether, "sponsored transfer should have landed");
+        assertEq(BOB_ADDRESS.balance, 1 ether, "direct ETH transfer should have landed");
+        assertEq(script.token().balanceOf(BOB_ADDRESS), 100e18, "direct token transfer should have landed");
     }
 }

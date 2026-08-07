@@ -67,24 +67,31 @@ forge test -vvv
 The output should look like this:
 
 ```bash
-Ran 4 tests for test/BatchCallAndSponsor.t.sol:BatchCallAndSponsorTest
-[PASS] testDirectExecution() (gas: 128386)
+Ran 5 tests for test/BatchCallAndSponsor.t.sol:BatchCallAndSponsorTest
+[PASS] testDirectExecution() (gas: 132349)
 Logs:
   Sending 1 ETH from Alice to Bob and transferring 100 tokens to Bob in a single transaction
 
-[PASS] testReplayAttack() (gas: 114337)
+[PASS] testReplayAttack() (gas: 111947)
 Logs:
   Test replay attack: Reusing the same signature should revert.
 
-[PASS] testSponsoredExecution() (gas: 110461)
+[PASS] testScriptRunEndState() (gas: 5720010)
+Logs:
+  Bob's balance after direct execution: 1000000000000000000
+  Bob's token balance after direct execution: 100000000000000000000
+  Sending 1 ETH from Alice to a random address, the transaction is sponsored by Bob
+  Recipient balance after sponsored execution: 1000000000000000000
+
+[PASS] testSponsoredExecution() (gas: 104642)
 Logs:
   Sending 1 ETH from Alice to a random address while the transaction is sponsored by Bob
 
-[PASS] testWrongSignature() (gas: 37077)
+[PASS] testWrongSignature() (gas: 37699)
 Logs:
   Test wrong signature: Execution should revert with 'Invalid signature'.
 
-Suite result: ok. 4 passed; 0 failed; 0 skipped;
+Suite result: ok. 5 passed; 0 failed; 0 skipped;
 ```
 
 #### Step 6: Run the Script
