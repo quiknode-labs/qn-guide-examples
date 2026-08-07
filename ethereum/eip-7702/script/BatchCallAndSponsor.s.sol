@@ -66,10 +66,13 @@ contract BatchCallAndSponsorScript is Script {
             data: abi.encodeCall(ERC20.transfer, (BOB_ADDRESS, 100e18))
         });
 
+        // Broadcast as a real transaction carrying Alice's authorization. vm.prank would only
+        // change local state, so the batch would never reach the chain while still bumping the
+        // nonce performSponsoredExecution() signs over -- reverting it under --broadcast.
+        vm.startBroadcast(ALICE_PK);
         vm.signAndAttachDelegation(address(implementation), ALICE_PK);
-        vm.startPrank(ALICE_ADDRESS);
         BatchCallAndSponsor(ALICE_ADDRESS).execute(calls);
-        vm.stopPrank();
+        vm.stopBroadcast();
 
         console.log("Bob's balance after direct execution:", BOB_ADDRESS.balance);
         console.log("Bob's token balance after direct execution:", token.balanceOf(BOB_ADDRESS));
