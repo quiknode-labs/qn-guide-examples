@@ -53,7 +53,7 @@ signature subscription.
    TITAN_GATEWAY_URL=your_titan_gateway_addon_url
    # TITAN_GATEWAY_AUTH=optional_bearer_token
    ```
-   Enable the [Titan Gateway add-on](https://marketplace.quicknode.com/add-on/titan-gateway)
+   Enable [Quicknode's Swap API with Titan](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=titan-meta-aggregation-swap)
    on your Quicknode endpoint to get the Gateway URL.
 
 3. Run the dev server:

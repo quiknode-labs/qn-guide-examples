@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/* Fonts — QuickNode brand (Denim / DenimINK / Geist Mono)            */
+/* Fonts — Quicknode brand (Denim / DenimINK / Geist Mono)            */
 /* ------------------------------------------------------------------ */
 @font-face {
   font-family: "Denim";
@@ -35,7 +35,7 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Design tokens — QuickNode "inverted" (dark) theme                  */
+/* Design tokens — Quicknode "inverted" (dark) theme                  */
 /* ------------------------------------------------------------------ */
 :root {
   --color-green-400: #6cff75;

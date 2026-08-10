@@ -18,13 +18,13 @@ export function InfoBanner() {
       <Text size="sm" mb="xs">
         This application uses the{" "}
         <Anchor
-          href="https://marketplace.quicknode.com/add-on/risk-assessment-api"
+          href="https://www.quicknode.com/add-ons/risk-assessment-api"
           target="_blank"
           underline="always"
         >
           Risk Assessment API
         </Anchor>{" "}
-        add-on on the Quicknode marketplace to secure both frontend interactions
+        endpoint add-on from Quicknode to secure both frontend interactions
         and smart contract operations, ensuring the highest level of security.
         Communication between the API and smart contract is done through
         Chainlink Functions.

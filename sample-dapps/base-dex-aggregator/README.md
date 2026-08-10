@@ -1,12 +1,17 @@
 # Base DEX Aggregator App
 
-A modern, user-friendly web application for performing token swaps on the Base blockchain. This web app uses Quicknode’s [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) to deliver **real-time gas estimation** and **optimized swap routing** — all in one modern interface.
+> **⚠️ Deprecated — reference only.**
+> The **Base DeFi Power Bundle** (Gas Estimation API + OpenOcean v4 Swap API) is no longer offered by Quicknode, so this sample app can no longer be run end to end.
+> The code is kept here as a reference implementation and is no longer maintained.
+> Browse the [Quicknode add-ons catalog](https://www.quicknode.com/add-ons) for currently available alternatives. Token swaps on Base are now available through Quicknode's [Swap API](https://www.quicknode.com/swap-api).
+
+A modern, user-friendly web application for performing token swaps on the Base blockchain. This web app used Quicknode’s **Base DeFi Power Bundle** to deliver **real-time gas estimation** and **optimized swap routing** — all in one modern interface.
 
 ![Base DEX Aggregator App Screenshot](./public/screenshot.png)
  
 ## 🚀 Features
 
-- 🔁 **Token Swaps**: Execute token swaps on Base using [OpenOcean v4 Swap API](https://marketplace.quicknode.com/add-on/openocean-v4-swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator)
+- 🔁 **Token Swaps**: Execute token swaps on Base using the OpenOcean v4 Swap API
 - ⛽ **Gas Estimation**: Real-time gas price predictions at 70%, 90%, and 99% confidence levels
 - 👛 **Wallet Integration**: Easily connect wallets (MetaMask, WalletConnect, Rabby, etc.) via [connectkit](https://docs.family.co/connectkit)
  
@@ -27,7 +32,7 @@ Before running the app, ensure you have:
 
 - [Node.js](https://nodejs.org/) v20.x or later
 - npm, yarn, or pnpm
-- A [Quicknode](https://quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) Base endpoint with the **Base DeFi Power Bundle** enabled
+- A [Quicknode](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=base-dex-aggregator) Base endpoint with the **Base DeFi Power Bundle** enabled (_no longer available_)
 - A [WalletConnect Project ID](https://cloud.walletconnect.com)
  
 ## ⚙️ Getting Started
@@ -126,7 +131,7 @@ vercel
 
 This app connects to the following APIs via the Base DeFi Power Bundle:
 
-| Feature        | Add-on / Method                                  |
+| Feature        | API / Method                                     |
 | -------------- | ------------------------------------------------ |
 | Gas Estimation | `sentio_gasPrice` RPC method                     |
 | Token Swaps    | OpenOcean v4 Swap API (`quote` and `swap` paths) |

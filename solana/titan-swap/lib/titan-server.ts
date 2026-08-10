@@ -20,7 +20,7 @@ import type {
  * auth credential never leaves the server.
  *
  * Env:
- *   TITAN_GATEWAY_URL  — base URL of the add-on (with or without trailing /api/v1)
+ *   TITAN_GATEWAY_URL  — Swap API Titan base URL (with or without trailing /api/v1)
  *   TITAN_GATEWAY_AUTH — optional bearer token (if not already in the URL)
  */
 const RAW_BASE = process.env.TITAN_GATEWAY_URL;
@@ -29,7 +29,7 @@ const AUTH = process.env.TITAN_GATEWAY_AUTH;
 function baseUrl(): string {
   if (!RAW_BASE) {
     throw new Error(
-      "TITAN_GATEWAY_URL is not set. Add your Titan Gateway add-on URL to .env.local."
+      "TITAN_GATEWAY_URL is not set. Add your Swap API Titan base URL to .env.local."
     );
   }
   let b = RAW_BASE.replace(/\/+$/, "");

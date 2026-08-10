@@ -1,6 +1,6 @@
 # Solana Geyser Yellowstone gRPC Python Example
 
-The example demonstrates a simple Python script that uses the [Quicknode Yellowstone gRPC Add-on](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-python) to monitor transactions related to Pump.fun minting operations.
+The example demonstrates a simple Python script that uses the [Quicknode Solana gRPC](https://www.quicknode.com/solana-grpc?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-python) (Yellowstone-compatible Geyser gRPC) to monitor transactions related to Pump.fun minting operations.
 
 ```bash
 💊 New Pump.fun Mint!
@@ -18,7 +18,7 @@ Mint: 2hz5ziHN1BgaMvjQwj4Y1BaMvcTCovQRGhqHqxPipump
 ## Requirements
 
 - [Quicknode Account](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-python)
-- [Quicknode Yellowstone gRPC Add-on Enabled](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-python)
+- [Quicknode Solana gRPC access](https://www.quicknode.com/solana-grpc?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-python)
 - [Python 3.10+](https://www.python.org/downloads/)
 - [pip](https://pypi.org/project/pip/)
 - Script assumes your Certificate Authority (CA) trust store on your machine allows trust the CA from your RPC endpoint.
@@ -63,7 +63,7 @@ Install the dependencies:
 
 ## Configuration
 
-Get your [Quicknode Yellowstone gRPC Add-on Enabled](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-python) RPC endpoint. 
+Get your Quicknode Solana endpoint with [Solana gRPC access](https://www.quicknode.com/solana-grpc?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-python). 
 
 Yellowstone gRPC operates on port 10000. This is a dedicated secure port for gRPC communication and is separate from the standard Solana RPC endpoint. When connecting to the service the port must be specified in the URL:
 
@@ -93,7 +93,7 @@ Run the script:
 
 ## Additional Resources
 
-- [Yellowstone gRPC Add-on](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-python)
+- [Solana gRPC](https://www.quicknode.com/solana-grpc?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-python)
 - [Yellowstone Docs](https://www.quicknode.com/docs/solana/yellowstone-grpc/overview)
 - For more information about the code in this example you can refer to the context in our [Yellowstone TypeScript Guide](https://www.quicknode.com/guides/solana-development/tooling/geyser/yellowstone), which explains some of the concepts and terminology used in this example.
 - [Yellowstone gRPC Source Code](https://github.com/rpcpool/yellowstone-grpc)

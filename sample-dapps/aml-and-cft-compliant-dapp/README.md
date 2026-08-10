@@ -2,7 +2,7 @@
 
 ![AML and CFT Compliant dApp Screenshot](./public/app-overview.png)
 
-**AML and CFT Compliant dApp** is a decentralized application (dApp) built on Ethereum-compatible networks (e.g., Base mainnet) that enables secure ETH staking with a compliance layer powered by [Chainlink Functions](https://chain.link/functions) and the [Risk Assessment API](https://marketplace.quicknode.com/add-on/risk-assessment-api?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp) which is on the [Quicknode Marketplace](https://marketplace.quicknode.com/?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp). This project demonstrates a practical integration of off-chain data into smart contracts, ensuring only low-risk wallets can participate in the staking pool.
+**AML and CFT Compliant dApp** is a decentralized application (dApp) built on Ethereum-compatible networks (e.g., Base mainnet) that enables secure ETH staking with a compliance layer powered by [Chainlink Functions](https://chain.link/functions) and the [Risk Assessment API](https://www.quicknode.com/add-ons/risk-assessment-api?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp) from the [Quicknode Add-ons](https://www.quicknode.com/add-ons?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp). This project demonstrates a practical integration of off-chain data into smart contracts, ensuring only low-risk wallets can participate in the staking pool.
 
 This project is deployed on **Base Mainnet** by default. If you choose to use a different network, make sure to update the relevant environment variables accordingly.
 
@@ -18,7 +18,7 @@ The primary goal of AML and CFT Compliant dApp is to provide a secure staking ex
 
 ### Technical Architecture
 
-- **Risk Assessment API:** A Quicknode marketplace add-on that provides a numeric risk score (0-100, where higher scores indicate lower risk) based on off-chain analysis (e.g., transaction patterns, known associations).
+- **Risk Assessment API:** A Quicknode add-on that provides a numeric risk score (0-100, where higher scores indicate lower risk) based on off-chain analysis (e.g., transaction patterns, known associations).
 - **Chainlink Functions:** A decentralized oracle solution that fetches data from the API, processes it, and updates the smart contract. It uses DON-hosted or user-hosted [secrets](https://docs.chain.link/chainlink-functions/resources/secrets) for API key management and a callback mechanism to deliver results.
 - **Smart Contract:** A Solidity contract that enforces staking rules based on risk scores. It integrates with Chainlink Functions to request and receive risk data.
 - **Next.js Frontend:** A TypeScript-based React application using Next.js, Wagmi, and Viem for blockchain interactions.
@@ -227,7 +227,7 @@ Before proceeding, ensure you have a **Quicknode endpoint** with the **Risk Asse
 
 1. **Create a Quicknode Endpoint**  
    - Visit [Quicknode](https://www.quicknode.com/?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp) and set up an endpoint on your preferred network.  
-   - Ensure the selected network is supported by the **Risk Assessment API** (check [supported networks](https://marketplace.quicknode.com/add-on/risk-assessment-api?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp)).
+   - Ensure the selected network is supported by the **Risk Assessment API** (check [supported networks](https://www.quicknode.com/add-ons/risk-assessment-api?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp)).
 
 2. **Enable the Risk Assessment API Add-on**  
    - Go to your **Quicknode dashboard**.  

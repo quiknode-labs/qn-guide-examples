@@ -3,12 +3,12 @@ export default function Banner() {
     <div className="w-full bg-blue-600 text-white py-2 text-center text-sm">
       Built with the{" "}
       <a
-        href="https://marketplace.quicknode.com/bundles/basebundle"
+        href="https://www.quicknode.com/add-ons"
         target="_blank"
         rel="noopener noreferrer"
         className="underline hover:text-blue-100 transition-colors"
       >
-        Quicknode Base DeFi Bundle
+        Quicknode Add-ons
       </a>{" "}
       - Check out the codebase {}
       <a

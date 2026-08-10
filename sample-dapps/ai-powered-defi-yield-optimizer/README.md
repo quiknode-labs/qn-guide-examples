@@ -5,7 +5,7 @@ An AI-powered DeFi yield farming optimizer that helps users build personalized p
 ## 🚀 Features
 
 ### Core Functionality
-- **Real-time Pool Data**: Fetches live pool data from Quicknode's Aerodrome API
+- **Real-time Pool Data**: Fetches live pool data from the Aerodrome integration in Quicknode's [Swap API](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=ai-powered-defi-yield-optimizer)
 - **AI-Powered Optimization**: Uses Claude AI for intelligent portfolio recommendations
 - **Risk Assessment**: Comprehensive 5-step quiz to determine user risk profile
 - **Smart Allocation**: Automated portfolio diversification with percentage allocations
@@ -91,7 +91,7 @@ An AI-powered DeFi yield farming optimizer that helps users build personalized p
 
 2. **Quicknode Account**:
    - Sign up at [quicknode.com](https://www.quicknode.com/)
-   - Subscribe to Aerodrome API add-on
+   - Get access to the [Swap API's Aerodrome integration](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=ai-powered-defi-yield-optimizer)
    - Get endpoint URL
 
 ## 🚀 Quick Start
@@ -146,7 +146,7 @@ pnpm start
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `ANTHROPIC_API_KEY` | Yes | Claude AI API key for optimization |
-| `NEXT_PUBLIC_QUICKNODE_ENDPOINT` | Yes | Quicknode Aerodrome API endpoint |
+| `NEXT_PUBLIC_QUICKNODE_ENDPOINT` | Yes | Quicknode Swap API (Aerodrome) endpoint |
 
 ### API Endpoints
 
@@ -201,5 +201,5 @@ View your personalized recommendations:
 ### Getting Help
 - **Documentation**: This README and inline code comments
 - **API Documentation**: 
-  - [Quicknode Aerodrome API](https://marketplace.quicknode.com/add-on/aerodrome-swap-api)
+  - [Quicknode Swap API (Aerodrome)](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=ai-powered-defi-yield-optimizer)
   - [Anthropic Claude API](https://docs.anthropic.com/claude/reference/getting-started-with-the-api)

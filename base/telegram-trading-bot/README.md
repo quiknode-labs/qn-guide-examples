@@ -1,6 +1,11 @@
 # Base MEV-Protected Telegram Trading Bot
 
-A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainnet with MEV protection, leveraging Quicknode's [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot).
+> **⚠️ Deprecated — reference only.**
+> The **Base DeFi Power Bundle** (OpenOcean v4 Swap API + MEV Protection & Gas Recovery) is no longer offered by Quicknode, so this sample app can no longer be run end to end.
+> The code is kept here as a reference implementation and is no longer maintained.
+> Browse the [Quicknode add-ons catalog](https://www.quicknode.com/add-ons) for currently available alternatives. Token swaps on Base are now available through Quicknode's [Swap API](https://www.quicknode.com/swap-api).
+
+A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainnet with MEV protection, leveraging Quicknode's **Base DeFi Power Bundle**.
 
 ![Telegram Trading Bot Screenshot](public/telegram-test-combined.png)
 
@@ -36,7 +41,7 @@ A secure and user-friendly Telegram bot for trading ERC-20 tokens on Base Mainne
 - **EVM Toolkit**: [viem](https://viem.sh/)
 - **Database**: SQLite via better-sqlite3
 - **Integrations**:
-  - [Quicknode Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot)
+  - Quicknode Base DeFi Power Bundle (_no longer available_)
     - OpenOcean API for swaps
     - Sentio Gas Price API for gas estimates
     - MEV Protection & Gas Recovery for MEV-protected transactions
@@ -109,7 +114,7 @@ The database is initialized automatically on first run (`src/lib/database.ts`), 
 ### Prerequisites
 
 - Node.js 20.x or higher
-- Quicknode Base Mainnet Endpoint URL with the [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot) enabled
+- Quicknode Base Mainnet Endpoint URL with the **Base DeFi Power Bundle** enabled (_no longer available_)
 - Telegram Bot token (get from @BotFather)
 
 ### Installation
@@ -150,7 +155,7 @@ cp .env.example .env
 
     - [Sign up](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot) for a Quicknode account
     - Create a Base Mainnet endpoint
-    - Activate the [Base DeFi Power Bundle](https://marketplace.quicknode.com/bundles/basebundle?utm_source=internal&utm_campaign=sample-apps&utm_content=base-tg-trading-bot) for your endpoint
+    - Activate the **Base DeFi Power Bundle** for your endpoint (_no longer available_)
     - Keep the endpoint URL handy
 
 6. Create a wallet encryption key to encrypt your private keys

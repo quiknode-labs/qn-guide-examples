@@ -27,7 +27,7 @@ bun install
 
 Make sure you have a Quicknode endpoint handy--you can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-explorer).
 
-Rename `.env.example` to `.env.local` and update with your Quicknode Solana Node Endpoint. Enable the DAS API only if you have enabled the DAS add-on for your Quicknode Solana Node Endpoint.
+Rename `.env.example` to `.env.local` and update with your Quicknode Solana Node Endpoint. Set `DAS_API_ENABLED` to `true` only if your Quicknode Solana Node Endpoint has access to the [Metaplex Digital Asset Standard (DAS) API](https://www.quicknode.com/metaplex-das-api?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-explorer).
 
 ```env
 SOLANA_RPC_URL=https://example.solana-mainnet.quiknode.pro/123456/
@@ -74,7 +74,7 @@ src/
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-wallet-explorer&env=SOLANA_RPC_URL,DAS_API_ENABLED,NEXT_PUBLIC_FETCH_JUPLIST&envDescription=SOLANA_RPC_URL%3A%20Use%20Quicknode%20Solana%20Mainnet%20Endpoint%20%7C%20DAS_API_ENABLED%20%3D%20true%20if%20DAS%20Add-on%20enabled%20in%20QN%20Dashboard%20%7C%20NEXT_PUBLIC_FETCH_JUPLIST%20%3D%20true%20to%20fetch%20token%20names&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=starter-solana-explorer&repository-name=starter-solana-explorer&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-title=Quicknode%20Starter%20Solana%20Explorer&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-wallet-explorer%2Fpublic%2Fdemo.png)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-wallet-explorer&env=SOLANA_RPC_URL,DAS_API_ENABLED,NEXT_PUBLIC_FETCH_JUPLIST&envDescription=SOLANA_RPC_URL%3A%20Use%20Quicknode%20Solana%20Mainnet%20Endpoint%20%7C%20DAS_API_ENABLED%20%3D%20true%20if%20your%20endpoint%20has%20Metaplex%20DAS%20API%20access%20%7C%20NEXT_PUBLIC_FETCH_JUPLIST%20%3D%20true%20to%20fetch%20token%20names&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=starter-solana-explorer&repository-name=starter-solana-explorer&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-title=Quicknode%20Starter%20Solana%20Explorer&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fsolana-wallet-explorer%2Fpublic%2Fdemo.png)
 
 ## Preview 
 
