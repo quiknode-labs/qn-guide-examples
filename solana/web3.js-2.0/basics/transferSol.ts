@@ -12,6 +12,7 @@ import {
     pipe,
     createTransactionMessage,
     setTransactionMessageFeePayer,
+    assertIsTransactionWithBlockhashLifetime,
     setTransactionMessageLifetimeUsingBlockhash,
     appendTransactionMessageInstruction,
     signTransactionMessageWithSigners,
@@ -90,6 +91,9 @@ async function main() {
     // 5 - Sign and send transaction
     const signedTransaction = await signTransactionMessageWithSigners(transactionMessage);
     const sendAndConfirmTransaction = sendAndConfirmTransactionFactory({ rpc, rpcSubscriptions });
+
+    // Ensure this transaction uses a recent blockhash.
+    assertIsTransactionWithBlockhashLifetime(signedTransaction);
 
     try {
         await sendAndConfirmTransaction(
