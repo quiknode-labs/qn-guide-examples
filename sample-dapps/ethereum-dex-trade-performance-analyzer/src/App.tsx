@@ -38,7 +38,7 @@ const App: React.FC = () => {
         err.message.includes("does not exist/is not available")
       ) {
         setError(
-          "Add-on is not enabled. Please visit your QN dashboard and enable the add-on."
+          "Add-on is not enabled. Please visit your Quicknode dashboard and enable the add-on."
         );
       } else {
         setError("Error fetching wallet data. Please try again.");

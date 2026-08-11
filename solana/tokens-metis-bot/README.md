@@ -1,6 +1,6 @@
 # Tokens + Metis trading bot
 
-A rules-based Solana trading bot sample. It discovers and screens tokens with the Tokens API, then executes swaps through Quicknode's Metis (Jupiter Swap) API via a `@solana/kit` custom transport.
+A rules-based Solana trading bot sample. It discovers and screens tokens with the Tokens API, then executes swaps through the Metis (Jupiter Swap) integration in Quicknode's [Swap API](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=tokens-metis-bot) via a `@solana/kit` custom transport.
 
 This is a technical sample for a Quicknode guide. It is educational, not financial advice, and it ships with live trading disabled by default.
 
@@ -30,7 +30,7 @@ Discovery (Tokens API), decision (pure rules engine), and execution (Metis) are 
 
 - Node.js 22 or later
 - A Quicknode Solana mainnet endpoint ([sign up here](https://www.quicknode.com))
-- The Metis - Jupiter Swap API add-on enabled on your Quicknode account (the public `https://public.jupiterapi.com` endpoint works as a testing-only fallback)
+- Access to the [Swap API](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=tokens-metis-bot)'s Metis (Jupiter Swap) integration on your Quicknode account (the public `https://public.jupiterapi.com` endpoint works as a testing-only fallback)
 - A Tokens API key from [app.tokens.xyz](https://app.tokens.xyz)
 - The Solana CLI, to create a dev wallet keypair file
 

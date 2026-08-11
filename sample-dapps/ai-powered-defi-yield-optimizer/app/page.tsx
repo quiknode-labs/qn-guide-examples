@@ -48,12 +48,12 @@ export default function Home() {
             </div>
             <div className="flex items-center space-x-4">
               <a
-                href="https://marketplace.quicknode.com/add-on/aerodrome-swap-api"
+                href="https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=ai-powered-defi-yield-optimizer"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-blue-600 hover:text-blue-800 underline"
               >
-                Powered by Quicknode Aerodrome API
+                Powered by Quicknode Swap API (Aerodrome)
               </a>
             </div>
           </div>

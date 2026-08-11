@@ -84,9 +84,9 @@ token-sweeper/
 - **EIP-7702**: Atomic batch transaction support
 
 ### APIs & Data Sources
-- **[Covalent GoldRush Wallet API](https://marketplace.quicknode.com/add-on/covalent-wallet-api)**: Token balance fetching
-- **[Aerodrome Swap API](https://marketplace.quicknode.com/add-on/aerodrome-swap-api)**: Quotes and swaps on Aerodrome, leading DEX on Base
-- **[Velodrome Swap API](https://marketplace.quicknode.com/add-on/velodrome-swap-api)**: Quotes and swaps on Velodrome, leading DEX on Optimism
+- **[Covalent GoldRush Wallet API](https://www.quicknode.com/add-ons/covalent-wallet-api?utm_source=internal&utm_campaign=sample-apps&utm_content=token-sweeper-eip-7702)**: Token balance fetching
+- **[Aerodrome Swap API](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=token-sweeper-eip-7702)**: Quotes and swaps on Aerodrome, leading DEX on Base
+- **[Velodrome Swap API](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=token-sweeper-eip-7702)**: Quotes and swaps on Velodrome, leading DEX on Optimism
 
 ### State Management
 - **React Hooks**: Component-level state
@@ -101,7 +101,7 @@ To run and use this application, you will need the following:
 
 - Node.js 20+
 - A [Quicknode](http://dashboard.quicknode.com/) account with Base or Optimism endpoints
-- The [Covalent Token API](https://marketplace.quicknode.com/add-on/covalent-wallet-api) add-on (_free tier not available_) and [Aerodrome](https://marketplace.quicknode.com/add-on/aerodrome-swap-api) or [Velodrome Swap API](https://marketplace.quicknode.com/add-on/velodrome-swap-api) add-on (_free tier available_)
+- The [Covalent GoldRush Wallet API](https://www.quicknode.com/add-ons/covalent-wallet-api?utm_source=internal&utm_campaign=sample-apps&utm_content=token-sweeper-eip-7702) endpoint add-on (_free tier not available_) and [Quicknode's Swap API](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=token-sweeper-eip-7702) with the Aerodrome or Velodrome integration (_free tier available_)
 - Project ID from [Reown, formerly WalletConnect](https://cloud.reown.com/)
 - MetaMask or compatible wallet with EIP-7702 support
 
@@ -109,17 +109,17 @@ To run and use this application, you will need the following:
 
 1. **Create Endpoints**: Log in to your [Quicknode account](http://dashboard.quicknode.com/) and create a new endpoint for each chain you want to support. For this guide, we will use Base and Optimism.
 
-> Since these API add-ons are available on mainnet only, you will need to set up your Quicknode account with a mainnet endpoint.
+> Since these APIs are available on mainnet only, you will need to set up your Quicknode account with a mainnet endpoint.
 
-2. **Install Add-ons**:
+2. **Configure Quicknode services**:
 
 - Once you are in your endpoint's dashboard, navigate to the **Add-ons** for your endpoint.
-- Install the [Covalent Token API](https://marketplace.quicknode.com/add-on/covalent-wallet-api) add-on.
-- Install the [Aerodrome Swap API](https://marketplace.quicknode.com/add-on/aerodrome-swap-api) and [Velodrome Swap API](https://marketplace.quicknode.com/add-on/velodrome-swap-api) add-ons. You can use the free tier for the swap APIs to start.
+- Enable the [Covalent GoldRush Wallet API](https://www.quicknode.com/add-ons/covalent-wallet-api?utm_source=internal&utm_campaign=sample-apps&utm_content=token-sweeper-eip-7702) endpoint add-on.
+- Activate the [Swap API](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=token-sweeper-eip-7702) with the Aerodrome and Velodrome integrations. You can use the free tier to start.
 
-3. **Get Covalent API Key**: Click **Sign in to Dashboard** next to the Covalent Token API add-on. This will redirect you to the Covalent dashboard where you can find your API key.
+3. **Get Covalent API Key**: Click **Sign in to Dashboard** next to the Covalent GoldRush Wallet API add-on. This will redirect you to the Covalent dashboard where you can find your API key.
 
-4. **Get Swap API URLs**: Click **Getting Started** next to the Aerodrome or Velodrome Swap API add-on. This will show you the base API URLs you need to use in your application. Use the URL before the `/v1/...` part, as we will append the specific endpoints in our code. It should look something like this: `https://YOUR-QUICKNODE-ENDPOINT-URL/addon/YOUR-ADDON-ID`
+4. **Get Swap API URLs**: Open **Getting Started** for the Aerodrome or Velodrome integration. This will show you the base API URLs you need to use in your application. Use the URL before the `/v1/...` part, as we will append the specific endpoints in our code. It should look something like this: `https://YOUR-QUICKNODE-ENDPOINT-URL/addon/YOUR-ADDON-ID`
 
 #### Setting Up Reown (formerly, WalletConnect)
 

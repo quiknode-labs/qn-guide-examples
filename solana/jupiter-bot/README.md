@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a simple demo uses Jupiter's Metis API and Quicknode's Metis add-on to create a simple Solana trading bot. The bot monitors price differences between token pairs and executes trades when profitable opportunities arise.
+This is a simple demo uses the Metis (Jupiter Swap) integration in Quicknode's [Swap API](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=jupiter-api-trading-bot) to create a simple Solana trading bot. The bot monitors price differences between token pairs and executes trades when profitable opportunities arise.
 
 _This example is for educational purposes only. Quicknode does not provide financial advice or endorse any trading strategies. Always do your own research and consult with a financial advisor before making any investment decisions._
 
@@ -42,9 +42,9 @@ bun install
 
 Make sure you have a Quicknode endpoint handy. You can [get one here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=qn-guide-examples&utm_content=jupiter-bot).
 
-- Rename `.env.example` to `.env` and update with your Quicknode Solana Node and Metis Add-on Endpoints.
+- Rename `.env.example` to `.env` and update with your Quicknode Solana Node and Metis (Jupiter Swap) endpoints.
 - Specify your `SECRET_KEY` (the private key of the wallet you want to use for the bot). You can generate a new one with `solana-keygen new` command using the Solana CLI.
-- Specify your `SOLANA_ENDPOINT` ([get one here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=jupiter-api-trading-bot)) and `METIS_ENDPOINT` ([get one here](https://marketplace.quicknode.com/add-on/metis-jupiter-swap-api)) or use the public endpoint, `https://public.jupiterapi.com`.
+- Specify your `SOLANA_ENDPOINT` ([get one here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=jupiter-api-trading-bot)) and `METIS_ENDPOINT` ([get one here](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=jupiter-api-trading-bot)) or use the public endpoint, `https://public.jupiterapi.com`.
 
 ```sh
 SECRET_KEY=[00, ..., 00]

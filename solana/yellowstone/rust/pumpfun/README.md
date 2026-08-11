@@ -1,6 +1,6 @@
 # Solana Geyser Yellowstone gRPC Rust Example
 
-The example demonstrates a simple Rust script that uses the [Quicknode Yellowstone gRPC Add-on](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust) to monitor transactions related to Pump.fun minting operations.
+The example demonstrates a simple Rust script that uses the [Quicknode Solana gRPC](https://www.quicknode.com/solana-grpc?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust) (Yellowstone-compatible Geyser gRPC) to monitor transactions related to Pump.fun minting operations.
 
 ```bash
 [2025-04-09T16:08:21Z INFO  solana_account_monitor] Connected to gRPC endpoint
@@ -12,7 +12,7 @@ The example demonstrates a simple Rust script that uses the [Quicknode Yellowsto
 ## Requirements
 
 - [Quicknode Account](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust)
-- [Quicknode Yellowstone gRPC Add-on Enabled](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust)
+- [Quicknode Solana gRPC access](https://www.quicknode.com/solana-grpc?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust)
 - [Rust](https://rustup.rs/)
 
 
@@ -32,7 +32,7 @@ cd solana/yellowstone/rust/pumpfun
 
 ## Configuration
 
-Get your [Quicknode Yellowstone gRPC Add-on Enabled](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust) RPC endpoint. 
+Get your Quicknode Solana endpoint with [Solana gRPC access](https://www.quicknode.com/solana-grpc?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust). 
 
 Yellowstone gRPC operates on port 10000. This is a dedicated secure port for gRPC communication and is separate from the standard Solana RPC endpoint. When connecting to the service the port must be specified in the URL:
 
@@ -85,6 +85,6 @@ cargo run
 
 ## Additional Resources
 
-- [Yellowstone gRPC Add-on](https://marketplace.quicknode.com/add-on/yellowstone-grpc-geyser-plugin?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust)
+- [Solana gRPC](https://www.quicknode.com/solana-grpc?utm_source=internal&utm_campaign=sample-apps&utm_content=yellowstone-rust)
 - [Yellowstone Docs](https://www.quicknode.com/docs/solana/yellowstone-grpc/overview)
 - [Yellowstone gRPC Source Code](https://github.com/rpcpool/yellowstone-grpc)

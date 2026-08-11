@@ -5,7 +5,7 @@ A TypeScript utility for executing swaps via Jupiter with Jito MEV bundles.
 ## Prerequisites
 
 - Node.js & npm
-- [Quicknode](https://quicknode.com) endpoints with [Metis API](https://marketplace.quicknode.com/add-on/metis-jupiter-v6-swap-api) and [Lil' JIT Add-ons](https://marketplace.quicknode.com/add-on/lil-jit-jito-bundles-and-transactions)
+- [Quicknode](https://www.quicknode.com) endpoints with the [Swap API](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=jupiter-jito)'s Metis (Jupiter Swap) integration and the [Lil' JIT endpoint add-on](https://www.quicknode.com/add-ons/lil-jit-jito-bundles-and-transactions?utm_source=internal&utm_campaign=sample-apps&utm_content=jupiter-jito)
 - Solana wallet with SOL
 - TypeScript
 

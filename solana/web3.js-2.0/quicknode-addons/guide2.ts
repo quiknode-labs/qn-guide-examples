@@ -125,7 +125,7 @@ interface CreateAddonsApiParams {
  *        https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=solana-web3.js-2.0-add-ons
  * @param {string} [params.metisEndpoint] - Optional. Endpoint for Metis services if required. (defaults to 'https://public.jupiterapi.com')
  *        More information at:
- *        https://marketplace.quicknode.com/add-on/metis-jupiter-v6-swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=solana-web3.js-2.0-add-ons
+ *        https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=solana-web3.js-2.0-add-ons
  * @param {string} [params.ipfsApiKey] - Optional. API key for IPFS services if required.
  *        More information at:
  *        hthttps://quicknode.com/ipfs?utm_source=internal&utm_campaign=sample-apps&utm_content=solana-web3.js-2.0-add-ons

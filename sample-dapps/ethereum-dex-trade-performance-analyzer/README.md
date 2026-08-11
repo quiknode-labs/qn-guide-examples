@@ -1,10 +1,13 @@
 # DEX Trade Performance Analyzer
 
+> **⚠️ Deprecated — reference only.**
+> Syve's **DEX Price Data & Wallet Tracking APIs** add-on is no longer offered by Quicknode, so this sample app can no longer be run end to end.
+> The code is kept here as a reference implementation and is no longer maintained.
+> Browse the [Quicknode add-ons catalog](https://www.quicknode.com/add-ons) for currently available alternatives.
+
 ## Introduction
 
-This application is designed to analyze the trading performance of a crypto wallet, leveraging the capabilities of Syve's [DEX Price Data & Wallet Tracking APIs](https://marketplace.quicknode.com/add-on/syve-dex-price-data-and-wallet-tracking-api). The primary focus of this application is to provide users with detailed insights into wallet trading activities, including profit and loss metrics for each traded token.
-
-For an in-depth guide on how to fetch data and develop further functionalities, refer to [our comprehensive guide on Quicknode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-track-dex-wallet-trading-performance).
+This application is designed to analyze the trading performance of a crypto wallet, leveraging the capabilities of Syve's **DEX Price Data & Wallet Tracking APIs**. The primary focus of this application is to provide users with detailed insights into wallet trading activities, including profit and loss metrics for each traded token.
 
 ### Tech Stack
 
@@ -25,7 +28,7 @@ For an in-depth guide on how to fetch data and develop further functionalities, 
 Before you begin, ensure you have the following:
 
 - [Node.js](https://nodejs.org/en/) installed on your system.
-- A Quicknode account with the [DEX Price Data & Wallet Tracking APIs](https://marketplace.quicknode.com/add-on/syve-dex-price-data-and-wallet-tracking-api) enabled.
+- A Quicknode account with the **DEX Price Data & Wallet Tracking APIs** enabled (_no longer available_).
 - A code editor or an IDE (e.g., [VS Code](https://code.visualstudio.com/))
 - [TypeScript](https://www.typescriptlang.org/) and [ts-node](https://typestrong.org/ts-node/)
 
@@ -57,7 +60,7 @@ npm install
 
 ### Setting Environment Variables
 
-Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_ENDPOINT_URL` placeholder with your Quicknode Ethereum Node Endpoint. Make sure that the [DEX Price Data & Wallet Tracking APIs](https://marketplace.quicknode.com/add-on/syve-dex-price-data-and-wallet-tracking-api) are enabled.
+Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_ENDPOINT_URL` placeholder with your Quicknode Ethereum Node Endpoint. Make sure that the **DEX Price Data & Wallet Tracking APIs** are enabled.
 
 ```env
 VITE_QUICKNODE_ENDPOINT="YOUR_QUICKNODE_ENDPOINT_URL"
@@ -89,6 +92,6 @@ Overall Performance            |  Token Specific Performance
 
 ## Conclusion
 
-Syve's [DEX Price Data & Wallet Tracking APIs](https://marketplace.quicknode.com/add-on/syve-dex-price-data-and-wallet-tracking-api) provide developers with powerful tools for analyzing wallet trading activities. By leveraging these APIs, developers can create applications that deliver valuable insights into crypto trading performance.
+Syve's **DEX Price Data & Wallet Tracking APIs** provided developers with powerful tools for analyzing wallet trading activities. By leveraging these APIs, developers can create applications that deliver valuable insights into crypto trading performance.
 
-[Quicknode](https://quicknode.com/) offers many different marketplace add-ons, providing developers with the resources needed to create robust and feature-rich crypto applications. To learn more about how these APIs and other Quicknode add-ons can benefit your projects, please [contact us](https://www.quicknode.com/contact-us); we're eager to assist you!
+[Quicknode](https://www.quicknode.com/) offers many different products and [endpoint add-ons](https://www.quicknode.com/add-ons), providing developers with the resources needed to create robust and feature-rich crypto applications. To learn more about how these APIs can benefit your projects, please [contact us](https://www.quicknode.com/contact-us); we're eager to assist you!

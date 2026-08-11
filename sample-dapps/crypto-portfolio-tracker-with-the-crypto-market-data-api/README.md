@@ -1,10 +1,13 @@
 # Crypto Portfolio Tracker
 
+> **⚠️ Deprecated — reference only.**
+> The **Crypto Market Data API** add-on is no longer offered by Quicknode, so this sample app can no longer be run end to end.
+> The code is kept here as a reference implementation and is no longer maintained.
+> Browse the [Quicknode add-ons catalog](https://www.quicknode.com/add-ons) for currently available alternatives.
+
 ## Overview
 
 The Crypto Portfolio Tracker is a web application that allows users to input their cryptocurrency holdings and track their portfolio value over time. The app fetches current and historical exchange rates to display the total portfolio value and a chart of historical portfolio values in various currencies. It is built using TypeScript, Vite, and Tailwind CSS.
-
-> For a detailed guide on how to build this application and utilize the [Crypto Market Data API](https://marketplace.quicknode.com/add-on/crypto-market-data-api), please visit our [comprehensive guide on Quicknode](https://www.quicknode.com/guides/quicknode-products/marketplace/how-to-build-a-crypto-portfolio-tracker-with-the-crypto-market-data-api).
 
 ![Crypto Portfolio Tracker Overview](public/overview.png)
 
@@ -24,8 +27,7 @@ The Crypto Portfolio Tracker is a web application that allows users to input the
 
 Before you begin, ensure you have the following:
 - [Node.js](https://nodejs.org/en/) installed on your system.
-- A Quicknode account with the [Crypto Market Data API](https://marketplace.quicknode.com/add-on/crypto-market-data-api) enabled.
-> Crypto Market Data API is a paid add-on. Please check the details [here](https://marketplace.quicknode.com/add-on/crypto-market-data-api) based on your needs.
+- A Quicknode account with the **Crypto Market Data API** enabled (_no longer available_).
 - [Typescript](https://www.typescriptlang.org/) and [ts-node](https://typestrong.org/ts-node/)
 
 You can install TypeScript and ts-node globally using the commands below:
