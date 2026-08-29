@@ -13,7 +13,7 @@
     "@types/node": "^20.14.2",
     "@web3modal/ethers": "^4.1.11",
     "ethers": "^6.12.0",
-    "next": "^14.2.33",
+    "next": "^16.1.5",
     "react": "^18",
     "react-dom": "^18"
   },
