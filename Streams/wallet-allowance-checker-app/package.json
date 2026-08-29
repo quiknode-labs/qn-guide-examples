@@ -9,7 +9,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.7.3",
+    "axios": "^1.13.5",
     "cors": "^2.8.5",
     "ethers": "^6.13.2",
     "express": "^4.19.2",
