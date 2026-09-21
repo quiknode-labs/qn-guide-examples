@@ -115,7 +115,7 @@ def test_signals_rejects_bad_values_and_normalizes_case(monkeypatch, capsys):
 def test_sellability_rejects_native_value_route(monkeypatch):
     import sellability as sell
     def post_route(value):
-        route = {"steps": [{"items": [{"data": {"to": "0x" + "3" * 40, "value": value, "data": "0x"}}]}]}
+        route = {"steps": [{"items": [{"data": {"to": "0x" + "3" * 40, "value": value, "data": "0x095ea7b3"}}]}]}
         monkeypatch.setattr(sell.httpx, "post",
                             lambda *a, **k: type("R", (), {"status_code": 200, "json": lambda self: route})())
     post_route("1000")
@@ -132,6 +132,26 @@ def test_sellability_rejects_native_value_route(monkeypatch):
     with pytest.raises(SystemExit) as ei:
         sell.relay_quote(sell.WETH, "0x" + "2" * 40, 100)
     assert ei.value.code == 7
+
+
+def test_relay_quote_rejects_malformed_calldata(monkeypatch):
+    import sellability as sell
+    # relay_quote must validate route calldata like quote.py / relay_pair_status: a step whose `to` is not a
+    # valid address, or whose `data` is not pure-hex of >= 4 bytes, is unusable -> (None, None) (caller reports
+    # UNKNOWN), never checksummed-and-simulated (which would crash to exit 1 or fake a honeypot signal).
+    def route(to, data):
+        r = {"steps": [{"items": [{"data": {"to": to, "value": "0", "data": data}}]}]}
+        monkeypatch.setattr(sell.httpx, "post",
+                            lambda *a, **k: type("R", (), {"status_code": 200, "json": lambda self: r})())
+    for to, data in (("0x" + "Z" * 40, "0x095ea7b3"),          # non-hex address
+                     ("0x" + "3" * 40, "0x        "),          # whitespace-padded calldata (0 bytes)
+                     ("0x" + "3" * 40, "0x12")):               # below the 4-byte selector
+        route(to, data)
+        assert sell.relay_quote(sell.WETH, "0x" + "2" * 40, 100) == (None, None)
+    # a well-formed step (valid address + >= 4-byte pure-hex calldata, no native value) still flows through
+    route("0x" + "3" * 40, "0x095ea7b3" + "00" * 40)
+    calls, _out = sell.relay_quote(sell.WETH, "0x" + "2" * 40, 100)
+    assert calls and calls[0]["data"].startswith("0x095ea7b3")
 
 
 def test_relay_quote_parks_on_size_or_impact_codes(monkeypatch, capsys):

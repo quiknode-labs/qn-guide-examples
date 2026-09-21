@@ -36,7 +36,7 @@ import httpx
 from eth_utils import is_address, keccak, to_checksum_address
 
 from common import (CHAIN_ID, NATIVE_ETH, WETH, checksum, discover_quotes, erc20_decimals,
-                    is_chain_4663, require_chain_4663, rpc, valid_calldata, valid_uint)
+                    is_chain_4663, probe_amount, require_chain_4663, rpc, valid_calldata, valid_uint)
 
 RELAY = "https://api.relay.link/quote/v2"
 # Relay errorCodes where a CURRENCY ADDRESS is invalid/unsupported: a genuine "no route" for this
@@ -130,8 +130,8 @@ def relay_quote(origin: str, dest: str, amount: int):
         for item in step.get("items", []):
             d = item.get("data") or {}
             to, data = d.get("to"), d.get("data")
-            if not (isinstance(to, str) and to and isinstance(data, str) and data):
-                return None, None              # a transaction step with no usable calldata
+            if not (isinstance(to, str) and is_address(to) and valid_calldata(data)):
+                return None, None              # targetless/malformed/whitespace-padded item -> caller reports UNKNOWN
             cid = d.get("chainId")
             if cid is not None and not is_chain_4663(cid):
                 # A cross-chain / wrong-chain leg would be simulated against 4663 state (different
@@ -339,7 +339,7 @@ def main(token: str) -> None:
             raise SystemExit(7)
         cp_name = cp["symbol"] or cp["address"]
         try:
-            status = relay_pair_status(cp["address"], token, 100 * 10**erc20_decimals(cp["address"]))
+            status = relay_pair_status(cp["address"], token, probe_amount(erc20_decimals(cp["address"])))
         except SystemExit:
             status = "unknown"
         if status == "currency_rejected":
