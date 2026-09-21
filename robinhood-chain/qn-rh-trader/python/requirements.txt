@@ -1,0 +1,5 @@
+# Robinhood Chain guide snippets. Read-only, paper-first.
+httpx>=0.27
+eth-utils>=4.1
+eth-abi>=5.1
+websockets>=12        # only watch.py needs this
