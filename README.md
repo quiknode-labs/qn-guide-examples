@@ -115,7 +115,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 ### Ethereum
 - [Make a Flash Loan using Aave V3](./ethereum/aave-flash-loan)
 - [How to get ABI of a smart contract](./ethereum/ABI)
-- [Audit ERC20, ERC721, and ERC1155 Token Activity using Quicknode SDK](./ethereum/audit-token-activity)
+- [Audit ERC20, ERC721, and ERC1155 Token Activity](./ethereum/audit-token-activity)
 - [audit-wallet-activity](./ethereum/audit-wallet-activity)
 - [Blinks NFT Minter for Monad](./ethereum/blink-starter-monad)
 - [BatchCallAndSponsor](./ethereum/eip-7702)
@@ -128,6 +128,9 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [wave-portal-svelte](./ethereum/wave-portal-svelte)
 - [The Web3 Developer Stack](./ethereum/web3-stack)
 
+### Hyperliquid
+- [How to Trade HIP-4 Prediction Markets on Hyperliquid](./hyperliquid/hip4-prediction-markets)
+
 ### Mpp
 - [Multichain Balance Checker (via MPP Sessions)](./mpp/multichain-balance-checker) - *Multichain balance checker using MPP sessions via Quicknode*
 
@@ -139,6 +142,9 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 
 ### Rails
 - [x402-rails Test Application](./rails/x402-micropayments)
+
+### Robinhood Chain
+- [Robinhood Chain Trading Primitives](./robinhood-chain/qn-rh-trader)
 
 ### Sample dApps
 - [AI-Powered DeFi Yield Optimizer for Aerodrome Finance](./sample-dapps/ai-powered-defi-yield-optimizer)
@@ -156,6 +162,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Hyperbase](./sample-dapps/hyperbase-sample-app)
 - [Hyperbook](./sample-dapps/hyperbook-l2-l4-visualizer)
 - [Quicknode Hyperliquid Portfolio Tracker](./sample-dapps/hyperliquid-portfolio-tracker)
+- [hyperliquid-tpsl-heatmap](./sample-dapps/hyperliquid-tpsl-heatmap)
 - [Hyperliquid Trading Dashboard](./sample-dapps/hyperliquid-trading-dashboard)
 - [RWA Tokenizer v2](./sample-dapps/rwa-tokenizer)
 - [Quicknode Solana Action Blinker](./sample-dapps/solana-action-blinker)
@@ -177,12 +184,13 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [explorer-clone-part-3](./solana/explorer-clone-part-3)
 - [functions](./solana/functions)
 - [fungible-SPL-token](./solana/fungible-SPL-token)
-- [Jupiter Trading Bot Example](./solana/jupiter-bot) - *Example trading bot for Solana using Quicknode and Metis API*
+- [Jupiter Trading Bot Example](./solana/jupiter-bot)
 - [Jito Jupiter Swap](./solana/jupiter-jito)
 - [Jupiter Ultra Swap Demo](./solana/jupiter-ultra-swap)
 - [How to Trade Kalshi Prediction Markets on Solana Using DFlow](./solana/kalshi-dflow)
 - [mint-nft](./solana/mint-nft)
 - [new-wallet-airdrop](./solana/new-wallet-airdrop)
+- [Build a Real-Time SOL Perps Dashboard with the Phoenix API](./solana/phoenix-dashboard) - *A dashboard for visualizing Phoenix perps data on Solana.*
 - [priority-fees-addon](./solana/priority-fees-addon)
 - [pump-fun-api](./solana/pump-fun-api)
 - [pump-yellowstone-copy-trader](./solana/pump-yellowstone-copy-trader)
@@ -192,11 +200,16 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Solana Mobile App](./solana/solana-mobile-app)
 - [solana-pay](./solana/solana-pay)
 - [solang](./solana/solang)
+- [Titan Swap — Meta-Aggregation on Solana](./solana/titan-swap)
 - [token-extensions](./solana/token-extensions)
+- [Tokens + Metis trading bot](./solana/tokens-metis-bot) - *Rules-based Solana trading bot sample using the Tokens API for discovery and Quicknode Metis (Jupiter Swap) for execution. Educational, not financial advice.*
 - [versioned-tx](./solana/versioned-tx)
 - [web3.js-2.0](./solana/web3.js-2.0)
 - [websockets](./solana/websockets)
 - [yellowstone](./solana/yellowstone)
+
+### Sql Explorer
+- [Hyperliquid Intelligence Bot](./sql-explorer/hyperliquid-intel-bot)
 
 ### Stacks
 - [Mint an NFT on Stacks](./stacks/stacks-nft)
@@ -207,6 +220,9 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [Quicknode Streams React Dashboard](./Streams/qs-react-app)
 - [UserStream](./Streams/userstream) - *Blockchain address tracking app using Quicknode Streams and Key-Value Store.*
 - [Wallet Allowance Checker (Streams + Postgres + Quicknode)](./Streams/wallet-allowance-checker-app)
+
+### Sui
+- [Sui Portfolio Tracker](./sui/sui-portfolio-tracker) - *Real-time Sui portfolio tracker using Quicknode GraphQL and gRPC*
 
 ### Tron
 - [Tron gRPC Project Setup Guide](./tron/tron-grpc)

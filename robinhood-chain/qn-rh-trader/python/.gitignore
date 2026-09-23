@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# local runtime state — never commit (the endpoint URL carries a token)
+.env
+
+# keep the template committed (the .env rule above never matches .env.example)
+!.env.example
