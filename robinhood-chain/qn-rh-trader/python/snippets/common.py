@@ -135,7 +135,7 @@ def rpc(method: str, params: list, *, url: str | None = None, timeout: float = 2
 def rpc_allow_revert(method: str, params: list, *, timeout: float = 20.0):
     """Like rpc(), but returns (None, message) for a JSON-RPC EXECUTION error (e.g. a reverted
     eth_call) instead of raising, while a transport/HTTP failure still RAISES. This lets a caller
-    tell a genuine on-chain revert (a real outcome) apart from an endpoint failure (UNKNOWN).
+    tell a genuine onchain revert (a real outcome) apart from an endpoint failure (UNKNOWN).
     Returns (result, None) on success."""
     url = env("QUICKNODE_RPC")
     try:
@@ -152,7 +152,7 @@ def rpc_allow_revert(method: str, params: list, *, timeout: float = 20.0):
         code = err.get("code") if isinstance(err, dict) else None
         msg = str(err.get("message") if isinstance(err, dict) else err)
         if code == 3 or "execution reverted" in msg.lower() or "revert" in msg.lower():
-            return None, msg                 # a genuine on-chain EXECUTION revert (a real outcome)
+            return None, msg                 # a genuine onchain EXECUTION revert (a real outcome)
         raise SystemExit(f"RPC {method} error: {msg}")   # method-not-found / bad-params / etc = UNKNOWN
     return body.get("result"), None
 
@@ -252,7 +252,7 @@ def probe_amount(decimals: int) -> int:
     """A small, decimals-aware probe size in an asset's RAW units: 25 units for a 6-dp asset
     (USDG-like), 0.01 of the asset for anything >= 2 dp (at ANY scale, incl. > 18 dp), and 1 whole
     unit below 2 dp. One source of truth in common, imported by quote.py, so a generic counterpart
-    (e.g. a Stock Token, from its on-chain decimals()) is sized consistently and cannot drift."""
+    (e.g. a Stock Token, from its onchain decimals()) is sized consistently and cannot drift."""
     if decimals == 6:
         return 25 * 10**6            # 25 of a 6-dp asset (USDG-like)
     if decimals >= 2:
@@ -286,7 +286,7 @@ def pool_liquidity(pid: str, block: str = "latest") -> int:
 
 
 def verify_quote_onchain(quote_addr: str) -> dict | None:
-    """Optional on-chain sanity check of a discovered base, used ONLY when QUICKNODE_RPC is set
+    """Optional onchain sanity check of a discovered base, used ONLY when QUICKNODE_RPC is set
     (returns None otherwise, so keyless discovery still works). Dexscreener's per-pool liquidity
     can be off, so this confirms the endpoint is chain 4663 AND the base is a REAL contract with
     a valid uint8 decimals(), not a phantom listing. Relay handles the actual swap routing, so the

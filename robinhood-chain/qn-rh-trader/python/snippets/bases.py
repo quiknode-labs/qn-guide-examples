@@ -7,10 +7,10 @@ leads with the PRIMARY (deepest) base and lists the others.
 It matters less than it looks for execution: Relay routes swap SETTLEMENT for you, so the
 base is mainly informational - what to price and probe against. Discovery is keyless
 (Dexscreener /token-pairs/v1). If QUICKNODE_RPC is set, the primary base is also verified
-on-chain (real contract + decimals), because Dexscreener's per-pool liquidity can be off.
+onchain (real contract + decimals), because Dexscreener's per-pool liquidity can be off.
 
     python snippets/bases.py 0x2E8c31162b855A2ffa90F6F8634643Ad6F111e18
-    QUICKNODE_RPC=https://... python snippets/bases.py 0x...    # + on-chain verify
+    QUICKNODE_RPC=https://... python snippets/bases.py 0x...    # + onchain verify
 """
 
 from __future__ import annotations
@@ -33,13 +33,13 @@ def main(token: str) -> None:
     primary = quotes[0]
     v = verify_quote_onchain(primary["address"])
     if v is None:
-        tag = "(set QUICKNODE_RPC to verify on-chain)"
+        tag = "(set QUICKNODE_RPC to verify onchain)"
     elif not v.get("chain_ok"):
         tag = f"[WARNING: endpoint reports chain {v.get('chain')}, not {CHAIN_ID}]"
     elif v.get("native"):
         tag = "[native ETH, 18 dp]"
     elif v.get("code") and v.get("decimals") is not None:
-        tag = f"[verified on-chain, {v['decimals']} dp]"
+        tag = f"[verified onchain, {v['decimals']} dp]"
     elif v.get("code"):
         tag = "[code present on 4663; decimals unverified]"
     else:

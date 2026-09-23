@@ -422,7 +422,7 @@ def test_erc20_decimals_rejects_non_uint8(monkeypatch):
         raise AssertionError(method)
     monkeypatch.setattr(common, "rpc", fake_rpc)
     with pytest.raises(SystemExit):
-        common.erc20_decimals("0x" + "3" * 40)   # not a known asset -> reads on-chain
+        common.erc20_decimals("0x" + "3" * 40)   # not a known asset -> reads onchain
 
 
 def test_dex_pairs_distinguishes_failure_from_empty(monkeypatch):

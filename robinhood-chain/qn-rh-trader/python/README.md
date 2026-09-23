@@ -10,7 +10,7 @@ Each snippet reads live mainnet, prints a real result, and **never signs or broa
 
 | Snippet | What it does | Needs |
 |---|---|---|
-| `bases.py` | Discover the quote assets a token trades against (deepest first) | nothing; RPC optional (on-chain verify) |
+| `bases.py` | Discover the quote assets a token trades against (deepest first) | nothing; RPC optional (onchain verify) |
 | `quote.py` | Get a real Relay route (approve + swap) and see the route-contract pin | nothing (Relay is keyless) |
 | `sellability.py` | Prove a WETH-quoted token is sellable via a state-carrying `eth_simulateV1` (Relay route) | `QUICKNODE_RPC` |
 | `mark.py` | Price a token with a live Dexscreener mark | nothing (public) |
@@ -52,7 +52,7 @@ Each snippet reads live mainnet, prints a real result, and **never signs or broa
 python snippets/bases.py 0x2E8c31162b855A2ffa90F6F8634643Ad6F111e18
 ```
 
-See the table above for what each snippet does and which endpoint it needs. `mark.py`, `signals.py`, and `bases.py` run with no endpoint (public APIs); `bases.py` uses the RPC only for an optional on-chain verify.
+See the table above for what each snippet does and which endpoint it needs. `mark.py`, `signals.py`, and `bases.py` run with no endpoint (public APIs); `bases.py` uses the RPC only for an optional onchain verify.
 
 ## Tests
 
