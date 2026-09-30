@@ -1,0 +1,67 @@
+name: Terraform plan
+
+on:
+  pull_request:
+    paths:
+      - "terraform/quicknode-terraform-provider/02-environments/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [dev, staging]
+    env:
+      QUICKNODE_API_KEY: ${{ secrets.QUICKNODE_API_KEY }}
+    defaults:
+      run:
+        working-directory: terraform/quicknode-terraform-provider/02-environments/envs/${{ matrix.env }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.16.4"
+          terraform_wrapper: false
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform plan
+        shell: bash
+        run: terraform plan -input=false -no-color 2>&1 | tee plan.txt
+
+      - name: Comment the plan on the pull request
+        if: ${{ !cancelled() && hashFiles(format('terraform/quicknode-terraform-provider/02-environments/envs/{0}/plan.txt', matrix.env)) != '' }}
+        uses: actions/github-script@v7
+        env:
+          ENV_NAME: ${{ matrix.env }}
+        with:
+          script: |
+            const fs = require('fs');
+            const env = process.env.ENV_NAME;
+            const plan = fs.readFileSync(`terraform/quicknode-terraform-provider/02-environments/envs/${env}/plan.txt`, 'utf8');
+            const summary = plan
+              .split('\n')
+              .filter((l) => /^(│ )?(Plan:|No changes|Error:)/.test(l))
+              .join('\n');
+            const body = [
+              `### Terraform plan: ${env}`,
+              summary,
+              '<details><summary>Full plan</summary>',
+              '',
+              '```',
+              plan.slice(-60000),
+              '```',
+              '</details>',
+            ].join('\n\n');
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body,
+            });

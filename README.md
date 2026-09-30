@@ -224,6 +224,9 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 ### Sui
 - [Sui Portfolio Tracker](./sui/sui-portfolio-tracker) - *Real-time Sui portfolio tracker using Quicknode GraphQL and gRPC*
 
+### Terraform
+- [Quicknode Terraform provider examples](./terraform/quicknode-terraform-provider)
+
 ### Tron
 - [Tron gRPC Project Setup Guide](./tron/tron-grpc)
 

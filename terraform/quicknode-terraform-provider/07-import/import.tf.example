@@ -1,0 +1,9 @@
+import {
+  to = quicknode_endpoint.adopted
+  id = "ENDPOINT_ID"
+}
+
+import {
+  to = quicknode_endpoint_token.default
+  id = "ENDPOINT_ID/TOKEN_ID"
+}
