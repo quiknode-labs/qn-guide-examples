@@ -54,7 +54,7 @@ export TF_VAR_webhook_url="https://webhook.site/YOUR_UNIQUE_ID"
 
 The files in `07-import` end in `.example`, so Terraform ignores them. Copy the blocks you need into `.tf` files in a folder with a provider `versions.tf`, then replace the placeholders with your own IDs. The `08-remote-state/backend.tf.example` file is a starting point for an S3 backend. Copy it into an environment folder, replace its bucket and region placeholders, and configure your AWS credentials. These two folders are snippets to copy into an existing Terraform root, so they have no `versions.tf` of their own. The S3 backend was tested on an S3-compatible mock, not on real AWS.
 
-Copy `09-ci/terraform-plan.yml` to `.github/workflows/terraform-plan.yml` in your repository and configure the `QUICKNODE_API_KEY` repository secret. The workflow paths refer to the `02-environments` layout here. If your layout differs, update every path in the workflow, including the trigger, working directory, `hashFiles`, and plan file reader. Run this secret-backed workflow only for pull requests from contributors you trust.
+Copy `09-ci/terraform-plan.yml` to `.github/workflows/terraform-plan.yml` in your repository and configure the `QUICKNODE_API_KEY` repository secret. If the jobs use the S3 backend, also add the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` repository secrets, and pass them in the job `env` block. The workflow paths refer to the `02-environments` layout here. If your layout differs, update every path in the workflow, including the trigger, working directory, `hashFiles`, and plan file reader. Run this secret-backed workflow only for pull requests from contributors you trust.
 
 ## Support & Feedback
 
