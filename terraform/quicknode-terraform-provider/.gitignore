@@ -1,0 +1,7 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars.json
+jwt.key
+jwt.pub.pem
+plan.txt

@@ -1,0 +1,9 @@
+terraform {
+  backend "s3" {
+    bucket       = "YOUR_STATE_BUCKET"
+    key          = "dev/terraform.tfstate"
+    region       = "YOUR_AWS_REGION"
+    encrypt      = true
+    use_lockfile = true
+  }
+}

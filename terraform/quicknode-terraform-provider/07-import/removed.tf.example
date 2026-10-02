@@ -1,0 +1,7 @@
+removed {
+  from = quicknode_endpoint.adopted
+
+  lifecycle {
+    destroy = false
+  }
+}

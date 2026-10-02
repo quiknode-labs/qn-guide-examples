@@ -1,0 +1,15 @@
+async function main(stream) {
+  const block = stream.data[0];
+  const txs = block.transactions;
+  if (txs.length === 0) return null;
+
+  // One batch lookup for every recipient in the block.
+  const flags = await qnLib.qnContainsListItems(
+    '${list_key}',
+    txs.map((tx) => tx.to || '')
+  );
+
+  const matches = txs.filter((tx, i) => flags[i]).map((tx) => tx.hash);
+  if (matches.length === 0) return null;
+  return { number: block.number, matches };
+}
