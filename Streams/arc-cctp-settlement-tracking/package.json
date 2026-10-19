@@ -1,0 +1,19 @@
+{
+  "name": "arc-cctp-settlement-tracking",
+  "version": "1.0.0",
+  "description": "Track Base and Arc CCTP USDC settlement with Quicknode Streams and PostgreSQL",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "node --env-file=.env setup.ts",
+    "prepare-streams": "node --env-file=.env prepare-streams.ts",
+    "reconcile": "node --env-file=.env reconcile.ts",
+    "inspect": "node --env-file=.env inspect.ts"
+  },
+  "dependencies": {
+    "pg": "8.23.0"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

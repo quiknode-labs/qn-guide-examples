@@ -1,0 +1,4 @@
+.env
+.env.*.private
+node_modules/
+stream-config/*.private.json

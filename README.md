@@ -217,6 +217,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 
 ### Streams
 - [Streams Discord AI Bot (Block Metrics Q&A)](./Streams/ai-bot-discord)
+- [CCTP Settlement Tracker: Base and Arc](./Streams/arc-cctp-settlement-tracking) - *Track Base and Arc CCTP USDC settlement with Quicknode Streams and PostgreSQL*
 - [Quicknode Streams React Dashboard](./Streams/qs-react-app)
 - [UserStream](./Streams/userstream) - *Blockchain address tracking app using Quicknode Streams and Key-Value Store.*
 - [Wallet Allowance Checker (Streams + Postgres + Quicknode)](./Streams/wallet-allowance-checker-app)
