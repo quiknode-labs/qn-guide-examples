@@ -130,3 +130,15 @@ test('holds the response until processing has finished', async () => {
     release(); await new Promise<void>(resolve => held.close(() => resolve()));
   }
 });
+
+test('rate limits repeated requests before signature or database processing', async () => {
+  const body = Buffer.from(JSON.stringify(payload));
+  let limited: Response | undefined;
+  for (let index = 0; index < 121; index++) {
+    const result = await fetch(url, { method: 'POST', body });
+    if (result.status === 429) { limited = result; break; }
+    assert.equal(result.status, 401);
+  }
+  assert.ok(limited);
+  assert.ok(Number(limited.headers.get('retry-after')) > 0);
+});

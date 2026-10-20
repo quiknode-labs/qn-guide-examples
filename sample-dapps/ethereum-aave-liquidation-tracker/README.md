@@ -177,7 +177,7 @@ npm run server
 
 The command loads `.env` before importing the RPC and security modules. Missing configuration stops startup. Verify `http://localhost:3005/health` and your tunnel's HTTPS `/health` endpoint, then activate the paused Stream.
 
-Unsigned requests to `/webhook` return `401`. Signed malformed payloads return `400`; compressed requests return `415`. A processing or storage failure returns `503` so Streams can retry. Success returns `200` only after the batch is persisted. The database upserts by transaction hash and log index, keeping replays from adding duplicate events. Multiple liquidation logs from the same transaction remain separate rows.
+The webhook limits each connected IP to 120 requests per minute before authentication or processing; excess requests return `429` with a retry interval. The in-memory limiter is for one worker. Behind a tunnel or proxy, requests may share the proxy IP; configure a trusted proxy and a shared limiter store before scaling. Unsigned requests to `/webhook` return `401`. Signed malformed payloads return `400`; compressed requests return `415`. A processing or storage failure returns `503` so Streams can retry. Success returns `200` only after the batch is persisted. The database upserts by transaction hash and log index, keeping replays from adding duplicate events. Multiple liquidation logs from the same transaction remain separate rows.
 
 The sample enriches each event before responding. Keep batch size one and use the short replay first. If processing repeatedly exceeds the delivery timeout, use a durable queue before acknowledging larger workloads. Changing the timeout alone does not make background work durable.
 

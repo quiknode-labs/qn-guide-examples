@@ -1,4 +1,5 @@
 import express, { type ErrorRequestHandler } from 'express';
+import { rateLimit } from 'express-rate-limit';
 import { webhookSignatureMiddleware } from './security';
 import { liquidationPayload, type LiquidationPayload } from './payload';
 
@@ -12,7 +13,13 @@ export function createWebhookApp(
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
   // Verify the exact bytes before parsing JSON, regardless of Content-Type.
-  app.post('/webhook', (req, res, next) => {
+  app.post('/webhook', rateLimit({
+    windowMs: 60_000,
+    limit: 120,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: { error: 'Webhook rate limit exceeded; retry after the reset' },
+  }), (req, res, next) => {
     if (req.headers['content-encoding'] && req.headers['content-encoding'] !== 'identity') {
       res.status(415).json({ error: 'Set Streams payload compression to None' });
       return;
