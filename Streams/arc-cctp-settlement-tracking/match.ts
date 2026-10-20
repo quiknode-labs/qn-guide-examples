@@ -19,11 +19,16 @@ const key = (fields: (string | number)[]) => JSON.stringify(fields.map((field) =
 
 export function messageIdentity(message: string) {
   const raw = message.toLowerCase().replace(/^0x/, '');
-  if (!/^[0-9a-f]+$/.test(raw) || raw.length % 2 || raw.length < 752) throw Error('Invalid signed message');
+  if (!/^[0-9a-f]+$/.test(raw) || raw.length % 2 || raw.length < 8) throw Error('Invalid signed message');
   const hex = (start: number, size: number) => `0x${raw.slice(start * 2, (start + size) * 2)}`;
   const number = (start: number, size: number) => BigInt(hex(start, size)).toString();
-  if (number(0, 4) !== '1' || number(148, 4) !== '1') throw Error('Unsupported message version');
-  if (hex(44, 32).slice(-40) !== tm.slice(2)) throw Error('Unexpected sender');
+  // Circle can return other protocols and message versions for the same transaction.
+  if (number(0, 4) !== '1') return null;
+  if (raw.length < 296) throw Error('Invalid signed message');
+  if (hex(44, 32) !== `0x${tm.slice(2).padStart(64, '0')}`) return null;
+  if (raw.length < 304) throw Error('Invalid signed message');
+  if (number(148, 4) !== '1') return null;
+  if (raw.length < 752) throw Error('Invalid signed message');
   return {
     nonce: hex(12, 32),
     source: Number(number(4, 4)), destination: Number(number(8, 4)),
@@ -38,8 +43,9 @@ export function matchMessages(legs: BurnLeg[], messages: IrisMessage[]) {
     for (const message of messages) {
       if (message.status !== 'complete' || !/^0x[0-9a-f]+$/i.test(message.attestation ?? '') || !message.message) continue;
       const identity = messageIdentity(message.message);
+      if (!identity || identity.key !== leg.message_key) continue;
       if (!hash.test(identity.nonce) || /^0x0+$/.test(identity.nonce) || identity.nonce !== message.eventNonce?.toLowerCase()) throw Error('Nonce mismatch');
-      if (identity.key === leg.message_key) candidates.push(identity);
+      candidates.push(identity);
     }
     // Identical messages have no unique immutable key. Leave them unresolved.
     if (candidates.length === 1 && legs.filter((other) => other.message_key === leg.message_key).length === 1) {

@@ -132,10 +132,12 @@ Run the file through `psql` as the database owner after exporting `CCTP_WRITER_P
 
 ## Matching and Replacement Behavior
 
-The worker matches immutable message fields, not API array positions, and processes all indexed burns of a selected transaction together. Indistinguishable messages remain unresolved. A completed response must include a signed message and attestation, and its decoded nonce must agree with `eventNonce`. Signature verification is left to the destination contract; the worker does not independently verify it cryptographically.
+The worker matches immutable message fields, not API array positions, and processes all indexed burns of a selected transaction together. It skips unrelated senders and unsupported message versions, and validates nonce metadata only for matching burns. Indistinguishable messages remain unresolved. A completed response must include a signed message and attestation, and its decoded nonce must agree with `eventNonce`. Signature verification is left to the destination contract; the worker does not independently verify it cryptographically.
 
 `burned` means no lookup result exists. `unresolved` means no unique complete match is recorded; inspect `resolution_status` for pending, absent, ambiguous, or failed lookup details. `attested` means the message is ready but its receive is not indexed. `settled` means the matching receive is indexed. Missing destination block coverage can hide a receive that has already happened.
 
 Empty batches allow corrections to remove displaced events. The latest delivery covering a block replaces its earlier event set, including across differently aligned ranges. Cached mappings carry the source block hash and immutable message key; a changed source observation invalidates its earlier mapping and is requeued. Failed lookups advance their check timestamp so they cannot starve later transactions.
 
 Replacement and failure behavior was tested with synthetic fixtures, not an induced live reorg or sustained provider outage. The example is scoped to Base/Arc USDC and CCTP V2; other assets, domains, and future message versions need explicit support.
+
+Run `npm test` for the message-matching regressions, including mixed Circle responses. These tests use synthetic fixtures and need no database or `.env`.

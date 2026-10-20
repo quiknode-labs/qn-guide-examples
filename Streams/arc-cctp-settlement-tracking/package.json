@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "node --test match.test.ts",
     "setup": "node --env-file=.env setup.ts",
     "prepare-streams": "node --env-file=.env prepare-streams.ts",
     "reconcile": "node --env-file=.env reconcile.ts",
