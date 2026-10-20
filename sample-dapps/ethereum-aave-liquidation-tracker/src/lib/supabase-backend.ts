@@ -1,19 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
-import { config } from 'dotenv';
 
-config();
+const url = process.env.SUPABASE_URL;
+const secret = process.env.SUPABASE_SECRET_KEY;
+if (!url || !secret) throw new Error('SUPABASE_URL and SUPABASE_SECRET_KEY are required');
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseKey = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error(
-    'Missing VITE_SUPABASE_URL or VITE_SUPABASE_PUBLISHABLE_KEY in environment variables.'
-  );
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// Alias for clarity
-export const supabaseServer = supabase;
-
+// Never import this client from browser code or prefix its secret with VITE_.
+export const supabaseServer = createClient(url, secret, {
+  auth: { persistSession: false, autoRefreshToken: false },
+  global: { fetch: (input, init) => fetch(input, { ...init, signal: AbortSignal.timeout(5000) }) },
+});

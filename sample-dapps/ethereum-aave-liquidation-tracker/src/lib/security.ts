@@ -1,103 +1,33 @@
-import * as crypto from 'crypto';
-import { Request, Response, NextFunction } from 'express';
+import { createHmac, timingSafeEqual } from 'node:crypto';
+import type { RequestHandler } from 'express';
 
-interface WebhookRequest extends Request {
-  rawBody?: string;
-}
-
-// Trim whitespace - keep the key exactly as provided (including qnsec_ prefix if present)
-const SECRET_KEY = process.env.WEBHOOK_SECRET_KEY?.trim();
-
-/**
- * Verify webhook signature using HMAC-SHA256
- * Quicknode concatenates: nonce + timestamp + payload
- * @param payload - The raw request body as string
- * @param nonce - The nonce from x-qn-nonce header
- * @param timestamp - The timestamp from x-qn-timestamp header
- * @param signature - The signature from x-qn-signature header
- * @returns boolean indicating if signature is valid
- */
 export function verifyWebhookSignature(
-  payload: string,
+  payload: Buffer,
   nonce: string,
   timestamp: string,
-  signature: string
+  signature: string,
+  secret: string,
 ): boolean {
-  if (!SECRET_KEY) {
-    console.warn('SECRET_KEY not configured - skipping verification');
-    return true; // Allow requests if no key is configured
-  }
-
-  if (!nonce || !timestamp || !signature) {
-    console.warn('Missing required signature parameters');
+  const value = signature.replace(/^sha256=/, '');
+  if (!secret.trim() || !nonce || !/^\d+$/.test(timestamp) || !/^[a-f\d]{64}$/i.test(value)) {
     return false;
   }
-
-  try {
-    // Concatenate nonce + timestamp + payload as per Quicknode spec
-    const signatureData = nonce + timestamp + payload;
-    const signatureBytes = Buffer.from(signatureData);
-
-    // Create HMAC with secret key as bytes (UTF-8 encoding, not base64)
-    const secretKeyBytes = Buffer.from(SECRET_KEY);
-    const hmac = crypto.createHmac('sha256', secretKeyBytes);
-    hmac.update(signatureBytes);
-    const computedSignature = hmac.digest('hex');
-
-    // Support both "sha256=" prefix and plain hex
-    const signatureValue = signature.startsWith('sha256=')
-      ? signature.slice(7)
-      : signature;
-
-    const isValid = crypto.timingSafeEqual(
-      Buffer.from(computedSignature),
-      Buffer.from(signatureValue)
-    );
-
-    return isValid;
-  } catch (error) {
-    console.error('Error verifying signature:', error);
-    return false;
-  }
+  const expected = createHmac('sha256', secret.trim()).update(nonce + timestamp).update(payload).digest();
+  return timingSafeEqual(expected, Buffer.from(value, 'hex'));
 }
 
-/**
- * Middleware to verify webhook signatures from Quicknode
- * Checks for WEBHOOK_SECRET_KEY and validates if configured
- */
-export function webhookSignatureMiddleware(
-  req: WebhookRequest,
-  res: Response,
-  next: NextFunction
-): void {
-  // Skip verification if no secret key is configured
-  if (!SECRET_KEY) {
-    return next();
-  }
-
-  // Extract Quicknode headers
-  const signature = req.headers['x-qn-signature'] as string;
-  const nonce = req.headers['x-qn-nonce'] as string;
-  const timestamp = req.headers['x-qn-timestamp'] as string;
-
-  // If headers are present, validate them
-  if (signature && nonce && timestamp) {
-    // Use raw body string (as received) for signature verification
-    const payloadString = req.rawBody || '';
-
-    const isValid = verifyWebhookSignature(
-      payloadString,
-      nonce,
-      timestamp,
-      signature
-    );
-
-    if (!isValid) {
-      console.error('Invalid webhook signature');
-      res.status(401).json({ error: 'Invalid signature' });
+export function webhookSignatureMiddleware(secret: string): RequestHandler {
+  if (!secret.trim()) throw new Error('WEBHOOK_SECRET_KEY is required');
+  return (req, res, next) => {
+    const nonce = req.headers['x-qn-nonce'];
+    const timestamp = req.headers['x-qn-timestamp'];
+    const signature = req.headers['x-qn-signature'];
+    if (!Buffer.isBuffer(req.body) || typeof nonce !== 'string' ||
+        typeof timestamp !== 'string' || typeof signature !== 'string' ||
+        !verifyWebhookSignature(req.body, nonce, timestamp, signature, secret)) {
+      res.status(401).json({ error: 'Missing or invalid webhook signature' });
       return;
     }
-  }
-
-  next();
+    next();
+  };
 }

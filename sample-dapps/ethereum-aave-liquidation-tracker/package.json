@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "tsx watch src/lib/server.ts"
+    "server": "tsx watch --env-file=.env src/lib/server.ts",
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -70,7 +71,7 @@
   "devDependencies": {
     "@eslint/js": "^9.11.1",
     "@types/express": "^5.0.4",
-    "@types/node": "^22.7.3",
+    "@types/node": "^22.19.15",
     "@types/react": "^18.3.9",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -84,5 +85,8 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
     "vite": "^7.2.6"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }
