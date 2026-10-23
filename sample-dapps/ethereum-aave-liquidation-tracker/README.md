@@ -12,7 +12,7 @@ Monitor and analyze liquidation events on the Aave V3 protocol in real-time. Thi
 - 💰 Detailed metrics and analytics
 - 📈 Historical liquidation trends
 - 🔄 Asset distribution analysis
-- ⚡ Serverless architecture
+- ⚡ Managed blockchain streaming
 
 ## Aave Pool Contract and LiquidationCall Event
 
@@ -53,7 +53,7 @@ We will be using decoded logs of the `LiquidationCall` event to track liquidatio
 
 ## How It Works
 
-This application uses a completely serverless architecture to track and analyze Aave V3 liquidation events:
+This application combines Quicknode Streams, a webhook worker, Supabase, and a React dashboard to track and analyze Aave V3 liquidation events:
 1. **Data Collection**: **Streams** monitors the raw blockchain event data for Aave V3's liquidation events in both historical and real-time
 2. **EVM Decoding**: **Streams** decode the raw event data using the [EVM Decoder](https://www.quicknode.com/docs/streams/filters#decoding-evm-data) to extract the relevant information
 3. **Data Processing**: Using `viem` and webhooks, we temporarily listen to incoming data and process the decoded event data by fetching token prices and token details
@@ -103,7 +103,7 @@ We are using a webhook server to:
 
 - Transforms blockchain data into application-ready format
 - Enriches events with additional data
-  - Fetching token metadata from blockchain (name, symbol, decimals) and storing them in Key-Value Store for future use
+  - Fetching token metadata from the blockchain (name, symbol, decimals) and caching it in the worker's memory until restart
   - Real-time token prices from price feeds
   - Calculated USD values for all amounts
   - Historical price data for analytics
@@ -163,19 +163,19 @@ npm run dev
 
 ### Connect the Webhook and Stream
 
-The frontend and webhook server are separate processes. Deploying the frontend to Vercel does not host the webhook worker. For a local test, create a paused Stream before starting the worker so its security token is available.
+The frontend and webhook server are separate processes. Deploying the frontend to Vercel does not host the webhook worker. For a local test, copy the security token during Stream creation, then start and verify the worker before finishing the creation wizard.
 
-1. In the [Streams dashboard](https://dashboard.quicknode.com/streams), create an **Ethereum mainnet** Stream with **Blocks with Receipts**, batch size **1**, and **Modify payload** enabled. Start with block `18983377` and end block `18983378` for a bounded replay.
+1. In the [Streams dashboard](https://dashboard.quicknode.com/streams), begin creating an **Ethereum mainnet** Stream with **Blocks with Receipts**, batch size **1**, and **Modify payload** enabled. Start with block `18983377` and end block `18983378` for a bounded replay.
 2. Paste the filtering code below and run the filter test at `18983377`. The filter processes all blocks in a batch, keeps each event's timestamp, and includes its transaction hash, log index, and block hash. Empty matches return `null`; broken input raises a visible error.
 3. In another terminal, run `ngrok http 3005`. Choose **Webhook** as the Stream destination and append `/webhook` to the tunnel's HTTPS address.
-4. Set compression to **None**, destination timeout to **30 seconds**, maximum failed retries to **3**, and retry interval to **3 seconds**. Save the Stream **paused**. Copy its destination **Security token** to `WEBHOOK_SECRET_KEY` in `.env`.
+4. Set compression to **None**, destination timeout to **30 seconds**, maximum failed retries to **3**, and retry interval to **3 seconds**. In this destination step, copy the **Security token** to `WEBHOOK_SECRET_KEY` in `.env`. Leave the creation wizard open while you start and verify the worker.
 5. Start the backend in another terminal:
 
 ```bash
 npm run server
 ```
 
-The command loads `.env` before importing the RPC and security modules. Missing configuration stops startup. Verify `http://localhost:3005/health` and your tunnel's HTTPS `/health` endpoint, then activate the paused Stream.
+The command loads `.env` before importing the RPC and security modules. Missing configuration stops startup. Verify `http://localhost:3005/health` and your tunnel's HTTPS `/health` endpoint, then return to the dashboard and finish creating the Stream to start the replay.
 
 The webhook limits each connected IP to 120 requests per minute before authentication or processing; excess requests return `429` with a retry interval. The in-memory limiter is for one worker. Behind a tunnel or proxy, requests may share the proxy IP; configure a trusted proxy and a shared limiter store before scaling. Unsigned requests to `/webhook` return `401`. Signed malformed payloads return `400`; compressed requests return `415`. A processing or storage failure returns `503` so Streams can retry. Success returns `200` only after the batch is persisted. The database upserts by transaction hash and log index, keeping replays from adding duplicate events. Multiple liquidation logs from the same transaction remain separate rows.
 
@@ -494,11 +494,13 @@ src/
   ├── components/       # Reusable UI components
   ├── hooks/            # Custom React hooks
   ├── lib/              
-  │   ├── security.ts          # Validating incoming Streams data 
-  │   ├── server.ts            # Our webhook server 
+  │   ├── payload.ts           # Validating the Streams payload shape
+  │   ├── security.ts          # Verifying the webhook signature
+  │   ├── server.ts            # Starting the webhook server
   │   ├── supabase-backend.ts  # Supabase keys for backend operations
   │   ├── supabase-frontend.ts # Supabase keys for frontend operations
-  │   ├── transform.ts         # Data transformation of incoming Streams data 
+  │   ├── transform.ts         # Enriching and storing incoming Streams data
+  │   ├── webhook.ts           # Webhook routes, rate limit, and signature check
   │   └── utils.ts             # General utility functions
   └── types/            # TypeScript type definitions
 ```
@@ -508,6 +510,8 @@ src/
 - `npm run dev`: Start development server
 - `npm run build`: Build for production
 - `npm run lint`: Run ESLint
+- `npm run server`: Start the webhook worker with `.env` loaded
+- `npm test`: Run the filter and webhook regression tests
 
 ## Contributing
 
