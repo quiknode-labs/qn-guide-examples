@@ -12,7 +12,7 @@ Monitor and analyze liquidation events on the Aave V3 protocol in real-time. Thi
 - 💰 Detailed metrics and analytics
 - 📈 Historical liquidation trends
 - 🔄 Asset distribution analysis
-- ⚡ Serverless architecture
+- ⚡ Managed blockchain streaming
 
 ## Aave Pool Contract and LiquidationCall Event
 
@@ -53,7 +53,7 @@ We will be using decoded logs of the `LiquidationCall` event to track liquidatio
 
 ## How It Works
 
-This application uses a completely serverless architecture to track and analyze Aave V3 liquidation events:
+This application combines Quicknode Streams, a webhook worker, Supabase, and a React dashboard to track and analyze Aave V3 liquidation events:
 1. **Data Collection**: **Streams** monitors the raw blockchain event data for Aave V3's liquidation events in both historical and real-time
 2. **EVM Decoding**: **Streams** decode the raw event data using the [EVM Decoder](https://www.quicknode.com/docs/streams/filters#decoding-evm-data) to extract the relevant information
 3. **Data Processing**: Using `viem` and webhooks, we temporarily listen to incoming data and process the decoded event data by fetching token prices and token details
@@ -95,7 +95,7 @@ Quicknode Streams provide real-time blockchain data without running a node:
 - Monitors Aave V3 contracts for liquidation events
 - Filters and delivers only relevant events
 - Ensures reliable data delivery with retry mechanisms
-- Zero infrastructure maintenance required
+- Streams manages blockchain data delivery; the webhook worker still needs hosting
 
 ### Webhooks
 
@@ -103,7 +103,7 @@ We are using a webhook server to:
 
 - Transforms blockchain data into application-ready format
 - Enriches events with additional data
-  - Fetching token metadata from blockchain (name, symbol, decimals) and storing them in Key-Value Store for future use
+  - Fetching token metadata from the blockchain (name, symbol, decimals) and caching it in the worker's memory until restart
   - Real-time token prices from price feeds
   - Calculated USD values for all amounts
   - Historical price data for analytics
@@ -114,165 +114,145 @@ We are using a webhook server to:
 
 ### Prerequisites
 
-- Node.js 18+
-- npm or yarn
-- Free trial [Quicknode](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=sample-apps&utm_content=aave-v3-liquidation-tracker) account
-- Free [Supabase](https://supabase.com/) account
+- Node.js 22.12 or later and npm.
+- A [Quicknode account](https://dashboard.quicknode.com/) with Streams and an Ethereum mainnet RPC endpoint. Historical price enrichment needs archive access for the replay block.
+- A [Supabase project](https://supabase.com/) with its project URL, publishable key, and a separate backend secret key.
+- [ngrok](https://ngrok.com/download) or another HTTPS tunnel for local webhook delivery.
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository and install the locked dependencies:
 
 ```bash
 git clone https://github.com/quiknode-labs/qn-guide-examples.git
 cd qn-guide-examples/sample-dapps/ethereum-aave-liquidation-tracker
+npm ci
+cp .env.example .env
 ```
 
-2. Install dependencies:
+2. Fill in `.env` using your Quicknode endpoint and Supabase **Project Settings > API Keys**:
+
+```dotenv
+# Public browser configuration. Both clients point to the same Supabase project.
+VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_PUBLISHABLE_KEY
+
+# Backend only. Never prefix this secret with VITE_.
+SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_SECRET_KEY=YOUR_SUPABASE_SECRET_KEY
+
+# Full endpoint: https://your-endpoint.ethereum-mainnet.quiknode.pro/your-token/
+QUICKNODE_RPC_URL=YOUR_ETHEREUM_MAINNET_RPC_ENDPOINT
+PORT=3005
+WEBHOOK_SECRET_KEY=REPLACE_WITH_YOUR_STREAM_SECURITY_TOKEN
+```
+
+The `VITE_` values are exposed in the browser. `SUPABASE_SECRET_KEY`, the RPC endpoint, and the Stream token stay on the server. Keep `.env` out of Git. The backend requires its own secret so the browser can read liquidation data without permission to write it.
+
+3. For a new database, run `supabase/schema.sql` in the Supabase SQL Editor. It creates the event identity constraint and read-only public dashboard policy. Then run `supabase/analytics.sql` to install the three dashboard query functions shown below.
+
+For an existing installation, pause the Stream and back up the table, then run `supabase/migration-event-identity.sql` instead of `schema.sql`. This adds columns without deleting old data and restricts public writes. Existing rows have a null log index and cannot be deduplicated retroactively from their transaction hash alone. Backfill their log identities from receipts before replaying old ranges if you need accurate totals across legacy data. Update the Stream filter and backend together before reactivating.
+
+4. Check the application, then start the frontend:
 
 ```bash
-npm install
-```
-
-3. Create a new project and database in [Supabase](https://supabase.com). Save the database password for later use.
-
-4. Create a `.env` file and add your [Supabase](https://supabase.com) URL and publishable key. You can get the URL and key from the Supabase dashboard by clicking the **Connect** button in the project.
-
-```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-5. Set up your database using the provided schema:
-
-```sql
-CREATE TABLE liquidations (
-    id SERIAL PRIMARY KEY,
-    liquidator_address character varying(42) NOT NULL,
-    liquidated_wallet character varying(42) NOT NULL,
-    collateral_asset character varying(42) NOT NULL,
-    collateral_asset_name character varying(100),
-    collateral_asset_symbol character varying(20),
-    collateral_asset_price numeric(20,6),
-    collateral_seized_amount numeric(78,18),
-    debt_asset character varying(42) NOT NULL,
-    debt_asset_name character varying(100),
-    debt_asset_symbol character varying(20),
-    debt_asset_price numeric(20,6),
-    debt_repaid_amount numeric(78,18),
-    transaction_hash character varying(66) NOT NULL,
-    block_number bigint NOT NULL,
-    receive_a_token boolean NOT NULL,
-    timestamp timestamp without time zone NOT NULL
-);
-```
-
-6. Start the development server:
-
-```bash
+npm test
+npm run build
 npm run dev
 ```
 
-### Setting up Webhook Server
+### Connect the Webhook and Stream
 
-1. Start your webhook server by running `ngrok http YOUR_PORT_NUMBER`. For this project, the default value is set to 3005 but feel free to change this in `.env`. 
-2. Once the server is established, you will use your generated ngrok link (e.g., `https://abcd.ngrok-free.app`) and append `/webhook` endpoint which is where we listen to incoming data from Quicknode streams. 
+The frontend and webhook server are separate processes. Deploying the frontend to Vercel does not host the webhook worker. For a local test, copy the security token during Stream creation, then start and verify the worker before finishing the creation wizard.
 
-### Setting up Quicknode Streams
+1. In the [Streams dashboard](https://dashboard.quicknode.com/streams), begin creating an **Ethereum mainnet** Stream with **Blocks with Receipts**, batch size **1**, and **Modify payload** enabled. Start with block `18983377` and end block `18983378` for a bounded replay.
+2. Paste the filtering code below and run the filter test at `18983377`. The filter processes all blocks in a batch, keeps each event's timestamp, and includes its transaction hash, log index, and block hash. Empty matches return `null`; broken input raises a visible error.
+3. In another terminal, run `ngrok http 3005`. Choose **Webhook** as the Stream destination and append `/webhook` to the tunnel's HTTPS address.
+4. Set compression to **None**, destination timeout to **30 seconds**, maximum failed retries to **3**, and retry interval to **3 seconds**. In this destination step, copy the **Security token** to `WEBHOOK_SECRET_KEY` in `.env`. Leave the creation wizard open while you start and verify the worker.
+5. Start the backend in another terminal:
 
-1. Create a Quicknode account at [quicknode.com](https://quicknode.com)
-2. Set up a new Stream:
-   - Select the chain and network (e.g., Ethereum Mainnet)
-   - Select the dataset as `Blocks with Receipts`
-   - Select start and end block numbers (for real-time data, keep `Stream end` as `Doesn't end`)
-   - Select the Modify the payload section and add the following **Streams Filtering Code**
-   - Select a test block (e.g., `18983377`) and click `Run test`
-   - Select the destination as `Webhook` and add your webhook URL with `/webhook` endpoint added. 
-   - Optionally, you can add your Stream's security token in `.env` to utilize [advanced security features](https://www.quicknode.com/guides/quicknode-products/streams/validating-incoming-streams-webhook-messages). 
-
-> The contract addresses, test blocks, and other configurations may vary depending on the specific project and network you are working with. In this app, we use Ethereum Mainnet and the Aave V3 protocol.
-
-You can get the full code for the Streams Filtering Function below or view it [here](https://github.com/quiknode-labs/qn-guide-examples/blob/main/sample-dapps/ethereum-aave-liquidation-tracker/qn-related/stream.js).
-
-<details>  
-<summary>View Streams Filtering Code</summary>
-
-```js
-// Filtering function on Streams
-function main(stream) {
-  try {
-    // Aave V3 LiquidationCall ABI
-    const aaveLiquidationAbi = `[{
-      "anonymous": false,
-      "inputs": [
-        {"indexed": true, "type": "address", "name": "collateralAsset"},
-        {"indexed": true, "type": "address", "name": "debtAsset"},
-        {"indexed": true, "type": "address", "name": "user"},
-        {"indexed": false, "type": "uint256", "name": "debtToCover"},
-        {"indexed": false, "type": "uint256", "name": "liquidatedCollateralAmount"},
-        {"indexed": false, "type": "address", "name": "liquidator"},
-        {"indexed": false, "type": "bool", "name": "receiveAToken"}
-      ],
-      "name": "LiquidationCall",
-      "type": "event"
-    }]`;
-
-    // Pool.sol addresses for Aave V3 (lowercase)
-    const normalizedAddresses = ["0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2"];
-
-    // Handle both payload and stream parameter styles
-    const data = stream?.data ? stream.data : stream;
-
-    // Early validation - return null to skip (per Quicknode docs)
-    if (!data?.[0]?.block?.timestamp || !data?.[0]?.receipts?.length) {
-      return null;
-    }
-
-    const timestamp = parseInt(data[0].block.timestamp, 16);
-
-    // Decode receipts
-    const decodedReceipts = decodeEVMReceipts(data[0].receipts, [aaveLiquidationAbi]);
-
-    // Validate decoded receipts
-    if (!decodedReceipts || !Array.isArray(decodedReceipts) || decodedReceipts.length === 0) {
-      return null;
-    }
-
-    // Filter for liquidation events
-    const filteredLogs = decodedReceipts
-      .filter(r => r?.decodedLogs?.length > 0)
-      .flatMap(r => r.decodedLogs)
-      .filter(log =>
-        log?.name === "LiquidationCall" &&
-        log?.address &&
-        normalizedAddresses.includes(log.address.toLowerCase())
-      );
-
-    // Return data if found, null otherwise (per Quicknode docs)
-    return filteredLogs?.length > 0
-      ? { timestamp, filteredLogs }
-      : null;
-  } catch (e) {
-    // Return null to skip on error (per Quicknode docs)
-    return null;
-  }
-}
+```bash
+npm run server
 ```
 
-</details>
+The command loads `.env` before importing the RPC and security modules. Missing configuration stops startup. Verify `http://localhost:3005/health` and your tunnel's HTTPS `/health` endpoint, then return to the dashboard and finish creating the Stream to start the replay.
 
-<br />
+The webhook limits each connected IP to 120 requests per minute before authentication or processing; excess requests return `429` with a retry interval. The in-memory limiter is for one worker. Behind a tunnel or proxy, requests may share the proxy IP; configure a trusted proxy and a shared limiter store before scaling. Unsigned requests to `/webhook` return `401`. Signed malformed payloads return `400`; compressed requests return `415`. A processing or storage failure returns `503` so Streams can retry. Success returns `200` only after the batch is persisted. The database upserts by transaction hash and log index, keeping replays from adding duplicate events. Multiple liquidation logs from the same transaction remain separate rows.
 
-#### Quicknode Setup
-1. Log in to your [Quicknode dashboard](https://dashboard.quicknode.com).
-2. Create a new Endpoint for your chain and network (e.g., Ethereum Mainnet).
-3. Copy the RPC URL and paste it into the `QUICKNODE_RPC_URL` variable in the `.env` file. 
+The sample enriches each event before responding. Keep batch size one and use the short replay first. If processing repeatedly exceeds the delivery timeout, use a durable queue before acknowledging larger workloads. Changing the timeout alone does not make background work durable.
 
-#### Database Setup
-1. Log in to your **Supabase dashboard**.
-2. Navigate to your project and click the **Connect** button.
-3. Under **Connection info**, click **App Frameworks** and set Framework to React and Using **Vite** framework. 
-4. Copy `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY` to `.env`. 
+### Verify Delivery and Replay
+
+After the Stream completes the short range:
+
+1. Check the worker logs for `Data written to Supabase successfully` and inspect rows in `liquidations`. Each new row should have `log_index` and `block_hash`.
+2. Confirm the dashboard's liquidation table displays the rows. Historical events may fall outside the analytics panels' default time windows.
+3. Record the row count, replay the same range, and verify that the count stays the same. Group by `(transaction_hash, log_index)` to check for duplicates among new rows.
+4. Stop and restart the backend with `npm run server`. Replay once more to verify that database deduplication survives a restart.
+5. Pause or delete the test Stream, stop the tunnel and worker, and remove test rows when finished. Avoid deleting pre-existing data.
+
+Reorg handling does not remove an orphaned liquidation row automatically. Use a sufficient distance from the chain tip and reconcile block hashes before treating this sample as a canonical event index. An upsert updates an event if it is re-included, but does not delete an event absent from the replacement chain.
+
+### Streams Filtering Code
+
+```javascript
+// Test block: 18983377 or any other block that has a liquidation event
+// Dataset: Block with receipts
+// Chain and Network: Ethereum Mainnet -- Update all related fields (e.g., contract addresses, test block, etc.) to match your specific project and network
+
+// Filtering function on Streams
+function main(stream) {
+  // Aave V3 LiquidationCall ABI
+  const aaveLiquidationAbi = `[{
+    "anonymous": false,
+    "inputs": [
+      {"indexed": true, "type": "address", "name": "collateralAsset"},
+      {"indexed": true, "type": "address", "name": "debtAsset"},
+      {"indexed": true, "type": "address", "name": "user"},
+      {"indexed": false, "type": "uint256", "name": "debtToCover"},
+      {"indexed": false, "type": "uint256", "name": "liquidatedCollateralAmount"},
+      {"indexed": false, "type": "address", "name": "liquidator"},
+      {"indexed": false, "type": "bool", "name": "receiveAToken"}
+    ],
+    "name": "LiquidationCall",
+    "type": "event"
+  }]`;
+
+  // Pool.sol addresses for Aave V3 (lowercase)
+  const normalizedAddresses = ["0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2"];
+
+  if (!Array.isArray(stream.data)) throw new Error('Expected Blocks with Receipts');
+  const filteredLogs = [];
+  for (const entry of stream.data) {
+    if (!entry.block || !Array.isArray(entry.receipts)) throw new Error('Missing block or receipts');
+    const timestamp = Number(BigInt(entry.block.timestamp));
+    const receipts = decodeEVMReceipts(entry.receipts, [aaveLiquidationAbi]);
+    for (const receipt of receipts) {
+      if (BigInt(receipt.status) !== 1n) continue;
+      for (const log of receipt.decodedLogs || []) {
+        if (log.name !== 'LiquidationCall' || !normalizedAddresses.includes(log.address.toLowerCase())) continue;
+        const receiveAToken = String(log.receiveAToken);
+        if (!['true', 'false'].includes(receiveAToken)) throw new Error('Invalid receiveAToken');
+        filteredLogs.push({
+          collateralAsset: log.collateralAsset,
+          debtAsset: log.debtAsset,
+          user: log.user,
+          liquidator: log.liquidator,
+          receiveAToken: receiveAToken === 'true',
+          debtToCover: String(log.debtToCover),
+          liquidatedCollateralAmount: String(log.liquidatedCollateralAmount),
+          transactionHash: receipt.transactionHash,
+          blockNumber: BigInt(entry.block.number).toString(),
+          blockHash: entry.block.hash,
+          logIndex: Number(BigInt(log.logIndex)),
+          timestamp,
+        });
+      }
+    }
+  }
+  return filteredLogs.length ? { timestamp: filteredLogs[0].timestamp, filteredLogs } : null;
+}
+```
 
 ### Setting up PostgreSQL Functions
 
@@ -497,12 +477,12 @@ $$ LANGUAGE plpgsql;
 For better query performance, we can create indexes on the `liquidations` table. Here's an example of how to create the necessary indexes:
 
 ```sql
-CREATE INDEX idx_debt_asset ON liquidations(debt_asset_symbol text_ops);
-CREATE INDEX idx_timestamp ON liquidations(timestamp timestamp_ops);
-CREATE INDEX idx_liquidator_address ON liquidations(liquidator_address text_ops);
-CREATE INDEX idx_liquidated_wallet ON liquidations(liquidated_wallet text_ops);
-CREATE INDEX idx_collateral_asset ON liquidations(collateral_asset_symbol text_ops);
-CREATE INDEX idx_liquidations_assets ON liquidations(collateral_asset_symbol text_ops,debt_asset_symbol text_ops);
+CREATE INDEX IF NOT EXISTS idx_debt_asset ON liquidations(debt_asset_symbol text_ops);
+CREATE INDEX IF NOT EXISTS idx_timestamp ON liquidations(timestamp timestamp_ops);
+CREATE INDEX IF NOT EXISTS idx_liquidator_address ON liquidations(liquidator_address text_ops);
+CREATE INDEX IF NOT EXISTS idx_liquidated_wallet ON liquidations(liquidated_wallet text_ops);
+CREATE INDEX IF NOT EXISTS idx_collateral_asset ON liquidations(collateral_asset_symbol text_ops);
+CREATE INDEX IF NOT EXISTS idx_liquidations_assets ON liquidations(collateral_asset_symbol text_ops,debt_asset_symbol text_ops);
 ```
 
 ## Development
@@ -514,11 +494,13 @@ src/
   ├── components/       # Reusable UI components
   ├── hooks/            # Custom React hooks
   ├── lib/              
-  │   ├── security.ts          # Validating incoming Streams data 
-  │   ├── server.ts            # Our webhook server 
+  │   ├── payload.ts           # Validating the Streams payload shape
+  │   ├── security.ts          # Verifying the webhook signature
+  │   ├── server.ts            # Starting the webhook server
   │   ├── supabase-backend.ts  # Supabase keys for backend operations
   │   ├── supabase-frontend.ts # Supabase keys for frontend operations
-  │   ├── transform.ts         # Data transformation of incoming Streams data 
+  │   ├── transform.ts         # Enriching and storing incoming Streams data
+  │   ├── webhook.ts           # Webhook routes, rate limit, and signature check
   │   └── utils.ts             # General utility functions
   └── types/            # TypeScript type definitions
 ```
@@ -528,6 +510,8 @@ src/
 - `npm run dev`: Start development server
 - `npm run build`: Build for production
 - `npm run lint`: Run ESLint
+- `npm run server`: Start the webhook worker with `.env` loaded
+- `npm test`: Run the filter and webhook regression tests
 
 ## Contributing
 
