@@ -1,0 +1,30 @@
+{
+  "name": "hyperliquid-historical-l2-rebuilder",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "scripts": {
+    "build": "tsc",
+    "analyze:events": "tsx --env-file=.env src/validation/analyze-events.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --env-file=.env --test tests/**/*.test.ts",
+    "checkpoint": "tsx --env-file=.env src/checkpoint/capture.ts",
+    "validate:anchor": "tsx --env-file=.env src/checkpoint/validate-anchor.ts",
+    "validate:differential": "tsx --env-file=.env src/validation/validate-differential.ts",
+    "validate:jsonl": "tsx --env-file=.env src/validation/validate-jsonl.ts",
+    "rebuild": "tsx --env-file=.env src/cli.ts",
+    "reconstruct": "tsx --env-file=.env src/cli.ts"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.13.4",
+    "@grpc/proto-loader": "^0.7.15"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}

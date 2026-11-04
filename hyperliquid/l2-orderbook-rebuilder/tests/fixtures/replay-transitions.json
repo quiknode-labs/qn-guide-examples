@@ -1,0 +1,32 @@
+{
+  "coin": "BTC",
+  "beforeOrders": [
+    { "oid": "1", "user": "0x0000000000000000000000000000000000000001", "coin": "BTC", "side": "B", "px": "100", "sz": "2" },
+    { "oid": "2", "user": "0x0000000000000000000000000000000000000002", "coin": "BTC", "side": "B", "px": "100", "sz": "0.2" },
+    { "oid": "3", "user": "0x0000000000000000000000000000000000000003", "coin": "BTC", "side": "A", "px": "101", "sz": "4" },
+    { "oid": "4", "user": "0x0000000000000000000000000000000000000004", "coin": "BTC", "side": "B", "px": "99", "sz": "5" }
+  ],
+  "afterOrders": [
+    { "oid": "1", "user": "0x0000000000000000000000000000000000000001", "coin": "BTC", "side": "B", "px": "100", "sz": "1.5" },
+    { "oid": "2", "user": "0x0000000000000000000000000000000000000002", "coin": "BTC", "side": "B", "px": "100", "sz": "0.2" },
+    { "oid": "5", "user": "0x0000000000000000000000000000000000000005", "coin": "BTC", "side": "A", "px": "102", "sz": "2" }
+  ],
+  "block": {
+    "blockNumber": 123,
+    "blockTime": "2026-07-16T00:00:00.000000000",
+    "bookEvents": [
+      { "user": "0x0000000000000000000000000000000000000001", "oid": 1, "coin": "BTC", "side": "B", "px": "100", "raw_book_diff": { "update": { "origSz": "2", "newSz": "1.5" } } },
+      { "user": "0x0000000000000000000000000000000000000004", "oid": 4, "coin": "BTC", "side": "B", "px": "99", "raw_book_diff": "remove" },
+      { "user": "0x0000000000000000000000000000000000000005", "oid": 5, "coin": "BTC", "side": "A", "px": "102", "raw_book_diff": { "new": { "sz": "2" } } },
+      { "user": "0x0000000000000000000000000000000000000006", "oid": 6, "coin": "BTC", "side": "B", "px": "98", "raw_book_diff": { "new": { "sz": "1" } } },
+      { "user": "0x0000000000000000000000000000000000000006", "oid": 6, "coin": "BTC", "side": "B", "px": "98", "raw_book_diff": "remove" },
+      { "user": "0x0000000000000000000000000000000000000003", "oid": 3, "coin": "BTC", "side": "A", "px": "101", "raw_book_diff": { "update": { "origSz": "4", "newSz": "0.0" } } },
+      { "user": "0x0000000000000000000000000000000000000003", "oid": 3, "coin": "BTC", "side": "A", "px": "101", "raw_book_diff": "remove" }
+    ],
+    "orderEvents": [
+      { "user": "0x0000000000000000000000000000000000000004", "status": "canceled", "order": { "coin": "BTC", "side": "B", "limitPx": "99", "sz": "5", "oid": 4, "origSz": "5", "tif": "Gtc", "isTrigger": false } },
+      { "user": "0x0000000000000000000000000000000000000003", "status": "filled", "order": { "coin": "BTC", "side": "A", "limitPx": "101", "sz": "0.0", "oid": 3, "origSz": "4", "tif": "Gtc", "isTrigger": false } }
+    ]
+  }
+}
+
