@@ -20,7 +20,7 @@
   "author": "amilz",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.9.0",
-    "@solana/kit": "^2.1.0",
+    "@solana/kit": "^8.6.0",
     "prettier": "^3.5.3",
     "zod": "^3.24.2"
   },

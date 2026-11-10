@@ -137,7 +137,7 @@ server.tool(
                 content: [
                     {
                         type: "text",
-                        text: `Error while getting balance: ${isSolanaError(error) ? error.message : "Unknown error"}`,
+                        text: `Error while getting token accounts: ${isSolanaError(error) ? error.message : "Unknown error"}`,
                     },
                 ],
                 isError: true,
@@ -214,7 +214,7 @@ server.tool(
         try {
             const transaction = await solanaRpc
                 .getTransaction(signature, {
-                    maxSupportedTransactionVersion: 0,
+                    maxSupportedTransactionVersion: 1,
                     encoding: "json",
                 })
                 .send();
@@ -273,7 +273,7 @@ server.tool(
                 content: [
                     {
                         type: "text",
-                        text: `Error while getting balance: ${isSolanaError(error) ? error.message : "Unknown error"}`,
+                        text: `Error while getting transaction: ${isSolanaError(error) ? error.message : "Unknown error"}`,
                     },
                 ],
                 isError: true,
@@ -314,8 +314,7 @@ server.tool(
                 executable: accountInfo.executable,
                 lamports: accountInfo.lamports.toString(),
                 owner: accountInfo.owner.toString(),
-                rentEpoch: accountInfo.rentEpoch.toLocaleString(),
-                space: accountInfo.data.length,
+                space: accountInfo.space.toString(),
             };
 
             return {
