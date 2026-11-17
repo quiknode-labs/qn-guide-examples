@@ -129,6 +129,7 @@ ln -s ../../scripts/pre-commit-tree.sh .git/hooks/pre-commit
 - [The Web3 Developer Stack](./ethereum/web3-stack)
 
 ### Hyperliquid
+- [Hyperliquid HIP-3 Market Monitor](./hyperliquid/hip3-market-monitor) - *Monitor HIP-3 market spreads, mark/oracle divergence, and input freshness with Quicknode.*
 - [How to Trade HIP-4 Prediction Markets on Hyperliquid](./hyperliquid/hip4-prediction-markets)
 
 ### Mpp
