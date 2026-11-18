@@ -68,7 +68,7 @@ export async function startMonitor(
     retry: ReturnType<typeof setTimeout> | undefined,
     poll: ReturnType<typeof setTimeout> | undefined;
   const controllers = new Set<AbortController>();
-  async function info(body: object): Promise<unknown> {
+  async function info(body: { type: string; dex?: string }): Promise<unknown> {
     const controller = new AbortController();
     controllers.add(controller);
     const timeout = setTimeout(() => controller.abort(), 5000);
@@ -79,8 +79,10 @@ export async function startMonitor(
         body: JSON.stringify(body),
         signal: controller.signal,
       });
-      if (!res.ok) throw Error("Market context request failed.");
-      return await res.json();
+      if (!res.ok) throw Error(`/info ${body.type} failed (HTTP ${res.status}).`);
+      return await res.json().catch(() => {
+        throw Error(`/info ${body.type} returned invalid JSON.`);
+      });
     } finally {
       clearTimeout(timeout);
       controllers.delete(controller);
