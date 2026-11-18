@@ -1,0 +1,23 @@
+{
+  "name": "hyperliquid-hip3-market-monitor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Monitor HIP-3 market spreads, mark/oracle divergence, and input freshness with Quicknode.",
+  "scripts": {
+    "start": "tsx --env-file=.env run.ts",
+    "check": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "1.14.7",
+    "@grpc/proto-loader": "0.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}
