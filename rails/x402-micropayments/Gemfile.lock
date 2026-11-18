@@ -294,10 +294,10 @@ GEM
     rake (13.3.1)
     rbnacl (7.1.2)
       ffi (~> 1)
-    rbsecp256k1 (6.0.0)
+    rbsecp256k1 (6.0.2)
       mini_portile2 (~> 2.8)
       pkg-config (~> 1.5)
-      rubyzip (~> 2.3)
+      rubyzip (~> 3.4)
     rdoc (7.0.3)
       erb
       psych (>= 4.0.0)
@@ -337,7 +337,7 @@ GEM
     ruby-vips (2.2.5)
       ffi (~> 1.12)
       logger
-    rubyzip (2.4.1)
+    rubyzip (3.4.0)
     scrypt (3.1.0)
       ffi-compiler (>= 1.0, < 2.0)
       rake (~> 13)
