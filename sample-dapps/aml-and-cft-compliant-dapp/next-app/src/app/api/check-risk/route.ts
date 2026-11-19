@@ -41,7 +41,9 @@ async function makeRiskScoreRequest(
   if (!quicknodeEndpoint) {
     throw new Error("QUICKNODE_ENDPOINT is not defined");
   }
-  const secrets = { QUICKNODE_ENDPOINT: quicknodeEndpoint };
+  const token = process.env.QUICKNODE_ENDPOINT_TOKEN;
+  const secrets: Record<string, string> = { QUICKNODE_ENDPOINT: quicknodeEndpoint };
+  if (token) secrets.QUICKNODE_ENDPOINT_TOKEN = token;
 
   // Configuration
   const slotIdNumber = 0;
@@ -53,6 +55,7 @@ async function makeRiskScoreRequest(
   const provider = new ethers.providers.JsonRpcProvider({
     skipFetchSetup: true,
     url: quicknodeEndpoint,
+    headers: token ? { "x-token": token } : undefined,
   });
 
   const wallet = new ethers.Wallet(privateKey);

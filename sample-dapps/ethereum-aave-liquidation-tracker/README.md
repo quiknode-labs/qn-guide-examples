@@ -142,10 +142,18 @@ SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 SUPABASE_SECRET_KEY=YOUR_SUPABASE_SECRET_KEY
 
 # Full endpoint: https://your-endpoint.ethereum-mainnet.quiknode.pro/your-token/
-QUICKNODE_RPC_URL=YOUR_ETHEREUM_MAINNET_RPC_ENDPOINT
+QUICKNODE_RPC_URL=https://your-endpoint.quiknode.pro/
+QUICKNODE_RPC_TOKEN=your-auth-token
 PORT=3005
 WEBHOOK_SECRET_KEY=REPLACE_WITH_YOUR_STREAM_SECURITY_TOKEN
 ```
+
+Copy **Base URL** and **Auth token** from the same Ethereum mainnet endpoint. The server sends the token in the `x-token` header.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. Keep the endpoint credentials in the server environment.
 
 The `VITE_` values are exposed in the browser. `SUPABASE_SECRET_KEY`, the RPC endpoint, and the Stream token stay on the server. Keep `.env` out of Git. The backend requires its own secret so the browser can read liquidation data without permission to write it.
 

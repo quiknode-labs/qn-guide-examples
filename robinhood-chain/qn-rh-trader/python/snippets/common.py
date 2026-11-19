@@ -114,11 +114,13 @@ def valid_calldata(data, min_bytes: int = 4) -> bool:
 
 def rpc(method: str, params: list, *, url: str | None = None, timeout: float = 20.0):
     """One JSON-RPC call to QUICKNODE_RPC. On a transport/RPC failure, exit with the error
-    CLASS only: the endpoint URL carries your token, so it is never printed."""
+    class only. Endpoint credentials stay out of the error output."""
+    token = os.environ.get("QUICKNODE_RPC_TOKEN") if url is None else None
     url = url or env("QUICKNODE_RPC")
     try:
         resp = httpx.post(
             url, json={"jsonrpc": "2.0", "id": 1, "method": method, "params": params},
+            headers={"x-token": token} if token else None,
             timeout=timeout,
         )
         resp.raise_for_status()
@@ -138,9 +140,12 @@ def rpc_allow_revert(method: str, params: list, *, timeout: float = 20.0):
     tell a genuine onchain revert (a real outcome) apart from an endpoint failure (UNKNOWN).
     Returns (result, None) on success."""
     url = env("QUICKNODE_RPC")
+    token = os.environ.get("QUICKNODE_RPC_TOKEN")
     try:
         resp = httpx.post(
-            url, json={"jsonrpc": "2.0", "id": 1, "method": method, "params": params}, timeout=timeout)
+            url, json={"jsonrpc": "2.0", "id": 1, "method": method, "params": params},
+            headers={"x-token": token} if token else None, timeout=timeout,
+        )
         resp.raise_for_status()
         body = resp.json()
     except httpx.HTTPStatusError as exc:

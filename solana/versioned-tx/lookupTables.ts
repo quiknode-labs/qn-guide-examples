@@ -5,8 +5,11 @@ const SIGNER_WALLET = Keypair.fromSecretKey(new Uint8Array(secret));
 const DESTINATION_WALLET = Keypair.generate();
 const LOOKUP_TABLE_ADDRESS = new PublicKey("3uBhgRWPTPLfvfqxi4M9eVZC8nS1kDG9XPkdHKgG69nw"); // 👈 replace with your value
 
-const QUICKNODE_RPC = 'https://example.solana-devnet.quiknode.pro/0123456/';
-const SOLANA_CONNECTION = new Connection(QUICKNODE_RPC);
+const QUICKNODE_RPC = process.env.QUICKNODE_RPC_URL as string;
+const SOLANA_CONNECTION = new Connection(QUICKNODE_RPC, {
+  httpHeaders: process.env.QUICKNODE_RPC_TOKEN ? { "x-token": process.env.QUICKNODE_RPC_TOKEN } : undefined,
+  wsEndpoint: process.env.QUICKNODE_WSS_URL,
+});
 
 async function createAndSendV0Tx(txInstructions: TransactionInstruction[]) {
     // Step 1 - Fetch Latest Blockhash

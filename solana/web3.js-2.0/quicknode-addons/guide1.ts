@@ -24,7 +24,10 @@ interface createQuicknodeTransportParams {
 }
 
 function createQuicknodeTransport({ endpoint }: createQuicknodeTransportParams): RpcTransport {
-    const jsonRpcTransport = createDefaultRpcTransport({ url: endpoint });
+    const jsonRpcTransport = createDefaultRpcTransport({
+        url: endpoint,
+        headers: process.env.QUICKNODE_RPC_TOKEN ? { "x-token": process.env.QUICKNODE_RPC_TOKEN } : undefined,
+    });
 
     return async <TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> => {
         return await jsonRpcTransport(...args);
@@ -55,7 +58,7 @@ export function createPriorityFeeApi(endpoint: string): Rpc<PriorityFeeApi> {
 
 
 async function main() {
-    const quickNodeRpc = createPriorityFeeApi('https://example.solana-mainnet.quiknode.pro/123456/');
+    const quickNodeRpc = createPriorityFeeApi(process.env.QUICKNODE_RPC_URL!);
 
     const priorityFees = await quickNodeRpc.qn_estimatePriorityFees({
         account: 'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4',

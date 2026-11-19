@@ -27,7 +27,8 @@ export default function Home() {
           Update `.env.local` with your Quicknode Ethereum Node Endpoint:
           <br />
           <br />
-          ETHEREUM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
+          ETHEREUM_RPC_URL=https://your-endpoint.quiknode.pro/
+          ETHEREUM_RPC_TOKEN=your-auth-token
         </CardContent>
       </Card>
       <Card>

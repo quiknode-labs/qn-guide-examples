@@ -21,7 +21,7 @@ cd sample-dapps/evm-token-factory
 
 ### Set Environment Variables
 
-1. Rename `.env.example` to `.env.local `and update it with RPC URLs for each blockchain. Also, include your [WalletConnect](https://cloud.walletconnect.com/). project ID (optionally, you can leave this blank but some features will not be supported). To create RPC URLs for each chain, you can run your own node locally or use a service like [Quicknode](https://quicknode.com) to quickly spin up a node endpoint.
+1. Copy `.env.example` to `.env.local`. Configure a browser-facing RPC URL you operate or have approved for each enabled chain and set `NEXT_PUBLIC_PROJECT_ID` to your WalletConnect project ID. The app enables only chains with a configured URL. Keep private Quicknode credentials on the server.
 
 ### Configure Smart Contract Addresses
 
@@ -172,7 +172,7 @@ export const mainnet = {
   name: 'Ethereum',
   currency: 'ETH',
   explorerUrl: 'https://etherscan.io',
-  rpcUrl: process.env.NEXT_PUBLIC_MAINNET_RPC_URL
+  rpcUrl: process.env.NEXT_PUBLIC_MAINNET_RPC_URL || ""
 }
 ```
 

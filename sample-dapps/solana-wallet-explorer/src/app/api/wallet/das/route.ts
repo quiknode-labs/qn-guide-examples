@@ -33,11 +33,14 @@ export async function GET(request: Request) {
             }
         };
         const endpoint = getDasEndpoint();
+        const token = process.env.SOLANA_RPC_TOKEN;
         const response = await fetch(endpoint, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                ...(token ? { "x-token": token } : {}),
             },
+            redirect: "error",
             body: JSON.stringify(requestBody)
         })
         if (!response.ok) {
@@ -46,6 +49,9 @@ export async function GET(request: Request) {
 
         const data: JsonResponse = await response.json();
         const assets: DasApiAssetList = data.result;
+        if (!Array.isArray(assets?.items)) {
+            throw new Error('DAS API did not return an asset list');
+        }
         return new Response(JSON.stringify({ assets }), {
             headers: { 'Content-Type': 'application/json' },
             status: 200,

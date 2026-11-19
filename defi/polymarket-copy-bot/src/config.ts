@@ -12,6 +12,7 @@ export const config = {
   targetWallet: process.env.TARGET_WALLET || '',
   privateKey: process.env.PRIVATE_KEY || '',
   polymarketGeoToken: process.env.POLYMARKET_GEO_TOKEN || '',
+  rpcToken: process.env.RPC_URL ? process.env.RPC_TOKEN : undefined,
   rpcUrl: process.env.RPC_URL || 'https://polygon-rpc.com',
   chainId: 137,
 

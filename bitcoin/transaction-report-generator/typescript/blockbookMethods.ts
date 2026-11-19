@@ -4,8 +4,12 @@ import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config(); // Initialize dotenv to use environment variables
 
-// Retrieve the Quicknode endpoint URL from environment variables
-const QUICKNODE_ENDPOINT = process.env.QUICKNODE_ENDPOINT as string;
+const QUICKNODE_ENDPOINT = (process.env.QUICKNODE_ENDPOINT_URL || process.env.QUICKNODE_ENDPOINT) as string;
+const QUICKNODE_ENDPOINT_TOKEN = process.env.QUICKNODE_ENDPOINT_TOKEN;
+const headers = {
+  "Content-Type": "application/json",
+  ...(QUICKNODE_ENDPOINT_TOKEN ? { "x-token": QUICKNODE_ENDPOINT_TOKEN } : {}),
+};
 
 // Fetches detailed transaction data for a specified Bitcoin address
 export async function bb_getaddress(address: string): Promise<Result> {
@@ -23,7 +27,8 @@ export async function bb_getaddress(address: string): Promise<Result> {
 
     // Make the POST request to the Quicknode endpoint
     const response = await axios.post(QUICKNODE_ENDPOINT, postData, {
-      headers: { "Content-Type": "application/json" },
+      headers,
+      maxRedirects: 0,
       maxBodyLength: Infinity,
     });
 
@@ -33,9 +38,8 @@ export async function bb_getaddress(address: string): Promise<Result> {
     } else {
       throw new Error("Failed to fetch transactions");
     }
-  } catch (error) {
-    console.error(error);
-    throw error;
+  } catch {
+    throw new Error("Failed to fetch Blockbook data");
   }
 }
 
@@ -52,7 +56,8 @@ export async function bb_gettickers(timestamp: number): Promise<PriceData> {
 
     // Make the POST request to the Quicknode endpoint
     const response = await axios.post(QUICKNODE_ENDPOINT, postData, {
-      headers: { "Content-Type": "application/json" },
+      headers,
+      maxRedirects: 0,
       maxBodyLength: Infinity,
     });
 
@@ -65,8 +70,7 @@ export async function bb_gettickers(timestamp: number): Promise<PriceData> {
     } else {
       throw new Error("Failed to fetch tickers");
     }
-  } catch (error) {
-    console.error(error);
-    throw error;
+  } catch {
+    throw new Error("Failed to fetch Blockbook data");
   }
 }

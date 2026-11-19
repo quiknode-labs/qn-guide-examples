@@ -46,11 +46,9 @@ function loadConfig(): AppConfig {
     process.exit(1);
   }
 
-  // Derive gRPC host: extract hostname only (strip protocol + any token path), then append :9000
-  // Quicknode URLs look like: https://abc.sui-mainnet.quiknode.pro/TOKEN
   const parsedUrl = new URL(endpointUrl!);
   const grpcHost = parsedUrl.hostname + ':9000';
-  const graphqlUrl = endpointUrl! + '/' + endpointToken! + '/graphql';
+  const graphqlUrl = new URL('/graphql', parsedUrl).toString();
 
   return {
     endpointUrl: endpointUrl!,

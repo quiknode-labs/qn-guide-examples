@@ -28,13 +28,22 @@ cp .env.example .env.local
 Then edit `.env.local` and add your API keys:
 
 ```bash
-QUICKNODE_RPC_URL=your_quicknode_rpc_endpoint_here
+QUICKNODE_RPC_URL=https://your-endpoint.solana-mainnet.quiknode.pro/
+QUICKNODE_RPC_TOKEN=your-auth-token
 JUPITER_API_KEY=your_jupiter_api_key_here
 ```
 
+Copy **Base URL** and **Auth token** from the same Solana mainnet endpoint. The server sends the token in the `x-token` header. Keep the Jupiter API key in its own setting.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. Keep the endpoint credentials in the server environment.
+
 **Note:**
 
-- **QUICKNODE_RPC_URL** (required): Get your Quicknode RPC endpoint from [Quicknode](https://www.quicknode.com/) or use the default public URL `https://api.mainnet-beta.solana.com`
+- **QUICKNODE_RPC_URL** (required) is the Base URL of your Quicknode Solana endpoint. You can also supply a public RPC URL.
+- **QUICKNODE_RPC_TOKEN** is the Auth token from that endpoint. Leave it unset for a public or already authenticated URL.
 - **JUPITER_API_KEY** (required for full functionality): Get your Jupiter API key from [Jupiter API Portal](https://portal.jup.ag/).
 
 3. Run the development server:

@@ -56,7 +56,10 @@ export class TradeExecutor {
   private readonly MIN_MAX_FEE_GWEI = parseFloat(process.env.MIN_MAX_FEE_GWEI || '60');
 
   constructor() {
-    this.provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
+    this.provider = new ethers.providers.JsonRpcProvider({
+      url: config.rpcUrl,
+      headers: config.rpcToken ? { "x-token": config.rpcToken } : undefined,
+    });
     this.wallet = new ethers.Wallet(config.privateKey, this.provider);
 
     this.clobClient = new ClobClient(

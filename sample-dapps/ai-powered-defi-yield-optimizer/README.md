@@ -121,8 +121,16 @@ Edit `.env`:
 ANTHROPIC_API_KEY=your_claude_api_key_here
 
 # Optional for live data (falls back to demo data)
-NEXT_PUBLIC_QUICKNODE_ENDPOINT=https://your-quicknode-endpoint.com/your-api-key/
+QUICKNODE_ENDPOINT_URL=https://your-endpoint.base-mainnet.quiknode.pro/
+QUICKNODE_ENDPOINT_TOKEN=your-auth-token
 ```
+
+Copy **Base URL** and **Auth token** from the same Base mainnet endpoint. The browser calls `/api/aerodrome`, which authenticates with the add-on on the server. If you already have a full endpoint URL, put it in `QUICKNODE_ENDPOINT_URL` and leave `QUICKNODE_ENDPOINT_TOKEN` unset. Set the same server variables when deploying.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. Keep the endpoint credentials in the server environment.
 
 ### 4. Run Development Server
 ```bash
@@ -146,7 +154,8 @@ pnpm start
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `ANTHROPIC_API_KEY` | Yes | Claude AI API key for optimization |
-| `NEXT_PUBLIC_QUICKNODE_ENDPOINT` | Yes | Quicknode Swap API (Aerodrome) endpoint |
+| `QUICKNODE_ENDPOINT_URL` | Yes | Base URL of a Base mainnet endpoint with the Aerodrome Swap API add-on |
+| `QUICKNODE_ENDPOINT_TOKEN` | Yes with Base URL | Auth token from the same endpoint |
 
 ### API Endpoints
 

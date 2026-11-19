@@ -15,7 +15,7 @@ A React + Express app that surfaces ERC20 allowance states collected via Quickno
 2. Configure env:
    ```bash
    cp example.env .env
-   # Set REACT_APP_QUICKNODE_ENDPOINT plus DB_USER/DB_HOST/DB_NAME/DB_PASSWORD/DB_PORT
+   # Set REACT_APP_QUICKNODE_ENDPOINT to a browser-facing Ethereum RPC URL you operate or have approved and set DB_USER/DB_HOST/DB_NAME/DB_PASSWORD/DB_PORT
    ```
 3. Start the API server (port 3001):
    ```bash
@@ -28,5 +28,5 @@ A React + Express app that surfaces ERC20 allowance states collected via Quickno
 
 ## How it works
 - Express serves `/api/wallet-approval-states/:walletAddress` from Postgres.
-- The React UI fetches approvals/history and enriches tokens via `REACT_APP_QUICKNODE_ENDPOINT`.
+- The React UI fetches approvals/history and enriches tokens via the browser-facing URL in `REACT_APP_QUICKNODE_ENDPOINT`. Create React App exposes this variable to the browser. Keep private endpoint credentials behind a backend.
 - Intended to pair with a Streams pipeline that writes wallet approvals into Postgres.

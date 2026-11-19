@@ -11,7 +11,7 @@ export const mainnet = {
   name: 'Ethereum',
   currency: 'ETH',
   explorerUrl: 'https://etherscan.io',
-  rpcUrl: process.env.NEXT_PUBLIC_MAINNET_RPC_URL as string
+  rpcUrl: process.env.NEXT_PUBLIC_MAINNET_RPC_URL || ""
 }
 
 export const holesky = {
@@ -19,7 +19,7 @@ export const holesky = {
   name: 'Ethereum Holesky',
   currency: 'ETH',
   explorerUrl: 'https://holesky.etherscan.io',
-  rpcUrl: process.env.NEXT_PUBLIC_HOLESKY_RPC_URL as string
+  rpcUrl: process.env.NEXT_PUBLIC_HOLESKY_RPC_URL || ""
 }
 
 export const sepolia = {
@@ -27,7 +27,7 @@ export const sepolia = {
   name: 'Ethereum Sepolia',
   currency: 'ETH',
   explorerUrl: 'https://sepolia.etherscan.io',
-  rpcUrl: process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL as string
+  rpcUrl: process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || ""
 }
 
 // 3. Create a metadata object
@@ -58,12 +58,16 @@ const validateConstants = (chains: any[], projectId: string) => {
   }
 }
 
-validateConstants([sepolia, mainnet, holesky], projectId);
+const chains = [sepolia, mainnet, holesky].filter(chain => chain.rpcUrl);
+if (chains.length === 0) {
+  throw new Error("Configure a browser-facing RPC URL for at least one chain in .env.local.");
+}
+validateConstants(chains, projectId);
 
 // 5. Create a Web3Modal instance
 createWeb3Modal({
   ethersConfig,
-  chains: [sepolia, mainnet, holesky],
+  chains,
   projectId,
   enableAnalytics: true, // Optional - defaults to your Cloud configuration
   enableOnramp: true // Optional - false as default

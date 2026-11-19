@@ -23,6 +23,7 @@ dotenv.config();
 const CONFIG = {
     METIS_ENDPOINT: process.env.METIS_ENDPOINT || 'https://public.jupiterapi.com',
     JITO_ENDPOINT: process.env.JITO_ENDPOINT || '',
+    JITO_RPC_TOKEN: process.env.JITO_RPC_TOKEN,
     WALLET_SECRET: process.env.WALLET_SECRET?.split(',').map(Number) || [],
     JITO_TIP_AMOUNT: 0.0005 * LAMPORTS_PER_SOL, // 500,000 lamports
     POLL_TIMEOUT_MS: 30000,
@@ -52,7 +53,9 @@ class JitoSwapManager {
     constructor() {
         this.jupiterApi = createJupiterApiClient({ basePath: CONFIG.METIS_ENDPOINT });
         this.wallet = Keypair.fromSecretKey(new Uint8Array(CONFIG.WALLET_SECRET));
-        this.connection = new Connection(CONFIG.JITO_ENDPOINT);
+        this.connection = new Connection(CONFIG.JITO_ENDPOINT, {
+            httpHeaders: CONFIG.JITO_RPC_TOKEN ? { 'x-token': CONFIG.JITO_RPC_TOKEN } : undefined,
+        });
     }
 
     private sleep(ms: number): Promise<void> {

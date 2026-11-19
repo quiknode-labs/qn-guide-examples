@@ -155,11 +155,13 @@ Required environment variables:
 ```bash
 COVALENT_API_KEY=your-covalent-api-key
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your-walletconnect-project-id
-NEXT_PUBLIC_BASE_RPC_URL=your-base-rpc-url
-NEXT_PUBLIC_OPTIMISM_RPC_URL=your-optimism-rpc-url
+NEXT_PUBLIC_BASE_RPC_URL=
+NEXT_PUBLIC_OPTIMISM_RPC_URL=
 AERODROME_BASE_API=aerodrome-api-endpoint
 VELODROME_OPTIMISM_API=velodrome-api-endpoint
 ```
+
+Configure both variables with browser-facing RPC URLs you operate or have approved. Keep private RPC credentials and the Swap API and GoldRush credentials in server settings.
 
 4. **Start the development server**
 ```bash

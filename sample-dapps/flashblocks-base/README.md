@@ -1,6 +1,6 @@
-# Flashblocks Base App
+# Flashblocks Base App (Historical)
 
-A decentralized application demonstrating Base Flashblocks capabilities with side-by-side comparison of transaction confirmations: Flashblocks vs Traditional blocks.
+This app recorded how preconfirmed and canonical transaction inclusion differed on Base Sepolia before Denim. Flashblocks were retired on Base Sepolia and Mainnet. For current integrations, use the standard Base or Base Sepolia Viem chain and read canonical state. See the [Denim migration guide](https://www.quicknode.com/docs/base/flashblocks/overview).
 
 ## Features
 
@@ -9,20 +9,18 @@ A decentralized application demonstrating Base Flashblocks capabilities with sid
 - **Live Metrics Dashboard**: Balances, and transaction status
 - **Wallet Integration**: RainbowKit wallet connection with Wagmi
 
-## Quick Start
+## Archived Setup
 
 ### Prerequisites
 
 You will need the following:
 
-- A [Quicknode](http://dashboard.quicknode.com/) account with Base Sepolia endpoint (optional)
+- A pre-Denim Base Sepolia RPC that served Flashblocks preconfirmations
 - Project ID from [Reown, formerly WalletConnect](https://cloud.reown.com/) - required for wallet connection
 
-#### Setting Up Quicknode
+#### Base Sepolia RPC Configuration
 
-1. **Create Endpoints**: Log in to your [Quicknode account](http://dashboard.quicknode.com/) and create a new endpoint for Base Sepolia testnet.
-
-2. **Get Endpoint Key**: After creating the endpoint, go to the endpoint dashboard and copy the HTTPS endpoint URL. You will need this key to configure your application.
+The original comparison used public endpoints for preconfirmation and canonical state. Base Sepolia no longer serves preconfirmations for `pending`.
 
 #### Setting Up Reown (formerly, WalletConnect)
 
@@ -57,12 +55,11 @@ Copy the `.env.example` file to `.env.local`.
 cp .env.example .env.local
 ```
 
-Then, fill in the following variables:
+The original browser configuration used these variables:
 
-```bash
-`NEXT_PUBLIC_QUICKNODE_ENDPOINT`: Your Quicknode endpoint
-`NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`: Your WalletConnect project ID
-```
+- `NEXT_PUBLIC_FLASHBLOCKS_RPC_URL` held the former public Base Sepolia preconfirmation URL.
+- `NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL` holds the operator-configured URL for canonical Base Sepolia reads.
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` holds the WalletConnect project ID.
 
 4. **Run Development Server**
 
@@ -116,17 +113,28 @@ Navigate to `http://localhost:3000`
 
 #### Client Configuration
 ```typescript
-// Flashblocks client
+import { createPublicClient, custom, http } from 'viem'
+import { baseSepolia, baseSepoliaPreconf } from 'viem/chains'
+
+const flashblocksRpc = process.env.NEXT_PUBLIC_FLASHBLOCKS_RPC_URL;
+const canonicalRpc = process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL;
+
+function historicalTransport(url: string | undefined, name: string) {
+  return url ? http(url) : custom({
+    request: async () => { throw new Error(`Set ${name} to a browser-facing RPC URL.`); },
+  }, { retryCount: 0 });
+}
+
 export const flashblocksClient = createPublicClient({
   chain: baseSepoliaPreconf, // Auto-uses "pending" for supported actions
-  transport: http(process.env.QUICKNODE_ENDPOINT),
+  transport: historicalTransport(flashblocksRpc, "NEXT_PUBLIC_FLASHBLOCKS_RPC_URL"),
 })
 
-// Traditional client
+// Traditional client with 2s polling
 export const traditionalClient = createPublicClient({
   chain: baseSepolia, // Uses "latest" by default
-  transport: http(process.env.QUICKNODE_ENDPOINT),
-})
+  transport: historicalTransport(canonicalRpc, "NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL"),
+});
 ```
 
 ## Development Commands

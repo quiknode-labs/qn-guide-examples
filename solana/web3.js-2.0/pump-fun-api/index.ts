@@ -204,7 +204,9 @@ async function main() {
 
     const targetMint = address("8gXN67Nmw9FZQjunJZzRoi2Qf1ykZtN9Q3BqxhCypump");
     const pumpFunApi = createPumpFunApi(metisUrl);
-    const solanaRpc: Rpc<SolanaRpcApi> = createSolanaRpc(rpcUrl);
+    const solanaRpc: Rpc<SolanaRpcApi> = createSolanaRpc(rpcUrl, process.env.HTTP_ENDPOINT_TOKEN
+        ? { headers: { 'x-token': process.env.HTTP_ENDPOINT_TOKEN } }
+        : undefined);
     const solanaRpcSubscriptions: RpcSubscriptions<SolanaRpcSubscriptionsApi>
         = createSolanaRpcSubscriptions(rpcSubscriptionsUrl);
 

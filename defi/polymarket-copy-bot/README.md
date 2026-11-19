@@ -71,7 +71,8 @@ npm run start:prod
 
 - `TARGET_WALLET`: wallet to follow
 - `PRIVATE_KEY`: your EOA private key used for signing/approvals/trades
-- `RPC_URL`: Polygon JSON-RPC endpoint
+- `RPC_URL`: Polygon Base URL or a full custom endpoint URL
+- `RPC_TOKEN`: Optional Auth token for the same Quicknode endpoint
 - `USE_WEBSOCKET`: `true|false`
 - `USE_USER_CHANNEL`: `true|false` (`true` requires valid API creds for WS auth)
 - `POSITION_MULTIPLIER`: copied size multiplier (e.g. `0.1`)
@@ -81,6 +82,11 @@ npm run start:prod
 - `MAX_SESSION_NOTIONAL`, `MAX_PER_MARKET_NOTIONAL`: `0` disables caps
 
 See `.env.example` for the full list.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples.
 
 ## Notes
 

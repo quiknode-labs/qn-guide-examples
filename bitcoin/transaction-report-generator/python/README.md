@@ -44,8 +44,12 @@ pip install -r requirements.txt
 
 5. Configure your Quicknode endpoint:
 
-- Rename the `.env.example` file to `.env`
-- Replace the `YOUR_QUICKNODE_BITCOIN_ENDPOINT_URL` placeholder with your Quicknode Bitcoin HTTP provider URL.
+Copy `.env.example` to `.env`. Copy **Base URL** and **Auth token** from your Blockbook-enabled Bitcoin mainnet endpoint into `QUICKNODE_ENDPOINT_URL` and `QUICKNODE_ENDPOINT_TOKEN`. Existing configurations with a full URL in `QUICKNODE_ENDPOINT` still work.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples.
 
 ## Usage
 

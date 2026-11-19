@@ -1,3 +1,5 @@
+Copy `.env.example` to `.env`. The RPC URL is bundled into the browser app. Set `REACT_APP_SOLANA_RPC_HOST` to a browser-facing Devnet RPC URL you operate or have approved. Keep private credentials behind a backend.
+
 
 # Solana dApp Scaffold Next
 

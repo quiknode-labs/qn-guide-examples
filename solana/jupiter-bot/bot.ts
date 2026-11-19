@@ -9,6 +9,8 @@ const LAMPORTS_PER_SOL = 1_000_000_000n;
 
 interface ArbBotConfig {
     solanaEndpoint: string; // e.g., "https://ex-am-ple.solana-mainnet.quiknode.pro/123456/"
+    solanaRpcToken?: string;
+    solanaWsEndpoint?: string;
     metisEndpoint: string;  // e.g., "https://jupiter-swap-api.quiknode.pro/123456/"
     secretKey: Uint8Array;
     firstTradePrice: number; // e.g. 94 USDC/SOL
@@ -57,7 +59,9 @@ export class ArbBot {
 
     constructor(config: ArbBotConfig) {
         const { 
-            solanaEndpoint, 
+            solanaEndpoint,
+            solanaRpcToken,
+            solanaWsEndpoint,
             metisEndpoint, 
             secretKey, 
             targetGainPercentage,
@@ -66,8 +70,15 @@ export class ArbBot {
             initialInputAmount,
             firstTradePrice
         } = config;
-        this.rpc = createSolanaRpc(solanaEndpoint);
-        this.rpcSubscriptions = createSolanaRpcSubscriptions(solanaEndpoint.replace('https://', 'wss://'));
+        if (solanaRpcToken && !solanaWsEndpoint) {
+            throw new Error("Set SOLANA_WSS_ENDPOINT to the full WebSocket Provider URL.");
+        }
+        this.rpc = createSolanaRpc(solanaEndpoint, {
+            headers: solanaRpcToken ? { "x-token": solanaRpcToken } : undefined,
+        });
+        this.rpcSubscriptions = createSolanaRpcSubscriptions(
+            solanaWsEndpoint ?? solanaEndpoint.replace(/^http/, "ws"),
+        );
         this.jupiterApi = createJupiterApiClient({ basePath: metisEndpoint });
         this.secretKey = secretKey;
         if (targetGainPercentage) { this.targetGainPercentage = targetGainPercentage }

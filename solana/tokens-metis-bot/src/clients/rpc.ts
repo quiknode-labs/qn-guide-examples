@@ -87,7 +87,11 @@ async function handleMetisRequest<TResponse>(
 }
 
 function createBotTransport(solanaRpcUrl: string, metisEndpoint: string): RpcTransport {
-  const jsonRpcTransport = createDefaultRpcTransport({ url: solanaRpcUrl });
+  const token = process.env.SOLANA_RPC_TOKEN;
+  const jsonRpcTransport = createDefaultRpcTransport({
+    url: solanaRpcUrl,
+    headers: token ? { "x-token": token } : {},
+  });
   return async <TResponse,>(...args: Parameters<RpcTransport>): Promise<TResponse> => {
     const { method, params } = args[0].payload as { method: string; params: unknown };
     if (method.startsWith("metis_")) {

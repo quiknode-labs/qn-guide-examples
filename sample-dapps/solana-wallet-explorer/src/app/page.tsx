@@ -22,7 +22,8 @@ export default function Home() {
         <CardContent>
           Update `.env.local` with your Quicknode Solana Node Endpoint:
           <br />
-          SOLANA_RPC_URL=https://example.solana-mainnet.quiknode.pro/123456/
+          SOLANA_RPC_URL=https://your-endpoint.quiknode.pro/
+          SOLANA_RPC_TOKEN=your-auth-token
           <br />
           DAS_API_ENABLED=true
         </CardContent>

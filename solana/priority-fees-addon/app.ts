@@ -44,6 +44,7 @@ async function fetchEstimatePriorityFees({
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            ...(process.env.QUICKNODE_RPC_TOKEN ? { 'x-token': process.env.QUICKNODE_RPC_TOKEN } : {}),
         },
         body: JSON.stringify(payload),
     });
@@ -65,7 +66,7 @@ const params: EstimatePriorityFeesParams = {
     last_n_blocks: 100,
     account: 'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4',
     api_version: 2,
-    endpoint: 'https://YOUR_QUICKNODE_ADDON_URL/'
+    endpoint: process.env.QUICKNODE_RPC_URL!
 };
 
 

@@ -2,9 +2,12 @@ import { createPublicClient, erc20Abi, formatUnits, http } from 'viem'
 import { mainnet } from 'viem/chains'
 import { prisma } from './prisma'
 
+const token = process.env.QN_EVM_ENDPOINT ? process.env.QN_EVM_TOKEN : undefined
 const client = createPublicClient({
   chain: mainnet,
-  transport: http(process.env.QN_EVM_ENDPOINT),
+  transport: http(process.env.QN_EVM_ENDPOINT, {
+    fetchOptions: token ? { headers: { "x-token": token }, redirect: "error" } : undefined,
+  }),
 })
 
 export async function getOrFetchToken(

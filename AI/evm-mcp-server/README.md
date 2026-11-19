@@ -89,7 +89,7 @@ To configure, open the **Claude Desktop** app, go to **Claude** > **Settings** >
             ],
             "env": {
                 "QN_ENDPOINT_NAME": "your-quicknode-endpoint-name",
-                "QN_TOKEN_ID": "your-quicknode-token-id"
+                "QN_AUTH_TOKEN": "your-auth-token"
             }
         }
     }
@@ -97,8 +97,13 @@ To configure, open the **Claude Desktop** app, go to **Claude** > **Settings** >
 ```
 
 - Replace `your-quicknode-endpoint-name` with the name of your Quicknode endpoint.
-- Replace `your-quicknode-token-id` with the token ID of your Quicknode endpoint.
+- Replace `your-auth-token` with the **Auth token** from your Quicknode endpoint.
 - Replace `/absolute-path-to` with the absolute path to the `evm-mcp-server` directory.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Set `QN_AUTH_TOKEN` for header auth. An existing `QN_TOKEN_ID` configuration still uses the URL-path option.
 
 ## Test the MCP Server
 

@@ -2,30 +2,11 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { createQR, encodeURL } from '@solana/pay';
-import { Connection, PublicKey } from '@solana/web3.js';
-import { u64 } from '@solana/buffer-layout-utils';
-import { struct } from '@solana/buffer-layout';
-
-const quickNodeEndpoint = 'https://example.solana-devnet.quiknode.pro/0123456/'; // 👈 Replace with your own devnet endpoint
-const connection = new Connection(quickNodeEndpoint, 'confirmed');
-const programId = new PublicKey('yV5T4jugYYqkPfA2REktXugfJ3HvmvRLEw7JxuB2TUf');
-const counterSeed = 'counter';
-const [counterPda] = PublicKey.findProgramAddressSync([Buffer.from(counterSeed)], programId);
-
-interface Counter {
-  discriminator: bigint;
-  count: bigint;
-}
-const CountLayout = struct<Counter>([
-  u64('discriminator'),
-  u64('count'),
-]);
-
 async function fetchCount() {
-  let { data } = await connection.getAccountInfo(counterPda) || {};
-  if (!data) throw new Error('Account not found');
-  const deserialized = CountLayout.decode(data);
-  return deserialized.count.toString();
+  const response = await fetch('/api/pay?count=true');
+  if (!response.ok) throw new Error('Unable to read the counter');
+  const { count } = await response.json();
+  return count as string;
 }
 
 export default function Home() {
@@ -34,22 +15,32 @@ export default function Home() {
 
   useEffect(() => {
     generateQr();
-    fetchCount().then(setCount);
-    const subscribe = connection.onProgramAccountChange(
-      programId,
-      () => fetchCount().then(setCount),
-      'finalized'
-    )
-    return () => {
-      connection.removeProgramAccountChangeListener(subscribe);
+    let active = true;
+    let timer: ReturnType<typeof setTimeout>;
+
+    async function pollCount() {
+      try {
+        const value = await fetchCount();
+        if (active) setCount(value);
+      } catch {
+        if (active) setCount('Unavailable');
+      } finally {
+        if (active) timer = setTimeout(pollCount, 3000);
+      }
     }
+
+    pollCount();
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
   }, []);
 
   const generateQr = async () => {
-    const apiUrl = `${window.location.protocol}/${window.location.host}/api/pay`;
+    const apiUrl = new URL('/api/pay', window.location.origin);
     const label = 'label';
     const message = 'message';
-    const url = encodeURL({ link: new URL(apiUrl), label, message });
+    const url = encodeURL({ link: apiUrl, label, message });
     const qr = createQR(url);
     const qrBlob = await qr.getRawData('png');
     if (!qrBlob) return;

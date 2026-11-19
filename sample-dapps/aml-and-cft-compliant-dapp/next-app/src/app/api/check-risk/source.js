@@ -45,6 +45,9 @@ const apiResponse = await Functions.makeHttpRequest({
   method: "POST",
   headers: {
     "Content-Type": "application/json",
+    ...(secrets.QUICKNODE_ENDPOINT_TOKEN
+      ? { "x-token": secrets.QUICKNODE_ENDPOINT_TOKEN }
+      : {}),
   },
   data: payload,
 });

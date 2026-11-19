@@ -51,12 +51,18 @@ Fill in `env.local`:
 
 | Variable | Value |
 | --- | --- |
-| `SOLANA_RPC_URL` | Your Quicknode Solana mainnet endpoint |
+| `SOLANA_RPC_URL` | Quicknode Solana mainnet Base URL, or a full HTTPS endpoint URL |
+| `SOLANA_RPC_TOKEN` | Auth token for the Base URL. Leave unset for a full URL. |
 | `METIS_ENDPOINT` | `https://jupiter-swap-api.quiknode.pro/YOUR_KEY` (or the public fallback) |
 | `TOKENS_API_BASE_URL` | `https://api.tokens.xyz/v1` |
 | `TOKENS_API_KEY` | Your Tokens API key |
 | `WALLET_KEYPAIR_PATH` | Path to your dev wallet keypair file, e.g. `./dev-wallet.json` or `~/.config/solana/id.json` |
 | `DRY_RUN` | Keep `true` until you have watched several dry cycles |
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples.
 
 Tune `rules.json` to taste. Unknown fields are rejected at startup.
 

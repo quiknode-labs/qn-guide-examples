@@ -4,9 +4,14 @@ import { supabaseServer } from './supabase-backend';
 import type { LiquidationPayload } from './payload';
 
 if (!process.env.QUICKNODE_RPC_URL) throw new Error('QUICKNODE_RPC_URL is required');
+const rpcToken = process.env.QUICKNODE_RPC_TOKEN;
 const client = createPublicClient({
   chain: mainnet,
-  transport: http(process.env.QUICKNODE_RPC_URL, { timeout: 5000, retryCount: 0 }),
+  transport: http(process.env.QUICKNODE_RPC_URL, {
+    timeout: 5000,
+    retryCount: 0,
+    fetchOptions: rpcToken ? { headers: { 'x-token': rpcToken }, redirect: 'error' } : undefined,
+  }),
 });
 const erc20 = parseAbi([
   'function name() view returns (string)',

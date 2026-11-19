@@ -9,7 +9,11 @@ from interfaces import Result, PriceData, Transaction, Vin, Vout  # Ensure corre
 load_dotenv()
 
 # Retrieve the Quicknode endpoint URL from environment variables
-QUICKNODE_ENDPOINT = os.getenv("QUICKNODE_ENDPOINT")
+QUICKNODE_ENDPOINT = os.getenv("QUICKNODE_ENDPOINT_URL") or os.getenv("QUICKNODE_ENDPOINT")
+QUICKNODE_ENDPOINT_TOKEN = os.getenv("QUICKNODE_ENDPOINT_TOKEN")
+HEADERS = {"Content-Type": "application/json"}
+if QUICKNODE_ENDPOINT_TOKEN:
+    HEADERS["x-token"] = QUICKNODE_ENDPOINT_TOKEN
 
 # Utility function to parse transaction data
 def parse_transaction_data(data: Dict[str, Any]) -> Transaction:
@@ -62,7 +66,7 @@ async def bb_getaddress(address: str) -> Result:
             "id": 1,
             "jsonrpc": "2.0",
         }
-        async with session.post(QUICKNODE_ENDPOINT, json=post_data, headers={"Content-Type": "application/json"}) as response:
+        async with session.post(QUICKNODE_ENDPOINT, json=post_data, headers=HEADERS, allow_redirects=False) as response:
             if response.status == 200:
                 data = await response.json()
                 result_data = data['result']
@@ -78,7 +82,7 @@ async def bb_gettickers(timestamp: int) -> PriceData:
             "id": 1,
             "jsonrpc": "2.0",
         }
-        async with session.post(QUICKNODE_ENDPOINT, json=post_data, headers={"Content-Type": "application/json"}) as response:
+        async with session.post(QUICKNODE_ENDPOINT, json=post_data, headers=HEADERS, allow_redirects=False) as response:
             if response.status == 200:
                 data = await response.json()
                 price_data = data['result']

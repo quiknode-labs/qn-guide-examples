@@ -2,9 +2,6 @@
 import { Result } from "../interfaces";
 import axios from "axios";
 
-// Retrieve the Quicknode endpoint URL from environment variables
-const QUICKNODE_ENDPOINT = import.meta.env.VITE_QUICKNODE_ENDPOINT as string;
-
 // Fetches detailed transaction data for a specified Ethereum address
 export async function bb_getAddress(address: string): Promise<Result> {
   try {
@@ -19,8 +16,8 @@ export async function bb_getAddress(address: string): Promise<Result> {
       jsonrpc: "2.0",
     };
 
-    // Make the POST request to the Quicknode endpoint
-    const response = await axios.post(QUICKNODE_ENDPOINT, postData, {
+    // Send the request to the same-origin Blockbook route
+    const response = await axios.post("/api/blockbook", postData, {
       headers: { "Content-Type": "application/json" },
       maxBodyLength: Infinity,
     });

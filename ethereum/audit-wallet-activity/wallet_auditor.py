@@ -2,8 +2,15 @@ from web3 import Web3 # we will be using Web3py library for this guide
 import json # we will need this to parse through your blockchain node responses
 from tqdm import tqdm # this library helps us track the progress of our script
 
-# Configuring Ethereum endpoint
-w3 = Web3(Web3.HTTPProvider("https://{your-endpoint-name}.quiknode.pro/{your-token}/"))
+import os
+
+w3 = Web3(Web3.HTTPProvider(
+    os.environ["QUICKNODE_RPC_URL"],
+    request_kwargs={"headers": {
+        "Content-Type": "application/json",
+        "x-token": os.environ["QUICKNODE_RPC_TOKEN"],
+    }},
+))
 
 # Main function to fetch wallet activity across a range of blocks
 def get_transactions_for_addresses(addresses, from_block, to_block):
@@ -15,7 +22,7 @@ def get_transactions_for_addresses(addresses, from_block, to_block):
     with tqdm(total=total_blocks, desc="Processing Blocks") as pbar:
         for block_num in range(from_block, to_block + 1):
             # Request block data
-            block = w3.eth.getBlock(block_num, full_transactions=True)
+            block = w3.eth.get_block(block_num, full_transactions=True)
 
             # Identify block transactions where address of interest is found
             for tx in block.transactions:
@@ -38,7 +45,7 @@ def get_transactions_for_addresses(addresses, from_block, to_block):
                     tx_details["token_transfers"].extend(get_token_transfers(tx["to"], block_num))
 
                     # Check for interactions with contracts and get internal transactions
-                    if tx["to"] and w3.eth.getCode(tx["to"]).hex() != "0x":
+                    if tx["to"] and w3.eth.get_code(tx["to"]).hex() != "0x":
                         tx_details["internal_transactions"].extend(get_internal_transactions(tx.hash.hex()))
 
                     transactions.append(tx_details)
@@ -75,8 +82,8 @@ def get_token_transfers(address, block_num):
     for entry in sent_transfers:
         modified_entry = {
             "contractAddress": entry["address"],
-            "from": w3.toChecksumAddress(entry["topics"][1].hex().lstrip("0x")),
-            "to": w3.toChecksumAddress(entry["topics"][2].hex().lstrip("0x")),
+            "from": w3.to_checksum_address(entry["topics"][1].hex().lstrip("0x")),
+            "to": w3.to_checksum_address(entry["topics"][2].hex().lstrip("0x")),
             "value": int(entry["data"],16),
             "topics": [topic.hex() if isinstance(topic, bytes) else topic for topic in entry["topics"]],
             "data": entry["data"],
@@ -92,15 +99,15 @@ def get_token_transfers(address, block_num):
     # Look for the address as the receiver
     filter_params["topics"][1] = None
     filter_params["topics"][2] = padded_address
-    received_transfers = w3.eth.getLogs(filter_params)
+    received_transfers = w3.eth.get_logs(filter_params)
 
     # Parse through API response and record transfer details
     received_transfers_list = []
     for entry in received_transfers:
         modified_entry = {
             "contractAddress": entry["address"],
-            "from": w3.toChecksumAddress(entry["topics"][1].hex().lstrip("0x")),
-            "to": w3.toChecksumAddress(entry["topics"][2].hex().lstrip("0x")),
+            "from": w3.to_checksum_address(entry["topics"][1].hex().lstrip("0x")),
+            "to": w3.to_checksum_address(entry["topics"][2].hex().lstrip("0x")),
             "value": int(entry["data"],16),
             "topics": [topic.hex() if isinstance(topic, bytes) else topic for topic in entry["topics"]],
             "data": entry["data"],

@@ -51,7 +51,12 @@ bun build
 
 Update your `claude_desktop_config.json` file with the content from [example Claude desktop config](./claude_desktop_config.json). You can find instructions [here](https://www.quicknode.com/guides/ai/solana-mcp-server#setup-claude-desktop).
 
-Make sure to update `SOLANA_RPC_ENDPOINT` with your Quicknode RPC endpoint. You can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-mcp).
+Copy **Base URL** into `SOLANA_RPC_ENDPOINT` and **Auth token** into `SOLANA_RPC_TOKEN` in the local MCP server environment. You can get one free [here](https://www.quicknode.com/signup?utm_source=internal&utm_campaign=dapp-examples&utm_content=solana-mcp).
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples.
 
 Make sure your `args` pass in the absolute path to the built server (for us it is `/YOUR_PATH/build/index.js`).
 

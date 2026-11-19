@@ -1,23 +1,22 @@
-import { createPublicClient, http } from 'viem'
+import { createPublicClient, custom, http } from 'viem'
 import { baseSepolia, baseSepoliaPreconf } from 'viem/chains'
 
-if (process.env.NEXT_PUBLIC_QUICKNODE_ENDPOINT) {
-  console.log(
-    "Using Quicknode endpoint",
-  );
-} else {
-  console.log("Using default public Sepolia endpoint");
-}
+const flashblocksRpc = process.env.NEXT_PUBLIC_FLASHBLOCKS_RPC_URL;
+const canonicalRpc = process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL;
 
-const QUICKNODE_ENDPOINT = process.env.NEXT_PUBLIC_QUICKNODE_ENDPOINT || "https://sepolia.base.org";
+function historicalTransport(url: string | undefined, name: string) {
+  return url ? http(url) : custom({
+    request: async () => { throw new Error(`Set ${name} to a browser-facing RPC URL.`); },
+  }, { retryCount: 0 });
+}
 
 export const flashblocksClient = createPublicClient({
   chain: baseSepoliaPreconf, // Auto-uses "pending" for supported actions
-  transport: http(QUICKNODE_ENDPOINT),
+  transport: historicalTransport(flashblocksRpc, "NEXT_PUBLIC_FLASHBLOCKS_RPC_URL"),
 })
 
 // Traditional client with 2s polling
 export const traditionalClient = createPublicClient({
   chain: baseSepolia, // Uses "latest" by default
-  transport: http(QUICKNODE_ENDPOINT),
+  transport: historicalTransport(canonicalRpc, "NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL"),
 });

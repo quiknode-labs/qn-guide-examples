@@ -2,9 +2,12 @@ import { Keypair, LAMPORTS_PER_SOL, Connection } from "@solana/web3.js"
 import * as fs from "fs"
 import "dotenv/config"
 
-const { QUICKNODE_RPC_ENDPOINT } = process.env
+const { QUICKNODE_RPC_ENDPOINT, QUICKNODE_RPC_URL, QUICKNODE_RPC_TOKEN, QUICKNODE_WSS_URL } = process.env
 
-const solanaConnection = new Connection(QUICKNODE_RPC_ENDPOINT as string)
+const solanaConnection = new Connection((QUICKNODE_RPC_URL || QUICKNODE_RPC_ENDPOINT) as string, {
+  httpHeaders: QUICKNODE_RPC_TOKEN ? { "x-token": QUICKNODE_RPC_TOKEN } : undefined,
+  wsEndpoint: QUICKNODE_WSS_URL,
+})
 const keypair = Keypair.generate()
 console.log(`Generated new KeyPair.\nWallet PublicKey:`, keypair.publicKey.toString())
 

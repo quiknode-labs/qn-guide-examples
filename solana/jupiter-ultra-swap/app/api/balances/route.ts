@@ -4,6 +4,7 @@ import { assertIsAddress } from "@solana/kit";
 const JUPITER_ULTRA_BASE = "https://api.jup.ag/ultra";
 const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
 const QUICKNODE_RPC_URL = process.env.QUICKNODE_RPC_URL;
+const QUICKNODE_RPC_TOKEN = process.env.QUICKNODE_RPC_TOKEN;
 
 // Validate Solana wallet address using @solana/kit to prevent SSRF attacks
 function isValidWalletAddress(address: string): boolean {
@@ -48,7 +49,9 @@ async function fetchSOLBalanceViaRPC(walletAddress: string): Promise<number> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(QUICKNODE_RPC_TOKEN ? { "x-token": QUICKNODE_RPC_TOKEN } : {}),
       },
+      redirect: "error",
       body: JSON.stringify(rpcRequest),
     });
 
@@ -58,8 +61,8 @@ async function fetchSOLBalanceViaRPC(walletAddress: string): Promise<number> {
 
     const data = await response.json();
     return data.result?.value || 0;
-  } catch (error) {
-    console.error("Error fetching SOL balance via RPC:", error);
+  } catch {
+    console.error("Error fetching SOL balance via RPC");
     return 0;
   }
 }

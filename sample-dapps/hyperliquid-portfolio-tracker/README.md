@@ -57,17 +57,21 @@ cp .env.example .env
 ### Setup Quicknode Endpoint
 
 1. Create a Hyperliquid endpoint at [Quicknode Dashboard](https://dashboard.quicknode.com/endpoints)
-2. Copy your endpoint URL
-3. **Important**: Remove `/evm` and add `/info` at the end
-   - Example: `https://example-name.hyperliquid.quiknode.pro/token-id/info`
-4. Add to `.env` as `QUICKNODE_API_URL`
+2. Under **API access URL → RPC**, copy the **Hypercore** URL. Move the token segment into `QUICKNODE_API_TOKEN`.
+3. Set `QUICKNODE_API_URL` to the same hostname with `/info` as its path. To use a token in the URL instead, replace the final `/hypercore` path with `/info` and leave `QUICKNODE_API_TOKEN` unset.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Keep `/info` as the service path. If you use the token in the URL, put it before `/info`.
 
 Your `.env` should look like:
 
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
-QUICKNODE_API_URL=https://your-endpoint.hyperliquid.quiknode.pro/token-id/info
+QUICKNODE_API_URL=https://your-endpoint.hype-mainnet.quiknode.pro/info
+QUICKNODE_API_TOKEN=your-auth-token
 ```
 
 ### Run the Application

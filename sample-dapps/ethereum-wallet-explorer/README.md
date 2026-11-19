@@ -26,11 +26,19 @@ bun install
 
 ### Set Environment Variables
 
-Rename `.env.example` to `.env.local` and update with your Quicknode Ethereum Node Endpoint.
+Copy `.env.example` to `.env.local` and fill in your Ethereum RPC settings.
 
 ```env
-ETHEREUM_RPC_URL=https://example.ethereum-mainnet.quiknode.pro/123456/
+ETHEREUM_RPC_URL=https://your-endpoint.quiknode.pro/
+ETHEREUM_RPC_TOKEN=your-auth-token
 ```
+
+Copy **Base URL** and **Auth token** from the same Ethereum mainnet endpoint. The server sends the token in the `x-token` header.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. Keep the endpoint credentials in the server environment.
 
 First, run the development server:
 
@@ -70,7 +78,7 @@ src/
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer&env=ETHEREUM_RPC_URL&envDescription=ETHEREUM_RPC_URL%3A%20Use%20Quicknode%20Ethereum%20Mainnet%20Endpoint&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=ethereum-wallet-explorer&repository-name=ethereum-wallet-explorer&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-title=Quicknode%20Starter%20Ethereum%20Wallet%20Explorer&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fblob%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer%2Fpublic%2Fdemo1.png)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Ftree%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer&env=ETHEREUM_RPC_URL,ETHEREUM_RPC_TOKEN&envDescription=ETHEREUM_RPC_URL%3A%20Base%20URL%20of%20your%20Quicknode%20Ethereum%20mainnet%20endpoint%0AETHEREUM_RPC_TOKEN%3A%20Auth%20token%20from%20the%20same%20endpoint&envLink=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&project-name=ethereum-wallet-explorer&repository-name=ethereum-wallet-explorer&redirect-url=https%3A%2F%2Fdashboard.quicknode.com%2Fendpoints&demo-title=Quicknode%20Starter%20Ethereum%20Wallet%20Explorer&demo-image=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fblob%2Fmain%2Fsample-dapps%2Fethereum-wallet-explorer%2Fpublic%2Fdemo1.png)
 
 
 ## Preview 

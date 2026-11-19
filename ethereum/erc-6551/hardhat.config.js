@@ -9,6 +9,7 @@ module.exports = {
     },
     sepolia: {
       url: process.env.RPC_URL,
+      httpHeaders: process.env.RPC_AUTH_TOKEN ? { "x-token": process.env.RPC_AUTH_TOKEN } : {},
       accounts: [process.env.PRIVATE_KEY]
     }
   }

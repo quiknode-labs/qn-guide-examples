@@ -3,6 +3,7 @@ import { ClearinghouseStateResponse, UserRateLimitResponse, UserVaultEquityRespo
 
 
 const QUICKNODE_ENDPOINT = process.env.QUICKNODE_API_URL!;
+const QUICKNODE_API_TOKEN = process.env.QUICKNODE_API_TOKEN;
 
 
 export class HyperliquidAPI {
@@ -19,7 +20,9 @@ export class HyperliquidAPI {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(QUICKNODE_API_TOKEN ? { 'x-token': QUICKNODE_API_TOKEN } : {}),
         },
+        redirect: "error",
         body: JSON.stringify(payload)
       });
 
@@ -50,7 +53,9 @@ export class HyperliquidAPI {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(QUICKNODE_API_TOKEN ? { 'x-token': QUICKNODE_API_TOKEN } : {}),
         },
+        redirect: "error",
         body: JSON.stringify(payload)
       });
 
@@ -81,7 +86,9 @@ export class HyperliquidAPI {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(QUICKNODE_API_TOKEN ? { 'x-token': QUICKNODE_API_TOKEN } : {}),
         },
+        redirect: "error",
         body: JSON.stringify(payload)
       });
 
@@ -112,7 +119,9 @@ export class HyperliquidAPI {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(QUICKNODE_API_TOKEN ? { 'x-token': QUICKNODE_API_TOKEN } : {}),
         },
+        redirect: "error",
         body: JSON.stringify(payload)
       });
 
@@ -143,7 +152,9 @@ export class HyperliquidAPI {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(QUICKNODE_API_TOKEN ? { 'x-token': QUICKNODE_API_TOKEN } : {}),
         },
+        redirect: "error",
         body: JSON.stringify(payload)
       });
 

@@ -1,12 +1,12 @@
 import { ethers } from 'ethers';
-import { handleError, parseAndValidateAddress } from '../../utils/helpers';
+import { handleError, initializeConnection, parseAndValidateAddress } from '../../utils/helpers';
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const walletAddress = url.searchParams.get('walletAddress');
     try {
         const validAddress = await parseAndValidateAddress(walletAddress);
-        const provider = new ethers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL);
+        const provider = initializeConnection();
         const balance = await provider.getBalance(validAddress, "latest");
         const ethBalance = ethers.formatEther(balance);
 

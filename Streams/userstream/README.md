@@ -96,9 +96,14 @@ cp .env.example .env
    - This URL must be publicly accessible by Quicknode
    - For local development, set up ngrok:
 
-3. **`QN_EVM_ENDPOINT`** (optional but recommended): Ethereum RPC endpoint for ENS resolution and ERC-20 token metadata
+3. Set the Ethereum **Base URL** in `QN_EVM_ENDPOINT` and its **Auth token** in `QN_EVM_TOKEN` for ENS and ERC-20 metadata.
 
-4. **`QN_SOLANA_ENDPOINT`** (optional but recommended): Solana RPC endpoint for SPL token metadata
+4. Set the Solana **Base URL** in `QN_SOLANA_ENDPOINT` and its **Auth token** in `QN_SOLANA_TOKEN` for SPL metadata.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples.
 
 <br />
 

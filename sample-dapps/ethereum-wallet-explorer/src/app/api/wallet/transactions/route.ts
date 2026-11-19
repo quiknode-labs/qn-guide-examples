@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { handleError, parseAndValidateAddress } from '../../utils/helpers';
+import { handleError, initializeConnection, parseAndValidateAddress } from '../../utils/helpers';
 
 interface Transaction {
     txid?: string;
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
         }
         
         const validAddress = await parseAndValidateAddress(walletAddress);
-        const provider = new ethers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL);
+        const provider = initializeConnection();
         const result = await provider.send("bb_getAddress", [
             validAddress,
             {

@@ -1,6 +1,6 @@
 # Update .env
 Rename `.env.example` to `.env`. Delete the comments.
-Set `REACT_APP_SOLANA_RPC_HOST`to your Quicknode endpoint URL.
+Set `REACT_APP_SOLANA_RPC_HOST` to a browser-facing RPC URL you operate or have approved for the selected cluster. Keep private endpoint credentials behind a backend.
 Set `REACT_APP_NETWORK` to the corresponding Solana network (`devnet`, `mainnet-beta`, `testnet`)
 
 # Solana dApp Scaffold Next

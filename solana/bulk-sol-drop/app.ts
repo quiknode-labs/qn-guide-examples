@@ -5,9 +5,12 @@ import { Drop, dropList } from "./dropList"
 import secret from "./guideSecret.json"
 import "dotenv/config"
 
-const { QUICKNODE_RPC_ENDPOINT } = process.env
+const { QUICKNODE_RPC_ENDPOINT, QUICKNODE_RPC_URL, QUICKNODE_RPC_TOKEN, QUICKNODE_WSS_URL } = process.env
 
-const SOLANA_CONNECTION = new Connection(QUICKNODE_RPC_ENDPOINT as string)
+const SOLANA_CONNECTION = new Connection((QUICKNODE_RPC_URL || QUICKNODE_RPC_ENDPOINT) as string, {
+  httpHeaders: QUICKNODE_RPC_TOKEN ? { "x-token": QUICKNODE_RPC_TOKEN } : undefined,
+  wsEndpoint: QUICKNODE_WSS_URL,
+})
 const FROM_KEY_PAIR = Keypair.fromSecretKey(new Uint8Array(secret))
 const NUM_DROPS_PER_TX = 10
 const TX_INTERVAL = 1000

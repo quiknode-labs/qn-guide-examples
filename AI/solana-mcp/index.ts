@@ -14,13 +14,17 @@ import {
 const CONFIG = {
     rpcEndpoint:
         process.env.SOLANA_RPC_ENDPOINT || "https://api.mainnet-beta.solana.com",
+    rpcToken: process.env.SOLANA_RPC_ENDPOINT ? process.env.SOLANA_RPC_TOKEN : undefined,
 };
 const SPL_PROGRAM_KEYS = {
     TOKEN_PROGRAM: address("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"),
     TOKEN_2022_PROGRAM: address("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"),
 };
 
-const solanaRpc = createSolanaRpc(CONFIG.rpcEndpoint);
+const solanaRpc = createSolanaRpc(
+    CONFIG.rpcEndpoint,
+    CONFIG.rpcToken ? { headers: { "x-token": CONFIG.rpcToken } } : undefined,
+);
 
 const server = new McpServer({
     name: "SolanaMCP",

@@ -25,7 +25,15 @@ export function initializeConnection(): Connection {
     } else {
         endpoint = process.env.QN_ENDPOINT;
     }
-    return new Connection(endpoint);
+    const token = process.env.QN_ENDPOINT ? process.env.QN_ENDPOINT_TOKEN : undefined;
+    const wsEndpoint = process.env.QN_WS_ENDPOINT;
+    if (token && !wsEndpoint) {
+        throw new Error('QN_WS_ENDPOINT is required when setting QN_ENDPOINT_TOKEN.');
+    }
+    return new Connection(endpoint, {
+        httpHeaders: token ? { 'x-token': token } : undefined,
+        wsEndpoint,
+    });
 }
 
 export function handleError(error: unknown): Response {

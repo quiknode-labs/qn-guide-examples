@@ -16,7 +16,10 @@ export function initializeConnection(): Connection {
   if (!process.env.SOLANA_RPC_URL) {
     throw new Error('SOLANA_RPC_URL is not set');
   }
-  return new Connection(process.env.SOLANA_RPC_URL);
+  const token = process.env.SOLANA_RPC_TOKEN;
+  return new Connection(process.env.SOLANA_RPC_URL, {
+    httpHeaders: token ? { 'x-token': token } : undefined,
+  });
 }
 
 export function getDasEndpoint(): string {

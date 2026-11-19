@@ -11,7 +11,11 @@ const TRADE_API = requireEnv('TRADE_API_URL');
 const RPC_URL   = requireEnv('QUICKNODE_RPC_URL');
 const USDC_MINT = requireEnv('USDC_MINT');
 
-const rpc = createSolanaRpc(RPC_URL);
+const rpc = createSolanaRpc(RPC_URL, {
+  headers: process.env.QUICKNODE_RPC_TOKEN
+    ? { "x-token": process.env.QUICKNODE_RPC_TOKEN }
+    : undefined,
+});
 
 // Main
 async function buyOutcomeToken(

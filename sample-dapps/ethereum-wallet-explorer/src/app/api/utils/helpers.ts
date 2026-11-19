@@ -14,25 +14,29 @@ export async function parseAndValidateAddress(walletAddress: string | null): Pro
 
 // Initializes a connection to an Ethereum provider
 export function initializeConnection(): ethers.JsonRpcProvider {
-  const ethRpcUrl = process.env.ETH_RPC_URL;
-  if (!ethRpcUrl) {
-    throw new Error('ETH_RPC_URL is not set');
-  }
-  return new ethers.JsonRpcProvider(ethRpcUrl);
+  const endpoint = getEthRpcUrl();
+  const token = process.env.ETHEREUM_RPC_TOKEN;
+  if (!token) return new ethers.JsonRpcProvider(endpoint);
+
+  const request = new ethers.FetchRequest(endpoint);
+  request.setHeader('x-token', token);
+  return new ethers.JsonRpcProvider(request);
 }
 
 // Example of getting the Ethereum RPC URL
 export function getEthRpcUrl(): string {
-  const ethRpcUrl = process.env.ETH_RPC_URL;
+  const ethRpcUrl = process.env.ETHEREUM_RPC_URL || process.env.ETH_RPC_URL;
   if (!ethRpcUrl) {
-    throw new Error('ETH_RPC_URL is not set');
+    throw new Error('ETHEREUM_RPC_URL is not set');
   }
   return ethRpcUrl;
 }
 
 // Error handling remains the same
 export function handleError(error: unknown): Response {
-  const message = error instanceof Error ? error.message : 'An unexpected error occurred';
+  const message = error instanceof Error && !("code" in error)
+    ? error.message
+    : 'Ethereum RPC request failed.';
   return new Response(JSON.stringify({ error: message }), {
     headers: { 'Content-Type': 'application/json' },
     status: error instanceof Error && error.message === 'Wallet address is required.' ? 400 : 500,
