@@ -54,7 +54,7 @@ SOLANA_WSS_ENDPOINT=
 METIS_ENDPOINT=https://jupiter-swap-api.quiknode.pro/abc123
 ```
 
-For split RPC credentials, set `SOLANA_ENDPOINT` to the **Base URL**, `SOLANA_RPC_TOKEN` to the **Auth token**, and `SOLANA_WSS_ENDPOINT` to the full WebSocket URL. To form it, append the Auth token to the Base URL from the **WSS** view. An existing full HTTPS URL still works with `SOLANA_RPC_TOKEN` unset. Keep the separate Metis base path in `METIS_ENDPOINT`.
+For split RPC credentials, set `SOLANA_ENDPOINT` to the **Base URL**, `SOLANA_RPC_TOKEN` to the **Auth token**, and `SOLANA_WSS_ENDPOINT` to the full WebSocket URL. To form it, append the Auth token to the Base URL from the **WSS** view. If `SOLANA_ENDPOINT` already includes the token, leave `SOLANA_RPC_TOKEN` blank. You can leave `SOLANA_WSS_ENDPOINT` blank to derive it from the HTTPS URL, or set it explicitly. Keep the separate Metis base path in `METIS_ENDPOINT`.
 
 > [!NOTE]
 > We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.

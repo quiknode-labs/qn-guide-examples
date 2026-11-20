@@ -70,14 +70,15 @@ export class ArbBot {
             initialInputAmount,
             firstTradePrice
         } = config;
-        if (solanaRpcToken && !solanaWsEndpoint) {
+        const wsEndpoint = solanaWsEndpoint?.trim();
+        if (solanaRpcToken && !wsEndpoint) {
             throw new Error("Set SOLANA_WSS_ENDPOINT to the full WebSocket Provider URL.");
         }
         this.rpc = createSolanaRpc(solanaEndpoint, {
             headers: solanaRpcToken ? { "x-token": solanaRpcToken } : undefined,
         });
         this.rpcSubscriptions = createSolanaRpcSubscriptions(
-            solanaWsEndpoint ?? solanaEndpoint.replace(/^http/, "ws"),
+            wsEndpoint || solanaEndpoint.replace(/^http/, "ws"),
         );
         this.jupiterApi = createJupiterApiClient({ basePath: metisEndpoint });
         this.secretKey = secretKey;
