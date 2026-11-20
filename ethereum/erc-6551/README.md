@@ -22,8 +22,17 @@ Create an **.env** file and fill in the environment variable with your private k
 
 ```sh
 RPC_URL=
+RPC_AUTH_TOKEN=
 PRIVATE_KEY=
 ```
+
+Use the endpoint **Base URL** and **Auth token** for the Hardhat environment. For a full HTTPS endpoint URL, leave `RPC_AUTH_TOKEN` unset. MetaMask uses the full HTTPS endpoint URL in **New RPC URL**.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. The MetaMask RPC field uses the full URL with the token in its path.
+
 
 To deploy contracts, we'll need to execute the **createAccount.js** script located in `scripts`:
 

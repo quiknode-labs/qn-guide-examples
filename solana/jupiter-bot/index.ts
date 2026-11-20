@@ -13,6 +13,8 @@ async function main() {
 
     const bot = new ArbBot({
         solanaEndpoint: process.env.SOLANA_ENDPOINT ?? defaultConfig.solanaEndpoint,
+        solanaRpcToken: process.env.SOLANA_ENDPOINT ? process.env.SOLANA_RPC_TOKEN : undefined,
+        solanaWsEndpoint: process.env.SOLANA_WSS_ENDPOINT,
         metisEndpoint: process.env.METIS_ENDPOINT ?? defaultConfig.jupiter,
         secretKey: decodedSecretKey,
         firstTradePrice: 900_000,       // min USDC out (6 decimals) — $0.90 for 0.01 SOL at ~$90/SOL

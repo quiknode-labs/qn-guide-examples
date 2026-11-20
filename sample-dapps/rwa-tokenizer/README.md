@@ -242,7 +242,6 @@ Then, edit `frontend/.env.local` with your deployed addresses, RPC URLs, WalletC
 # RPC URLs (UPDATE THESE)
 NEXT_PUBLIC_RPC_BASE_SEPOLIA=
 NEXT_PUBLIC_RPC_SEPOLIA=
-
 # WalletConnect/Rainbow (UPDATE THIS)
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
 
@@ -268,6 +267,8 @@ NEXT_PUBLIC_PERMIT2_ADDRESS=0x000000000022D473030F116dDEE9F6B43aC78BA3
 # Google Maps API (OPTIONAL)
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
 ```
+
+Set both browser RPC variables to URLs you operate or have approved. For a private Quicknode endpoint, use a backend that applies the token server-side. The deploy script has separate RPC settings.
 
 #### Step 7: Start Frontend
 

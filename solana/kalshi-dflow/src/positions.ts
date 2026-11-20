@@ -7,7 +7,11 @@ import { loadWallet, fetchJson, parseMintAndBalance, getWalletTokenAccounts, req
 const METADATA_API = requireEnv('METADATA_API_URL');
 const RPC_URL      = requireEnv('QUICKNODE_RPC_URL');
 
-const rpc = createSolanaRpc(RPC_URL);
+const rpc = createSolanaRpc(RPC_URL, {
+  headers: process.env.QUICKNODE_RPC_TOKEN
+    ? { "x-token": process.env.QUICKNODE_RPC_TOKEN }
+    : undefined,
+});
 
 // Main
 async function getPositions(walletAddress: string) {

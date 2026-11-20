@@ -1,7 +1,7 @@
 //src/App.js
 //Import libraries and components
 import { useState } from 'react';
-import { ethers, utils } from "ethers";
+import { utils } from "ethers";
 
 
 function App() {
@@ -26,17 +26,11 @@ function App() {
       alert('Please enter a valid Ethereum wallet address')
       return;
     }
-    const provider = new ethers.providers.JsonRpcProvider("<YOUR-QUICKNODE-HTTP-URL-HERE>");
-    const tokens = await provider.send("qn_getWalletTokenBalance", {
-      wallet: address,
-      contracts: [
-        '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', //WETH
-        '0xdAC17F958D2ee523a2206206994597C13D831ec7', //USDT
-        '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0', //MATIC
-        '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72', //ENS
-      ]
+    const response = await fetch("/api/tokens?wallet=" + encodeURIComponent(address), {
+      headers: { Accept: "application/json" },
     });
-    return tokens
+    if (!response.ok) throw new Error("Unable to load tokens.");
+    return response.json()
   }
   
   return(

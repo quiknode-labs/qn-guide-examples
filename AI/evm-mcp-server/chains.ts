@@ -2,6 +2,7 @@
 export type ChainConfig = {
   network: string;
   rpc: string;
+  token?: string;
   name: string;
   symbol: string;
   decimals: number;
@@ -22,27 +23,29 @@ const validateEnvVar = (name: string): string => {
 
 // Get the endpoint name and token ID from environment variables
 const QN_ENDPOINT_NAME = validateEnvVar("QN_ENDPOINT_NAME");
-const QN_TOKEN_ID = validateEnvVar("QN_TOKEN_ID");
+const QN_AUTH_TOKEN = process.env.QN_AUTH_TOKEN;
+const legacyPath = QN_AUTH_TOKEN ? "" : validateEnvVar("QN_TOKEN_ID") + "/";
 
 // Function to build Quicknode RPC URL based on network name
 const buildRpcUrl = (networkName: string): string => {
   // Special case for Ethereum mainnet
   if (networkName === "mainnet") {
-    return `https://${QN_ENDPOINT_NAME}.quiknode.pro/${QN_TOKEN_ID}/`;
+    return `https://${QN_ENDPOINT_NAME}.quiknode.pro/${legacyPath}`;
   }
 
   // Special case for Avalanche mainnet
   if (networkName ==="avalanche-mainnet") {
-    return `https://${QN_ENDPOINT_NAME}.${networkName}.quiknode.pro/${QN_TOKEN_ID}/ext/bc/C/rpc`;
+    return `https://${QN_ENDPOINT_NAME}.${networkName}.quiknode.pro/${legacyPath}ext/bc/C/rpc`;
   }
   
   // For other networks, include network name in the URL
-  return `https://${QN_ENDPOINT_NAME}.${networkName}.quiknode.pro/${QN_TOKEN_ID}/`;
+  return `https://${QN_ENDPOINT_NAME}.${networkName}.quiknode.pro/${legacyPath}`;
 };
 
 export const CHAINS = {
   ethereum: {
     network: "mainnet",
+    token: QN_AUTH_TOKEN,
     rpc: buildRpcUrl("mainnet"),
     name: "Ethereum",
     symbol: "ETH",
@@ -50,6 +53,7 @@ export const CHAINS = {
   },
   base: {
     network: "base-mainnet",
+    token: QN_AUTH_TOKEN,
     rpc: buildRpcUrl("base-mainnet"),
     name: "Base",
     symbol: "ETH",
@@ -57,6 +61,7 @@ export const CHAINS = {
   },
   arbitrum: {
     network: "arbitrum-mainnet",
+    token: QN_AUTH_TOKEN,
     rpc: buildRpcUrl("arbitrum-mainnet"),
     name: "Arbitrum",
     symbol: "ETH",
@@ -64,6 +69,7 @@ export const CHAINS = {
   },
   avalanche: {
     network: "avalanche-mainnet",
+    token: QN_AUTH_TOKEN,
     rpc: buildRpcUrl("avalanche-mainnet"),
     name: "Avalanche",
     symbol: "AVAX",
@@ -71,6 +77,7 @@ export const CHAINS = {
   },
   bsc: {
     network: "bsc",
+    token: QN_AUTH_TOKEN,
     rpc: buildRpcUrl("bsc"),
     name: "Binance Smart Chain",
     symbol: "BNB",

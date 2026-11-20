@@ -24,9 +24,9 @@ import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { DasApiAsset, dasApi } from '@metaplex-foundation/digital-asset-standard-api';
 
 
-const endpoint = "https://example.solana-devnet.quiknode.pro/123456/";
+const endpoint = process.env.QUICKNODE_RPC_URL!;
 
-const umi = createUmi(endpoint)
+const umi = createUmi(endpoint, { httpHeaders: process.env.QUICKNODE_RPC_TOKEN ? { "x-token": process.env.QUICKNODE_RPC_TOKEN } : undefined })
     .use(mplTokenMetadata())
     .use(mplBubblegum())
     .use(dasApi());

@@ -22,35 +22,26 @@ interface TokensParams {
 }
 
 export class AerodromeAPI {
-  private baseUrl: string;
   private listedTokensCache: Set<string> | null = null;
   private cacheTimestamp = 0;
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-
-  constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_QUICKNODE_ENDPOINT || "";
-  }
 
   private async request<T>(
     endpoint: string,
     params?: Record<string, any>
   ): Promise<T> {
-    const url = new URL(`${this.baseUrl}addon/1051/v1${endpoint}`);
+    const search = new URLSearchParams({ resource: endpoint });
 
     // Add query parameters
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined) {
-          url.searchParams.append(key, value.toString());
+          search.append(key, value.toString());
         }
       });
     }
 
-    const response = await fetch(url.toString(), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(`/api/aerodrome?${search}`);
 
     if (!response.ok) {
       throw new Error(

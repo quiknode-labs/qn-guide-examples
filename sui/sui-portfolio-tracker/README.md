@@ -105,19 +105,18 @@ QN_ENDPOINT_TOKEN=your-token-here
 SUI_ADDRESS=0x...
 ```
 
-Your Quicknode endpoint URL looks like `https://your-endpoint.sui-mainnet.quiknode.pro/abcdef1234567890/`. Split it into two parts:
-- `QN_ENDPOINT_URL` — everything up to (but not including) the trailing token path: `https://your-endpoint.sui-mainnet.quiknode.pro`
-- `QN_ENDPOINT_TOKEN` — the token segment at the end (without slashes): `abcdef1234567890`
+Open your Sui mainnet endpoint in the Quicknode dashboard. Copy **Base URL** into `QN_ENDPOINT_URL` and **Auth token** into `QN_ENDPOINT_TOKEN`. The app sends the token in an `x-token` HTTP header for GraphQL and as `x-token` metadata for gRPC.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> With URL-path authentication on GraphQL, the token comes before `/graphql`. The gRPC client sends the token as separate metadata on port `9000`.
 
 You can track multiple addresses by comma-separating them:
 
 ```
 SUI_ADDRESS=0xabc...,0xdef...,0x123...
 ```
-
-**Finding your token:** Your Quicknode endpoint URL looks like
-`https://abc123xyz.sui-mainnet.quiknode.pro/abcdef1234567890`
-The token is the path segment: `abcdef1234567890`.
 
 ### 5. Run
 

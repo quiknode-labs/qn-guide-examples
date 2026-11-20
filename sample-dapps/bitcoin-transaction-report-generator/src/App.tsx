@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import "./index.css";
 import ReportForm from "./components/ReportForm";
 import ResultTable from "./components/ResultTable";

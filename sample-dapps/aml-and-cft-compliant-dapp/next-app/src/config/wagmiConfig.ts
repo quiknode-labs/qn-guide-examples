@@ -10,7 +10,7 @@ export const config = createConfig(
     chains: [base],
     transports: {
       // RPC URL for each chain
-      [base.id]: http(process.env.QUICKNODE_ENDPOINT || ""),
+      [base.id]: http("/api/rpc"),
     },
 
     // Required API Keys

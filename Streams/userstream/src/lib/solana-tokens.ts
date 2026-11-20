@@ -101,9 +101,14 @@ async function solanaRpcRequest<T>(
   const url = getSolanaRpcUrl()
   if (!url) return null
 
+  const token = process.env.QN_SOLANA_TOKEN
   const response = await fetch(url, {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: {
+      'content-type': 'application/json',
+      ...(token ? { 'x-token': token } : {}),
+    },
+    redirect: 'error',
     body: JSON.stringify({
       jsonrpc: '2.0',
       id: 1,

@@ -6,7 +6,8 @@
                 "/absolute/path/to/build/index.js"
             ],
             "env": {
-                "SOLANA_RPC_ENDPOINT": "https://example.solana-mainnet.quiknode.pro/123456/"
+                "SOLANA_RPC_ENDPOINT": "https://your-endpoint.solana-mainnet.quiknode.pro/",
+                "SOLANA_RPC_TOKEN": "your-auth-token"
             }
         }
     }

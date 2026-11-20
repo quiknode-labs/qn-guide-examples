@@ -52,8 +52,11 @@ function u16ToBytes(num: number): Uint8Array {
     return new Uint8Array(arr);
 }
 async function main() {
-    const rpcUrl = process.env.HTTP_ENDPOINT as string;
-    const connection = new Connection(rpcUrl, 'confirmed');
+    const rpcUrl = (process.env.QUICKNODE_RPC_URL || process.env.HTTP_ENDPOINT) as string;
+    const connection = new Connection(rpcUrl, {
+      commitment: "confirmed",
+      httpHeaders: process.env.QUICKNODE_RPC_TOKEN ? { "x-token": process.env.QUICKNODE_RPC_TOKEN } : undefined,
+    });
     const [pda] = PublicKey.findProgramAddressSync([
         Buffer.from(AMM_CONFIG_SEED, "utf8"),
         u16ToBytes(AMM_CONFIG_INDEX)

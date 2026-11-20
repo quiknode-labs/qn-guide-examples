@@ -45,12 +45,21 @@ Make sure you have a Quicknode endpoint handy--you can [get one free](https://ww
 - Add your [Jupiter API key](https://dev.jup.ag/portal/setup) (using `JUPITER_API_KEY`) for fetching SOL price data.
 
 ```sh
-DEVNET_RPC_ENDPOINT=https://example.solana-devnet.quiknode.pro/12345/
-MAINNET_RPC_ENDPOINT=https://example.solana-mainnet.quiknode.pro/12345/
+DEVNET_RPC_ENDPOINT=https://your-endpoint.solana-devnet.quiknode.pro/
+DEVNET_RPC_TOKEN=your-devnet-auth-token
+MAINNET_RPC_ENDPOINT=https://your-endpoint.solana-mainnet.quiknode.pro/
+MAINNET_RPC_TOKEN=your-mainnet-auth-token
 NEXT_PUBLIC_NETWORK_ENV=mainnet
 NEXT_PUBLIC_VALIDATOR_ADDRESS=5s3vajJvaAbabQvxFdiMfg14y23b2jvK6K2Mw4PYcYK
 JUPITER_API_KEY=your_jupiter_api_key_here
 ```
+
+For each enabled network, use the **Base URL** and **Auth token** from the same endpoint. The server uses `x-token` for HTTP requests, including confirmation by polling. If you use testnet, set `TESTNET_RPC_ENDPOINT` and `TESTNET_RPC_TOKEN`. A full RPC URL also works with the matching token variable unset.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. Keep the endpoint credentials in the server environment.
 
 First, run the development server:
 
@@ -148,4 +157,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fsample-dapps%2Fsolana-staking-ui&env=DEVNET_RPC_ENDPOINT,MAINNET_RPC_ENDPOINT,NEXT_PUBLIC_NETWORK_ENV,NEXT_PUBLIC_VALIDATOR_ADDRESS&envDescription=Quicknode%20Endpoint%20and%20Validator%20Address&envLink=https%3A%2F%2Fdashboard.quicknode.com%2F%3Fprompt%3Dsignup&project-name=quicknode-stake-ui&repository-name=quicknode-stake-ui&demo-title=Quicknode%20Stake%20%20Solana%20UI&demo-description=A%20landing%20page%20for%20staking%20Solana)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fquiknode-labs%2Fqn-guide-examples%2Fsample-dapps%2Fsolana-staking-ui&env=DEVNET_RPC_ENDPOINT,DEVNET_RPC_TOKEN,MAINNET_RPC_ENDPOINT,MAINNET_RPC_TOKEN,NEXT_PUBLIC_NETWORK_ENV,NEXT_PUBLIC_VALIDATOR_ADDRESS&envDescription=DEVNET_RPC_ENDPOINT%3A%20Solana%20devnet%20Base%20URL%0ADEVNET_RPC_TOKEN%3A%20Devnet%20Auth%20token%0AMAINNET_RPC_ENDPOINT%3A%20Solana%20mainnet%20Base%20URL%0AMAINNET_RPC_TOKEN%3A%20Mainnet%20Auth%20token%0ANEXT_PUBLIC_NETWORK_ENV%3A%20Next%20Public%20Network%20Env%0ANEXT_PUBLIC_VALIDATOR_ADDRESS%3A%20Next%20Public%20Validator%20Address&envLink=https%3A%2F%2Fdashboard.quicknode.com%2F%3Fprompt%3Dsignup&project-name=quicknode-stake-ui&repository-name=quicknode-stake-ui&demo-title=Quicknode%20Stake%20%20Solana%20UI&demo-description=A%20landing%20page%20for%20staking%20Solana)

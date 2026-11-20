@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { handleError } from '../utils/helpers';
+import { handleError, initializeConnection } from '../utils/helpers';
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
         if (ethers.isAddress(walletAddress)) {
             address = ethers.getAddress(walletAddress);
         } else {
-            const provider = new ethers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL);
+            const provider = initializeConnection();
             const resolvedAddress = await provider.resolveName(walletAddress);
             if (resolvedAddress === null) {
                 throw new Error(`The ENS name '${walletAddress}' does not resolve to an address.`);

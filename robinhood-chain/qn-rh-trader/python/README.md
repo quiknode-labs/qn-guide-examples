@@ -38,13 +38,21 @@ Each snippet reads live mainnet, prints a real result, and **never signs or broa
    python -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt
    ```
-4. Configure your Quicknode endpoint. The snippets read `QUICKNODE_RPC` and `QUICKNODE_WS` from the environment (there is no config file and no keychain use), so export them or copy `.env.example` and source it. The endpoint carries a token, so never commit it.
+4. Configure your Quicknode endpoint. The snippets read `QUICKNODE_RPC` and `QUICKNODE_WS` from the environment (there is no config file and no keychain use), so export them or copy `.env.example` and source it. Keep the endpoint credentials in your local environment.
    ```bash
    cp .env.example .env   # then edit .env, and: set -a; source .env; set +a
    # or export directly:
-   export QUICKNODE_RPC="https://<your-endpoint>.quiknode.pro/<token>/"   # 4663 HTTP
+   export QUICKNODE_RPC="https://your-endpoint.robinhood-mainnet.quiknode.pro/"
+   export QUICKNODE_RPC_TOKEN="your-auth-token"
    export QUICKNODE_WS="wss://<your-endpoint>.quiknode.pro/<token>/"      # 4663 WSS (watch.py only)
    ```
+
+Set `QUICKNODE_RPC` to the **Base URL** and `QUICKNODE_RPC_TOKEN` to the **Auth token**. You can keep an existing full HTTPS endpoint URL by leaving the token unset. Keep the full WebSocket Provider URL in `QUICKNODE_WS`.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. The subscription client still uses the full WSS URL with its token path.
 
 ## Run
 

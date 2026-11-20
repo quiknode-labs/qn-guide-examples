@@ -9,6 +9,7 @@ export const config = {
 
   // Blockchain configuration
   rpcUrl: process.env.BNB_RPC_URL || "https://bsc-dataseed.binance.org",
+  rpcToken: process.env.BNB_RPC_URL ? process.env.BNB_RPC_TOKEN : undefined,
   privateKey: process.env.PRIVATE_KEY as Address,
 
   // Trading configuration

@@ -4,8 +4,11 @@ import secret from './guideSecret.json';
 const SIGNER_WALLET = Keypair.fromSecretKey(new Uint8Array(secret));
 const DESTINATION_WALLET = Keypair.generate();
 
-const QUICKNODE_RPC = 'https://example.solana-devnet.quiknode.pro/0123456/';
-const SOLANA_CONNECTION = new Connection(QUICKNODE_RPC);
+const QUICKNODE_RPC = process.env.QUICKNODE_RPC_URL as string;
+const SOLANA_CONNECTION = new Connection(QUICKNODE_RPC, {
+  httpHeaders: process.env.QUICKNODE_RPC_TOKEN ? { "x-token": process.env.QUICKNODE_RPC_TOKEN } : undefined,
+  wsEndpoint: process.env.QUICKNODE_WSS_URL,
+});
 
 const instructions: TransactionInstruction[] = [
     SystemProgram.transfer({

@@ -23,12 +23,20 @@ This project contains the example code for the Quicknode guide: [How to Trade Ka
    ```env
    METADATA_API_URL=https://dev-prediction-markets-api.dflow.net
    TRADE_API_URL=https://dev-quote-api.dflow.net
-   QUICKNODE_RPC_URL=<your-quicknode-solana-endpoint>
+   QUICKNODE_RPC_URL=
+   QUICKNODE_RPC_TOKEN=
    KEYPAIR_PATH=<path-to-your-wallet-keypair.json>
    SERIES_TICKER=KXEPLGAME
    USDC_MINT=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
    DFLOW_API_KEY= # required for production endpoints, leave blank for dev
    ```
+
+Use your Quicknode **Base URL** and **Auth token** for the Solana RPC settings. Leave the token unset for a full HTTPS endpoint URL.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples.
 
 The dev API URLs in the `.env` example work without an API key. Note that despite the `dev` in the URL, these endpoints still operate on Solana mainnet-beta and use real funds. For production, you will need a DFlow API key and must integrate [Proof](https://pond.dflow.net/build/proof/introduction) for KYC/identity verification to meet Kalshi compliance requirements.
 

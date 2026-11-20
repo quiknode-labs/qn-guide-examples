@@ -9,7 +9,8 @@ const recipient = new PublicKey(myWallet);
 const amount = new BigNumber(0.0001); // 0.0001 SOL
 const label = 'Quicknode Guide Store';
 const memo = 'QN Solana Pay Demo Public Memo';
-const quicknodeEndpoint = 'https://example.solana-devnet.quiknode.pro/123456/'; // Replace with your Quicknode endpoint
+const quicknodeEndpoint = process.env.QUICKNODE_RPC_URL;
+const quicknodeToken = process.env.QUICKNODE_RPC_TOKEN;
 
 const paymentRequests = new Map<string, { recipient: PublicKey; amount: BigNumber; memo: string }>();
 
@@ -30,8 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             paymentRequests.set(ref, { recipient, amount, memo });
             const { url } = urlData;
             res.status(200).json({ url: url.toString(), ref });
-        } catch (error) {
-            console.error('Error:', error);
+        } catch {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     } else if (req.method === 'GET') {
@@ -50,8 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             } else {
                 res.status(404).json({ status: 'not found' });
             }
-        } catch (error) {
-            console.error('Error:', error);
+        } catch {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
@@ -87,7 +86,11 @@ async function verifyTransaction(reference: PublicKey) {
     }
     const { recipient, amount, memo } = paymentData;
     // 2 - Establish a Connection to the Solana Cluster
-    const connection = new Connection(quicknodeEndpoint, 'confirmed');
+    if (!quicknodeEndpoint) throw new Error('Set QUICKNODE_RPC_URL on the server.');
+    const connection = new Connection(quicknodeEndpoint, {
+        commitment: 'confirmed',
+        httpHeaders: quicknodeToken ? { 'x-token': quicknodeToken } : undefined,
+    });
     console.log('recipient', recipient.toBase58());
     console.log('amount', amount);
     console.log('reference', reference.toBase58());

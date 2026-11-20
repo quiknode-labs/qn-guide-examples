@@ -27,7 +27,8 @@ import { getTransferSolInstruction } from "@solana-program/system";
 const MINIMUM_JITO_TIP = 1_000; // lamports
 const NUMBER_TRANSACTIONS = 5;
 const SIMULATE_ONLY = true;
-const ENDPOINT = 'https://example.quiknode.pro/123456/'; // 👈 Replace with your own endpoint
+const ENDPOINT = process.env.QUICKNODE_RPC_URL!;
+const rpcHeaders = process.env.QUICKNODE_RPC_TOKEN ? { "x-token": process.env.QUICKNODE_RPC_TOKEN } : undefined;
 const POLL_INTERVAL_MS = 3000;
 const POLL_TIMEOUT_MS = 30000;
 const DEFAULT_WAIT_BEFORE_POLL_MS = 5000;
@@ -198,7 +199,7 @@ async function main() {
     const signer = await createKeyPairSignerFromBytes(new Uint8Array(secret));
     console.log(`Initializing Jito Bundles demo. Sending ${NUMBER_TRANSACTIONS} transactions from ${signer.address}.`);
     const quickNode = {
-        solana: createSolanaRpc(ENDPOINT),
+        solana: createSolanaRpc(ENDPOINT, { headers: rpcHeaders }),
         lilJit: createJitoBundlesRpc({ endpoint: ENDPOINT }),
     }
     console.log(`✅ - Established connection to Quicknode.`);

@@ -60,13 +60,19 @@ npm install
 
 ### Setting Environment Variables
 
-Rename `.env.example` to `.env` and replace the `YOUR_QUICKNODE_BITCOIN_ENDPOINT_URL` placeholder with your Quicknode Bitcoin endpoint with Blockbook access.
+Copy `.env.example` to `.env`. From your Blockbook-enabled Bitcoin mainnet endpoint, copy **Base URL** into `QUICKNODE_ENDPOINT_URL` and **Auth token** into `QUICKNODE_ENDPOINT_TOKEN`.
 
 ```env
-VITE_QUICKNODE_ENDPOINT = "YOUR_QUICKNODE_BITCOIN_ENDPOINT_URL"
+QUICKNODE_ENDPOINT_URL=https://your-quicknode-endpoint.quiknode.pro/
+QUICKNODE_ENDPOINT_TOKEN=your-auth-token
 ```
 
-> Please note that while we utilize `dotenv` for environment variable management, sensitive information like endpoints can still be visible on the frontend. This configuration is not recommended for production environments as-is.
+The browser calls `/api/blockbook` on the app's origin. The server route reads these variables and authenticates upstream. Set the same server variables in Vercel for deployment. For an existing install, move the full URL to the server variable and remove `VITE_QUICKNODE_ENDPOINT` from local and deployment settings. If you already have a full endpoint URL, you can set it as `QUICKNODE_ENDPOINT_URL` and leave `QUICKNODE_ENDPOINT_TOKEN` unset.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. Keep the endpoint credentials in the server environment.
 
 ### Running the Application
 

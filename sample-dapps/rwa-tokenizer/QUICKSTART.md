@@ -186,10 +186,10 @@ forge build --force
 ```
 
 ### "RPC URL not configured"
-Edit `.env` and ensure RPC URLs are set, or use public RPCs:
+In the frontend `.env.local`, set both browser-facing RPC URLs to routes you operate or have approved.
 ```
-NEXT_PUBLIC_RPC_BASE_SEPOLIA=https://sepolia.base.org
-NEXT_PUBLIC_RPC_SEPOLIA=https://rpc.sepolia.org
+NEXT_PUBLIC_RPC_BASE_SEPOLIA=
+NEXT_PUBLIC_RPC_SEPOLIA=
 ```
 
 ### "Transaction reverted"

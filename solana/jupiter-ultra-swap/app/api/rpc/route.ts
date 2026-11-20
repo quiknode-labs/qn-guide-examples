@@ -1,6 +1,7 @@
 export const runtime = "nodejs";
 
 const QUICKNODE_RPC_URL = process.env.QUICKNODE_RPC_URL;
+const QUICKNODE_RPC_TOKEN = process.env.QUICKNODE_RPC_TOKEN;
 
 export async function POST(req: Request) {
   if (!QUICKNODE_RPC_URL) {
@@ -16,7 +17,9 @@ export async function POST(req: Request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(QUICKNODE_RPC_TOKEN ? { "x-token": QUICKNODE_RPC_TOKEN } : {}),
       },
+      redirect: "error",
       body,
     });
 
@@ -26,11 +29,10 @@ export async function POST(req: Request) {
       status: res.status,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (error) {
-    console.error("Error proxying RPC request:", error);
+  } catch {
     return new Response(
       JSON.stringify({
-        error: error instanceof Error ? error.message : "Failed to proxy RPC request",
+        error: "Failed to proxy RPC request",
       }),
       {
         status: 500,

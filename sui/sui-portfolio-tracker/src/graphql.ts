@@ -71,6 +71,7 @@ async function executeGraphQL<T>(
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      'x-token': config.endpointToken,
     },
     body: JSON.stringify({ query, variables }),
   });

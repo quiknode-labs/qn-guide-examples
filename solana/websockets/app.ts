@@ -1,8 +1,12 @@
 import { Connection, PublicKey, LAMPORTS_PER_SOL, } from "@solana/web3.js";
 
-const WSS_ENDPOINT = 'wss://example.solana-devnet.quiknode.pro/000/'; // replace with your URL
-const HTTP_ENDPOINT = 'https://example.solana-devnet.quiknode.pro/000/'; // replace with your URL
-const solanaConnection = new Connection(HTTP_ENDPOINT, { wsEndpoint: WSS_ENDPOINT });
+const WSS_ENDPOINT = process.env.QUICKNODE_WSS_URL;
+const HTTP_ENDPOINT = process.env.QUICKNODE_RPC_URL;
+if (!HTTP_ENDPOINT || !WSS_ENDPOINT) throw new Error("Set QUICKNODE_RPC_URL and QUICKNODE_WSS_URL.");
+const solanaConnection = new Connection(HTTP_ENDPOINT, {
+  httpHeaders: process.env.QUICKNODE_RPC_TOKEN ? { "x-token": process.env.QUICKNODE_RPC_TOKEN } : undefined,
+  wsEndpoint: WSS_ENDPOINT,
+});
 const sleep = (ms:number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

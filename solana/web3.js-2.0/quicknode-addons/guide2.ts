@@ -34,7 +34,10 @@ type IpfsApi = {
 type QuicknodeAddons = PriorityFeeApi & MetisApi & IpfsApi;
 
 function createQuicknodeTransport({ endpoint, metisEndpoint, ipfsApiKey }: CreateAddonsApiParams): RpcTransport {
-    const jsonRpcTransport = createDefaultRpcTransport({ url: endpoint });
+    const jsonRpcTransport = createDefaultRpcTransport({
+        url: endpoint,
+        headers: process.env.QUICKNODE_RPC_TOKEN ? { "x-token": process.env.QUICKNODE_RPC_TOKEN } : undefined,
+    });
 
     return async <TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> => {
         const { method, params } = args[0].payload as { method: string; params: unknown };

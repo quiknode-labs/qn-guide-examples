@@ -20,7 +20,9 @@ export const getPublicClient = (chainId: ChainId) => {
 
   // Create new public client
   const client = createPublicClient({
-    transport: http(chain.rpc),
+    transport: http(chain.rpc, {
+      fetchOptions: chain.token ? { headers: { "x-token": chain.token }, redirect: "error" } : undefined,
+    }),
   });
 
   // Cache for future use

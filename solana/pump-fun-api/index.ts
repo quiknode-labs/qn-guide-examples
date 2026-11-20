@@ -9,7 +9,12 @@ const SIMULATE = process.env.SIMULATE === 'true';
 async function main() {
     const metisUrl = process.env.METIS_URL as string;
     const rpcUrl = process.env.HTTP_ENDPOINT as string;
-    const connection = new Connection(rpcUrl, 'confirmed');
+    const connection = new Connection(rpcUrl, {
+        commitment: 'confirmed',
+        httpHeaders: process.env.HTTP_ENDPOINT_TOKEN
+            ? { 'x-token': process.env.HTTP_ENDPOINT_TOKEN }
+            : undefined,
+    });
     const signerSecretKey = JSON.parse(process.env.WALLET_SECRET_KEY as string) as number[];
     const signerKeypair = Keypair.fromSecretKey(new Uint8Array(signerSecretKey));
     const wallet = signerKeypair.publicKey.toBase58();

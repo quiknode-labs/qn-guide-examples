@@ -33,7 +33,11 @@ const account = privateKeyToAccount(config.privateKey);
 const client = createWalletClient({
   account,
   chain: bsc,
-  transport: http(config.rpcUrl),
+  transport: http(config.rpcUrl, {
+    fetchOptions: {
+      headers: config.rpcToken ? { "x-token": config.rpcToken } : undefined,
+    },
+  }),
 }).extend(publicActions)
 
 

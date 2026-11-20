@@ -27,8 +27,17 @@ npm install -d @types/node
 ```env
 METIS_ENDPOINT=https://public.jupiterapi.com
 JITO_ENDPOINT=https://jito-mainnet.quiknode.pro/your-key
+JITO_RPC_TOKEN=
 WALLET_SECRET=21,31,41,51,61,71,81,91  # Your wallet private key as comma-separated numbers
 ```
+
+Set `JITO_ENDPOINT` to the Quicknode Solana Base URL and `JITO_RPC_TOKEN` to its Auth token. Leave the token unset for an existing full HTTPS endpoint URL. The Metis base path remains a separate setting.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples.
+
 
 ## Usage
 

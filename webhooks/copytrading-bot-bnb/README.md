@@ -101,7 +101,8 @@ Edit `.env` with your values:
 ```bash
 # Quicknode Configuration
 QUICKNODE_SECURITY_TOKEN=your_security_token_from_streams_dashboard # 👈 UPDATE HERE
-BNB_RPC_URL=https://your-quicknode-bnb-endpoint.quiknode.pro/abc123/ # 👈 UPDATE HERE
+BNB_RPC_URL=
+BNB_RPC_TOKEN=
 
 # Wallet Configuration (⚠️ KEEP THIS SECURE)
 PRIVATE_KEY=0x...your_wallet_private_key # 👈 UPDATE HERE
@@ -116,6 +117,14 @@ MAX_TRADE_AMOUNT=0.5               # Maximum 0.5 BNB per trade
 MIN_BALANCE=0.05                   # Keep 0.05 BNB reserve for gas
 SLIPPAGE_TOLERANCE=5               # 5% slippage tolerance
 ```
+
+Set `BNB_RPC_URL` to your BNB Chain **Base URL** and `BNB_RPC_TOKEN` to its **Auth token**. For an existing full HTTPS endpoint URL, leave `BNB_RPC_TOKEN` unset. The Streams signing secret is configured separately.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples.
+
 
 **Configuration Parameters Explained**:
 

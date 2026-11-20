@@ -49,12 +49,20 @@ signature subscription.
 
 2. Create `.env.local` (see `.env.local.example`). Both are server-only:
    ```bash
-   QUICKNODE_RPC_URL=your_quicknode_solana_rpc_url
+   QUICKNODE_RPC_URL=https://your-endpoint.solana-mainnet.quiknode.pro/
+   QUICKNODE_RPC_TOKEN=your-auth-token
    TITAN_GATEWAY_URL=your_titan_gateway_addon_url
    # TITAN_GATEWAY_AUTH=optional_bearer_token
    ```
    Enable [Quicknode's Swap API with Titan](https://www.quicknode.com/swap-api?utm_source=internal&utm_campaign=sample-apps&utm_content=titan-meta-aggregation-swap)
    on your Quicknode endpoint to get the Gateway URL.
+
+   Copy **Base URL** and **Auth token** from the same Solana mainnet endpoint. The server sends the token in the `x-token` header. Keep the Titan Gateway URL in its own setting.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. Keep the endpoint credentials in the server environment.
 
 3. Run the dev server:
    ```bash

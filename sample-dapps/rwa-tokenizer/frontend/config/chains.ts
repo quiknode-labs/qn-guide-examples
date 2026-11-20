@@ -6,7 +6,7 @@ export const baseSepolia = defineChain({
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
     default: {
-      http: [process.env.NEXT_PUBLIC_RPC_BASE_SEPOLIA || 'https://sepolia.base.org'],
+      http: process.env.NEXT_PUBLIC_RPC_BASE_SEPOLIA ? [process.env.NEXT_PUBLIC_RPC_BASE_SEPOLIA] : [],
     },
   },
   blockExplorers: {
@@ -24,7 +24,7 @@ export const sepolia = defineChain({
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
     default: {
-      http: [process.env.NEXT_PUBLIC_RPC_SEPOLIA || 'https://rpc.sepolia.org'],
+      http: process.env.NEXT_PUBLIC_RPC_SEPOLIA ? [process.env.NEXT_PUBLIC_RPC_SEPOLIA] : [],
     },
   },
   blockExplorers: {

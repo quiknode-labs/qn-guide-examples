@@ -62,7 +62,9 @@ class CopyTradeBot {
     constructor() {
         this.validateEnv();
 
-        this.connection = new Connection(process.env.SOLANA_RPC);
+        this.connection = new Connection(process.env.SOLANA_RPC, {
+            httpHeaders: process.env.SOLANA_RPC_TOKEN ? { "x-token": process.env.SOLANA_RPC_TOKEN } : undefined,
+        });
         this.wallet = Keypair.fromSecretKey(
             Uint8Array.from(JSON.parse(process.env.SECRET_KEY))
         );

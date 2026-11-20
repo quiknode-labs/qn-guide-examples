@@ -12,7 +12,10 @@ const QUOTER_CONTRACT_ADDRESS = '0xEd1f6473345F45b75F8179591dd5bA1888cf2FB3'
 const SWAP_ROUTER_CONTRACT_ADDRESS = '0x3bFA4769FB09eefC5a80d6E87c3B9C650f7Ae48E'
 
 // Provider, Contract & Signer Instances
-const provider = new ethers.JsonRpcProvider(process.env.RPC_URL)
+const rpcRequest = new ethers.FetchRequest(process.env.RPC_URL);
+const rpcToken = process.env.QUICKNODE_RPC_TOKEN;
+if (rpcToken) rpcRequest.setHeader("x-token", rpcToken);
+const provider = new ethers.JsonRpcProvider(rpcRequest);
 const factoryContract = new ethers.Contract(POOL_FACTORY_CONTRACT_ADDRESS, FACTORY_ABI, provider);
 const quoterContract = new ethers.Contract(QUOTER_CONTRACT_ADDRESS, QUOTER_ABI, provider)
 const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider)

@@ -1,5 +1,7 @@
 # AML and CFT Compliant dApp
 
+> Chainlink deprecated Functions on testnet on June 15, 2026, and on mainnet on June 30, 2026. The Functions setup below is historical. For new onchain workflows, see the [Chainlink Runtime Environment (CRE)](https://docs.chain.link/cre).
+
 ![AML and CFT Compliant dApp Screenshot](./public/app-overview.png)
 
 **AML and CFT Compliant dApp** is a decentralized application (dApp) built on Ethereum-compatible networks (e.g., Base mainnet) that enables secure ETH staking with a compliance layer powered by [Chainlink Functions](https://chain.link/functions) and the [Risk Assessment API](https://www.quicknode.com/add-ons/risk-assessment-api?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp) from the [Quicknode Add-ons](https://www.quicknode.com/add-ons?utm_source=internal&utm_campaign=sample-apps&utm_content=aml-and-cft-compliant-dapp). This project demonstrates a practical integration of off-chain data into smart contracts, ensuring only low-risk wallets can participate in the staking pool.
@@ -333,16 +335,27 @@ npm install
   ```dotenv
   WALLETCONNECT_PROJECT_ID=<your-walletconnect-project-id>
   PRIVATE_KEY=<your-private-key>
-  QUICKNODE_ENDPOINT=<your-quicknode-endpoint>
+  QUICKNODE_ENDPOINT=https://your-endpoint.base-mainnet.quiknode.pro/
+  QUICKNODE_ENDPOINT_TOKEN=your-auth-token
   CONTRACT_ADDRESS=<deployed-contract-address>
   SUBSCRIPTION_ID=<chainlink-subscription-id>
   ```
+
+
+Use the **Base URL** and **Auth token** of your Risk Assessment-enabled endpoint. The Next.js server uses `x-token` for RPC and passes both settings through Chainlink Functions secrets. The browser reads Base data through the app’s same-origin `/api/rpc` route. If you use a full URL in `QUICKNODE_ENDPOINT`, leave `QUICKNODE_ENDPOINT_TOKEN` unset.
+
+> [!NOTE]
+> We recommend sending the **Auth token** in the `x-token` header for HTTPS requests. This reduces the risk of exposing credentials through URL logging and monitoring systems.
+>
+> Quicknode supports both header and URL-path authentication. Open **How to authenticate** on your endpoint overview to see the HTTPS examples. Keep the endpoint credentials in the server environment.
+
 
 - **`WALLETCONNECT_PROJECT_ID`** – Your WalletConnect project ID, required for enabling wallet connections.  
 - **`PRIVATE_KEY`** – The private key of a designated wallet used to sign risk check requests.  
   - This ensures that only authorized users can trigger Chainlink Functions requests.  
   - Without this, the Chainlink subscription could be abused by unauthorized users.  
-- **`QUICKNODE_ENDPOINT`** – Your Quicknode RPC endpoint URL with the **Risk Assessment API** enabled.  
+- **`QUICKNODE_ENDPOINT`** – Base URL of your Quicknode endpoint with the **Risk Assessment API** enabled.
+- **`QUICKNODE_ENDPOINT_TOKEN`** is the Auth token for that endpoint.
 - **`CONTRACT_ADDRESS`** – The deployed **Risk-Based Staking** smart contract address.  
 - **`SUBSCRIPTION_ID`** – The Chainlink Functions subscription ID linked to your contract for off-chain risk evaluations.  
 
