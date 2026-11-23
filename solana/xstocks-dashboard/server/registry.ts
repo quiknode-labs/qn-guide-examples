@@ -1,10 +1,10 @@
-import { PublicKey } from "@solana/web3.js";
-import { ExtensionType, getExtensionData, getScaledUiAmountConfig, unpackMint } from "@solana/spl-token";
-import { unpack as unpackTokenMetadata } from "@solana/spl-token-metadata";
+import { getAddressDecoder, isSome } from "@solana/kit";
+import { getMintDecoder } from "@solana-program/token-2022";
 import { ISSUER, TOKEN_2022 } from "./config.ts";
 import { rpc, withRetry } from "./rpc.ts";
 
-const TOKEN_2022_KEY = new PublicKey(TOKEN_2022);
+const mintDecoder = getMintDecoder();
+const addressDecoder = getAddressDecoder();
 
 export interface MintState {
   address: string;
@@ -33,18 +33,17 @@ export function rawToShares(mint: MintState, raw: bigint | number, unixSeconds: 
 /**
  * Parse a Token-2022 mint account. The Scaled UI config and the metadata are
  * extensions stored after the base mint, so their offsets differ per mint.
- * `unpackMint` walks the extension list for us.
+ * Kit's Token-2022 mint decoder walks the extension list for us.
  */
 export function parseMintAccount(address: string, data: Uint8Array, previous?: MintState): MintState | null {
   try {
-    const key = new PublicKey(address);
-    const mint = unpackMint(key, { data: Buffer.from(data), owner: TOKEN_2022_KEY, executable: false, lamports: 0 }, TOKEN_2022_KEY);
-    const scaled = getScaledUiAmountConfig(mint);
+    const mint = mintDecoder.decode(data);
+    const extensions = isSome(mint.extensions) ? mint.extensions.value : [];
+    const scaled = extensions.find((e) => e.__kind === "ScaledUiAmountConfig");
+    const metadata = extensions.find((e) => e.__kind === "TokenMetadata");
     let symbol = previous?.symbol ?? address.slice(0, 6);
     let name = previous?.name ?? symbol;
-    const metadataBytes = getExtensionData(ExtensionType.TokenMetadata, mint.tlvData);
-    if (metadataBytes) {
-      const metadata = unpackTokenMetadata(metadataBytes);
+    if (metadata) {
       symbol = metadata.symbol || symbol;
       name = metadata.name || name;
     }
@@ -119,7 +118,7 @@ export async function readMintStates(
       if (!account || account.owner !== TOKEN_2022) return;
       const data = Buffer.from(account.data[0], "base64");
       // COption tag (4 bytes) then the authority key.
-      if (data.readUInt32LE(0) !== 1 || new PublicKey(data.subarray(4, 36)).toBase58() !== ISSUER) return;
+      if (data.readUInt32LE(0) !== 1 || addressDecoder.decode(data.subarray(4, 36)) !== ISSUER) return;
       const state = parseMintAccount(batch[index], data);
       if (state) result.set(state.address, state);
     });
