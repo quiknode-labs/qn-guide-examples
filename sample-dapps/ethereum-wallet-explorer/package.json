@@ -14,7 +14,7 @@
     "clsx": "^2.1.0",
     "ethers": "^6.11.1",
     "lucide-react": "^0.330.0",
-    "next": "^14.2.33",
+    "next": "^15.5.29",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.2.1",
