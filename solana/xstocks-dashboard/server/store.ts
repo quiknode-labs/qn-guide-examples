@@ -331,22 +331,33 @@ export class Store {
         const state = this.mints.get(mint);
         if (!rt || !state || rt.lastPriceT === null || now - rt.lastPriceT > FLAG_LAST_TRADE_MS) continue;
         const { stale, aging, premiumPct, z } = this.gap(mint, now);
-        if (stale || aging || premiumPct === null || z === null) continue;
+        if (stale || premiumPct === null || z === null) continue;
+        // The stock price updates about once a minute, so it spends part of every minute over 30s
+        // old. Pause on those checks: keep the hold timer and any listing, but judge nothing new.
+        if (aging) {
+          if (this.flagSince.has(mint)) holding.add(mint);
+          // Keep it on the quote list, or its quote can expire during the pause and reset the hold.
+          if (this.quoteCandidates.includes(mint)) nearMisses.push({ mint, z });
+          const shown = this.opportunities.find((o) => o.mint === mint);
+          if (shown) listed.push(shown);
+          continue;
+        }
 
-        const quote = this.quotes.get(mint);
+        const quote = this.quoteNow(mint, now);
         const q10 = quote && now - quote.t < FLAG_QUOTE_MS ? quote.sizes.find((size) => size.usd === 10_000) ?? null : null;
         const below = z <= -FLAG_Z && premiumPct <= -FLAG_BELOW_MIN_PCT;
         if (!below) continue;
         // Unusual enough to be worth quoting, so the cost check has data on the next pass.
         nearMisses.push({ mint, z });
         if (!q10 || q10.impactPct >= 0) continue;
+        const cost10k = q10.impactPct;
 
         const key = mint;
         holding.add(key);
         const since = this.flagSince.get(key) ?? now;
         this.flagSince.set(key, since);
         if (now - since < FLAG_HOLD_MS) continue;
-        listed.push({ symbol: state.symbol, mint, since, premiumPct, z, cost10k: q10.impactPct, route: q10.route });
+        listed.push({ symbol: state.symbol, mint, since, premiumPct, z, cost10k, route: q10.route });
       }
     }
     for (const key of this.flagSince.keys()) if (!holding.has(key)) this.flagSince.delete(key);
@@ -354,6 +365,19 @@ export class Store {
 
     // Cheapest buy against the stock price first.
     this.opportunities = listed.sort((a, b) => a.cost10k - b.cost10k);
+  }
+
+  /**
+   * The latest quote with each size's cost measured against the current stock price. The quote
+   * can be minutes old and the stock may have moved since, so the cost stored with it can be out
+   * of date. With a stale stock price, sizes are compared with the $1K quote, as in the poller.
+   */
+  private quoteNow(mint: string, now: number) {
+    const quote = this.quotes.get(mint);
+    if (!quote || quote.sizes.length === 0) return null;
+    const ref = this.refs.get(mint);
+    const base = ref && now - ref.updatedAt < REF_STALE_MS ? ref.price : quote.sizes[0].price;
+    return { t: quote.t, sizes: quote.sizes.map((size) => ({ ...size, impactPct: (size.price / base - 1) * 100 })) };
   }
 
   private signal(mint: string, now: number): SignalRow {
@@ -381,7 +405,7 @@ export class Store {
       spike = average > 0 ? recent / average : null;
     }
 
-    const quote = this.quotes.get(mint);
+    const quote = this.quoteNow(mint, now);
     return {
       symbol: state.symbol,
       onchain: rt.lastPrice,

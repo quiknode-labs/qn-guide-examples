@@ -179,6 +179,21 @@ export function classifyTransaction(
     }
     return owner === feePayer && Math.abs(feePayerSol) > 0.005 && Math.sign(feePayerSol) === sign;
   };
+  /**
+   * True when `owner` moved USDC or SOL in direction `sign`. Paired with an xStock move the same
+   * way, that is liquidity: a deposit sends both and gets LP tokens back, a withdrawal receives both.
+   */
+  const movesCash = (owner: string, sign: 1 | -1): boolean => {
+    let opposite = false;
+    for (const [other, delta] of deltas.get(owner) ?? []) {
+      if (!(USD_STABLES.has(other) || other === WSOL) || delta === 0n) continue;
+      if ((delta > 0n ? 1 : -1) === sign) return true;
+      opposite = true;
+    }
+    // Native SOL counts only without an opposite USDC or WSOL leg, so a sell that also pays a tip
+    // or account rent in SOL stays a sell.
+    return !opposite && owner === feePayer && Math.abs(feePayerSol) > 0.005 && Math.sign(feePayerSol) === sign;
+  };
 
   const events: Classified[] = [];
   const seconds = Math.floor(blockTime / 1000);
@@ -212,8 +227,13 @@ export function classifyTransaction(
       continue;
     }
 
-    // Owners whose xStock change is paid for by an opposite change in another asset.
-    const paired = changes.filter((change) => hasOpposingFlow(change.owner, mintAddress, change.delta > 0n ? -1 : 1));
+    // Owners whose xStock change is paid for by an opposite change in another asset. An owner whose
+    // USDC or SOL moves the same way as the xStock is adding or removing liquidity, not trading,
+    // even though the LP token moves the opposite way.
+    const paired = changes.filter((change) => {
+      const sign = change.delta > 0n ? 1 : -1;
+      return hasOpposingFlow(change.owner, mintAddress, sign === 1 ? -1 : 1) && !movesCash(change.owner, sign);
+    });
 
     if (paired.length === 0 || (lending && !hasDex)) {
       // One-way movement: lending, pool liquidity, or a plain transfer.
