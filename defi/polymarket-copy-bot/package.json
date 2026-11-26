@@ -17,7 +17,7 @@
   "description": "",
   "dependencies": {
     "@polymarket/clob-client": "^5.2.1",
-    "axios": "^1.13.4",
+    "axios": "^1.15.0",
     "dotenv": "^17.2.3",
     "ethers": "^5.7.2",
     "ws": "^8.19.0"
