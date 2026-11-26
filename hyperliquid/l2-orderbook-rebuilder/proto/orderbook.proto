@@ -1,0 +1,167 @@
+// Source: https://github.com/quiknode-labs/hypercore-grpc-examples/blob/main/proto/orderbook.proto
+// Retrieved 2026-07-16. Keep synchronized with the published Quicknode service contract.
+syntax = "proto3";
+package hyperliquid;
+
+service OrderBookStreaming {
+  rpc StreamL2Book (L2BookRequest) returns (stream L2BookUpdate);
+  rpc StreamL4Book (L4BookRequest) returns (stream L4BookUpdate);
+  rpc StreamBboBook (BboBookRequest) returns (stream BboBookUpdate);
+  rpc StreamL2BookDiff (L2BookDiffRequest) returns (stream L2BookDiffUpdate);
+  rpc StreamL4BookUpdates (L4BookUpdatesRequest) returns (stream L4BookUpdatesUpdate);
+  rpc StreamTpslUpdates (TpslUpdatesRequest) returns (stream TpslUpdatesUpdate);
+}
+
+message L2BookRequest {
+  string coin = 1;
+  uint32 n_levels = 2;
+  optional uint32 n_sig_figs = 3;
+  optional uint64 mantissa = 4;
+}
+
+message L2BookUpdate {
+  string coin = 1;
+  uint64 time = 2;
+  uint64 block_number = 3;
+  repeated L2Level bids = 4;
+  repeated L2Level asks = 5;
+}
+
+message L2Level {
+  string px = 1;
+  string sz = 2;
+  uint32 n = 3;
+}
+
+message BboBookRequest { repeated string coins = 1; }
+
+message BboBookUpdate {
+  string coin = 1;
+  uint64 time = 2;
+  uint64 block_number = 3;
+  L2Level bid = 4;
+  L2Level ask = 5;
+}
+
+message L2BookDiffRequest {
+  repeated string coins = 1;
+  uint32 n_levels = 2;
+  optional uint32 n_sig_figs = 3;
+  optional uint64 mantissa = 4;
+  bool skip_initial_snapshot = 5;
+}
+
+message L2BookDiffUpdate {
+  uint64 time = 1;
+  uint64 height = 2;
+  bool snapshot = 3;
+  repeated L2CoinDiff diffs = 4;
+}
+
+message L2CoinDiff {
+  string coin = 1;
+  uint64 seq = 2;
+  uint64 prev_seq = 3;
+  repeated L2Level bids = 4;
+  repeated L2Level asks = 5;
+  bool snapshot = 6;
+}
+
+message L4BookRequest { string coin = 1; }
+
+message L4BookUpdate {
+  oneof update {
+    L4BookSnapshot snapshot = 1;
+    L4BookDiff diff = 2;
+  }
+}
+
+message L4BookSnapshot {
+  string coin = 1;
+  uint64 time = 2;
+  uint64 height = 3;
+  repeated L4Order bids = 4;
+  repeated L4Order asks = 5;
+}
+
+message L4BookDiff {
+  uint64 time = 1;
+  uint64 height = 2;
+  string data = 3;
+}
+
+message L4BookUpdatesRequest { repeated string coins = 1; }
+
+enum L4OrderDiffType {
+  L4_ORDER_DIFF_TYPE_UNSPECIFIED = 0;
+  L4_ORDER_DIFF_TYPE_NEW = 1;
+  L4_ORDER_DIFF_TYPE_UPDATE = 2;
+  L4_ORDER_DIFF_TYPE_REMOVE = 3;
+}
+
+message L4BookUpdatesUpdate {
+  uint64 time = 1;
+  uint64 height = 2;
+  repeated L4OrderDiff diffs = 3;
+  bool snapshot = 4;
+}
+
+message L4OrderDiff {
+  L4OrderDiffType diff_type = 1;
+  string coin = 2;
+  uint64 oid = 3;
+  string user = 4;
+  string side = 5;
+  string px = 6;
+  string sz = 7;
+}
+
+message L4Order {
+  string user = 1;
+  string coin = 2;
+  string side = 3;
+  string limit_px = 4;
+  string sz = 5;
+  uint64 oid = 6;
+  uint64 timestamp = 7;
+  string trigger_condition = 8;
+  bool is_trigger = 9;
+  string trigger_px = 10;
+  bool is_position_tpsl = 11;
+  bool reduce_only = 12;
+  string order_type = 13;
+  optional string tif = 14;
+  optional string cloid = 15;
+}
+
+message TpslUpdatesRequest { repeated string coins = 1; }
+
+enum TpslDiffType {
+  TPSL_DIFF_TYPE_UNSPECIFIED = 0;
+  TPSL_DIFF_TYPE_ADD = 1;
+  TPSL_DIFF_TYPE_REMOVE = 2;
+}
+
+message TpslUpdatesUpdate {
+  uint64 time = 1;
+  uint64 height = 2;
+  repeated TpslOrderDiff diffs = 3;
+  bool snapshot = 4;
+}
+
+message TpslOrderDiff {
+  TpslDiffType diff_type = 1;
+  uint64 oid = 2;
+  string coin = 3;
+  string user = 4;
+  string side = 5;
+  string trigger_px = 6;
+  string limit_px = 7;
+  string sz = 8;
+  string trigger_condition = 9;
+  string order_type = 10;
+  bool is_position_tpsl = 11;
+  bool reduce_only = 12;
+  uint64 timestamp = 13;
+  string reason = 14;
+}
