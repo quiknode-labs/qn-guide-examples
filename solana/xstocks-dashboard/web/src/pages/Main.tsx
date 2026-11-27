@@ -231,7 +231,7 @@ export function Main({ snapshot, controls, setControls }: {
           <>
             <span>These are conditions in the data, not recommendations.</span>
             <span>A ticker is listed during US market hours when it trades unusually low against its own history (two standard deviations or more), at least 0.25% below the stock price, and a live $10K Jupiter quote still lands below the stock price.</span>
-            <span>It is listed only when the token traded in the last 5 minutes, the ticker has at least 5 minutes of history, and the condition has held for a minute on stock prices under 30 seconds old. The stock price updates about once a minute. While it is older than that, a listed ticker stays and nothing new is added.</span>
+            <span>It is listed only when the token traded in the last 5 minutes, the ticker has at least 5 minutes of history, and the condition has held for a minute on stock prices under 30 seconds old. The stock price updates about once a minute. While it is older than that, nothing new is added, and a listed ticker stays only while its $10K quote is still below the stock price.</span>
           </>
         }
       >
@@ -248,7 +248,7 @@ export function Main({ snapshot, controls, setControls }: {
         answer={status.marketOpen ? "The US stock market is open." : "The US stock market is closed."}
         how={
           <>
-            <span>Gap = token price ÷ stock price − 1. The token price is the volume-weighted price of exchange trades, sampled every 15 seconds.</span>
+            <span>Gap = token price ÷ stock price − 1. The token price is the volume-weighted price of exchange trades, sampled every 15 seconds. A ticker with no trade in 15 minutes has no gap until it trades again.</span>
             <span>
               The stock price comes from Jupiter's Price API{premium.refMaxAgeSec !== null ? <>, last updated <span className="xs-num">{span(premium.refMaxAgeSec)}</span> ago</> : ""}.
               It updates about once a minute, so during market hours a gap marked "~" may include stock movement since the last update. A grey dashed line means the stock price is over 5 minutes old.

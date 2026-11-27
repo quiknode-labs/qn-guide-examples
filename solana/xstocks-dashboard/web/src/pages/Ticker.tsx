@@ -112,7 +112,7 @@ export function Ticker({ snapshot, symbol, controls, setControls }: {
         how={
           <>
             <span>The top chart shows the token's price and the stock's price. The lower band is the gap between them: token price ÷ stock price − 1.</span>
-            <span>The token price is the volume-weighted price of exchange trades, sampled every 15 seconds. The stock price comes from Jupiter's Price API and updates about once a minute.</span>
+            <span>The token price is the volume-weighted price of exchange trades, sampled every 15 seconds. After 15 minutes without a trade, the token price and the gap are left blank until the next trade. The stock price comes from Jupiter's Price API and updates about once a minute.</span>
             <span>{normal.detail}</span>
           </>
         }
