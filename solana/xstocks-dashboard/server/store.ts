@@ -13,7 +13,11 @@ interface TickerRuntime {
   startSupplyRaw: bigint;
   /** [t, shares] after each supply change seen on the account stream. */
   supplySteps: [number, number][];
-  decodedNetShares: number;
+  /**
+   * Net raw amount of decoded mints and redeems. Kept raw so it converts at the same multiplier
+   * as the supply change, or a dividend or split would make the cross-check disagree.
+   */
+  decodedNetRaw: number;
   lastPrice: number | null;
   lastPriceT: number | null;
   /** Dollars and shares traded since the last sample, for a volume-weighted price. */
@@ -25,6 +29,9 @@ interface TickerRuntime {
   closeDurations: number[];
   /** Last reference price seen while the US market was open. */
   lastSessionRef: number | null;
+  /** Slot and write version of the newest account update applied, so replays can't move it back. */
+  accountSlot: number;
+  accountWrite: bigint;
 }
 
 const TRADE = new Set<EventType>(["buy", "sell"]);
@@ -44,8 +51,10 @@ const FLAG_HOLD_MS = 60_000;
 const FLAG_BELOW_MIN_PCT = 0.25;
 /** The token must have traded this recently, so the gap reflects a live price. */
 const FLAG_LAST_TRADE_MS = 5 * 60_000;
-/** A quote older than this is not used. */
+/** A quote older than this is not used for alerts or shown as a cost. */
 const FLAG_QUOTE_MS = 3 * 60_000;
+/** A last trade older than this is too old to compare with the current stock price. */
+const ONCHAIN_STALE_MS = 15 * 60_000;
 
 
 function median(values: number[]): number | null {
@@ -144,9 +153,9 @@ export class Store {
         this.runtime.set(address, {
           startSupplyRaw: state.supplyRaw,
           supplySteps: [[Date.now(), rawToShares(state, state.supplyRaw, Date.now() / 1000)]],
-          decodedNetShares: 0,
+          decodedNetRaw: 0,
           lastPrice: null, lastPriceT: null, accUsd: 0, accShares: 0,
-          samples: [], episodeStart: null, closeDurations: [], lastSessionRef: null,
+          samples: [], episodeStart: null, closeDurations: [], lastSessionRef: null, accountSlot: 0, accountWrite: 0n,
         });
         this.mints.set(address, state);
         this.bySymbol.set(state.symbol, address);
@@ -188,7 +197,12 @@ export class Store {
         rt.lastPriceT = event.t;
       }
       if (event.type === "mint" || event.type === "redeem") {
-        rt.decodedNetShares += event.type === "mint" ? event.shares : -event.shares;
+        const state = this.mints.get(event.mint);
+        if (state) {
+          // Back to raw units with the multiplier the classifier used at block time.
+          const raw = (event.shares / multiplierAt(state, Math.floor(event.t / 1000))) * 10 ** state.decimals;
+          rt.decodedNetRaw += event.type === "mint" ? raw : -raw;
+        }
         if (event.type === "mint" && rt.episodeStart === null) {
           const premium = this.currentPremium(event.mint);
           if (premium !== null && premium >= 0.2) rt.episodeStart = event.t;
@@ -200,10 +214,14 @@ export class Store {
   }
 
   /** A mint account changed. The account stream is the source of truth for supply and the multiplier. */
-  onMintAccount(next: MintState, t: number) {
+  onMintAccount(next: MintState, t: number, slot = Number.MAX_SAFE_INTEGER, writeVersion = 0n) {
     const previous = this.mints.get(next.address);
     const rt = this.runtime.get(next.address);
     if (!previous || !rt) return;
+    // A reconnect replays recent slots. Ignore any write older than the one already applied.
+    if (slot < rt.accountSlot || (slot === rt.accountSlot && writeVersion <= rt.accountWrite)) return;
+    rt.accountSlot = slot;
+    rt.accountWrite = writeVersion;
     const seconds = Math.floor(t / 1000);
     if (next.supplyRaw !== previous.supplyRaw) {
       rt.supplySteps.push([t, rawToShares(next, next.supplyRaw, seconds)]);
@@ -232,14 +250,17 @@ export class Store {
     for (const [mint, rt] of this.runtime) {
       if (rt.lastPrice === null && rt.samples.length === 0) continue;
       const ref = this.refs.get(mint);
-      const on = rt.accShares > 0 ? rt.accUsd / rt.accShares : rt.lastPrice;
+      const traded = rt.accShares > 0;
+      const recent = rt.lastPriceT !== null && now - rt.lastPriceT <= ONCHAIN_STALE_MS;
+      const on = traded ? rt.accUsd / rt.accShares : recent ? rt.lastPrice : null;
       rt.accUsd = 0;
       rt.accShares = 0;
       const stale = !ref || now - ref.updatedAt > REF_STALE_MS;
       if (ref && open && !stale) rt.lastSessionRef = ref.price;
       rt.samples.push({ t: now, on, ref: ref?.price ?? null, stale });
       if (rt.samples.length > MAX_SAMPLES) rt.samples.shift();
-      if (rt.episodeStart !== null && on !== null && ref && !stale) {
+      // Only a trade in this interval can show the gap closing. A stock move alone does not.
+      if (rt.episodeStart !== null && traded && on !== null && ref && !stale) {
         const premium = (on / ref.price - 1) * 100;
         if (premium <= 0.05) {
           rt.closeDurations.push((now - rt.episodeStart) / 1000);
@@ -302,7 +323,8 @@ export class Store {
     const stale = !ref || now - ref.updatedAt > REF_STALE_MS;
     // Only matters while the stock trades. Outside market hours the reference does not move.
     const aging = !stale && isMarketOpen(now) && now - ref.updatedAt > REF_AGING_MS;
-    const premiumPct = rt.lastPrice !== null && ref ? (rt.lastPrice / ref.price - 1) * 100 : null;
+    const recent = rt.lastPriceT !== null && now - rt.lastPriceT <= ONCHAIN_STALE_MS;
+    const premiumPct = rt.lastPrice !== null && recent && ref ? (rt.lastPrice / ref.price - 1) * 100 : null;
 
     // z-score of the current premium against every fresh sample since startup.
     const premiums = rt.samples.filter((s) => s.on !== null && s.ref !== null && !s.stale).map((s) => (s.on! / s.ref! - 1) * 100);
@@ -335,16 +357,20 @@ export class Store {
         // The stock price updates about once a minute, so it spends part of every minute over 30s
         // old. Pause on those checks: keep the hold timer and any listing, but judge nothing new.
         if (aging) {
-          if (this.flagSince.has(mint)) holding.add(mint);
           // Keep it on the quote list, or its quote can expire during the pause and reset the hold.
           if (this.quoteCandidates.includes(mint)) nearMisses.push({ mint, z });
+          // The hold and the listing survive the pause only while a live $10K quote still lands
+          // below the stock price. An expired or reversed quote drops them.
+          const q10 = this.quoteNow(mint, now)?.sizes.find((size) => size.usd === 10_000) ?? null;
+          if (!q10 || q10.impactPct >= 0) continue;
+          if (this.flagSince.has(mint)) holding.add(mint);
           const shown = this.opportunities.find((o) => o.mint === mint);
-          if (shown) listed.push(shown);
+          if (shown) listed.push({ ...shown, cost10k: q10.impactPct, route: q10.route });
           continue;
         }
 
         const quote = this.quoteNow(mint, now);
-        const q10 = quote && now - quote.t < FLAG_QUOTE_MS ? quote.sizes.find((size) => size.usd === 10_000) ?? null : null;
+        const q10 = quote?.sizes.find((size) => size.usd === 10_000) ?? null;
         const below = z <= -FLAG_Z && premiumPct <= -FLAG_BELOW_MIN_PCT;
         if (!below) continue;
         // Unusual enough to be worth quoting, so the cost check has data on the next pass.
@@ -374,7 +400,8 @@ export class Store {
    */
   private quoteNow(mint: string, now: number) {
     const quote = this.quotes.get(mint);
-    if (!quote || quote.sizes.length === 0) return null;
+    // Tickers that leave the busiest five stop being quoted. Don't show their last quote as current.
+    if (!quote || quote.sizes.length === 0 || now - quote.t >= FLAG_QUOTE_MS) return null;
     const ref = this.refs.get(mint);
     const base = ref && now - ref.updatedAt < REF_STALE_MS ? ref.price : quote.sizes[0].price;
     return { t: quote.t, sizes: quote.sizes.map((size) => ({ ...size, impactPct: (size.price / base - 1) * 100 })) };
@@ -495,9 +522,7 @@ export class Store {
     });
     const chartSet = new Set(chartSymbols);
     const corpMarkers: Marker[] = this.applied.filter((a) => a.t >= from).map((a) => ({ t: a.t, symbol: a.symbol, kind: "corp", usd: null }));
-    const chartMarkers = [...markers.filter((m) => chartSet.has(m.symbol)), ...corpMarkers.filter((m) => chartSet.has(m.symbol))]
-      .sort((a, b) => (b.usd ?? 0) - (a.usd ?? 0))
-      .slice(0, 60);
+    const chartMarkers = [...largestMarkers(markers.filter((m) => chartSet.has(m.symbol))), ...corpMarkers.filter((m) => chartSet.has(m.symbol))];
 
     // Signals for the busiest tickers.
     const signalMints = this.topMintsByVolume(from, 10);
@@ -588,7 +613,7 @@ export class Store {
       trades,
       supplyShares: supplyNow,
       supplyChangeShares: rawToShares(state, state.supplyRaw - rt.startSupplyRaw, seconds),
-      decodedNetShares: rt.decodedNetShares,
+      decodedNetShares: rawToShares(state, rt.decodedNetRaw, seconds),
       multiplier: multiplierAt(state, seconds),
       upcoming: this.upcoming(now).find((a) => a.mint === mint) ?? null,
       applied,
@@ -598,13 +623,18 @@ export class Store {
         ]),
         300,
       ),
-      markers: markers.sort((a, b) => (b.usd ?? 0) - (a.usd ?? 0)).slice(0, 60),
+      markers: [...largestMarkers(markers.filter((m) => m.kind !== "corp")), ...markers.filter((m) => m.kind === "corp")],
       volumeBars: bars,
       supply: thin([[this.startedAt, supplyStart] as [number, number], ...rt.supplySteps.slice(1)], 400),
       largest: largest.slice(0, 20),
       signal,
     };
   }
+}
+
+/** The 60 largest mint and redeem markers. Corporate actions are added separately so they are never cut. */
+function largestMarkers(markers: Marker[]): Marker[] {
+  return [...markers].sort((a, b) => (b.usd ?? 0) - (a.usd ?? 0)).slice(0, 60);
 }
 
 /** Dividends nudge the multiplier by a fraction of a percent. Splits move it by a large ratio. */

@@ -28,6 +28,7 @@ export interface Reading { label: string; detail: string; flag: boolean }
 /** Is this ticker's gap normal for it? */
 export function normalReading(row: SignalRow): Reading {
   if (row.stale) return { label: "No fresh stock price", detail: "The stock price is over 5 minutes old, so the gap can't be judged.", flag: false };
+  if (row.premiumPct === null) return { label: "No recent trade", detail: "No trade with a clear price in the last 15 minutes, so there is no current gap to judge.", flag: false };
   if (row.z === null) return { label: "Still learning", detail: "Needs about 5 minutes of prices to know what is normal for this ticker.", flag: false };
   const side = row.z >= 0 ? "high" : "low";
   const detail = `${Math.abs(row.z).toFixed(1)} standard deviations ${row.z >= 0 ? "above" : "below"} this ticker's average gap since the app started.`;
@@ -50,7 +51,7 @@ const BASELINE_NEEDED_SEC = 5 * 60;
 
 /** While any ticker is still building its baseline, say so with the time left. Otherwise nothing. */
 export function learningNote(signals: SignalRow[]): string | null {
-  const learning = signals.filter((row) => row.z === null && !row.stale);
+  const learning = signals.filter((row) => row.z === null && !row.stale && row.premiumPct !== null);
   if (learning.length === 0) return null;
   const left = Math.max(...learning.map((row) => BASELINE_NEEDED_SEC - row.baselineSec));
   const what = learning.length === signals.length ? "each ticker" : `${learning.length} of these tickers`;

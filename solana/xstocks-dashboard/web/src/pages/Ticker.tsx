@@ -43,10 +43,13 @@ export function Ticker({ snapshot, symbol, controls, setControls }: {
   // The headline: what the token costs against the stock, and whether that is normal.
   let headline: string;
   if (detail.onchain === null) headline = `No ${detail.symbol} trades with a clear price have been seen since the app started.`;
+  else if (detail.ref !== null && detail.premiumPct === null && detail.onchainT !== null) headline = `${detail.symbol} last traded at ${price(detail.onchain)} at ${clock(detail.onchainT)}, too long ago to compare with the ${underlying} stock price.`;
   else if (detail.ref === null || detail.premiumPct === null) headline = `${detail.symbol} last traded at ${price(detail.onchain)}. There is no ${underlying} stock price to compare it with yet.`;
   else if (detail.stale) headline = `${detail.symbol} last traded at ${price(detail.onchain)}. The ${underlying} stock price is over 5 minutes old, so the gap can't be trusted right now.`;
   else {
-    headline = `${detail.symbol} costs ${price(detail.onchain)} onchain, ${gapWords(detail.premiumPct)} ${underlying}'s stock price of ${price(detail.ref)}.`;
+    headline = detail.aging
+      ? `${detail.symbol} costs ${price(detail.onchain)} onchain, about ${gapWords(detail.premiumPct)} ${underlying}'s stock price of ${price(detail.ref)}. The stock price is over 30 seconds old, so the gap is approximate.`
+      : `${detail.symbol} costs ${price(detail.onchain)} onchain, ${gapWords(detail.premiumPct)} ${underlying}'s stock price of ${price(detail.ref)}.`;
     if (signal.z === null) headline += " The app is still learning what gap is normal for this ticker.";
     else headline += normal.flag ? ` That gap is ${normal.label.toLowerCase()} for this ticker.` : " That gap is within this ticker's normal range.";
   }
@@ -54,7 +57,7 @@ export function Ticker({ snapshot, symbol, controls, setControls }: {
   const quote10 = quoteAt(signal, 10_000);
   const costAnswer = quote10
     ? `Buying $10K of ${detail.symbol} right now would cost about ${Math.abs(quote10.impactPct).toFixed(2)}% ${quote10.impactPct >= 0 ? "more" : "less"} than the stock price, through ${quote10.route}.`
-    : `Live quotes cover only the five busiest tickers, and ${detail.symbol} is not one of them right now.`;
+    : `No live quote for ${detail.symbol} in the last 3 minutes. Quotes cover the five busiest tickers and any close to an alert.`;
 
   let volumeAnswer = detail.trades > 0 ? `${usd(detail.volumeUsd)} of ${detail.symbol} traded ${when}, in ${detail.trades.toLocaleString("en-US")} ${detail.trades === 1 ? "trade" : "trades"}.` : `No ${detail.symbol} trades ${when}.`;
   if (signal.spike !== null) volumeAnswer += pace.flag ? ` It is trading at ${signal.spike.toFixed(1)} times its usual pace.` : " That is in line with its usual pace.";

@@ -34,20 +34,26 @@ export function startPricePolling(store: Store) {
   const poll = async () => {
     const seeds = SEED_SYMBOLS.map((symbol) => store.symbolToMint(symbol)).filter((mint): mint is string => Boolean(mint));
     const wanted = [...new Set([...store.activeMints(138), ...seeds])];
-    try {
-      for (let i = 0; i < Math.max(1, wanted.length); i += 49) {
-        const ids = [WSOL, ...wanted.slice(i, i + 49)];
+    // Each batch stands alone, so one failed request does not hold back the others.
+    let failed: Error | null = null;
+    for (let i = 0; i < Math.max(1, wanted.length); i += 49) {
+      const ids = [WSOL, ...wanted.slice(i, i + 49)];
+      try {
         const prices = await getJson<Record<string, PriceEntry>>(`${PRICE_URL}?ids=${ids.join(",")}`);
         if (prices[WSOL]?.usdPrice) store.solPrice = prices[WSOL].usdPrice;
         for (const mint of ids) {
           const stock = prices[mint]?.stockData;
-          if (stock?.price) store.refs.set(mint, { price: stock.price, updatedAt: Date.parse(stock.updatedAt) || Date.now() });
+          // Without a readable timestamp the price's age is unknown. Keep the previous one.
+          const updatedAt = stock ? Date.parse(stock.updatedAt) : NaN;
+          if (stock?.price && Number.isFinite(updatedAt)) store.refs.set(mint, { price: stock.price, updatedAt });
         }
+      } catch (error) {
+        failed = error as Error;
       }
-      failures = 0;
-    } catch (error) {
-      if (failures++ % 6 === 0) console.warn(`[prices] reference price poll failed: ${(error as Error).message}`);
     }
+    if (failed) {
+      if (failures++ % 6 === 0) console.warn(`[prices] reference price poll failed: ${failed.message}`);
+    } else failures = 0;
     setTimeout(poll, PRICE_POLL_MS * Math.min(6, 1 + failures));
   };
   return poll();

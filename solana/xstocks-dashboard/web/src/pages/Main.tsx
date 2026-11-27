@@ -231,7 +231,7 @@ export function Main({ snapshot, controls, setControls }: {
           <>
             <span>These are conditions in the data, not recommendations.</span>
             <span>A ticker is listed during US market hours when it trades unusually low against its own history (two standard deviations or more), at least 0.25% below the stock price, and a live $10K Jupiter quote still lands below the stock price.</span>
-            <span>It is listed only when the stock price is under 30 seconds old, the token traded in the last 5 minutes, the ticker has at least 5 minutes of history, and the condition has held for a minute.</span>
+            <span>It is listed only when the token traded in the last 5 minutes, the ticker has at least 5 minutes of history, and the condition has held for a minute on stock prices under 30 seconds old. The stock price updates about once a minute. While it is older than that, a listed ticker stays and nothing new is added.</span>
           </>
         }
       >
@@ -383,7 +383,11 @@ export function Main({ snapshot, controls, setControls }: {
             </>
           }
         >
-          {quotedRows.length > 0 ? <CostTable rows={quotedRows} /> : <WarmingUp since={status.startedAt} height={120} detail="Quotes start about 20s after the first trades" />}
+          {quotedRows.length > 0
+            ? <CostTable rows={quotedRows} />
+            : snapshot.now - status.startedAt < 3 * 60_000
+              ? <WarmingUp since={status.startedAt} height={120} detail="Quotes start about 20s after the first trades" />
+              : <Note>No Jupiter quotes in the last 3 minutes.</Note>}
         </Frame>
       </div>
 

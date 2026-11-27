@@ -1,6 +1,6 @@
 import { Badge, Heading, Logo, Panel, RollingNumber, Status, Table, Tag, cn } from "../ui.tsx";
 import type { CorporateAction, DecodedEvent, Opportunity, Snapshot } from "../../../shared/types.ts";
-import { EVENT_META, clock, countdown, duration, pct, span } from "../format.ts";
+import { EVENT_META, countdown, duration, pct, span, stamp } from "../format.ts";
 import type { Reading } from "../insights.ts";
 import { Swatch } from "./Frame.tsx";
 import { useTick } from "./charts.tsx";
@@ -153,7 +153,7 @@ export function CorporateTable({ upcoming, applied, now, showTicker = true }: { 
                 <Table.Cell><span className="text-sm">{action.kind === "split" ? "Split" : "Dividend"}</span></Table.Cell>
                 <Table.Cell align="right"><span className="xs-num text-sm">{change >= 0 ? "+" : ""}{change.toFixed(3)}%</span></Table.Cell>
                 <Table.Cell align="right">
-                  <span className="xs-num text-sm">{soon ? `in ${countdown(action.t - now)}` : <span className="text-(--foreground-medium)">applied {clock(action.t)}</span>}</span>
+                  <span className="xs-num text-sm">{soon ? `in ${countdown(action.t - now)}` : <span className="text-(--foreground-medium)">applied {stamp(action.t, now)}</span>}</span>
                 </Table.Cell>
                 <Table.Cell align="right"><span className="xs-num text-xs text-(--foreground-medium)">{action.from.toFixed(6)} → {action.to.toFixed(6)}</span></Table.Cell>
               </Table.Row>

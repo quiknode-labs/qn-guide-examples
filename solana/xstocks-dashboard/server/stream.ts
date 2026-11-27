@@ -17,6 +17,10 @@ const backoffMs = (attempt: number) => Math.min(30_000, 1000 * 2 ** (attempt - 1
 const SILENCE_MS = 30_000;
 /** Solana gRPC can replay roughly the last 3,000 slots through `fromSlot`. */
 const MAX_REPLAY_SLOTS = 2_500;
+/** Average slot time, used to estimate how many slots an outage missed. */
+const SLOT_MS = 400;
+/** Give up on replaying after this many failed attempts, whatever the error says. */
+const MAX_REPLAY_ATTEMPTS = 3;
 
 /**
  * Build the subscribe request. Both filters come from the same cuckoo filter set:
@@ -50,7 +54,7 @@ export function buildRequest(mints: Iterable<string>, fromSlot?: number): { requ
 
 interface PendingSlot {
   transactions: { info: SubscribeUpdateTransactionInfo; keys: string[] }[];
-  accounts: { address: string; data: Uint8Array }[];
+  accounts: { address: string; data: Uint8Array; writeVersion: bigint }[];
 }
 
 export class StreamManager {
@@ -61,7 +65,10 @@ export class StreamManager {
   private seenQueue: string[] = [];
   private lastSlot = 0;
   private lastUpdateAt = 0;
+  /** Wall-clock time of the last update received. Unlike lastUpdateAt, a connect attempt does not reset it. */
+  private lastDataAt = 0;
   private attempt = 0;
+  private replayFailures = 0;
   private stopped = false;
 
   constructor(private store: Store) {}
@@ -71,12 +78,20 @@ export class StreamManager {
     while (!this.stopped) {
       let replaying = false;
       try {
-        // Replay the slots missed while disconnected when they are still within reach.
+        // Replay the slots missed while disconnected when they are still within reach. The current
+        // slot is unknown until the stream answers, so estimate the outage from wall-clock time.
+        const missedSlots = (Date.now() - this.lastDataAt) / SLOT_MS + 32;
+        if (this.lastSlot > 0 && (missedSlots > MAX_REPLAY_SLOTS || this.replayFailures >= MAX_REPLAY_ATTEMPTS)) {
+          // Too far back to replay. Resume at the tip and keep the gap.
+          console.warn(`[stream] skipping replay: about ${Math.round(missedSlots)} slots missed, ${this.replayFailures} failed replays`);
+          this.lastSlot = 0;
+        }
         const fromSlot = this.lastSlot > 0 ? this.lastSlot - 32 : undefined;
         replaying = Boolean(fromSlot);
         await this.connectOnce(fromSlot);
       } catch (error) {
         const reason = String((error as Error)?.message ?? error).replace(/https?:\/\/\S+/g, "<endpoint>");
+        if (replaying) this.replayFailures++;
         if (replaying && /from_?slot|replay|not available|too old/i.test(reason)) {
           // The missed slots are no longer retained. Resume at the tip and keep the gap.
           this.lastSlot = 0;
@@ -114,9 +129,11 @@ export class StreamManager {
       };
       stream.on("data", (update: SubscribeUpdate) => {
         this.lastUpdateAt = Date.now();
+        this.lastDataAt = this.lastUpdateAt;
         if (first && (update.blockMeta || update.transaction || update.account)) {
           first = false;
           this.attempt = 0;
+          this.replayFailures = 0;
           this.store.step("stream", { state: "done", detail: "finalized" });
           this.store.closeGap(Boolean(fromSlot));
           console.log(`[stream] live${fromSlot ? `, replaying from slot ${fromSlot}` : ""}`);
@@ -175,7 +192,11 @@ export class StreamManager {
         return;
       }
       store.status.counters.accountUpdates++;
-      this.slotBucket(Number(update.account.slot)).accounts.push({ address, data: update.account.account.data });
+      this.slotBucket(Number(update.account.slot)).accounts.push({
+        address,
+        data: update.account.account.data,
+        writeVersion: BigInt(update.account.account.writeVersion ?? 0),
+      });
     } else if (update.blockMeta) {
       const slot = Number(update.blockMeta.slot);
       const blockTime = Number(update.blockMeta.blockTime?.timestamp ?? 0) * 1000 || Date.now();
@@ -193,9 +214,9 @@ export class StreamManager {
 
   private flush(slot: number, blockTime: number, bucket: PendingSlot) {
     const { store } = this;
-    for (const { address, data } of bucket.accounts) {
+    for (const { address, data, writeVersion } of bucket.accounts) {
       const next = parseMintAccount(address, data, store.mints.get(address));
-      if (next) store.onMintAccount(next, blockTime);
+      if (next) store.onMintAccount(next, blockTime, slot, writeVersion);
     }
     for (const { info, keys } of bucket.transactions) {
       const signature = bs58.encode(info.signature);

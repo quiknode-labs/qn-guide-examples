@@ -163,7 +163,7 @@ export function TimeChart({ from, to, series, sessions = [], gaps = [], markers 
             const cy = value !== null ? y(value) : M.top + innerH / 2;
             const ink = "var(--foreground)";
             if (marker.kind === "mint") return <polygon key={index} points={`${cx - 5},${cy - 8} ${cx + 5},${cy - 8} ${cx},${cy - 17}`} fill={ink} />;
-            if (marker.kind === "redeem") return <polygon key={index} points={`${cx - 5},${cy + 17} ${cx + 5},${cy + 17} ${cx},${cy + 8}`} fill={ink} />;
+            if (marker.kind === "redeem") return <polygon key={index} points={`${cx - 5},${cy + 8} ${cx + 5},${cy + 8} ${cx},${cy + 17}`} fill={ink} />;
             return <rect key={index} x={cx - 5} y={cy - 5} width={10} height={10} transform={`rotate(45 ${cx} ${cy})`} fill={ink} />;
           })}
           {hover !== null ? <line x1={x(hover)} x2={x(hover)} y1={M.top} y2={M.top + innerH} stroke="var(--foreground)" /> : null}

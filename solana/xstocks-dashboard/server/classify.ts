@@ -173,9 +173,17 @@ export function classifyTransaction(
     }
     return usd;
   };
+  // Net change of each mint across every owner. A swap moves existing tokens, so its other leg
+  // nets to zero. LP tokens and position NFTs are minted or burned in the transaction, so they
+  // don't, and they must not count as the other side of a trade. Wrapped SOL is exempt: routers
+  // wrap native SOL into a temporary account and close it, so its net is not zero either.
+  const netByMint = new Map<string, bigint>();
+  for (const perMint of deltas.values()) for (const [m, delta] of perMint) netByMint.set(m, (netByMint.get(m) ?? 0n) + delta);
   const hasOpposingFlow = (owner: string, mint: string, sign: 1 | -1): boolean => {
     for (const [other, delta] of deltas.get(owner) ?? []) {
-      if (other !== mint && delta !== 0n && (delta > 0n ? 1 : -1) === sign) return true;
+      if (other === mint || delta === 0n || (delta > 0n ? 1 : -1) !== sign) continue;
+      if (other !== WSOL && netByMint.get(other) !== 0n) continue;
+      return true;
     }
     return owner === feePayer && Math.abs(feePayerSol) > 0.005 && Math.sign(feePayerSol) === sign;
   };
@@ -186,12 +194,18 @@ export function classifyTransaction(
   const movesCash = (owner: string, sign: 1 | -1): boolean => {
     let opposite = false;
     for (const [other, delta] of deltas.get(owner) ?? []) {
-      if (!(USD_STABLES.has(other) || other === WSOL) || delta === 0n) continue;
-      if ((delta > 0n ? 1 : -1) === sign) return true;
-      opposite = true;
+      if (delta === 0n) continue;
+      const direction = delta > 0n ? 1 : -1;
+      if (USD_STABLES.has(other) || other === WSOL) {
+        if (direction === sign) return true;
+        opposite = true;
+      } else if (direction !== sign && netByMint.get(other) === 0n) {
+        // Paid for with another token, for example an xStock-for-xStock swap.
+        opposite = true;
+      }
     }
-    // Native SOL counts only without an opposite USDC or WSOL leg, so a sell that also pays a tip
-    // or account rent in SOL stays a sell.
+    // Native SOL counts only when nothing else pays for the xStock, so a sell that also pays a
+    // tip or account rent in SOL stays a sell.
     return !opposite && owner === feePayer && Math.abs(feePayerSol) > 0.005 && Math.sign(feePayerSol) === sign;
   };
 
@@ -269,7 +283,10 @@ export function classifyTransaction(
 
     // Trade. Pick the trader: a signer if one took part, else the side that is not a known pool,
     // else the smaller holder (pools hold inventory, traders usually start or end near zero).
-    let taker = paired.find((change) => signers.has(change.owner));
+    // A signer whose xStock moved against a paired pool is the trader even when its payment does
+    // not show in token balances, for example native SOL when someone else pays the fee.
+    let taker = paired.find((change) => signers.has(change.owner))
+      ?? changes.find((change) => signers.has(change.owner) && paired.some((pool) => pool.delta > 0n !== change.delta > 0n));
     if (taker) {
       for (const change of paired) {
         if (change !== taker && change.delta > 0n !== taker.delta > 0n && ctx.poolOwners.size < 100_000) ctx.poolOwners.add(change.owner);

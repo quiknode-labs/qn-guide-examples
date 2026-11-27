@@ -38,6 +38,12 @@ export function clock(ms: number): string {
   return new Date(ms).toLocaleTimeString("en-US", { hour12: false });
 }
 
+/** Time of day, with the date in front when it is not the same day as `now`. */
+export function stamp(ms: number, now: number): string {
+  const sameDay = new Date(ms).toDateString() === new Date(now).toDateString();
+  return sameDay ? clock(ms) : `${new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric" })} ${clock(ms)}`;
+}
+
 export function shortClock(ms: number): string {
   return new Date(ms).toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" });
 }
