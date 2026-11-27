@@ -1,0 +1,243 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens for the dashboard. Square corners, 1px borders instead of shadows,
+ * one accent per surface, and a mono face for every number.
+ *
+ * Themes are set with data-theme on any element: "white" (panels), "gray" (page),
+ * and "inverted" (top bar). Components read only the semantic tokens below.
+ */
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Inter Tight", "Inter", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  /* Every size ships with its line height. */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 2rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 2rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 2rem;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 3rem;
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 3rem;
+
+  --radius-*: initial;
+}
+
+:root {
+  /* Chart series, always used in order 1 to 12. Identical in every theme. */
+  --color-chart-1: oklch(78.34% 0.118 139.4);
+  --color-chart-2: oklch(72.38% 0.16 294.4);
+  --color-chart-3: oklch(88.75% 0.15 93.1);
+  --color-chart-4: oklch(77.03% 0.122 344.3);
+  --color-chart-5: oklch(87.31% 0.127 122.7);
+  --color-chart-6: oklch(72.79% 0.138 317.2);
+  --color-chart-7: oklch(79.63% 0.114 54);
+  --color-chart-8: oklch(74.01% 0.106 249.4);
+  --color-chart-9: oklch(70.59% 0.152 21.7);
+  --color-chart-10: oklch(81.59% 0.091 210.8);
+  --color-chart-11: oklch(65.17% 0.127 270.8);
+  --color-chart-12: oklch(76.4% 0.098 176.1);
+
+  /* Shared across themes. Feedback colors are for status messages only. */
+  --ink: oklch(28.9% 0 0);
+  --accent: oklch(89% 0.2203 144.5);
+  --accent-foreground: var(--ink);
+  --feedback-foreground: var(--ink);
+  --success: oklch(95.1% 0.0702 146.6);
+  --error: oklch(88.01% 0.055 1.24);
+  --warning: oklch(95.68% 0.046 89.57);
+}
+
+:root,
+[data-theme="white"] {
+  --background: #fff;
+  --background-elevated: oklch(28.9% 0 0 / 0.05);
+  --background-inverted: var(--ink);
+  --foreground: var(--ink);
+  --foreground-medium: oklch(28.9% 0 0 / 0.7);
+  --foreground-light: oklch(28.9% 0 0 / 0.55);
+  --foreground-inverted: #fff;
+  --border: oklch(28.9% 0 0 / 0.14);
+  --grid: oklch(89.2% 0 0);
+  --hover: oklch(28.9% 0 0 / 0.05);
+  --focus-ring: oklch(59% 0.1799 143.5);
+  --info: oklch(97% 0 0);
+}
+
+[data-theme="gray"] {
+  --background: oklch(97% 0 0);
+  --background-elevated: oklch(28.9% 0 0 / 0.05);
+  --background-inverted: var(--ink);
+  --foreground: var(--ink);
+  --foreground-medium: oklch(28.9% 0 0 / 0.7);
+  --foreground-light: oklch(28.9% 0 0 / 0.55);
+  --foreground-inverted: oklch(97% 0 0);
+  --border: oklch(28.9% 0 0 / 0.14);
+  --grid: oklch(84.5% 0 0);
+  --hover: oklch(28.9% 0 0 / 0.05);
+  --focus-ring: oklch(59% 0.1799 143.5);
+  --info: oklch(93.1% 0 0);
+}
+
+[data-theme="inverted"] {
+  --background: var(--ink);
+  --background-elevated: oklch(100% 0 0 / 0.05);
+  --background-inverted: #fff;
+  --foreground: #fff;
+  --foreground-medium: oklch(100% 0 0 / 0.7);
+  --foreground-light: oklch(100% 0 0 / 0.55);
+  --foreground-inverted: var(--ink);
+  --border: oklch(100% 0 0 / 0.14);
+  --grid: oklch(41.5% 0.001 62.2);
+  --hover: oklch(100% 0 0 / 0.05);
+  --focus-ring: var(--accent);
+  --info: oklch(89.2% 0 0);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    background: var(--background);
+    -webkit-font-smoothing: antialiased;
+  }
+  [data-theme] {
+    color: var(--foreground);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 1px;
+  }
+  a {
+    color: inherit;
+  }
+  .font-mono,
+  code {
+    font-variant-ligatures: none;
+  }
+}
+
+/* Panel chrome: rail lines, squares, and a dot grid. */
+.xs-rail {
+  height: 14px;
+  background-image:
+    linear-gradient(var(--foreground), var(--foreground)),
+    linear-gradient(var(--foreground), var(--foreground)),
+    linear-gradient(var(--foreground), var(--foreground)),
+    linear-gradient(var(--foreground), var(--foreground));
+  background-size: 100% 1px;
+  background-position: 0 0, 0 4px, 0 8px, 0 12px;
+  background-repeat: no-repeat;
+}
+.xs-dotgrid {
+  background-image: radial-gradient(circle at center, var(--grid) 0.85px, transparent 0.95px);
+  background-size: 12px 12px;
+}
+/* Wide diagonal stripes for "no data yet" and stream gaps. */
+.xs-stripes {
+  background-image: repeating-linear-gradient(135deg, var(--grid) 0 6px, transparent 6px 12px);
+}
+/* Fine 1px diagonal hatch, used on feedback strips and the empty part of a progress bar. */
+.xs-hatch {
+  background-image: repeating-linear-gradient(135deg, currentColor 0 1px, transparent 1px 4px);
+}
+/* Selected tab: an accent band along the bottom with an accent dot field fading up. */
+.xs-selected-fade {
+  position: relative;
+  isolation: isolate;
+}
+.xs-selected-fade::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(circle, var(--accent) 0.9px, transparent 1px);
+  background-size: 4px 4px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 90%);
+  mask-image: linear-gradient(to bottom, transparent, black 90%);
+}
+.xs-selected-fade::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--accent);
+  border-top: 1px solid var(--accent-foreground);
+}
+
+.xs-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-variant-ligatures: none;
+}
+svg text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--foreground-medium);
+}
+
+/* A changed figure slides up into place. */
+@keyframes xs-roll {
+  from {
+    transform: translateY(40%);
+    opacity: 0.2;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.xs-roll {
+  display: inline-block;
+  animation: xs-roll 320ms ease-out;
+}
+@keyframes xs-pulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+.xs-loader span {
+  animation: xs-pulse 900ms ease-in-out infinite;
+}
+.xs-loader span:nth-child(2) { animation-delay: 150ms; }
+.xs-loader span:nth-child(3) { animation-delay: 300ms; }
+@keyframes xs-toast-in {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.xs-toast {
+  animation: xs-toast-in 180ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .xs-roll,
+  .xs-loader span,
+  .xs-toast {
+    animation: none;
+  }
+}

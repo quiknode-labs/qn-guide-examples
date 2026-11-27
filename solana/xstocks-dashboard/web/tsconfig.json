@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", "lib": ["ES2023", "DOM", "DOM.Iterable"], "module": "ESNext", "moduleResolution": "Bundler",
+    "jsx": "react-jsx", "strict": true, "noEmit": true, "skipLibCheck": true, "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true, "types": ["vite/client"]
+  },
+  "include": ["src", "../shared"]
+}

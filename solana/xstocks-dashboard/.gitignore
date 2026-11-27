@@ -1,0 +1,10 @@
+.env
+.env.*
+node_modules/
+dist/
+vendor/
+mockups/
+
+AGENTS.md
+CLAUDE.md
+.vercel

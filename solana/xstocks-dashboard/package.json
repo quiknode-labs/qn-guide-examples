@@ -1,0 +1,41 @@
+{
+  "name": "xstocks-dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "server": "tsx --env-file=.env server/index.ts",
+    "web": "vite",
+    "dev": "concurrently -n server,web -c auto \"npm:server\" \"npm:web\"",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit -p server && tsc --noEmit -p web"
+  },
+  "dependencies": {
+    "@fontsource/geist-mono": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/inter-tight": "^5.3.0",
+    "@solana-program/token-2022": "^0.20.1",
+    "@solana/kit": "^8.6.0",
+    "@triton-one/yellowstone-grpc": "^10.0.0",
+    "bs58": "^6.0.0",
+    "clsx": "^2.1.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "concurrently": "^10.0.7",
+    "tailwindcss": "^4.3.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8"
+  }
+}
