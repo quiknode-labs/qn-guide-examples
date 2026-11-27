@@ -69,6 +69,8 @@ export class StreamManager {
   private lastDataAt = 0;
   private attempt = 0;
   private replayFailures = 0;
+  /** True once connect() succeeded on the current attempt, so a later failure is not a network failure. */
+  private connected = false;
   private stopped = false;
 
   constructor(private store: Store) {}
@@ -88,10 +90,13 @@ export class StreamManager {
         }
         const fromSlot = this.lastSlot > 0 ? this.lastSlot - 32 : undefined;
         replaying = Boolean(fromSlot);
+        this.connected = false;
         await this.connectOnce(fromSlot);
       } catch (error) {
         const reason = String((error as Error)?.message ?? error).replace(/https?:\/\/\S+/g, "<endpoint>");
-        if (replaying) this.replayFailures++;
+        // Count only failures after the connection opened and before any data, which is where a
+        // rejected fromSlot shows up. A network outage fails at connect() and must not end the replay.
+        if (replaying && this.connected) this.replayFailures++;
         if (replaying && /from_?slot|replay|not available|too old/i.test(reason)) {
           // The missed slots are no longer retained. Resume at the tip and keep the gap.
           this.lastSlot = 0;
@@ -112,6 +117,7 @@ export class StreamManager {
       grpcMaxDecodingMessageSize: 64 * 1024 * 1024,
     } as ConstructorParameters<typeof Client>[2]);
     await this.client.connect();
+    this.connected = true;
     const { request } = buildRequest(this.store.mints.keys(), fromSlot);
     const stream = await this.client.subscribe(request);
     this.stream = stream;
@@ -134,6 +140,7 @@ export class StreamManager {
           first = false;
           this.attempt = 0;
           this.replayFailures = 0;
+          this.connected = false;
           this.store.step("stream", { state: "done", detail: "finalized" });
           this.store.closeGap(Boolean(fromSlot));
           console.log(`[stream] live${fromSlot ? `, replaying from slot ${fromSlot}` : ""}`);

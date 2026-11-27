@@ -311,4 +311,23 @@ scenario("13", () => {
   console.log("ok 13: a gap needs a trade from the last 15 minutes");
 });
 
+// 14. Zap-in: the signer sells 0.6 of 1 NVDAx into pool A for $60 USDC, then deposits the other 0.4
+//     with all $60 into pool B for LP tokens. Only the 0.6 sold is a trade, at $100 a share.
+scenario("14", () => {
+  const poolA = "PoolA111111111111111111111111111111111111111";
+  const poolB = "PoolB111111111111111111111111111111111111111";
+  const LP = "LPmint1111111111111111111111111111111111111";
+  const keys = [USER, RAYDIUM];
+  const big = 1n << 40n;
+  const info = swapTx(keys, 1, 1e9, 1e9 - 5000,
+    [tokenBal(1, MINT, USER, 100_000_000n), tokenBal(2, USDC, USER, 0n), tokenBal(3, MINT, poolA, big), tokenBal(4, USDC, poolA, big), tokenBal(5, MINT, poolB, big), tokenBal(6, USDC, poolB, big), tokenBal(7, LP, USER, 0n)],
+    [tokenBal(1, MINT, USER, 0n), tokenBal(2, USDC, USER, 0n), tokenBal(3, MINT, poolA, big + 60_000_000n), tokenBal(4, USDC, poolA, big - 60_000_000n), tokenBal(5, MINT, poolB, big + 40_000_000n), tokenBal(6, USDC, poolB, big + 60_000_000n), tokenBal(7, LP, USER, 5n)], 14);
+  const event = classifyTransaction(info, keys, 1, OPEN, ctx2())[0];
+  assert.equal(event.type, "sell");
+  assert.equal(event.wallet, USER);
+  assert.ok(Math.abs(event.shares - 0.6) < 1e-9, `expected 0.6 shares, got ${event.shares}`);
+  assert.ok(event.price !== null && Math.abs(event.price - 100) < 1e-6, `expected $100 a share, got ${event.price}`);
+  console.log("ok 14: a zap-in counts only the part sold, at the right price");
+});
+
 process.exitCode = failed ? 1 : 0;

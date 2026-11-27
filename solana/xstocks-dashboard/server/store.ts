@@ -214,7 +214,7 @@ export class Store {
   }
 
   /** A mint account changed. The account stream is the source of truth for supply and the multiplier. */
-  onMintAccount(next: MintState, t: number, slot = Number.MAX_SAFE_INTEGER, writeVersion = 0n) {
+  onMintAccount(next: MintState, t: number, slot: number, writeVersion: bigint) {
     const previous = this.mints.get(next.address);
     const rt = this.runtime.get(next.address);
     if (!previous || !rt) return;

@@ -299,7 +299,16 @@ export function classifyTransaction(
       );
     }
     const buying = taker.delta > 0n;
-    const shares = rawToShares(mint, buying ? taker.delta : -taker.delta, seconds);
+    let traded = buying ? taker.delta : -taker.delta;
+    if (!paired.includes(taker)) {
+      // A signer picked without its own payment leg may also have moved tokens elsewhere, for
+      // example depositing the rest into a pool. Count only what the paired pools took the other side of.
+      const counter = paired
+        .filter((change) => change.delta > 0n !== buying)
+        .reduce((sum, change) => sum + (change.delta < 0n ? -change.delta : change.delta), 0n);
+      if (counter > 0n && counter < traded) traded = counter;
+    }
+    const shares = rawToShares(mint, traded, seconds);
 
     // Dollar value: the trader's own stablecoin or wrapped SOL leg first, then the pool side,
     // then the fee payer's native SOL change, then the reference price.
